@@ -10,13 +10,14 @@ build
 # Output
 bin/
 lib/
-contrib/
+
+#contrib/
 
 # Generated
-assimp.pc
-revision.h
-contrib/zlib/zconf.h
-contrib/zlib/zlib.pc
+#assimp.pc
+#revision.h
+#contrib/zlib/zconf.h
+#contrib/zlib/zlib.pc
 
 # CMake
 CMakeCache.txt
