@@ -8,10 +8,7 @@ namespace ifx {
 void key_callback(GLFWwindow *window, int key,
                   int scancode, int action, int mode) {
     Controls& controls = Controls::GetInstance();
-/*
-    if(controls.control_mode() == ControlMode::GUI){
-        return;
-    }*/
+
     ImGui_ImplGlfwGL3_KeyCallback(window, key, scancode, action, mode);
     controls.OnKeyboardEvent(action, key);
 
