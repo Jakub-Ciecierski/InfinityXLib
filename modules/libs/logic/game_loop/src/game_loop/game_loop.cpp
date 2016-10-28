@@ -12,8 +12,8 @@ GameLoop::~GameLoop(){
 
 }
 
-void GameLoop::AddSimulation(std::unique_ptr<Simulation> simulation) {
-    simulations_.push_back(std::move(simulation));
+void GameLoop::AddSimulation(std::shared_ptr<Simulation> simulation) {
+    simulations_.push_back(simulation);
 }
 
 void GameLoop::Start(){

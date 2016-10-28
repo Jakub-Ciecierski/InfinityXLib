@@ -61,11 +61,11 @@ std::unique_ptr<RenderObject> RenderObjectFactory::CreateRoom(){
     float scaleFactor = 2.0f;
     render_object->scale(glm::vec3(scaleFactor, scaleFactor, scaleFactor));
 
-    render_object->SetBeforeRender([](){
+    render_object->SetBeforeRender([](const Program* program){
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
     });
-    render_object->SetAfterRender([](){
+    render_object->SetAfterRender([](const Program* program){
         glDisable(GL_CULL_FACE);
     });
 

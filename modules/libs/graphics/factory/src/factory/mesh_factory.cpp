@@ -470,6 +470,211 @@ std::unique_ptr<Mesh> MeshFactory::LoadCubemap() {
     return mesh;
 }
 
+std::unique_ptr<Mesh> MeshFactory::LoadCAMMaterial() {
+    // Position, Normal, TexCoord
+    vector <Vertex> vertices = {
+            // Front
+            Vertex{vec3(1.0f, 1.0f, 0.0f),
+                   vec3(0.0f, 0.0f, -1.0f), vec2(1.0f, 1.0f)},
+            Vertex{vec3(1.0f, 0.0f, 0.0f),
+                   vec3(0.0f, 0.0f, -1.0f), vec2(1.0f, 0.0f)},
+            Vertex{vec3(0.0f, 0.0f, 0.0f),
+                   vec3(0.0f, 0.0f, -1.0f), vec2(0.0f, 0.0f)},
+            Vertex{vec3(0.0f, 1.0f, 0.0f),
+                   vec3(0.0f, 0.0f, -1.0f), vec2(0.0f, 1.0f)},
+
+            // Back
+            Vertex{vec3(1.0f, 1.0f, 1.0f),
+                   vec3(0.0f, 0.0f, 1.0f), vec2(1.0f, 1.0f)},
+            Vertex{vec3(1.0f, 0.0f, 1.0f),
+                   vec3(0.0f, 0.0f, 1.0f), vec2(1.0f, 0.0f)},
+            Vertex{vec3(0.0f, 0.0f, 1.0f),
+                   vec3(0.0f, 0.0f, 1.0f), vec2(0.0f, 0.0f)},
+            Vertex{vec3(0.0f, 1.0f, 1.0f),
+                   vec3(0.0f, 0.0f, 1.0f), vec2(0.0f, 1.0f)},
+
+            // Left
+            Vertex{vec3(0.0f, 1.0f, 1.0f),
+                   vec3(-1.0f, 0.0f, 0.0f), vec2(1.0f, 1.0f)},
+            Vertex{vec3(0.0f, 0.0f, 1.0f),
+                   vec3(-1.0f, 0.0f, 0.0f), vec2(1.0f, 0.0f)},
+            Vertex{vec3(0.0f, 0.0f, 0.0f),
+                   vec3(-1.0f, 0.0f, 0.0f), vec2(0.0f, 0.0f)},
+            Vertex{vec3(0.0f, 1.0f, 0.0f),
+                   vec3(-1.0f, 0.0f, 0.0f), vec2(0.0f, 1.0f)},
+
+            // Right
+            Vertex{vec3(1.0f, 1.0f, 1.0f),
+                   vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 1.0f)},
+            Vertex{vec3(1.0f, 0.0f, 1.0f),
+                   vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 0.0f)},
+            Vertex{vec3(1.0f, 0.0f, 0.0f),
+                   vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 0.0f)},
+            Vertex{vec3(1.0f, 1.0f, 0.0f),
+                   vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 1.0f)},
+
+            // Bottom
+            Vertex{vec3(1.0f, 0.0f, 1.0f),
+                   vec3(0.0f, -1.0f, 0.0f), vec2(1.0f, 1.0f)},
+            Vertex{vec3(1.0f, 0.0f, 0.0f),
+                   vec3(0.0f, -1.0f, 0.0f), vec2(1.0f, 0.0f)},
+            Vertex{vec3(0.0f, 0.0f, 0.0f),
+                   vec3(0.0f, -1.0f, 0.0f), vec2(0.0f, 0.0f)},
+            Vertex{vec3(0.0f, 0.0f, 1.0f),
+                   vec3(0.0f, -1.0f, 0.0f), vec2(0.0f, 1.0f)},
+
+            // Top
+            Vertex{vec3(1.0f, 1.0f, 1.0f),
+                   vec3(0.0f, 1.0f, 0.0f), vec2(1.0f, 1.0f)},
+            Vertex{vec3(1.0f, 1.0f, 0.0f),
+                   vec3(0.0f, 1.0f, 0.0f), vec2(1.0f, 0.0f)},
+            Vertex{vec3(0.0f, 1.0f, 0.0f),
+                   vec3(0.0f, 1.0f, 0.0f), vec2(0.0f, 0.0f)},
+            Vertex{vec3(0.0f, 1.0f, 1.0f),
+                   vec3(0.0f, 1.0f, 0.0f), vec2(0.0f, 1.0f)},
+    };
+
+    vector <GLuint> indices = {
+            3, 1, 0, 3, 2, 1,            // front
+            4, 5, 7, 5, 6, 7,            // back
+
+            8, 9, 11, 9, 10, 11,           // left
+            15, 13, 12, 15, 14, 13,        // right
+
+            16, 17, 19, 17, 18, 19,        // bottom
+            23, 21, 20, 23, 22, 21,        // top
+    };
+    TextureFactory textureLoader;
+
+    ifx::Resources &resources = ifx::Resources::GetInstance();
+    Texture textureDiffuse
+            = TextureLoader().loadTexture(
+                    resources.GetResourcePath("cam/box1.png",
+                                              ifx::ResourceType::TEXTURE),
+                    TextureTypes::DIFFUSE);
+    Texture textureSpecular
+            = TextureLoader().loadTexture(
+                    resources.GetResourcePath("cam/box1.png",
+                                              ifx::ResourceType::TEXTURE),
+                    TextureTypes::SPECULAR);
+
+    //Texture textureDiffuse = textureLoader.LoadContainerDiffuse();
+    //Texture textureSpecular = textureLoader.LoadContainerSpecular();
+    std::vector <Texture> textures = {textureDiffuse, textureSpecular};
+
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices, textures,
+                                        GL_TRIANGLES));
+
+    Material material;
+    material.shininess = 32.0f;
+    mesh->setMaterial(material);
+
+    return mesh;
+}
+
+/*
+std::unique_ptr<Mesh> MeshFactory::LoadCAMMaterial() {
+    // Position, Normal, TexCoord
+    vector <Vertex> vertices = {
+            // Front
+            Vertex{vec3(1.0f, 1.0f, -1.0f),
+                   vec3(0.0f, 0.0f, -1.0f), vec2(1.0f, 1.0f)},
+            Vertex{vec3(1.0f, -1.0f, -1.0f),
+                   vec3(0.0f, 0.0f, -1.0f), vec2(1.0f, 0.0f)},
+            Vertex{vec3(-1.0f, -1.0f, -1.0f),
+                   vec3(0.0f, 0.0f, -1.0f), vec2(0.0f, 0.0f)},
+            Vertex{vec3(-1.0f, 1.0f, -1.0f),
+                   vec3(0.0f, 0.0f, -1.0f), vec2(0.0f, 1.0f)},
+
+            // Back
+            Vertex{vec3(1.0f, 1.0f, 1.0f),
+                   vec3(0.0f, 0.0f, 1.0f), vec2(1.0f, 1.0f)},
+            Vertex{vec3(1.0f, -1.0f, 1.0f),
+                   vec3(0.0f, 0.0f, 1.0f), vec2(1.0f, 0.0f)},
+            Vertex{vec3(-1.0f, -1.0f, 1.0f),
+                   vec3(0.0f, 0.0f, 1.0f), vec2(0.0f, 0.0f)},
+            Vertex{vec3(-1.0f, 1.0f, 1.0f),
+                   vec3(0.0f, 0.0f, 1.0f), vec2(0.0f, 1.0f)},
+
+            // Left
+            Vertex{vec3(-1.0f, 1.0f, 1.0f),
+                   vec3(-1.0f, 0.0f, 0.0f), vec2(1.0f, 1.0f)},
+            Vertex{vec3(-1.0f, -1.0f, 1.0f),
+                   vec3(-1.0f, 0.0f, 0.0f), vec2(1.0f, 0.0f)},
+            Vertex{vec3(-1.0f, -1.0f, -1.0f),
+                   vec3(-1.0f, 0.0f, 0.0f), vec2(0.0f, 0.0f)},
+            Vertex{vec3(-1.0f, 1.0f, -1.0f),
+                   vec3(-1.0f, 0.0f, 0.0f), vec2(0.0f, 1.0f)},
+
+            // Right
+            Vertex{vec3(1.0f, 1.0f, 1.0f),
+                   vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 1.0f)},
+            Vertex{vec3(1.0f, -1.0f, 1.0f),
+                   vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 0.0f)},
+            Vertex{vec3(1.0f, -1.0f, -1.0f),
+                   vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 0.0f)},
+            Vertex{vec3(1.0f, 1.0f, -1.0f),
+                   vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 1.0f)},
+
+            // Bottom
+            Vertex{vec3(1.0f, -1.0f, 1.0f),
+                   vec3(0.0f, -1.0f, 0.0f), vec2(1.0f, 1.0f)},
+            Vertex{vec3(1.0f, -1.0f, -1.0f),
+                   vec3(0.0f, -1.0f, 0.0f), vec2(1.0f, 0.0f)},
+            Vertex{vec3(-1.0f, -1.0f, -1.0f),
+                   vec3(0.0f, -1.0f, 0.0f), vec2(0.0f, 0.0f)},
+            Vertex{vec3(-1.0f, -1.0f, 1.0f),
+                   vec3(0.0f, -1.0f, 0.0f), vec2(0.0f, 1.0f)},
+
+            // Top
+            Vertex{vec3(1.0f, 1.0f, 1.0f),
+                   vec3(0.0f, 1.0f, 0.0f), vec2(1.0f, 1.0f)},
+            Vertex{vec3(1.0f, 1.0f, -1.0f),
+                   vec3(0.0f, 1.0f, 0.0f), vec2(1.0f, 0.0f)},
+            Vertex{vec3(-1.0f, 1.0f, -1.0f),
+                   vec3(0.0f, 1.0f, 0.0f), vec2(0.0f, 0.0f)},
+            Vertex{vec3(-1.0f, 1.0f, 1.0f),
+                   vec3(0.0f, 1.0f, 0.0f), vec2(0.0f, 1.0f)},
+    };
+
+    vector <GLuint> indices = {
+            3, 1, 0, 3, 2, 1,            // front
+            4, 5, 7, 5, 6, 7,            // back
+
+            8, 9, 11, 9, 10, 11,           // left
+            15, 13, 12, 15, 14, 13,        // right
+
+            16, 17, 19, 17, 18, 19,        // bottom
+            23, 21, 20, 23, 22, 21,        // top
+    };
+    TextureFactory textureLoader;
+
+
+    ifx::Resources &resources = ifx::Resources::GetInstance();
+    Texture textureDiffuse
+            = TextureLoader().loadTexture(
+                    resources.GetResourcePath("cam/box1.png",
+                                              ifx::ResourceType::TEXTURE),
+                    TextureTypes::DIFFUSE);
+    Texture textureSpecular
+            = TextureLoader().loadTexture(
+                    resources.GetResourcePath("cam/box1.png",
+                                              ifx::ResourceType::TEXTURE),
+                    TextureTypes::SPECULAR);
+
+
+    std::vector <Texture> textures = {textureDiffuse, textureSpecular};
+
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices, textures,
+                                        GL_TRIANGLES));
+
+    Material material;
+    material.shininess = 32.0f;
+    mesh->setMaterial(material);
+
+    return mesh;
+}
+*/
 std::unique_ptr<Mesh> MeshFactory::LoadCube() {
     // Position, Normal, TexCoord
     vector <Vertex> vertices = {
@@ -551,6 +756,92 @@ std::unique_ptr<Mesh> MeshFactory::LoadCube() {
     std::vector <Texture> textures = {textureDiffuse, textureSpecular};
 
     std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices, textures,
+                                        GL_TRIANGLES));
+
+    Material material;
+    material.shininess = 32.0f;
+    mesh->setMaterial(material);
+
+    return mesh;
+}
+
+
+std::unique_ptr<Mesh> MeshFactory::LoadCubeUnTextured() {
+    // Position, Normal, TexCoord
+    vector <Vertex> vertices = {
+            // Front
+            Vertex{vec3(0.5f, 0.5f, -0.5f),
+                   vec3(0.0f, 0.0f, -1.0f), vec2(1.0f, 1.0f)},
+            Vertex{vec3(0.5f, -0.5f, -0.5f),
+                   vec3(0.0f, 0.0f, -1.0f), vec2(1.0f, 0.0f)},
+            Vertex{vec3(-0.5f, -0.5f, -0.5f),
+                   vec3(0.0f, 0.0f, -1.0f), vec2(0.0f, 0.0f)},
+            Vertex{vec3(-0.5f, 0.5f, -0.5f),
+                   vec3(0.0f, 0.0f, -1.0f), vec2(0.0f, 1.0f)},
+
+            // Back
+            Vertex{vec3(0.5f, 0.5f, 0.5f),
+                   vec3(0.0f, 0.0f, 1.0f), vec2(1.0f, 1.0f)},
+            Vertex{vec3(0.5f, -0.5f, 0.5f),
+                   vec3(0.0f, 0.0f, 1.0f), vec2(1.0f, 0.0f)},
+            Vertex{vec3(-0.5f, -0.5f, 0.5f),
+                   vec3(0.0f, 0.0f, 1.0f), vec2(0.0f, 0.0f)},
+            Vertex{vec3(-0.5f, 0.5f, 0.5f),
+                   vec3(0.0f, 0.0f, 1.0f), vec2(0.0f, 1.0f)},
+
+            // Left
+            Vertex{vec3(-0.5f, 0.5f, 0.5f),
+                   vec3(-1.0f, 0.0f, 0.0f), vec2(1.0f, 1.0f)},
+            Vertex{vec3(-0.5f, -0.5f, 0.5f),
+                   vec3(-1.0f, 0.0f, 0.0f), vec2(1.0f, 0.0f)},
+            Vertex{vec3(-0.5f, -0.5f, -0.5f),
+                   vec3(-1.0f, 0.0f, 0.0f), vec2(0.0f, 0.0f)},
+            Vertex{vec3(-0.5f, 0.5f, -0.5f),
+                   vec3(-1.0f, 0.0f, 0.0f), vec2(0.0f, 1.0f)},
+
+            // Right
+            Vertex{vec3(0.5f, 0.5f, 0.5f),
+                   vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 1.0f)},
+            Vertex{vec3(0.5f, -0.5f, 0.5f),
+                   vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 0.0f)},
+            Vertex{vec3(0.5f, -0.5f, -0.5f),
+                   vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 0.0f)},
+            Vertex{vec3(0.5f, 0.5f, -0.5f),
+                   vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 1.0f)},
+
+            // Bottom
+            Vertex{vec3(0.5f, -0.5f, 0.5f),
+                   vec3(0.0f, -1.0f, 0.0f), vec2(1.0f, 1.0f)},
+            Vertex{vec3(0.5f, -0.5f, -0.5f),
+                   vec3(0.0f, -1.0f, 0.0f), vec2(1.0f, 0.0f)},
+            Vertex{vec3(-0.5f, -0.5f, -0.5f),
+                   vec3(0.0f, -1.0f, 0.0f), vec2(0.0f, 0.0f)},
+            Vertex{vec3(-0.5f, -0.5f, 0.5f),
+                   vec3(0.0f, -1.0f, 0.0f), vec2(0.0f, 1.0f)},
+
+            // Top
+            Vertex{vec3(0.5f, 0.5f, 0.5f),
+                   vec3(0.0f, 1.0f, 0.0f), vec2(1.0f, 1.0f)},
+            Vertex{vec3(0.5f, 0.5f, -0.5f),
+                   vec3(0.0f, 1.0f, 0.0f), vec2(1.0f, 0.0f)},
+            Vertex{vec3(-0.5f, 0.5f, -0.5f),
+                   vec3(0.0f, 1.0f, 0.0f), vec2(0.0f, 0.0f)},
+            Vertex{vec3(-0.5f, 0.5f, 0.5f),
+                   vec3(0.0f, 1.0f, 0.0f), vec2(0.0f, 1.0f)},
+    };
+
+    vector <GLuint> indices = {
+            3, 1, 0, 3, 2, 1,            // front
+            4, 5, 7, 5, 6, 7,            // back
+
+            8, 9, 11, 9, 10, 11,           // left
+            15, 13, 12, 15, 14, 13,        // right
+
+            16, 17, 19, 17, 18, 19,        // bottom
+            23, 21, 20, 23, 22, 21,        // top
+    };
+
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices,
                                         GL_TRIANGLES));
 
     Material material;
@@ -762,4 +1053,68 @@ std::unique_ptr<Mesh> MeshFactory::LoadLamp() {
             vertices, indices, textures, GL_TRIANGLES));
     return mesh;
 }
+
+std::unique_ptr<Mesh> MeshFactory::LoadSphere(float radius) {
+    std::vector<Vertex> vertices;
+    std::vector<GLuint> indices;
+    std::vector<Texture> textures;
+
+    /// ------
+    double latitudeBands = 20;
+    double longitudeBands = 20;
+
+    for (double latNumber = 0; latNumber <= (latitudeBands); latNumber++) {
+        double theta = latNumber * M_PI / latitudeBands;
+        //theta /= 2.0f;
+
+        double sinTheta = sin(theta);
+        double cosTheta = cos(theta);
+
+        for (double longNumber = 0; longNumber <= longitudeBands; longNumber++) {
+            double phi = longNumber * 2 * M_PI / longitudeBands;
+            double sinPhi = sin(phi);
+            double cosPhi = cos(phi);
+
+            Vertex vs;
+            vs.Normal = glm::vec3(cosPhi * sinTheta,
+                                  cosTheta,
+                                  sinPhi * sinTheta);
+            vs.TexCoords = glm::vec2(1 - (longNumber / longitudeBands),
+                                     1 - (latNumber / latitudeBands));
+            vs.Position = glm::vec3(radius * vs.Normal[0],
+                                    radius * vs.Normal[1],
+                                    radius * vs.Normal[2]);
+            vs.Normal = -vs.Normal;
+
+            vertices.push_back(vs);
+        }
+
+        for (int latNumber = 0; latNumber < latitudeBands; latNumber++) {
+            for (int longNumber = 0; longNumber < longitudeBands; longNumber++) {
+                int first = (latNumber * (longitudeBands + 1)) + longNumber;
+                int second = first + longitudeBands + 1;
+
+                indices.push_back(first);
+                indices.push_back(second);
+                indices.push_back(first + 1);
+
+                indices.push_back(second);
+                indices.push_back(second + 1);
+                indices.push_back(first + 1);
+
+            }
+        }
+    }
+
+    auto mesh = std::unique_ptr<Mesh>(
+            new Mesh(vertices, indices, GL_TRIANGLES));
+    //mesh->setPolygonMode(GL_LINE);
+
+    Material material;
+    material.shininess = 32.0f;
+    mesh->setMaterial(material);
+
+    return mesh;
+}
+
 } // ifx

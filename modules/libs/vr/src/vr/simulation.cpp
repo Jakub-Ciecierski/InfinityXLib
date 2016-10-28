@@ -12,4 +12,11 @@ bool Simulation::SetRunning(bool value){
     running_ = value;
 }
 
+void Simulation::Play(){
+    running_ = true;
+}
+void Simulation::Pause(){
+    running_ = false;
+}
+
 }

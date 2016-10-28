@@ -13,6 +13,7 @@ GUI::~GUI(){
 }
 
 void GUI::NewFrame(){
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     ImGui_ImplGlfwGL3_NewFrame();
 }
 

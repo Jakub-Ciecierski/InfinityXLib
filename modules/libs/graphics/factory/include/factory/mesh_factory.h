@@ -30,10 +30,14 @@ public:
 
     static std::unique_ptr<Mesh> LoadPatch();
     static std::unique_ptr<Mesh> LoadCubemap();
+    static std::unique_ptr<Mesh> LoadCAMMaterial();
     static std::unique_ptr<Mesh> LoadCube();
     static std::unique_ptr<Mesh> LoadRoom();
     static std::unique_ptr<Mesh> LoadFloor();
     static std::unique_ptr<Mesh> LoadLamp();
+
+    static std::unique_ptr<Mesh> LoadCubeUnTextured();
+    static std::unique_ptr<Mesh> LoadSphere(float radius = 2);
 };
 }
 

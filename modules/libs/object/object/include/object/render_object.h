@@ -19,11 +19,15 @@ public:
     virtual ~RenderObject();
 
     const std::vector<std::shared_ptr<Program>>& programs(){ return programs_;}
+    Model* model(){return model_.get();}
+    bool do_render(){return do_render_;}
+    bool do_render(bool val){do_render_ = val;}
 
-    void SetBeforeRender(std::function<void()> before_render);
-    void SetAfterRender(std::function<void()> after_render);
+    void SetBeforeRender(std::function<void(
+            const Program* program)>before_render);
+    void SetAfterRender(std::function<void(
+            const Program* program)> after_render);
 
-    Model* getModel();
     void addProgram(std::shared_ptr<Program> program);
 
     /*
@@ -32,15 +36,15 @@ public:
     virtual void render(const Program& program);
 
 protected:
-    std::shared_ptr<Model> model;
+    std::shared_ptr<Model> model_;
 
+    std::function<void(const Program* program)> before_render_;
+    std::function<void(const Program* program)> after_render_;
 private:
 
     std::vector<std::shared_ptr<Program>> programs_;
 
-    std::function<void()> before_render_;
-    std::function<void()> after_render_;
-
+    bool do_render_;
 };
 
 

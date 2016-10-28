@@ -31,7 +31,7 @@ enum class TextureTypes{
 };
 
 enum class TextureInternalFormat{
-    RGB, DEPTH_COMPONENT
+    R, RGB, DEPTH_COMPONENT
 };
 
 enum class TexturePixelType{
@@ -52,6 +52,7 @@ struct Texture{
     // e.g. GL_TEXTURE_2D
     GLenum type;
     TextureInternalFormat format;
+    TexturePixelType pixel_type;
 
     int width;
     int height;
@@ -78,6 +79,28 @@ struct Texture{
 
     void Unbind(){
         glBindTexture(type, 0);
+    }
+
+    void UpdateData(float* data, int width, int height){
+        GLenum format_gl = GetTextureInternalFormatPrimitive(format);
+        glBindTexture(GL_TEXTURE_2D, id);
+        glTexImage2D(GL_TEXTURE_2D, 0,
+                     format_gl,
+                     width, height, 0,
+                     format_gl,
+                     GetTexturePixelTypePrimitive(pixel_type), data);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    void UpdateData(unsigned char* data, int width, int height){
+        GLenum format_gl = GetTextureInternalFormatPrimitive(format);
+        glBindTexture(GL_TEXTURE_2D, id);
+        glTexImage2D(GL_TEXTURE_2D, 0,
+                     format_gl,
+                     width, height, 0,
+                     format_gl,
+                     GetTexturePixelTypePrimitive(pixel_type), data);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     void updateData(unsigned char* data, int width, int height, int dim){

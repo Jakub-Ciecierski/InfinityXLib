@@ -59,6 +59,30 @@ Texture TextureFactory::LoadExampleCubemap() {
 Texture TextureFactory::LoadDynamicBlueDiffuseTexture() {
     TextureLoader textureLoader;
 
+    int width = 15;
+    int height = 15;
+    int pixel_data = 1;
+    int count = width * height * pixel_data;
+    int pixelCount = count / pixel_data;
+    float *data = new float[count];
+
+    int pixelIndex = 0;
+    for (int i = 0; i < pixelCount; i++) {
+        data[pixelIndex] = (float)i/(float)pixelCount;
+
+        pixelIndex += pixel_data;
+    }
+    Texture texture = textureLoader.loadFromDataRED(TextureTypes::DIFFUSE, data,
+                                                 width, height);
+
+    delete data;
+
+    return texture;
+}
+/*
+Texture TextureFactory::LoadDynamicBlueDiffuseTexture() {
+    TextureLoader textureLoader;
+
     int width = 128;
     int height = 128;
     int pixel_data = 3;
@@ -69,7 +93,7 @@ Texture TextureFactory::LoadDynamicBlueDiffuseTexture() {
     int pixelIndex = 0;
     for (int i = 0; i < pixelCount; i++) {
         data[pixelIndex + 0] = 0;
-        data[pixelIndex + 1] = 255;
+        data[pixelIndex + 1] = 125;
         data[pixelIndex + 2] = 0;
 
         pixelIndex += pixel_data;
@@ -80,7 +104,7 @@ Texture TextureFactory::LoadDynamicBlueDiffuseTexture() {
     delete data;
 
     return texture;
-}
+}*/
 
 Texture TextureFactory::LoadDynamicBlueSpecularTexture() {
     TextureLoader textureLoader;

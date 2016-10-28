@@ -12,13 +12,9 @@ namespace ifx {
 using namespace glm;
 using namespace std;
 
-ModelFactory::ModelFactory() {
+ModelFactory::ModelFactory() {}
 
-}
-
-ModelFactory::~ModelFactory() {
-
-}
+ModelFactory::~ModelFactory() {}
 
 std::shared_ptr<Model> ModelFactory::LoadAsteroidModel() {
     std::string path
@@ -117,6 +113,15 @@ std::shared_ptr<Model> ModelFactory::LoadSquareModel() {
     return Model::MakeModel("SquareModel", std::move(meshes));
 }
 
+std::shared_ptr<Model> ModelFactory::LoadCAMMaterial() {
+    MeshFactory meshLoader;
+
+    std::vector<std::unique_ptr<Mesh>> meshes;
+    meshes.push_back(std::move(meshLoader.LoadCAMMaterial()));
+
+    return Model::MakeModel("CubeModel", std::move(meshes));
+}
+
 std::shared_ptr<Model> ModelFactory::LoadCubeModel() {
     MeshFactory meshLoader;
 
@@ -162,6 +167,13 @@ std::shared_ptr<Model> ModelFactory::LoadFloorModel(){
 
     std::vector<std::unique_ptr<Mesh>> meshes;
     meshes.push_back(std::move(meshLoader.LoadFloor()));
+
+    return Model::MakeModel("Floor", std::move(meshes));
+}
+
+std::shared_ptr<Model> ModelFactory::LoadSphere(float radius){
+    std::vector<std::unique_ptr<Mesh>> meshes;
+    meshes.push_back(std::move(MeshFactory::LoadSphere(radius)));
 
     return Model::MakeModel("Floor", std::move(meshes));
 }

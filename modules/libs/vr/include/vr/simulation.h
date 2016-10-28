@@ -16,6 +16,9 @@ public:
 
     bool IsRunning();
     bool SetRunning(bool value);
+
+    void Play();
+    void Pause();
 protected:
     bool running_;
 };

@@ -4,7 +4,6 @@
 #include <controls/controls.h>
 #include <rendering/fbo_rendering/fbo_renderer.h>
 #include <gui/gui.h>
-#include <gui/imgui/imgui.h>
 
 namespace ifx {
 
@@ -27,12 +26,6 @@ void Renderer::HandleEvents() {
         scene_->ReloadProgams();
         if(fbo_renderer_->program())
             fbo_renderer_->program()->Reload();
-    }
-    if (keys[GLFW_KEY_1]){
-        rendering_type_ = RenderingType::NORMAL;
-    }
-    if (keys[GLFW_KEY_2]){
-        rendering_type_ = RenderingType::FBO_TEXTURE;
     }
 }
 
@@ -69,8 +62,8 @@ void Renderer::initGLFWRenderContext(){
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    int width = 1400;
-    int height = 900;
+    int width = 1500;
+    int height = 1000;
     window_ .reset(new Window(width, height, "InfinityX"));
 }
 

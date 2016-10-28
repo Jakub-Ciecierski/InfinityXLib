@@ -32,5 +32,12 @@ void main(){
         gl_TessLevelOuter[1] = TessLevelOuter;
         gl_TessLevelOuter[2] = TessLevelOuter;
         gl_TessLevelOuter[3] = TessLevelOuter;
+
+        gl_TessLevelInner[0] = 15;
+        gl_TessLevelInner[1] = 15;
+        gl_TessLevelOuter[0] = 15;
+        gl_TessLevelOuter[1] = 15;
+        gl_TessLevelOuter[2] = 15;
+        gl_TessLevelOuter[3] = 15;
     }
 }

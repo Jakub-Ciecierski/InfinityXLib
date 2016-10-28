@@ -1,6 +1,8 @@
 #include <shaders/data/shader_data.h>
 
 GLenum GetTextureInternalFormatPrimitive(TextureInternalFormat format){
+    if(format == TextureInternalFormat::R)
+        return GL_RED;
     if(format == TextureInternalFormat::RGB)
         return GL_RGB;
     else if(format == TextureInternalFormat::DEPTH_COMPONENT)

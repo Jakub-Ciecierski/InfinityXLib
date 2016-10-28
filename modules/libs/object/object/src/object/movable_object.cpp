@@ -49,6 +49,10 @@ void MovableObject::rotate(const glm::vec3 &rotate) {
     this->rotation += rotate;
 }
 
+void MovableObject::scale(float scale) {
+    this->scaleFactor = glm::vec3(scale, scale, scale);
+}
+
 void MovableObject::scale(const glm::vec3 &scale) {
     this->scaleFactor = scale;
 }
@@ -61,6 +65,10 @@ const glm::vec3& MovableObject::getDirection(){
     return this->direction;
 }
 
+const glm::mat4 MovableObject::GetModelMatrix(){
+    update();
+    return ModelMatrix;
+}
 
 void MovableObject::initVectors(){
     scaleFactor = glm::vec3(1.0f, 1.0f, 1.0f);

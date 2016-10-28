@@ -25,7 +25,13 @@ public:
     LightGroup* light_group(){return light_group_.get();}
     Camera* camera(){return camera_.get();}
 
-    void AddRenderObject(std::unique_ptr<RenderObject> render_object);
+    void AddRenderObject(std::shared_ptr<RenderObject> render_object);
+
+    /**
+     * Removes from the list and deletes the memory.
+     */
+    bool DeleteRenderObject(RenderObject* render_object);
+
     void ReloadProgams();
     void SetCamera(std::unique_ptr<Camera> camera);
     void render();
@@ -41,7 +47,7 @@ private:
     void render(RenderObject* render_object);
     void updateObjects();
 
-    std::vector<std::unique_ptr<RenderObject>> render_objects_;
+    std::vector<std::shared_ptr<RenderObject>> render_objects_;
     std::unique_ptr<LightGroup> light_group_;
     std::unique_ptr<Camera> camera_;
 };

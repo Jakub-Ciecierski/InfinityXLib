@@ -17,9 +17,20 @@ InstancedRenderObject::InstancedRenderObject(ObjectID id,
 InstancedRenderObject::~InstancedRenderObject(){}
 
 void InstancedRenderObject::render(const Program& program){
+    if(before_render_)
+        before_render_(&program);
+
     program.use();
 
-    model->drawInstanced(program, instanced_data_.data_count);
+    // Model
+    GLint transformLoc = glGetUniformLocation(program.getID(),
+                                              MODEL_MATRIX_NAME.c_str());
+    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(ModelMatrix));
+
+    model_->drawInstanced(program, instanced_data_.data_count);
+
+    if(after_render_)
+        after_render_(&program);
 }
 
 } // namespace ifx

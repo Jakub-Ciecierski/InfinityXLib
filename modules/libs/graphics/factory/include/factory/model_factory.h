@@ -22,6 +22,7 @@ public:
     static std::shared_ptr<Model> LoadBicubicBezierAsymmetricPatch();
 
     static std::shared_ptr<Model> LoadSquareModel();
+    static std::shared_ptr<Model> LoadCAMMaterial();
     static std::shared_ptr<Model> LoadCubeModel();
     static std::shared_ptr<Model> LoadRoomModel();
     static std::shared_ptr<Model> LoadCubemapModel();
@@ -30,6 +31,7 @@ public:
     static std::shared_ptr<Model> LoadFloorModel();
 
     static std::shared_ptr<Model> LoadModel(std::string path);
+    static std::shared_ptr<Model> LoadSphere(float radius = 2.0f);
 
 };
 } // ifx

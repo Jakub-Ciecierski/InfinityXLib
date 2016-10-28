@@ -26,6 +26,41 @@ std::shared_ptr<Program> ProgramFactory::LoadMainProgram(){
     return ProgramLoader().CreateProgram(vertex_path, fragment_path);
 }
 
+std::shared_ptr<Program> ProgramFactory::LoadCAMMaterialBoxProgram(){
+    ifx::Resources& resources = ifx::Resources::GetInstance();
+
+    std::string vertex_path =
+            resources.GetResourcePath(
+                    "cam/cam_material_box/cam_material_box.vs",
+                                      ifx::ResourceType::SHADER);
+    std::string fragment_path =
+            resources.GetResourcePath(
+                    "cam/cam_material_box/cam_material_box.fs",
+                                      ifx::ResourceType::SHADER);
+
+    return ProgramLoader().CreateProgram(vertex_path, fragment_path);
+}
+
+
+std::shared_ptr<Program> ProgramFactory::LoadCAMPlane(){
+    ifx::Resources& resources = ifx::Resources::GetInstance();
+    std::string vertex_path =
+            resources.GetResourcePath("cam/plane/tess.vs",
+                                      ifx::ResourceType::SHADER);
+    std::string fragment_path =
+            resources.GetResourcePath("cam/plane/tess.fs",
+                                      ifx::ResourceType::SHADER);
+    std::string tcs_path =
+            resources.GetResourcePath("cam/plane/tess.tcs",
+                                      ifx::ResourceType::SHADER);
+    std::string tes_path =
+            resources.GetResourcePath("cam/plane/tess.tes",
+                                      ifx::ResourceType::SHADER);
+
+    return ProgramLoader().CreateProgram(vertex_path, fragment_path,
+                                         tcs_path, tes_path);
+}
+
 std::shared_ptr<Program> ProgramFactory::LoadInstancedProgram(){
     ifx::Resources& resources = ifx::Resources::GetInstance();
 

@@ -12,14 +12,28 @@ Scene::Scene(std::unique_ptr<LightGroup> light_group,
 Scene::Scene(std::vector<std::unique_ptr<RenderObject>> render_objects,
              std::unique_ptr<LightGroup> light_group,
              std::unique_ptr<Camera> camera) :
-        render_objects_(std::move(render_objects)),
         light_group_(std::move(light_group)),
-        camera_(std::move(camera)) {}
+        camera_(std::move(camera)) {
+    for(unsigned int i = 0; i < render_objects.size(); i++){
+        render_objects_.push_back(std::move(render_objects[i]));
+    }
+}
 
 Scene::~Scene(){}
 
-void Scene::AddRenderObject(std::unique_ptr<RenderObject> render_object){
-    render_objects_.push_back(std::move(render_object));
+void Scene::AddRenderObject(std::shared_ptr<RenderObject> render_object){
+    render_objects_.push_back(render_object);
+}
+
+bool Scene::DeleteRenderObject(RenderObject* render_object){
+    for(int i = 0;i < render_objects_.size(); i++){
+        if(render_object == render_objects_[i].get()){
+            render_objects_[i].reset();
+            render_objects_.erase(render_objects_.begin() + i);
+            return true;
+        }
+    }
+    return false;
 }
 
 void Scene::ReloadProgams(){

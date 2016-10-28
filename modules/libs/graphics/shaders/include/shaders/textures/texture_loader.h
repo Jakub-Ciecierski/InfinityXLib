@@ -23,6 +23,8 @@ public:
     Texture CreateEmptyTexture(TextureTypes type,
                                int width, int height);
 
+    Texture loadFromDataRED(TextureTypes type, float* data,
+                         int width, int height);
     Texture loadFromData(TextureTypes type, unsigned char* data,
                          int width, int height);
 

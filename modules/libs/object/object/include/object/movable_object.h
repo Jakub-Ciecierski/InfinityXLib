@@ -41,11 +41,13 @@ public:
      */
     virtual void rotate(const glm::vec3 &rotate);
 
+    void scale(float scale);
     void scale(const glm::vec3 &scale);
 
     const glm::vec3& getPosition();
     const glm::vec3& getDirection();
 
+    const glm::mat4 GetModelMatrix();
 protected:
     void initVectors();
 

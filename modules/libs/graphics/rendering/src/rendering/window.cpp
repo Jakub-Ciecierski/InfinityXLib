@@ -31,10 +31,6 @@ void Window::HandleEvents() {
     if (keys[GLFW_KEY_ESCAPE]){
         glfwSetWindowShouldClose(glfwWindow, GL_TRUE);
     }
-    if (!keys[GLFW_KEY_LEFT_CONTROL])
-        ShowCursor();
-    else
-        HideCursor();
 }
 
 void Window::init() {

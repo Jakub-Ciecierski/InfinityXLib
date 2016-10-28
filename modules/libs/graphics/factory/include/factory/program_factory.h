@@ -18,6 +18,9 @@ public:
 
     std::shared_ptr<Program> LoadShadowMappingProgram();
 
+    std::shared_ptr<Program> LoadCAMMaterialBoxProgram();
+    std::shared_ptr<Program> LoadCAMPlane();
+
     std::shared_ptr<Program> LoadInstancedProgram();
 
     std::shared_ptr<Program> LoadFBOProgram();

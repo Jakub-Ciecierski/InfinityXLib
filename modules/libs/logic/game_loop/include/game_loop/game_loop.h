@@ -17,12 +17,12 @@ public:
 
     Renderer* renderer(){return renderer_.get();}
 
-    void AddSimulation(std::unique_ptr<Simulation> simulation);
+    void AddSimulation(std::shared_ptr<Simulation> simulation);
     void Start();
 
 private:
     std::unique_ptr<Renderer> renderer_;
-    std::vector<std::unique_ptr<Simulation>> simulations_;
+    std::vector<std::shared_ptr<Simulation>> simulations_;
 
 };
 }

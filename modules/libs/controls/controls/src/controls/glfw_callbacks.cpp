@@ -8,10 +8,11 @@ namespace ifx {
 void key_callback(GLFWwindow *window, int key,
                   int scancode, int action, int mode) {
     Controls& controls = Controls::GetInstance();
-
-    if(controls.control_mode() == ControlMode::GUI) {
-        ImGui_ImplGlfwGL3_KeyCallback(window, key, scancode, action, mode);
-    }
+/*
+    if(controls.control_mode() == ControlMode::GUI){
+        return;
+    }*/
+    ImGui_ImplGlfwGL3_KeyCallback(window, key, scancode, action, mode);
     controls.OnKeyboardEvent(action, key);
 
 }
@@ -19,9 +20,6 @@ void key_callback(GLFWwindow *window, int key,
 void mouse_callback(GLFWwindow *window,
                     double x, double y) {
     Controls& controls = Controls::GetInstance();
-    if(controls.control_mode() == ControlMode::GUI) {
-        return;
-    }
 
     controls.OnMouseEvent(x, y);
 }
@@ -30,7 +28,7 @@ void mouse_button_callback(GLFWwindow *window,
                            int button, int action, int mods) {
     Controls& controls = Controls::GetInstance();
 
-    if(controls.control_mode() == ControlMode::GUI) {
+    if(ImGui::GetIO().WantCaptureMouse){
         ImGui_ImplGlfwGL3_MouseButtonCallback(window, button, action, mods);
         return;
     }
@@ -61,18 +59,13 @@ void mousescroll_callback(GLFWwindow *window,
                           double xoffset, double yoffset) {
     Controls& controls = Controls::GetInstance();
 
-    if(controls.control_mode() == ControlMode::GUI) {
-        ImGui_ImplGlfwGL3_ScrollCallback(window, xoffset, yoffset);
-        return;
-    }
+    ImGui_ImplGlfwGL3_ScrollCallback(window, xoffset, yoffset);
 }
 
 void char_callback(GLFWwindow* window, unsigned int c){
     Controls& controls = Controls::GetInstance();
-    if(controls.control_mode() == ControlMode::GUI) {
-        ImGui_ImplGlfwGL3_CharCallback(window, c);
-        return;
-    }
+
+    ImGui_ImplGlfwGL3_CharCallback(window, c);
 }
 
 }
