@@ -22,7 +22,7 @@ Camera::~Camera() {
 
 void Camera::HandleEvents() {
     Controls& controls = Controls::GetInstance();
-    float movementSpeed = 0.01f;
+    float movementSpeed = 0.001f;
     float rotationSpeed = 0.1f;
 
     const Keys& keys = controls.keyboard_keys();

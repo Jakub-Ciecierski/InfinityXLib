@@ -16,6 +16,8 @@ public:
 
     ~MeshFactory();
 
+    static std::unique_ptr<Mesh> CreateQuad(int x, int y);
+
     static std::unique_ptr<Mesh> LoadBicubicBezierPatch(float startX,
                                                         float startY,
                                                         float depth,

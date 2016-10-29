@@ -92,7 +92,5 @@ void Patch::draw(const Program &program) {
     // TODO should be called once
     glPatchParameteri(GL_PATCH_VERTICES, vertexCountPerPatch);
 
-    //this->drawingMode = GL_PATCHES;
-
     Mesh::draw(program);
 }

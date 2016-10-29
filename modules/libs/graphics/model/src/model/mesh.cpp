@@ -11,7 +11,7 @@ Mesh::Mesh(){
 Mesh::Mesh(std::vector<Vertex> vertices,
            vector <GLuint>& indices,
            GLenum drawingMode, GLenum polygonMode) :
-        vertices(vertices), indices(indices){
+        vertices_(vertices), indices(indices){
     this->primitive_mode_ = drawingMode;
     this->polygonMode = polygonMode;
     checkError();
@@ -24,7 +24,7 @@ Mesh::Mesh(std::vector<Vertex> vertices,
            vector <GLuint>& indices,
            vector<Texture>& textures,
            GLenum drawingMode, GLenum polygonMode) :
-        vertices(vertices), indices(indices), textures(textures){
+        vertices_(vertices), indices(indices), textures(textures){
     this->primitive_mode_ = drawingMode;
     this->polygonMode = polygonMode;
     checkError();
@@ -38,7 +38,7 @@ Mesh::Mesh(std::vector<Vertex> vertices,
            vector<Texture>& textures,
            Material material,
            GLenum drawingMode, GLenum polygonMode) :
-        vertices(vertices), indices(indices), textures(textures),
+        vertices_(vertices), indices(indices), textures(textures),
         material(material){
     this->primitive_mode_ = drawingMode;
     this->polygonMode = polygonMode;
@@ -65,9 +65,9 @@ void Mesh::computeTangetBasis(){
         if(vertexIndex >= indices.size()){
             throw new std::invalid_argument("computeTangetBasis out of bounds");
         }
-        computeAndStoreTangetBasis(vertices[indices[vertexIndex+0]],
-                                   vertices[indices[vertexIndex+1]],
-                                   vertices[indices[vertexIndex+2]]);
+        computeAndStoreTangetBasis(vertices_[indices[vertexIndex+0]],
+                                   vertices_[indices[vertexIndex+1]],
+                                   vertices_[indices[vertexIndex+2]]);
 /*
         std::cout << "Face[" << i << "]" << std::endl;
         std::cout << "V0: " << vertexIndex+0 << std::endl;
@@ -167,7 +167,7 @@ void Mesh::checkError(){
 void Mesh::initBuffers(){
     vao_.reset(new VAO());
 
-    vbo_.reset(new VBO(&vertices));
+    vbo_.reset(new VBO(&vertices_));
     ebo_.reset(new EBO(&indices));
 
     vao_->bindVertexBuffers(*vbo_, *ebo_);
@@ -281,7 +281,7 @@ std::string Mesh::toString() const{
             normalTexCount++;
     }
 
-    str += "Vertices Count:          " + to_string(vertices.size()) + "\n";
+    str += "Vertices Count:          " + to_string(vertices_.size()) + "\n";
     str += "Texture Diffuse Count:   " + to_string(diffuseTexCount) + "\n";
     str += "Texture Specular Count:  " + to_string(specularTexCount) + "\n";
     str += "Texture Normal Count:  " + to_string(normalTexCount) + "\n";

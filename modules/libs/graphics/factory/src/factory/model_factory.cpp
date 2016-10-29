@@ -30,6 +30,15 @@ std::shared_ptr<Model> ModelFactory::LoadNanoSuitModel() {
     return LoadModel(path);
 }
 
+std::shared_ptr<Model> ModelFactory::CreateQuad(int x, int y){
+    MeshFactory meshLoader;
+
+    std::vector<std::unique_ptr<Mesh>> meshes;
+    meshes.push_back(std::move(MeshFactory::CreateQuad(x,y)));
+
+    return Model::MakeModel("Quad", std::move(meshes));
+}
+
 std::shared_ptr<Model> ModelFactory::LoadBicubicBezierSurfaceC0() {
     MeshFactory meshLoader;
 /*

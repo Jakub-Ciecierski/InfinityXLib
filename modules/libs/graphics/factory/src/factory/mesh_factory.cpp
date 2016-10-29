@@ -15,6 +15,56 @@ MeshFactory::MeshFactory(){}
 
 MeshFactory::~MeshFactory(){}
 
+std::unique_ptr<Mesh> MeshFactory::CreateQuad(int width, int heigth){
+    std::vector<Vertex> vertices;
+    std::vector<GLuint> indices;
+    const float quad_min = 0.0f;
+    const float quad_max = 1.0f;
+    float dx = quad_max / (float)width;
+    float dy = quad_max / (float)heigth;
+
+    float x = quad_min;
+    float y = quad_min;
+
+    int id = 0;
+    for(int i = 0; i < width; i++){
+        y = quad_min;
+        for(int j = 0; j < heigth; j++){
+            vertices.push_back(Vertex{vec3(x + dx, y + dy, 0.0f),
+                                      vec3(0.0f, 0.0f, -1.0f),
+                                      vec2(x + dx, y + dy)});
+            vertices.push_back(Vertex{vec3(x + dx, y, 0.0f),
+                                      vec3(0.0f, 0.0f, -1.0f),
+                                      vec2(x + dx, y)});
+            vertices.push_back(Vertex{vec3(x, y, 0.0f),
+                                      vec3(0.0f, 0.0f, -1.0f),
+                                      vec2(x, y)});
+            vertices.push_back(Vertex{vec3(x, y + dy, 0.0f),
+                                      vec3(0.0f, 0.0f, -1.0f),
+                                      vec2(x, y + dy)});
+            indices.push_back(id);
+            indices.push_back(id+1);
+            indices.push_back(id+3);
+            indices.push_back(id+1);
+            indices.push_back(id+2);
+            indices.push_back(id+3);
+            id+=4;
+
+            y += dy;
+        }
+        x += dx;
+    }
+
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices,
+                                        GL_TRIANGLES));
+
+    Material material;
+    material.shininess = 32.0f;
+    mesh->setMaterial(material);
+
+    return mesh;
+}
+
 std::unique_ptr<Mesh> MeshFactory::LoadBicubicBezierPatch(float startX,
                                                           float startY,
                                                           float depth,
@@ -1118,3 +1168,4 @@ std::unique_ptr<Mesh> MeshFactory::LoadSphere(float radius) {
 }
 
 } // ifx
+

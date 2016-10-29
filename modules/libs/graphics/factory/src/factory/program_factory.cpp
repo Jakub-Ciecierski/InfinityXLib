@@ -26,6 +26,19 @@ std::shared_ptr<Program> ProgramFactory::LoadMainProgram(){
     return ProgramLoader().CreateProgram(vertex_path, fragment_path);
 }
 
+std::shared_ptr<Program> ProgramFactory::LoadHeightmapProgram(){
+    ifx::Resources& resources = ifx::Resources::GetInstance();
+
+    std::string vertex_path =
+            resources.GetResourcePath("heightmap/heightmap.vs",
+                                      ifx::ResourceType::SHADER);
+    std::string fragment_path =
+            resources.GetResourcePath("heightmap/heightmap.fs",
+                                      ifx::ResourceType::SHADER);
+
+    return ProgramLoader().CreateProgram(vertex_path, fragment_path);
+}
+
 std::shared_ptr<Program> ProgramFactory::LoadCAMMaterialBoxProgram(){
     ifx::Resources& resources = ifx::Resources::GetInstance();
 

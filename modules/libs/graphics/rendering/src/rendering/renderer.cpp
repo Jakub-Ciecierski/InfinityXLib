@@ -65,6 +65,9 @@ void Renderer::initGLFWRenderContext(){
     int width = 1500;
     int height = 1000;
     window_ .reset(new Window(width, height, "InfinityX"));
+
+    // Dont limit FPS
+    glfwSwapInterval(0);
 }
 
 void Renderer::initOpenGLContext(){

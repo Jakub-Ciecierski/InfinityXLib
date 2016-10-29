@@ -46,6 +46,7 @@ public:
 
     virtual ~Mesh();
 
+    const std::vector<Vertex>& vertices(){return vertices_;}
     VAO* vao() {return vao_.get();};
     VBO* vbo() {return vbo_.get();};
 
@@ -62,7 +63,7 @@ public:
     std::string toString() const;
 
 protected:
-    std::vector<Vertex> vertices;
+    std::vector<Vertex> vertices_;
     std::vector<GLuint> indices;
     std::vector<Texture> textures;
 
