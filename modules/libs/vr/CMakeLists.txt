@@ -41,8 +41,8 @@ include_directories($ENV{IFX_ROOT}/dependencies/glm/${INC_DIR})
 
 # SHADERS
 find_package(OpenGL REQUIRED)
-find_package(GLEW REQUIRED)
-include_directories(${OPENGL_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS})
+include_directories($ENV{IFX_ROOT}/${DEPS_DIR}/glew-2.0.0/include)
+include_directories(${OPENGL_INCLUDE_DIRS})
 include_directories($ENV{IFX_ROOT}/modules/libs/common/math/${INC_DIR})
 include_directories($ENV{IFX_ROOT}/modules/libs/common/resources/${INC_DIR})
 

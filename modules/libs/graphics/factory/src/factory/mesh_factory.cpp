@@ -6,6 +6,11 @@
 
 #include <vector>
 
+// For windows
+#ifndef M_PI
+#define M_PI 3.14
+#endif
+
 namespace ifx {
 
 using namespace std;

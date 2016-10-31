@@ -18,7 +18,7 @@ public:
     float x() {return x_;}
     float y() {return y_;}
 
-    bool is_pressed(bool pressed) { is_pressed_ = pressed; }
+    void is_pressed(bool pressed) { is_pressed_ = pressed; }
     void x(float x) {x_ = x;}
     void y(float y) {y_ = y;}
 

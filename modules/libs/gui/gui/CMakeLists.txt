@@ -33,8 +33,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 #---------------------------------
 # SHADERS
 find_package(OpenGL REQUIRED)
-find_package(GLEW REQUIRED)
-include_directories(${OPENGL_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS})
+include_directories(${OPENGL_INCLUDE_DIRS})
+include_directories($ENV{IFX_ROOT}/${DEPS_DIR}/glew-2.0.0/include)
 
 include_directories($ENV{IFX_ROOT}/${DEPS_DIR}/glfw-3.1.2/${INC_DIR})
 
