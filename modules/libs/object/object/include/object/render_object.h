@@ -7,6 +7,7 @@
 #include <shaders/program.h>
 #include <object/movable_object.h>
 
+#include <functional>
 #include <memory>
 
 /*
@@ -21,7 +22,7 @@ public:
     const std::vector<std::shared_ptr<Program>>& programs(){ return programs_;}
     Model* model(){return model_.get();}
     bool do_render(){return do_render_;}
-    bool do_render(bool val){do_render_ = val;}
+    void do_render(bool val){do_render_ = val;}
 
     void SetBeforeRender(std::function<void(
             const Program* program)>before_render);
