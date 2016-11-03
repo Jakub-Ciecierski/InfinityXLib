@@ -48,6 +48,7 @@ const std::string TEXTURE_CUBEMAP_NAME = "cubemap";
 const std::string TEXTURE_SCREEN_NAME = "screen_texture";
 
 const std::string TEXTURE_SHADOW_MAP = "shadow_map";
+const std::string SHADOW_MAP_MODE = "shadow_directed_type";
 
 const std::string TESSELLATION_LVL_INNER_NAME = "TessLevelInner";
 const std::string TESSELLATION_LVL_OUTER_NAME = "TessLevelOuter";

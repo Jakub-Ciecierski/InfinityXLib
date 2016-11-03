@@ -1013,8 +1013,8 @@ std::unique_ptr<Mesh> MeshFactory::LoadFloor(){
             0, 1, 3, 1, 2, 3,            // front
     };
     TextureFactory textureLoader;
-    Texture textureDiffuse = textureLoader.LoadContainerDiffuse();
-    Texture textureSpecular = textureLoader.LoadContainerSpecular();
+    Texture textureDiffuse = textureLoader.LoadPortalTexture();
+    Texture textureSpecular = textureLoader.LoadPortalTexture();
 
     std::vector <Texture> textures = {textureDiffuse, textureSpecular};
 

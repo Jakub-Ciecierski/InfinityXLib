@@ -30,7 +30,9 @@ void ShadowMapping::Render(Scene* scene){
 
         fbo_->bind();
         glClear(GL_DEPTH_BUFFER_BIT);
+        glCullFace(GL_FRONT); // peter panning
         scene->render(program_.get());
+        glCullFace(GL_BACK); // peter panning
         fbo_->unbind();
     }
 
@@ -48,9 +50,15 @@ Texture ShadowMapping::CreateTexture(){
             dimensions_.width, dimensions_.height);
     texture.AddParameter(TextureParameter{GL_TEXTURE_MIN_FILTER, GL_NEAREST});
     texture.AddParameter(TextureParameter{GL_TEXTURE_MAG_FILTER, GL_NEAREST});
-    texture.AddParameter(TextureParameter{GL_TEXTURE_WRAP_S, GL_REPEAT});
-    texture.AddParameter(TextureParameter{GL_TEXTURE_WRAP_T, GL_REPEAT});
-
+    // Pixels outside shadow mapp range will have value indicating no shadow.
+    texture.AddParameter(TextureParameter{GL_TEXTURE_WRAP_S,
+                                          GL_CLAMP_TO_BORDER});
+    texture.AddParameter(TextureParameter{GL_TEXTURE_WRAP_T,
+                                          GL_CLAMP_TO_BORDER});
+    texture.Bind();
+    GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+    texture.Unbind();
     return texture;
 }
 

@@ -59,6 +59,7 @@ private:
     void initGLFWCallbacks();
 
     void RenderNormal();
+    void RenderNormalNoShadow();
     void RenderNormalShadowMapping();
     void RenderFBOTexture();
 

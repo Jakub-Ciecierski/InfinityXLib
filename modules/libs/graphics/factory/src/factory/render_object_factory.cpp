@@ -22,6 +22,7 @@ RenderObjectFactory::~RenderObjectFactory() {
 
 std::unique_ptr<Renderer> RenderObjectFactory::CreateRenderer(){
     auto renderer = std::unique_ptr<ifx::Renderer>(new ifx::Renderer());
+    renderer->SetShadowsType(ifx::ShadowsType::SHADOW_MAPPING);
     ifx::Window* window = renderer->window();
     auto fbo_renderer = ifx::RenderObjectFactory().CreateFBORenderer(window);
     renderer->SetFBORenderer(std::move(fbo_renderer));
@@ -47,7 +48,7 @@ std::unique_ptr<FBORenderer> RenderObjectFactory::CreateFBORenderer(
 
 ShadowMapping* RenderObjectFactory::CreateShadowMapping(){
     std::shared_ptr<Program> program = ProgramFactory().LoadShadowMappingProgram();
-    return new ShadowMapping(Dimensions{1024, 1024}, program);
+    return new ShadowMapping(Dimensions{4024, 4024}, program);
 };
 
 std::unique_ptr<RenderObject> RenderObjectFactory::CreateRoom(){
@@ -168,25 +169,26 @@ RenderObject* RenderObjectFactory::CreateAsteroid(){
     return renderObject;
 }
 
-RenderObject* RenderObjectFactory::CreateNanosuitObject(){
+std::unique_ptr<RenderObject> RenderObjectFactory::CreateNanosuitObject(){
     std::shared_ptr<Program> nano_program = ProgramFactory().LoadMainProgram();
     std::shared_ptr<Program> normal_vision_program = ProgramFactory().LoadNormalVisionProgram();
     std::shared_ptr<Model> nanosuitModel = ModelFactory::LoadNanoSuitModel();
 
-    RenderObject* renderObject
-            = new RenderObject(ObjectID(0), nanosuitModel);
+    auto renderObject
+            = std::unique_ptr<RenderObject>(new RenderObject(ObjectID(0),
+                                                             nanosuitModel));
 
     renderObject->addProgram(nano_program);
-    renderObject->addProgram(normal_vision_program);
+    //renderObject->addProgram(normal_vision_program);
 
-    float scaleFactor = 0.005f;
+    float scaleFactor = 0.05f;
     renderObject->scale(glm::vec3(scaleFactor, scaleFactor, scaleFactor));
-    renderObject->moveTo(glm::vec3(0,0,0));
+    renderObject->moveTo(glm::vec3(2,0,2));
 
     return renderObject;
 }
 
-RenderObject* RenderObjectFactory::CreateFloor(){
+std::unique_ptr<RenderObject> RenderObjectFactory::CreateFloor(){
     ProgramFactory program_factory;
 
     std::shared_ptr<Program> nano_program = program_factory.LoadMainProgram();
@@ -194,20 +196,21 @@ RenderObject* RenderObjectFactory::CreateFloor(){
 
     std::shared_ptr<Model> nanosuitModel = ModelFactory::LoadFloorModel();
 
-    RenderObject* renderObject
-            = new RenderObject(ObjectID(0), nanosuitModel);
+    auto renderObject
+            = std::unique_ptr<RenderObject>(new RenderObject(ObjectID(0),
+                                                     nanosuitModel));
 
     renderObject->addProgram(nano_program);
     //renderObject->addProgram(normal_vision_program);
 
-    float scaleFactor = 1.005f;
+    float scaleFactor = 15.005f;
     renderObject->scale(glm::vec3(scaleFactor, scaleFactor, scaleFactor));
     renderObject->rotateTo(glm::vec3(90, 0, 0));
 
     return renderObject;
 }
 
-RenderObject* RenderObjectFactory::CreateLampObject(){
+std::unique_ptr<RenderObject> RenderObjectFactory::CreateLampObject(){
     ProgramFactory program_factory;
 
     std::shared_ptr<Program> nano_program = program_factory.loadLampProgram();
@@ -215,8 +218,9 @@ RenderObject* RenderObjectFactory::CreateLampObject(){
 
     std::shared_ptr<Model> nanosuitModel = ModelFactory::LoadLampModel();
 
-    RenderObject* renderObject
-            = new RenderObject(ObjectID(0), nanosuitModel);
+    auto renderObject
+            = std::unique_ptr<RenderObject>(new RenderObject(ObjectID(0),
+                                                             nanosuitModel));
 
     renderObject->addProgram(nano_program);
 
