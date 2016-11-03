@@ -35,7 +35,7 @@ void main()
 
     // Fragment position is used to
     // calculate the Ray between Fragment and Light position for each fragment
-    FragPos = vec3(ModelMatrix * pos4);
+    FragPos = vec3(translate*ModelMatrix * pos4);
 
     // Multiply by the "Normal Matrix"
     // TODO This should be calculatd on CPU and send as uniform mat4

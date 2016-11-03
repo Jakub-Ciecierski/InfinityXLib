@@ -108,21 +108,40 @@ vec3 computeSpecular(vec3 norm, vec3 lightDir,
                      vec3 viewDir, vec3 specularLight);
 
 float ShadowMappingCalculation(vec4 fragPosLightSpace){
+    if(textureSize(shadow_map, 0).x <= 1)
+        return 0.0;
+
     // Projection.
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
 
     // Depth map is in range [0,1].
     projCoords = projCoords * 0.5 + 0.5;
 
+    float bias = 0.005;
     float closestDepth = texture(shadow_map, projCoords.xy).r;
     float currentDepth = projCoords.z;
-    float shadow = closestDepth < currentDepth ? 1 : 0;
 
-    //return currentDepth;
-    //return closestDepth;
+    // PCF. Create softer shadows
+    float shadow = 0.0;
+    vec2 texelSize = 1.0 / textureSize(shadow_map, 0);
+    for(int x = -1; x <= 1; ++x)
+    {
+        for(int y = -1; y <= 1; ++y)
+        {
+            float pcfDepth = texture(shadow_map, projCoords.xy + vec2(x, y) * texelSize).r;
+            shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
+        }
+    }
+    shadow /= 9.0;
+
+    // A projected coordinate is further than the light's
+    // far plane when its z coordinate is larger than 1.0
+    if(projCoords.z > 1.0)
+        shadow = 0.0;
+
+    // 1 if shadow, 0 otherwise
     return shadow;
 }
-
 vec3 computePointLight(PointLight light, vec3 norm, vec3 fragPos,
                         vec3 viewDir, mat3 TBN){
     vec3 lightDir = normalize(light.position - fragPos);
@@ -165,8 +184,7 @@ vec3 computeDirLight(DirLight light, vec3 norm, vec3 viewDir, mat3 TBN){
     vec4 fragPosLightSpace = light.LightSpaceMatrix * vec4(FragPos, 1.0);
     float shadow = ShadowMappingCalculation(fragPosLightSpace);
 
-    vec3 result = (ambient + diffuse + specular);
-    //vec3 result = (ambient + (1.0 - shadow) * (diffuse + specular));
+    vec3 result = (ambient + (1.0 - shadow) * (diffuse + specular));
 
     return result;
 }
