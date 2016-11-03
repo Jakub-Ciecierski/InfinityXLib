@@ -29,9 +29,7 @@ std::unique_ptr<Scene> SceneFactory::CreateNanosuitGuy(std::unique_ptr<Camera> c
 
     std::vector<std::unique_ptr<RenderObject>> render_objects;
 
-    render_objects.push_back(
-            std::unique_ptr<RenderObject>(
-                    RenderObjectFactory().CreateNanosuitObject()));
+    render_objects.push_back(std::move(RenderObjectFactory().CreateNanosuitObject()));
 
     std::unique_ptr<LightGroup> group_light(
                 LightingFactory().createGroupLight(camera.get()));

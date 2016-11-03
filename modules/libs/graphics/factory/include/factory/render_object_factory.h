@@ -27,11 +27,11 @@ public:
 
     RenderObject* CreateAsteroidField();
     RenderObject* CreateAsteroid();
-    RenderObject* CreateNanosuitObject();
+    std::unique_ptr<RenderObject> CreateNanosuitObject();
 
-    RenderObject* CreateFloor();
+    std::unique_ptr<RenderObject> CreateFloor();
 
-    RenderObject* CreateLampObject();
+    std::unique_ptr<RenderObject> CreateLampObject();
 
     /*
     RenderObject* loadBicubicBezierSurfaceC0Object();

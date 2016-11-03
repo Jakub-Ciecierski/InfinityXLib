@@ -157,6 +157,7 @@ extern const std::string TEXTURE_CUBEMAP_NAME;
 extern const std::string TEXTURE_SCREEN_NAME;
 
 extern const std::string TEXTURE_SHADOW_MAP;
+extern const std::string SHADOW_MAP_MODE;
 
 extern const std::string TESSELLATION_LVL_INNER_NAME;
 extern const std::string TESSELLATION_LVL_OUTER_NAME;

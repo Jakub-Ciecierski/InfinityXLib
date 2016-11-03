@@ -118,8 +118,8 @@ target_link_libraries(${APP_NAME}
 
 target_link_libraries(${APP_NAME} SOIL)
 target_link_libraries(${APP_NAME} assimp)
-target_link_libraries(${APP_NAME} glfw)
+target_link_libraries(${APP_NAME} glfw ${GLFW_LIBRARIES})
 
 
 target_link_libraries(${APP_NAME} ${OPENGL_LIBRARIES})
-target_link_libraries(${APP_NAME} glew-2.0.0)
+target_link_libraries(${APP_NAME} glew20)

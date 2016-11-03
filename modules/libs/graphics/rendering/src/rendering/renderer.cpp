@@ -107,10 +107,14 @@ void Renderer::Render(){
     glfwSwapBuffers(window_->getHandle());
 }
 
-void Renderer::RenderNormalShadowMapping(){
-    shadow_mapping_->Render(scene_.get());
+void Renderer::RenderNormal(){
+    if(shadow_type_ == ShadowsType::NONE)
+        RenderNormalNoShadow();
+    if(shadow_type_ == ShadowsType::SHADOW_MAPPING)
+        RenderNormalShadowMapping();
+}
 
-    glViewport(0, 0, *(window_->width()), *(window_->height()));
+void Renderer::RenderNormalNoShadow(){
     glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
@@ -118,7 +122,10 @@ void Renderer::RenderNormalShadowMapping(){
     scene_->render();
 }
 
-void Renderer::RenderNormal(){
+void Renderer::RenderNormalShadowMapping(){
+    shadow_mapping_->Render(scene_.get());
+
+    glViewport(0, 0, *(window_->width()), *(window_->height()));
     glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
