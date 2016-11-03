@@ -982,6 +982,7 @@ std::unique_ptr<Mesh> MeshFactory::LoadRoom() {
     TextureFactory textureLoader;
     Texture textureDiffuse = textureLoader.LoadPortalTexture();
     Texture textureSpecular = textureLoader.LoadPortalTexture();
+    textureSpecular.texType = TextureTypes::SPECULAR;
 
     std::vector <Texture> textures = {textureDiffuse, textureSpecular};
 
@@ -1001,11 +1002,11 @@ std::unique_ptr<Mesh> MeshFactory::LoadFloor(){
             // Front
             Vertex{vec3(1.0f, 1.0f, 0.0f),
                    vec3(0.0f, 0.0f, -1.0f), vec2(1.0f, 1.0f)},
-            Vertex{vec3(1.0f, 0.0f, 0.0f),
+            Vertex{vec3(1.0f, -1.0f, 0.0f),
                    vec3(0.0f, 0.0f, -1.0f), vec2(1.0f, 0.0f)},
-            Vertex{vec3(0.0f, 0.0f, 0.0f),
+            Vertex{vec3(-1.0f, -1.0f, 0.0f),
                    vec3(0.0f, 0.0f, -1.0f), vec2(0.0f, 0.0f)},
-            Vertex{vec3(0.0f, 1.0f, 0.0f),
+            Vertex{vec3(-1.0f, 1.0f, 0.0f),
                    vec3(0.0f, 0.0f, -1.0f), vec2(0.0f, 1.0f)},
     };
 
@@ -1015,6 +1016,7 @@ std::unique_ptr<Mesh> MeshFactory::LoadFloor(){
     TextureFactory textureLoader;
     Texture textureDiffuse = textureLoader.LoadPortalTexture();
     Texture textureSpecular = textureLoader.LoadPortalTexture();
+    textureSpecular.texType = TextureTypes::SPECULAR;
 
     std::vector <Texture> textures = {textureDiffuse, textureSpecular};
 
