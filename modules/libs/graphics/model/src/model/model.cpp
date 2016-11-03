@@ -17,7 +17,6 @@ std::shared_ptr<Model> Model::MakeModel(
         = std::static_pointer_cast<Model>(
                     ifx::ResourceMemoryCache::GetInstance().Get(filepath));
     if(!model){
-        //model = std::make_shared<Model>(filepath, meshes);
         model = std::shared_ptr<Model>(new Model(filepath, std::move(meshes)));
     }
     ifx::ResourceMemoryCache::GetInstance().Add(model);
