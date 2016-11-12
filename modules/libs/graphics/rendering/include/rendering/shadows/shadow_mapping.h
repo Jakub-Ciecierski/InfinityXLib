@@ -5,6 +5,7 @@
 
 #include <math/math_ifx.h>
 #include <shaders/data/shader_data.h>
+#include <shaders/textures/texture.h>
 
 class Program;
 
@@ -38,8 +39,8 @@ public:
     void Render(Scene* scene);
 
 private:
-    Texture CreateTexture();
-    void InitFBO(Texture texture);
+    std::shared_ptr<Texture2D> CreateTexture();
+    void InitFBO(std::shared_ptr<Texture2D> texture);
 
     void BindLightMatrix(const Program* program, LightDirectional* light);
 

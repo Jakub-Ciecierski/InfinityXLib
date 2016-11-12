@@ -8,6 +8,11 @@ ObjectID::ObjectID(int key) : key(key){
 
 }
 
+ObjectID::ObjectID(int key, std::string name) :
+    key(key), name_(name){
+
+}
+
 ObjectID::~ObjectID() {
 
 }

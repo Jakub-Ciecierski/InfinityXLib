@@ -14,8 +14,8 @@ TextureFactory::TextureFactory() {
 TextureFactory::~TextureFactory() {
 
 }
-
-Texture TextureFactory::LoadExampleCubemap() {
+/*
+std::shared_ptr<Texture2D> TextureFactory::LoadExampleCubemap() {
     TextureLoader textureLoader;
 
     ifx::Resources &resources = ifx::Resources::GetInstance();
@@ -30,33 +30,10 @@ Texture TextureFactory::LoadExampleCubemap() {
             filepathBase + "ft.JPG"
     };
     return textureLoader.loadCubemap(filepathFaces);
-
-
-/*
-    string filepathBase = "res/textures/cubemap/sb_strato/stratosphere_";
-    std::vector<std::string> filepathFaces = {
-            filepathBase+"rt.jpg",
-            filepathBase+"lf.jpg",
-            filepathBase+"up.jpg",
-            filepathBase+"dn.jpg",
-            filepathBase+"bk.jpg",
-            filepathBase+"ft.jpg"
-    };
-    return loadCubemap(filepathFaces);*/
-/*
-    string filepathBase = "res/textures/cubemap/sb_iceflow/iceflow_";
-    std::vector<std::string> filepathFaces = {
-            filepathBase+"rt.jpg",
-            filepathBase+"lf.jpg",
-            filepathBase+"up.jpg",
-            filepathBase+"dn.jpg",
-            filepathBase+"bk.jpg",
-            filepathBase+"ft.jpg"
-    };
-    return loadCubemap(filepathFaces);*/
 }
-
-Texture TextureFactory::LoadDynamicBlueDiffuseTexture() {
+*/
+/*
+std::shared_ptr<Texture2D> TextureFactory::LoadDynamicBlueDiffuseTexture() {
     TextureLoader textureLoader;
 
     int width = 15;
@@ -78,7 +55,7 @@ Texture TextureFactory::LoadDynamicBlueDiffuseTexture() {
     delete data;
 
     return texture;
-}
+}*/
 /*
 Texture TextureFactory::LoadDynamicBlueDiffuseTexture() {
     TextureLoader textureLoader;
@@ -105,8 +82,8 @@ Texture TextureFactory::LoadDynamicBlueDiffuseTexture() {
 
     return texture;
 }*/
-
-Texture TextureFactory::LoadDynamicBlueSpecularTexture() {
+/*
+std::shared_ptr<Texture2D> TextureFactory::LoadDynamicBlueSpecularTexture() {
     TextureLoader textureLoader;
 
     int width = 128;
@@ -131,127 +108,76 @@ Texture TextureFactory::LoadDynamicBlueSpecularTexture() {
 
     return texture;
 }
-
-Texture TextureFactory::LoadTesselationDiffuse() {
-    TextureLoader textureLoader;
-
-    ifx::Resources &resources = ifx::Resources::GetInstance();
-    string filepath = resources.GetResourcePath("teselation/diffuse.jpg",
-                                                ifx::ResourceType::TEXTURE);
-    GLuint id = textureLoader.loadFromFile(filepath.c_str());
-    Texture texture = textureLoader.contructTexture(id, GL_TEXTURE_2D);
-    texture.texType = TextureTypes::DIFFUSE;
-
-    return texture;
+*/
+std::shared_ptr<Texture2D> TextureFactory::LoadTesselationDiffuse() {
+    return Texture2D::MakeTexture2DFromFile(
+            ifx::Resources::GetInstance()
+                    .GetResourcePath("teselation/diffuse.jpg",
+                                     ifx::ResourceType::TEXTURE),
+            TextureTypes::DIFFUSE);
 }
 
-Texture TextureFactory::LoadTesselationSpecular() {
-    TextureLoader textureLoader;
-
-    ifx::Resources &resources = ifx::Resources::GetInstance();
-    string filepath = resources.GetResourcePath("teselation/diffuse.jpg",
-                                                ifx::ResourceType::TEXTURE);
-    GLuint id = textureLoader.loadFromFile(filepath.c_str());
-
-    Texture texture = textureLoader.contructTexture(id, GL_TEXTURE_2D);
-    texture.texType = TextureTypes::SPECULAR;
-
-    return texture;
+std::shared_ptr<Texture2D> TextureFactory::LoadTesselationSpecular() {
+    return Texture2D::MakeTexture2DFromFile(
+            ifx::Resources::GetInstance()
+                    .GetResourcePath("teselation/diffuse.jpg",
+                                     ifx::ResourceType::TEXTURE),
+            TextureTypes::SPECULAR);
 }
 
-Texture TextureFactory::LoadTesselationNormals() {
-    TextureLoader textureLoader;
-
-    ifx::Resources &resources = ifx::Resources::GetInstance();
-    string filepath = resources.GetResourcePath("teselation/normals.jpg",
-                                                ifx::ResourceType::TEXTURE);
-    GLuint id = textureLoader.loadFromFile(filepath.c_str());
-
-    Texture texture = textureLoader.contructTexture(id, GL_TEXTURE_2D);
-    texture.texType = TextureTypes::NORMAL;
-
-    return texture;
+std::shared_ptr<Texture2D> TextureFactory::LoadTesselationNormals() {
+    return Texture2D::MakeTexture2DFromFile(
+            ifx::Resources::GetInstance()
+                    .GetResourcePath("teselation/normals.jpg",
+                                     ifx::ResourceType::TEXTURE),
+            TextureTypes::NORMAL);
 }
 
-Texture TextureFactory::LoadTesselationHeight() {
-    TextureLoader textureLoader;
-
-    ifx::Resources &resources = ifx::Resources::GetInstance();
-    string filepath = resources.GetResourcePath("teselation/height.jpg",
-                                                ifx::ResourceType::TEXTURE);
-    GLuint id = textureLoader.loadFromFile(filepath.c_str());
-
-    Texture texture = textureLoader.contructTexture(id, GL_TEXTURE_2D);
-    texture.texType = TextureTypes::DISPLACEMENT;
-
-    return texture;
+std::shared_ptr<Texture2D> TextureFactory::LoadTesselationHeight() {
+    return Texture2D::MakeTexture2DFromFile(
+            ifx::Resources::GetInstance()
+                    .GetResourcePath("teselation/height.jpg",
+                                     ifx::ResourceType::TEXTURE),
+            TextureTypes::DISPLACEMENT);
 }
 
-Texture TextureFactory::LoadContainer() {
-    TextureLoader textureLoader;
-
-    ifx::Resources &resources = ifx::Resources::GetInstance();
-    string filepath = resources.GetResourcePath("container.png",
-                                                ifx::ResourceType::TEXTURE);
-    GLuint id = textureLoader.loadFromFile(filepath.c_str());
-
-    Texture texture = textureLoader.contructTexture(id, GL_TEXTURE_2D);
-
-    return texture;
+std::shared_ptr<Texture2D> TextureFactory::LoadContainerDiffuse() {
+    return Texture2D::MakeTexture2DFromFile(
+            ifx::Resources::GetInstance()
+                    .GetResourcePath("container_diff.png",
+                                     ifx::ResourceType::TEXTURE),
+            TextureTypes::DIFFUSE);
 }
 
-Texture TextureFactory::LoadContainerDiffuse() {
-    TextureLoader textureLoader;
-
-    ifx::Resources &resources = ifx::Resources::GetInstance();
-    string filepath = resources.GetResourcePath("container_diff.png",
-                                                ifx::ResourceType::TEXTURE);
-    GLuint id = textureLoader.loadFromFile(filepath.c_str());
-
-    Texture texture = textureLoader.contructTexture(id, GL_TEXTURE_2D);
-    texture.texType = TextureTypes::DIFFUSE;
-
-    return texture;
+std::shared_ptr<Texture2D> TextureFactory::LoadPortalTextureDiffuse() {
+    return Texture2D::MakeTexture2DFromFile(
+            ifx::Resources::GetInstance()
+                    .GetResourcePath("portal/portal_wall.jpg",
+                                     ifx::ResourceType::TEXTURE),
+            TextureTypes::DIFFUSE);
 }
 
-Texture TextureFactory::LoadPortalTexture() {
-    TextureLoader textureLoader;
-
-    ifx::Resources &resources = ifx::Resources::GetInstance();
-    string filepath = resources.GetResourcePath("portal/portal_wall.jpg",
-                                                ifx::ResourceType::TEXTURE);
-    GLuint id = textureLoader.loadFromFile(filepath.c_str());
-
-    Texture texture = textureLoader.contructTexture(id, GL_TEXTURE_2D);
-    texture.texType = TextureTypes::DIFFUSE;
-
-    return texture;
+std::shared_ptr<Texture2D> TextureFactory::LoadPortalTextureSpecular() {
+    return Texture2D::MakeTexture2DFromFile(
+            ifx::Resources::GetInstance()
+                    .GetResourcePath("portal/portal_wall.jpg",
+                                     ifx::ResourceType::TEXTURE),
+            TextureTypes::SPECULAR);
 }
 
-Texture TextureFactory::LoadContainerSpecular() {
-    TextureLoader textureLoader;
-
-    ifx::Resources &resources = ifx::Resources::GetInstance();
-    string filepath = resources.GetResourcePath("container_specular.png",
-                                                ifx::ResourceType::TEXTURE);
-    GLuint id = textureLoader.loadFromFile(filepath.c_str());
-
-    Texture texture = textureLoader.contructTexture(id, GL_TEXTURE_2D);
-    texture.texType = TextureTypes::SPECULAR;
-
-    return texture;
+std::shared_ptr<Texture2D> TextureFactory::LoadContainerSpecular() {
+    return Texture2D::MakeTexture2DFromFile(
+            ifx::Resources::GetInstance()
+                    .GetResourcePath("container_specular.png",
+                                     ifx::ResourceType::TEXTURE),
+            TextureTypes::SPECULAR);
 }
 
-Texture TextureFactory::LoadAwesomeFace() {
-    TextureLoader textureLoader;
-
-    ifx::Resources &resources = ifx::Resources::GetInstance();
-    string filepath = resources.GetResourcePath("awesomeface.png",
-                                                ifx::ResourceType::TEXTURE);
-    GLuint id = textureLoader.loadFromFile(filepath.c_str());
-
-    Texture texture = textureLoader.contructTexture(id, GL_TEXTURE_2D);
-
-    return texture;
+std::shared_ptr<Texture2D> TextureFactory::LoadAwesomeFace() {
+    return Texture2D::MakeTexture2DFromFile(
+            ifx::Resources::GetInstance()
+                    .GetResourcePath("awesomeface.png",
+                                     ifx::ResourceType::TEXTURE),
+            TextureTypes::DIFFUSE);
 }
 }

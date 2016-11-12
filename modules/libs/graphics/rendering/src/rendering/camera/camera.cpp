@@ -26,7 +26,7 @@ void Camera::HandleEvents() {
     float rotationSpeed = 0.1f;
 
     const Keys& keys = controls.keyboard_keys();
-    const MouseEvents& mouse_events = controls.mouse_events();
+    MouseEvents& mouse_events = controls.mouse_events();
 
     float boost = movementSpeed;
     if (keys[GLFW_KEY_SPACE])
@@ -44,14 +44,25 @@ void Camera::HandleEvents() {
     if (keys[GLFW_KEY_E])
         moveDown(boost);
 
-    MouseEvent* left_mouse = mouse_events.LeftMouse;
-    if(left_mouse->is_pressed()){
+    MouseEvent* right_mouse = mouse_events.RightMouse;
+    if(right_mouse->is_pressed()){
         GLfloat xoffset = mouse_events.pos_x - mouse_events.prev_pos_x;
         GLfloat yoffset = mouse_events.prev_pos_y - mouse_events.pos_y;
 
         rotate(glm::vec3(xoffset * rotationSpeed,
                          yoffset * rotationSpeed, 0));
     }
+
+    MouseEvent* middle_mouse = mouse_events.MiddleMouse;
+    if(middle_mouse->is_pressed()){
+        GLfloat xoffset = mouse_events.pos_x - mouse_events.prev_pos_x;
+        GLfloat yoffset = mouse_events.prev_pos_y - mouse_events.pos_y;
+
+        move(-xoffset * right * movementSpeed * 2.0f);
+        move(yoffset * up * movementSpeed * 2.0f);
+    }
+
+    moveForward(0.2f * mouse_events.GetAndResetScrollOffSet());
 }
 
 void Camera::rotate(const glm::vec3 &rotation) {

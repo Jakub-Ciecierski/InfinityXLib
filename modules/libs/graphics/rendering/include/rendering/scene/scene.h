@@ -22,6 +22,8 @@ public:
           std::unique_ptr<Camera> camera);
     ~Scene();
 
+    std::vector<std::shared_ptr<RenderObject>>& render_objects(){
+        return render_objects_;}
     LightGroup* light_group(){return light_group_.get();}
     Camera* camera(){return camera_.get();}
 

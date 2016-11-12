@@ -2,6 +2,9 @@
 #define PROJECT_TEXTURE_FACTORY_H
 
 #include "shaders/data/shader_data.h"
+#include <shaders/textures/texture.h>
+
+#include <memory>
 
 namespace ifx {
 
@@ -14,27 +17,28 @@ public:
 
     ~TextureFactory();
 
-    Texture LoadExampleCubemap();
+    std::shared_ptr<Texture2D> LoadExampleCubemap();
 
-    Texture LoadDynamicBlueDiffuseTexture();
+    std::shared_ptr<Texture2D> LoadDynamicBlueDiffuseTexture();
 
-    Texture LoadDynamicBlueSpecularTexture();
+    std::shared_ptr<Texture2D> LoadDynamicBlueSpecularTexture();
 
-    Texture LoadTesselationDiffuse();
+    std::shared_ptr<Texture2D> LoadTesselationDiffuse();
 
-    Texture LoadTesselationSpecular();
+    std::shared_ptr<Texture2D> LoadTesselationSpecular();
 
-    Texture LoadTesselationNormals();
+    std::shared_ptr<Texture2D> LoadTesselationNormals();
 
-    Texture LoadTesselationHeight();
+    std::shared_ptr<Texture2D> LoadTesselationHeight();
 
-    Texture LoadContainer();
-    Texture LoadPortalTexture();
-    Texture LoadContainerDiffuse();
+    std::shared_ptr<Texture2D> LoadContainer();
+    std::shared_ptr<Texture2D> LoadPortalTextureDiffuse();
+    std::shared_ptr<Texture2D> LoadPortalTextureSpecular();
+    std::shared_ptr<Texture2D> LoadContainerDiffuse();
 
-    Texture LoadContainerSpecular();
+    std::shared_ptr<Texture2D> LoadContainerSpecular();
 
-    Texture LoadAwesomeFace();
+    std::shared_ptr<Texture2D> LoadAwesomeFace();
 
 };
 } // ifx

@@ -27,7 +27,8 @@ void InstancedRenderObject::render(const Program& program){
                                               MODEL_MATRIX_NAME.c_str());
     glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(ModelMatrix));
 
-    model_->drawInstanced(program, instanced_data_.data_count);
+    for(auto& model : models_)
+        model->drawInstanced(program, instanced_data_.data_count);
 
     if(after_render_)
         after_render_(&program);

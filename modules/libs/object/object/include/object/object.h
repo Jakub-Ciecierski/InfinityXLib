@@ -12,12 +12,12 @@
 class Object {
 private:
 
-    ObjectID id;
+    ObjectID id_;
 
 public:
 
     Object(ObjectID id);
-
+    ObjectID& id(){return id_;}
     virtual ~Object();
 
     virtual void update() = 0;

@@ -13,6 +13,18 @@
 
 #include <iostream>
 
+namespace ifx {
+
+class Texture2D;
+
+struct Textures {
+    std::shared_ptr<Texture2D> diffuse;
+    std::shared_ptr<Texture2D> specular;
+    std::shared_ptr<Texture2D> normal;
+    std::shared_ptr<Texture2D> displacement;
+    std::shared_ptr<Texture2D> fbo;
+};
+
 /*
  * Contains the geometry of an object.
  * Vertices, indices, textures and material is defined.
@@ -23,49 +35,41 @@
 class Mesh {
 public:
     Mesh();
+
     Mesh(std::vector<Vertex> vertices,
-         std::vector <GLuint>& indices,
+         std::vector<GLuint> &indices,
          GLenum drawingMode = GL_TRIANGLES,
          GLenum polygonMode = GL_FILL);
 
-    Mesh(std::vector<Vertex> vertices,
-         std::vector <GLuint>& indices,
-         std::vector<Texture>& textures,
-         GLenum drawingMode = GL_TRIANGLES,
-         GLenum polygonMode = GL_FILL);
-
-    Mesh(std::vector<Vertex> vertices,
-         std::vector <GLuint>& indices,
-         std::vector<Texture>& textures,
-         Material material,
-         GLenum drawingMode  = GL_TRIANGLES,
-         GLenum polygonMode = GL_FILL);
-
-    Mesh(const Mesh& mesh) = delete;
-    Mesh& operator=(const Mesh& other) = delete;
+    Mesh(const Mesh &mesh) = delete;
+    Mesh &operator=(const Mesh &other) = delete;
 
     virtual ~Mesh();
 
-    const std::vector<Vertex>& vertices(){return vertices_;}
-    VAO* vao() {return vao_.get();};
-    VBO* vbo() {return vbo_.get();};
+    const std::vector<Vertex> &vertices() { return vertices_; }
+
+    VAO *vao() { return vao_.get(); };
+    VBO *vbo() { return vbo_.get(); };
+
 
     void setPolygonMode(GLenum polygonMode);
+
     void setPrimitiveMode(GLenum drawingMode);
-    void setMaterial(const Material& material);
-    void addTexture(Texture texture);
 
-    std::vector<Texture*> getTextures(TextureTypes type);
+    void setMaterial(const Material &material);
 
-    virtual void draw(const Program& program);
-    virtual void drawInstanced(const Program& program, int count);
+    void AddTexture(std::shared_ptr<Texture2D> texture);
+
+    virtual void draw(const Program &program);
+
+    virtual void drawInstanced(const Program &program, int count);
 
     std::string toString() const;
 
 protected:
     std::vector<Vertex> vertices_;
     std::vector<GLuint> indices;
-    std::vector<Texture> textures;
+    Textures textures_;
 
     GLenum primitive_mode_;
     GLenum polygonMode;
@@ -89,15 +93,20 @@ protected:
     /*
      * Computes Tanget Basis for the face represented by the vertices
      */
-    void computeAndStoreTangetBasis(Vertex& v1, Vertex& v2, Vertex& v3);
+    void computeAndStoreTangetBasis(Vertex &v1, Vertex &v2, Vertex &v3);
 
     void initBuffers();
 
     /*
      * Binds all textures during draw operation
      */
-    void bindTextures(const Program& program);
-    void bindColor(const Program& program);
+    void bindTextures(const Program &program);
+    void BindTexture(std::shared_ptr<Texture2D> texture,
+                     std::string program_location,
+                     const Program &program, int id);
+
+    void bindColor(const Program &program);
 };
+}
 
 #endif //DUCK_MESH_H

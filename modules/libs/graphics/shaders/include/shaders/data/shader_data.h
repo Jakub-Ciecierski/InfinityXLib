@@ -26,6 +26,7 @@ struct InstancedData {
     std::vector<glm::mat4> model_matrices;
 };
 
+/*
 enum class TextureTypes{
     DIFFUSE, SPECULAR, NORMAL, DISPLACEMENT, CUBEMAP, FBO
 };
@@ -111,7 +112,7 @@ struct Texture{
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 };
-
+*/
 struct Material{
     float shininess;
 };
@@ -163,6 +164,8 @@ extern const std::string TESSELLATION_LVL_INNER_NAME;
 extern const std::string TESSELLATION_LVL_OUTER_NAME;
 extern const std::string PATCH_ID_I_NAME;
 extern const std::string PATCH_ID_J_NAME;
+extern const std::string PATCH_ROW_COUNT_NAME;
+extern const std::string PATCH_COLUMN_COUNT_NAME;
 
 /**
  * Light

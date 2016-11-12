@@ -31,8 +31,12 @@ out vec2 teTexCoords;
 uniform mat4 ModelMatrix;
 uniform mat4 ViewMatrix;
 uniform mat4 ProjectionMatrix;
+
 uniform int patchIDI;
 uniform int patchIDJ;
+uniform float patchRowCount;
+uniform float patchColumnCount;
+
 uniform Material material;
 
 const float DISP_SCALE = 0.1f;
@@ -50,12 +54,12 @@ void main(){
     float u = gl_TessCoord.x;
     float v = gl_TessCoord.y;
 
-    float minJ = patchIDJ / 4.0f;
-    float maxJ = (patchIDJ + 1) / 4.0f;
+    float minJ = patchIDJ / 4.0;
+    float maxJ = (patchIDJ + 1) / 4.0;
     float rJ = maxJ - minJ;
 
-    float minI = patchIDI / 4.0f;
-    float maxI = (patchIDI + 1) / 4.0f;
+    float minI = patchIDI / 4.0;
+    float maxI = (patchIDI + 1) / 4.0;
     float rI = maxI - minI;
 
     float texU = rJ * u + minJ;
@@ -131,14 +135,6 @@ void main(){
     vec3 tanV = normalize(vec3(xV, yV, zV));
 
     teNormal  = normalize(cross(tanV, tanU));
-
-    // ---------- DISPLACEMENT -------------- //
-    vec4 pointPosViewSpace =  ViewMatrix * ModelMatrix * pointPosition4;
-    float mipLevel = computeMipLevel(pointPosViewSpace.z);
-    float h = texture(material.displacement, teTexCoords, mipLevel).x;
-    h = h * DISP_SCALE;
-    pointPosition3 += h * teNormal;
-
 
     gl_Position
         = ProjectionMatrix * ViewMatrix * ModelMatrix *

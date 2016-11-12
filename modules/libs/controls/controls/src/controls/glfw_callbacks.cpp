@@ -7,18 +7,18 @@ namespace ifx {
 
 void key_callback(GLFWwindow *window, int key,
                   int scancode, int action, int mode) {
-    Controls& controls = Controls::GetInstance();
-
+    if(ImGui::GetIO().WantCaptureKeyboard){
+        ImGui_ImplGlfwGL3_KeyCallback(window, key, scancode, action, mode);
+        return;
+    }
+    // Duplication on purpose.
     ImGui_ImplGlfwGL3_KeyCallback(window, key, scancode, action, mode);
-    controls.OnKeyboardEvent(action, key);
-
+    Controls::GetInstance().OnKeyboardEvent(action, key);
 }
 
 void mouse_callback(GLFWwindow *window,
                     double x, double y) {
-    Controls& controls = Controls::GetInstance();
-
-    controls.OnMouseEvent(x, y);
+    Controls::GetInstance().OnMouseEvent(x, y);
 }
 
 void mouse_button_callback(GLFWwindow *window,
@@ -54,9 +54,11 @@ void mouse_button_callback(GLFWwindow *window,
 
 void mousescroll_callback(GLFWwindow *window,
                           double xoffset, double yoffset) {
-    Controls& controls = Controls::GetInstance();
-
-    ImGui_ImplGlfwGL3_ScrollCallback(window, xoffset, yoffset);
+    if(ImGui::GetIO().WantCaptureMouse){
+        ImGui_ImplGlfwGL3_ScrollCallback(window, xoffset, yoffset);
+        return;
+    }
+    Controls::GetInstance().OnMouseScrollEvent(xoffset, yoffset);
 }
 
 void char_callback(GLFWwindow* window, unsigned int c){

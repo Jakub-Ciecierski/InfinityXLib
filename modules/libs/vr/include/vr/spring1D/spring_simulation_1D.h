@@ -6,8 +6,6 @@
 
 #include <vector>
 
-class RenderObject;
-
 /**
  * Simulation of 1D spring.
  * Only interested in one dimension of the position.
@@ -29,6 +27,8 @@ class RenderObject;
  */
 
 namespace ifx {
+
+class RenderObject;
 
 /**
  * The type of the shift function for:

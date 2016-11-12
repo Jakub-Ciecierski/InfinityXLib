@@ -5,6 +5,7 @@
 #include <model/mesh.h>
 #include <shaders/textures/texture_loader.h>
 #include <rendering/window.h>
+#include <shaders/textures/texture.h>
 
 namespace ifx {
 
@@ -43,13 +44,15 @@ void FBORenderer::Render(Program* program){
 }
 
 void FBORenderer::initFBO(Window* window){
-    Texture texture = TextureLoader().CreateEmptyTexture(
+    auto texture = Texture2D::MakeTexture2DEmpty(
+            "fbo",
             TextureTypes::FBO,
             TextureInternalFormat::RGB,
             TexturePixelType::UNSIGNED_BYTE,
             *(window->width()), *(window->height()));
-    texture.AddParameter(TextureParameter{GL_TEXTURE_MIN_FILTER, GL_LINEAR});
-    texture.AddParameter(TextureParameter{GL_TEXTURE_MAG_FILTER, GL_LINEAR});
+
+    texture->AddParameter(TextureParameter{GL_TEXTURE_MIN_FILTER, GL_LINEAR});
+    texture->AddParameter(TextureParameter{GL_TEXTURE_MAG_FILTER, GL_LINEAR});
 
     fbo_ = new FBO(texture, FBOType::COLOR_DEPTH);
     fbo_->compile();
@@ -69,9 +72,8 @@ void FBORenderer::initScreenMesh(){
     };
     std::vector <GLuint> indices = { 0, 1, 3, 1, 2, 3 };
 
-    std::vector <Texture> textures {fbo_->texture()};
-
-    screenMesh_ = new Mesh(vertices, indices, textures);
+    screenMesh_ = new Mesh(vertices, indices);
+    screenMesh_->AddTexture(fbo_->texture());
 }
 
 }

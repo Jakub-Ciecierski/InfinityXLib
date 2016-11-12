@@ -7,6 +7,7 @@
 /*
  * Class loads textures.
  */
+/*
 class TextureLoader {
 public:
 
@@ -17,9 +18,7 @@ public:
                                TextureInternalFormat format,
                                TexturePixelType pixel_type,
                                int width, int height);
-    /**
-     * Deprecated.
-     */
+
     Texture CreateEmptyTexture(TextureTypes type,
                                int width, int height);
 
@@ -38,5 +37,5 @@ public:
 
 };
 
-
+*/
 #endif //DUCK_TEXTURE_LOADER_H

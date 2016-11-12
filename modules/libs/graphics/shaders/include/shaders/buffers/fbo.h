@@ -4,7 +4,11 @@
 #include <GL/glew.h>
 #include <shaders/data/shader_data.h>
 
+#include <memory>
+
 namespace ifx {
+
+class Texture2D;
 
 /**
  * Determines the type of FBO.
@@ -21,11 +25,11 @@ enum class FBOType{
 class FBO {
 public:
 
-    FBO(Texture texture, FBOType type);
+    FBO(std::shared_ptr<Texture2D> texture, FBOType type);
 
     ~FBO();
 
-    Texture texture(){return texture_;}
+    std::shared_ptr<Texture2D> texture(){return texture_;}
 
     /**
      * Finishes the creation of FBO.
@@ -60,7 +64,7 @@ private:
     FBOType type_;
 
     GLuint id_;
-    Texture texture_;
+    std::shared_ptr<Texture2D> texture_;
 
     bool compiled_;
 };

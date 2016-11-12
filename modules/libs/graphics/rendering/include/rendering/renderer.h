@@ -36,7 +36,7 @@ public:
     Renderer();
     ~Renderer();
 
-    Scene* scene()  {return scene_.get();}
+    std::shared_ptr<Scene> scene()  {return scene_;}
     Window* window()  {return window_.get();}
     RenderingType rendering_type(){return rendering_type_;}
     ShadowsType shadow_type(){return shadow_type_;};
@@ -46,7 +46,7 @@ public:
     void Update();
     void Render();
 
-    void SetScene(std::unique_ptr<Scene> scene);
+    void SetScene(std::shared_ptr<Scene> scene);
     void SetGUI(std::unique_ptr<GUI> gui);
     void SetRenderingType(RenderingType type);
     void SetShadowsType(ShadowsType type);
@@ -64,7 +64,7 @@ private:
     void RenderFBOTexture();
 
     std::unique_ptr<Window> window_;
-    std::unique_ptr<Scene> scene_;
+    std::shared_ptr<ifx::Scene> scene_;
     std::unique_ptr<GUI> gui_;
 
     RenderingType rendering_type_;

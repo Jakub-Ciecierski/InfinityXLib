@@ -52,13 +52,23 @@ struct MouseEvents{
     MouseEvent* RightMouse;
     MouseEvent* MiddleMouse;
 
+    float GetAndResetScrollOffSet() {
+        float tmp = scroll_y_offset;
+        scroll_y_offset = 0;
+        return tmp;
+    }
+
     float pos_x;
     float pos_y;
 
     float prev_pos_x;
     float prev_pos_y;
+
+    float scroll_x_offset;
+    float scroll_y_offset;
 };
 
 }
 
 #endif //PROJECT_MOUSE_EVENT_H
+

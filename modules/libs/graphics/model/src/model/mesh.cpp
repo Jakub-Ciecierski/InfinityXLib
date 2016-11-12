@@ -1,48 +1,22 @@
 #include "model/mesh.h"
 
+#include <shaders/textures/texture.h>
 #include <stdexcept>
 
 using namespace std;
 
-Mesh::Mesh(){
+namespace ifx {
+
+Mesh::Mesh() {
 
 }
 
 Mesh::Mesh(std::vector<Vertex> vertices,
-           vector <GLuint>& indices,
+           vector<GLuint> &indices,
            GLenum drawingMode, GLenum polygonMode) :
-        vertices_(vertices), indices(indices){
+        vertices_(vertices), indices(indices) {
     this->primitive_mode_ = drawingMode;
     this->polygonMode = polygonMode;
-    checkError();
-
-    computeTangetBasis();
-    initBuffers();
-}
-
-Mesh::Mesh(std::vector<Vertex> vertices,
-           vector <GLuint>& indices,
-           vector<Texture>& textures,
-           GLenum drawingMode, GLenum polygonMode) :
-        vertices_(vertices), indices(indices), textures(textures){
-    this->primitive_mode_ = drawingMode;
-    this->polygonMode = polygonMode;
-    checkError();
-
-    computeTangetBasis();
-    initBuffers();
-}
-
-Mesh::Mesh(std::vector<Vertex> vertices,
-           vector <GLuint>& indices,
-           vector<Texture>& textures,
-           Material material,
-           GLenum drawingMode, GLenum polygonMode) :
-        vertices_(vertices), indices(indices), textures(textures),
-        material(material){
-    this->primitive_mode_ = drawingMode;
-    this->polygonMode = polygonMode;
-
     checkError();
 
     computeTangetBasis();
@@ -50,33 +24,27 @@ Mesh::Mesh(std::vector<Vertex> vertices,
 }
 
 Mesh::~Mesh() {
-    for(auto& texture : textures){
-        texture.Delete();
-    }
+
 }
 
-void Mesh::computeTangetBasis(){
+void Mesh::computeTangetBasis() {
     const int DATA_PER_FACE = 3;
     int faceCount = indices.size() / DATA_PER_FACE;
     int vertexIndex = 0;
 
 
-    for(int i = 0; i < faceCount; i++){
-        if(vertexIndex >= indices.size()){
+    for (int i = 0; i < faceCount; i++) {
+        if (vertexIndex >= indices.size()) {
             throw new std::invalid_argument("computeTangetBasis out of bounds");
         }
-        computeAndStoreTangetBasis(vertices_[indices[vertexIndex+0]],
-                                   vertices_[indices[vertexIndex+1]],
-                                   vertices_[indices[vertexIndex+2]]);
-/*
-        std::cout << "Face[" << i << "]" << std::endl;
-        std::cout << "V0: " << vertexIndex+0 << std::endl;
-        std::cout << "V1: " << vertexIndex+1 << std::endl;
-        std::cout << "V2: " << vertexIndex+2 << std::endl << std::endl;*/
+        computeAndStoreTangetBasis(vertices_[indices[vertexIndex + 0]],
+                                   vertices_[indices[vertexIndex + 1]],
+                                   vertices_[indices[vertexIndex + 2]]);
         vertexIndex += DATA_PER_FACE;
 
     }
 }
+
 /*
 void Mesh::computeAndStoreTangetBasis(Vertex& v0, Vertex& v1, Vertex& v2){
     glm::vec3 P = v1.Position - v0.Position;
@@ -127,21 +95,21 @@ void Mesh::computeAndStoreTangetBasis(Vertex& v0, Vertex& v1, Vertex& v2){
 }
 */
 
-void Mesh::computeAndStoreTangetBasis(Vertex& v0, Vertex& v1, Vertex& v2){
+void Mesh::computeAndStoreTangetBasis(Vertex &v0, Vertex &v1, Vertex &v2) {
 
-    glm::vec2 & uv0 = v0.TexCoords;
-    glm::vec2 & uv1 = v1.TexCoords;
-    glm::vec2 & uv2 = v2.TexCoords;
+    glm::vec2 &uv0 = v0.TexCoords;
+    glm::vec2 &uv1 = v1.TexCoords;
+    glm::vec2 &uv2 = v2.TexCoords;
 
     glm::vec3 deltaPos1 = v1.Position - v0.Position;
     glm::vec3 deltaPos2 = v2.Position - v0.Position;
 
-    glm::vec2 deltaUV1 = uv1-uv0;
-    glm::vec2 deltaUV2 = uv2-uv0;
+    glm::vec2 deltaUV1 = uv1 - uv0;
+    glm::vec2 deltaUV2 = uv2 - uv0;
 
     float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
-    glm::vec3 tangent = (deltaPos1 * deltaUV2.y   - deltaPos2 * deltaUV1.y)*r;
-    glm::vec3 bitangent = (deltaPos2 * deltaUV1.x   - deltaPos1 * deltaUV2.x)*r;
+    glm::vec3 tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
+    glm::vec3 bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r;
 
     tangent = glm::normalize(tangent);
     bitangent = glm::normalize(bitangent);
@@ -156,15 +124,11 @@ void Mesh::computeAndStoreTangetBasis(Vertex& v0, Vertex& v1, Vertex& v2){
 
 }
 
-void Mesh::checkError(){
-    int textureCount = textures.size();
+void Mesh::checkError() {
 
-    if(textureCount > MAX_TEX_COUNT){
-        throw std::invalid_argument("Too many textures");
-    }
 }
 
-void Mesh::initBuffers(){
+void Mesh::initBuffers() {
     vao_.reset(new VAO());
 
     vbo_.reset(new VBO(&vertices_));
@@ -173,70 +137,59 @@ void Mesh::initBuffers(){
     vao_->bindVertexBuffers(*vbo_, *ebo_);
 }
 
-void Mesh::bindTextures(const Program& program){
-    for(unsigned int j = 0; j < textures.size(); j++){
-        int i = j + 31;
-        glActiveTexture(GL_TEXTURE31 + j);
-        textures[j].Bind();
-        if(textures[j].texType == TextureTypes::DIFFUSE){
-            glUniform1i(glGetUniformLocation(program.getID(),
-                                             MATERIAL_DIFFUSE_NAME.c_str()),i);
-        }else if(textures[j].texType == TextureTypes::SPECULAR){
-            glUniform1i(glGetUniformLocation(program.getID(),
-                                             MATERIAL_SPECULAR_NAME.c_str()),i);
-        }else if(textures[j].texType == TextureTypes::NORMAL){
-            glUniform1i(glGetUniformLocation(program.getID(),
-                                             MATERIAL_NORMAL_NAME.c_str()),i);
-        }else if(textures[j].texType == TextureTypes::DISPLACEMENT){
-            glUniform1i(glGetUniformLocation(program.getID(),
-                                             MATERIAL_DISPLACEMENT_NAME.c_str()),i);
-        }else if(textures[j].texType == TextureTypes::CUBEMAP){
-            glUniform1i(glGetUniformLocation(program.getID(),
-                                             TEXTURE_CUBEMAP_NAME.c_str()),i);
-        }else if(textures[j].texType == TextureTypes::FBO){
-            glUniform1i(glGetUniformLocation(program.getID(),
-                                             TEXTURE_SCREEN_NAME.c_str()),i);
-        }else{
-            // TODO check proper naming convetion
-            glUniform1i(glGetUniformLocation(program.getID(),
-                                             TEX_UNI_NAMES[i].c_str()), i);
-        }
-    }
+void Mesh::bindTextures(const Program &program) {
+    BindTexture(textures_.diffuse, MATERIAL_DIFFUSE_NAME, program, 0);
+    BindTexture(textures_.specular, MATERIAL_SPECULAR_NAME, program, 1);
+    BindTexture(textures_.normal, MATERIAL_NORMAL_NAME, program, 2);
+    BindTexture(textures_.displacement, MATERIAL_DISPLACEMENT_NAME, program, 3);
+    BindTexture(textures_.fbo, TEXTURE_SCREEN_NAME, program, 4);
 }
 
-void Mesh::bindColor(const Program& program){
+void Mesh::BindTexture(std::shared_ptr<Texture2D> texture,
+                       std::string program_location,
+                       const Program &program, int id){
+    if(!texture)
+        return;
+    int i = id + 31;
+    glActiveTexture(GL_TEXTURE31 + id);
+    texture->Bind();
+    glUniform1i(glGetUniformLocation(program.getID(),
+                                     program_location.c_str()), i);
+    //texture->Unbind();
+}
+
+void Mesh::bindColor(const Program &program) {
     GLint matShineLoc = glGetUniformLocation(program.getID(),
                                              MATERIAL_SHININESS_NAME.c_str());
     glUniform1f(matShineLoc, material.shininess);
 }
 
-void Mesh::setPolygonMode(GLenum polygonMode){
+void Mesh::setPolygonMode(GLenum polygonMode) {
     this->polygonMode = polygonMode;
 }
 
-void Mesh::setPrimitiveMode(GLenum drawingMode){
+void Mesh::setPrimitiveMode(GLenum drawingMode) {
     this->primitive_mode_ = drawingMode;
 }
 
-void Mesh::setMaterial(const Material& material){
+void Mesh::setMaterial(const Material &material) {
     this->material = material;
 }
 
-void Mesh::addTexture(Texture texture){
-    this->textures.push_back(texture);
+void Mesh::AddTexture(std::shared_ptr<Texture2D> texture){
+    if(texture->texture_type() == TextureTypes::DIFFUSE)
+        textures_.diffuse = texture;
+    if(texture->texture_type() == TextureTypes::SPECULAR)
+        textures_.specular = texture;
+    if(texture->texture_type() == TextureTypes::NORMAL)
+        textures_.normal = texture;
+    if(texture->texture_type() == TextureTypes::DISPLACEMENT)
+        textures_.displacement = texture;
+    if(texture->texture_type() == TextureTypes::FBO)
+        textures_.fbo = texture;
 }
 
-std::vector<Texture*> Mesh::getTextures(TextureTypes type){
-    std::vector<Texture*> texturesType;
-    for(unsigned int i = 0; i < textures.size(); i++){
-        if(textures[i].texType == type) {
-            texturesType.push_back(&textures[i]);
-        }
-    }
-    return texturesType;
-}
-
-void Mesh::draw(const Program& program){
+void Mesh::draw(const Program &program) {
     program.use();
 
     glPolygonMode(GL_FRONT_AND_BACK, polygonMode);
@@ -251,7 +204,7 @@ void Mesh::draw(const Program& program){
     vao_->unbind();
 }
 
-void Mesh::drawInstanced(const Program& program, int count){
+void Mesh::drawInstanced(const Program &program, int count) {
     program.use();
 
     glPolygonMode(GL_FRONT_AND_BACK, polygonMode);
@@ -267,17 +220,18 @@ void Mesh::drawInstanced(const Program& program, int count){
     vao_->unbind();
 }
 
-std::string Mesh::toString() const{
+std::string Mesh::toString() const {
     string str = "";
     int diffuseTexCount = 0;
     int specularTexCount = 0;
     int normalTexCount = 0;
-    for(unsigned int i = 0; i < textures.size(); i++){
-        if(textures[i].texType == TextureTypes::DIFFUSE)
+    /*
+    for (unsigned int i = 0; i < textures.size(); i++) {
+        if (textures[i].texType == TextureTypes::DIFFUSE)
             diffuseTexCount++;
-        if(textures[i].texType == TextureTypes::SPECULAR)
+        if (textures[i].texType == TextureTypes::SPECULAR)
             specularTexCount++;
-        if(textures[i].texType == TextureTypes::NORMAL)
+        if (textures[i].texType == TextureTypes::NORMAL)
             normalTexCount++;
     }
 
@@ -285,6 +239,7 @@ std::string Mesh::toString() const{
     str += "Texture Diffuse Count:   " + to_string(diffuseTexCount) + "\n";
     str += "Texture Specular Count:  " + to_string(specularTexCount) + "\n";
     str += "Texture Normal Count:  " + to_string(normalTexCount) + "\n";
-
+*/
     return str;
+}
 }

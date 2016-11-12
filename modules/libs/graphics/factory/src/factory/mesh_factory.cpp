@@ -2,8 +2,8 @@
 
 #include "factory/texture_factory.h"
 #include <shaders/textures/texture_loader.h>
+#include <shaders/textures/texture.h>
 #include <model/patch/patch.h>
-
 #include <vector>
 
 // For windows
@@ -70,7 +70,7 @@ std::unique_ptr<Mesh> MeshFactory::CreateQuad(int width, int heigth){
     return mesh;
 }
 
-std::unique_ptr<Mesh> MeshFactory::LoadBicubicBezierPatch(float startX,
+std::unique_ptr<Mesh> MeshFactory:: LoadBicubicBezierPatch(float startX,
                                                           float startY,
                                                           float depth,
                                                           int idI, int idJ) {
@@ -147,23 +147,13 @@ std::unique_ptr<Mesh> MeshFactory::LoadBicubicBezierPatch(float startX,
             8, 9, 10, 11,
             12, 13, 14, 15
     };
-
-    TextureFactory textureLoader;
-
-    Texture textureDiffuse = textureLoader.LoadTesselationDiffuse();
-    Texture textureSpecular = textureLoader.LoadTesselationSpecular();
-    Texture textureHeight = textureLoader.LoadTesselationHeight();
-    Texture textureNormal = textureLoader.LoadTesselationNormals();
-
-    std::vector <Texture> textures = {textureDiffuse, textureSpecular,
-                                      textureHeight, textureNormal};
-/*
-    std::unique_ptr<Mesh> mesh(new Patch(vertices, indices, textures,
-                                         2.0f, 2.0f, vertices.size(), idI, idJ));
-*/
-    auto mesh = std::unique_ptr<Mesh>(new Patch(vertices, indices, textures,
+    auto mesh = std::unique_ptr<Mesh>(new Patch(vertices, indices,
                                                2.0f, 2.0f, vertices.size(),
                                                 idI, idJ));
+    mesh->AddTexture(TextureFactory().LoadTesselationDiffuse());
+    mesh->AddTexture(TextureFactory().LoadTesselationSpecular());
+    mesh->AddTexture(TextureFactory().LoadTesselationHeight());
+    mesh->AddTexture(TextureFactory().LoadTesselationNormals());
 
     mesh->setPolygonMode(GL_LINE);
     mesh->setPrimitiveMode(GL_PATCHES);
@@ -279,21 +269,14 @@ std::unique_ptr<Mesh> MeshFactory::LoadBicubicBezierPolygon(float startX,
             7, 11,
             11, 15
     };
-    TextureFactory textureLoader;
 
-    Texture textureDiffuse = textureLoader.LoadTesselationDiffuse();
-    Texture textureSpecular = textureLoader.LoadTesselationSpecular();
-    Texture textureHeight = textureLoader.LoadTesselationHeight();
-    Texture textureNormal = textureLoader.LoadTesselationNormals();
-
-    std::vector <Texture> textures = {textureDiffuse, textureSpecular,
-                                      textureHeight, textureNormal};
-
-
-
-    auto mesh = std::unique_ptr<Mesh>(new Patch(vertices, indices, textures,
+    auto mesh = std::unique_ptr<Mesh>(new Patch(vertices, indices,
                                                 2.0f, 2.0f,
                                                 vertices.size(), idI, idJ));
+    mesh->AddTexture(TextureFactory().LoadTesselationDiffuse());
+    mesh->AddTexture(TextureFactory().LoadTesselationSpecular());
+    mesh->AddTexture(TextureFactory().LoadTesselationHeight());
+    mesh->AddTexture(TextureFactory().LoadTesselationNormals());
 
     mesh->setPolygonMode(GL_FILL);
     mesh->setPrimitiveMode(GL_LINES);
@@ -378,14 +361,10 @@ std::unique_ptr<Mesh> MeshFactory::LoadBicubicBezierAsymmetricPatch() {
             12, 13, 14, 15
     };
 
-    TextureFactory textureLoader;
-    Texture textureDiffuse = textureLoader.LoadDynamicBlueDiffuseTexture();
-    Texture textureSpecular = textureLoader.LoadDynamicBlueSpecularTexture();
-
-    std::vector <Texture> textures = {textureDiffuse, textureSpecular};
-
-    std::unique_ptr<Mesh> mesh(new Patch(vertices, indices, textures,
+    std::unique_ptr<Mesh> mesh(new Patch(vertices, indices,
                            2.0f, 2.0f, vertices.size()));
+
+
     mesh->setPolygonMode(GL_LINE);
     mesh->setPrimitiveMode(GL_PATCHES);
 
@@ -420,13 +399,8 @@ std::unique_ptr<Mesh> MeshFactory::LoadPatch() {
             0, 1, 2, 3
     };
 
-    TextureFactory textureLoader;
-    Texture textureDiffuse = textureLoader.LoadDynamicBlueDiffuseTexture();
-    Texture textureSpecular = textureLoader.LoadDynamicBlueSpecularTexture();
 
-    std::vector <Texture> textures = {textureDiffuse, textureSpecular};
-
-    std::unique_ptr<Mesh> mesh(new Patch(vertices, indices, textures));
+    std::unique_ptr<Mesh> mesh(new Patch(vertices, indices));
     mesh->setPolygonMode(GL_LINE);
     mesh->setPrimitiveMode(GL_PATCHES);
 
@@ -511,12 +485,8 @@ std::unique_ptr<Mesh> MeshFactory::LoadCubemap() {
             16, 17, 19, 17, 18, 19,        // bottom
             23, 21, 20, 23, 22, 21,        // top
     };
-    TextureFactory textureLoader;
-    Texture textureDiffuse = textureLoader.LoadExampleCubemap();
 
-    std::vector <Texture> textures = {textureDiffuse};
-
-    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices, textures));
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices));
 
     Material material;
     material.shininess = 32.0f;
@@ -599,26 +569,19 @@ std::unique_ptr<Mesh> MeshFactory::LoadCAMMaterial() {
             16, 17, 19, 17, 18, 19,        // bottom
             23, 21, 20, 23, 22, 21,        // top
     };
-    TextureFactory textureLoader;
 
-    ifx::Resources &resources = ifx::Resources::GetInstance();
-    Texture textureDiffuse
-            = TextureLoader().loadTexture(
-                    resources.GetResourcePath("cam/box1.png",
-                                              ifx::ResourceType::TEXTURE),
-                    TextureTypes::DIFFUSE);
-    Texture textureSpecular
-            = TextureLoader().loadTexture(
-                    resources.GetResourcePath("cam/box1.png",
-                                              ifx::ResourceType::TEXTURE),
-                    TextureTypes::SPECULAR);
-
-    //Texture textureDiffuse = textureLoader.LoadContainerDiffuse();
-    //Texture textureSpecular = textureLoader.LoadContainerSpecular();
-    std::vector <Texture> textures = {textureDiffuse, textureSpecular};
-
-    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices, textures,
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices,
                                         GL_TRIANGLES));
+    mesh->AddTexture(Texture2D::MakeTexture2DFromFile(
+            ifx::Resources::GetInstance().GetResourcePath(
+                    "cam/box1.png", ifx::ResourceType::TEXTURE),
+            TextureTypes::DIFFUSE
+    ));
+    mesh->AddTexture(Texture2D::MakeTexture2DFromFile(
+            ifx::Resources::GetInstance().GetResourcePath(
+                    "cam/box1.png", ifx::ResourceType::TEXTURE),
+            TextureTypes::SPECULAR
+    ));
 
     Material material;
     material.shininess = 32.0f;
@@ -627,109 +590,6 @@ std::unique_ptr<Mesh> MeshFactory::LoadCAMMaterial() {
     return mesh;
 }
 
-/*
-std::unique_ptr<Mesh> MeshFactory::LoadCAMMaterial() {
-    // Position, Normal, TexCoord
-    vector <Vertex> vertices = {
-            // Front
-            Vertex{vec3(1.0f, 1.0f, -1.0f),
-                   vec3(0.0f, 0.0f, -1.0f), vec2(1.0f, 1.0f)},
-            Vertex{vec3(1.0f, -1.0f, -1.0f),
-                   vec3(0.0f, 0.0f, -1.0f), vec2(1.0f, 0.0f)},
-            Vertex{vec3(-1.0f, -1.0f, -1.0f),
-                   vec3(0.0f, 0.0f, -1.0f), vec2(0.0f, 0.0f)},
-            Vertex{vec3(-1.0f, 1.0f, -1.0f),
-                   vec3(0.0f, 0.0f, -1.0f), vec2(0.0f, 1.0f)},
-
-            // Back
-            Vertex{vec3(1.0f, 1.0f, 1.0f),
-                   vec3(0.0f, 0.0f, 1.0f), vec2(1.0f, 1.0f)},
-            Vertex{vec3(1.0f, -1.0f, 1.0f),
-                   vec3(0.0f, 0.0f, 1.0f), vec2(1.0f, 0.0f)},
-            Vertex{vec3(-1.0f, -1.0f, 1.0f),
-                   vec3(0.0f, 0.0f, 1.0f), vec2(0.0f, 0.0f)},
-            Vertex{vec3(-1.0f, 1.0f, 1.0f),
-                   vec3(0.0f, 0.0f, 1.0f), vec2(0.0f, 1.0f)},
-
-            // Left
-            Vertex{vec3(-1.0f, 1.0f, 1.0f),
-                   vec3(-1.0f, 0.0f, 0.0f), vec2(1.0f, 1.0f)},
-            Vertex{vec3(-1.0f, -1.0f, 1.0f),
-                   vec3(-1.0f, 0.0f, 0.0f), vec2(1.0f, 0.0f)},
-            Vertex{vec3(-1.0f, -1.0f, -1.0f),
-                   vec3(-1.0f, 0.0f, 0.0f), vec2(0.0f, 0.0f)},
-            Vertex{vec3(-1.0f, 1.0f, -1.0f),
-                   vec3(-1.0f, 0.0f, 0.0f), vec2(0.0f, 1.0f)},
-
-            // Right
-            Vertex{vec3(1.0f, 1.0f, 1.0f),
-                   vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 1.0f)},
-            Vertex{vec3(1.0f, -1.0f, 1.0f),
-                   vec3(1.0f, 0.0f, 0.0f), vec2(1.0f, 0.0f)},
-            Vertex{vec3(1.0f, -1.0f, -1.0f),
-                   vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 0.0f)},
-            Vertex{vec3(1.0f, 1.0f, -1.0f),
-                   vec3(1.0f, 0.0f, 0.0f), vec2(0.0f, 1.0f)},
-
-            // Bottom
-            Vertex{vec3(1.0f, -1.0f, 1.0f),
-                   vec3(0.0f, -1.0f, 0.0f), vec2(1.0f, 1.0f)},
-            Vertex{vec3(1.0f, -1.0f, -1.0f),
-                   vec3(0.0f, -1.0f, 0.0f), vec2(1.0f, 0.0f)},
-            Vertex{vec3(-1.0f, -1.0f, -1.0f),
-                   vec3(0.0f, -1.0f, 0.0f), vec2(0.0f, 0.0f)},
-            Vertex{vec3(-1.0f, -1.0f, 1.0f),
-                   vec3(0.0f, -1.0f, 0.0f), vec2(0.0f, 1.0f)},
-
-            // Top
-            Vertex{vec3(1.0f, 1.0f, 1.0f),
-                   vec3(0.0f, 1.0f, 0.0f), vec2(1.0f, 1.0f)},
-            Vertex{vec3(1.0f, 1.0f, -1.0f),
-                   vec3(0.0f, 1.0f, 0.0f), vec2(1.0f, 0.0f)},
-            Vertex{vec3(-1.0f, 1.0f, -1.0f),
-                   vec3(0.0f, 1.0f, 0.0f), vec2(0.0f, 0.0f)},
-            Vertex{vec3(-1.0f, 1.0f, 1.0f),
-                   vec3(0.0f, 1.0f, 0.0f), vec2(0.0f, 1.0f)},
-    };
-
-    vector <GLuint> indices = {
-            3, 1, 0, 3, 2, 1,            // front
-            4, 5, 7, 5, 6, 7,            // back
-
-            8, 9, 11, 9, 10, 11,           // left
-            15, 13, 12, 15, 14, 13,        // right
-
-            16, 17, 19, 17, 18, 19,        // bottom
-            23, 21, 20, 23, 22, 21,        // top
-    };
-    TextureFactory textureLoader;
-
-
-    ifx::Resources &resources = ifx::Resources::GetInstance();
-    Texture textureDiffuse
-            = TextureLoader().loadTexture(
-                    resources.GetResourcePath("cam/box1.png",
-                                              ifx::ResourceType::TEXTURE),
-                    TextureTypes::DIFFUSE);
-    Texture textureSpecular
-            = TextureLoader().loadTexture(
-                    resources.GetResourcePath("cam/box1.png",
-                                              ifx::ResourceType::TEXTURE),
-                    TextureTypes::SPECULAR);
-
-
-    std::vector <Texture> textures = {textureDiffuse, textureSpecular};
-
-    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices, textures,
-                                        GL_TRIANGLES));
-
-    Material material;
-    material.shininess = 32.0f;
-    mesh->setMaterial(material);
-
-    return mesh;
-}
-*/
 std::unique_ptr<Mesh> MeshFactory::LoadCube() {
     // Position, Normal, TexCoord
     vector <Vertex> vertices = {
@@ -804,14 +664,11 @@ std::unique_ptr<Mesh> MeshFactory::LoadCube() {
             16, 17, 19, 17, 18, 19,        // bottom
             23, 21, 20, 23, 22, 21,        // top
     };
-    TextureFactory textureLoader;
-    Texture textureDiffuse = textureLoader.LoadContainerDiffuse();
-    Texture textureSpecular = textureLoader.LoadContainerSpecular();
 
-    std::vector <Texture> textures = {textureDiffuse, textureSpecular};
-
-    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices, textures,
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices,
                                         GL_TRIANGLES));
+    mesh->AddTexture(TextureFactory().LoadContainerDiffuse());
+    mesh->AddTexture(TextureFactory().LoadContainerSpecular());
 
     Material material;
     material.shininess = 32.0f;
@@ -979,14 +836,10 @@ std::unique_ptr<Mesh> MeshFactory::LoadRoom() {
             16, 17, 19, 17, 18, 19,        // bottom
             23, 21, 20, 23, 22, 21,        // top
     };
-    TextureFactory textureLoader;
-    Texture textureDiffuse = textureLoader.LoadPortalTexture();
-    Texture textureSpecular = textureLoader.LoadPortalTexture();
-
-    std::vector <Texture> textures = {textureDiffuse, textureSpecular};
-
-    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices, textures,
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices,
                                         GL_TRIANGLES));
+    mesh->AddTexture(TextureFactory().LoadPortalTextureDiffuse());
+    mesh->AddTexture(TextureFactory().LoadPortalTextureSpecular());
 
     Material material;
     material.shininess = 32.0f;
@@ -1012,14 +865,11 @@ std::unique_ptr<Mesh> MeshFactory::LoadFloor(){
     vector <GLuint> indices = {
             0, 1, 3, 1, 2, 3,            // front
     };
-    TextureFactory textureLoader;
-    Texture textureDiffuse = textureLoader.LoadPortalTexture();
-    Texture textureSpecular = textureLoader.LoadPortalTexture();
-
-    std::vector <Texture> textures = {textureDiffuse, textureSpecular};
-
-    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices, textures,
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices,
                                           GL_TRIANGLES));
+
+    mesh->AddTexture(TextureFactory().LoadPortalTextureDiffuse());
+    mesh->AddTexture(TextureFactory().LoadPortalTextureSpecular());
 
     Material material;
     material.shininess = 32.0f;
@@ -1103,16 +953,14 @@ std::unique_ptr<Mesh> MeshFactory::LoadLamp() {
     };
     TextureFactory textureLoader;
 
-    std::vector <Texture> textures;
     std::unique_ptr<Mesh> mesh(new Mesh(
-            vertices, indices, textures, GL_TRIANGLES));
+            vertices, indices, GL_TRIANGLES));
     return mesh;
 }
 
 std::unique_ptr<Mesh> MeshFactory::LoadSphere(float radius) {
     std::vector<Vertex> vertices;
     std::vector<GLuint> indices;
-    std::vector<Texture> textures;
 
     /// ------
     double latitudeBands = 20;
@@ -1173,4 +1021,5 @@ std::unique_ptr<Mesh> MeshFactory::LoadSphere(float radius) {
 }
 
 } // ifx
+
 

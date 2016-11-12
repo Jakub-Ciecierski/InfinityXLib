@@ -7,6 +7,8 @@
 #include <memory>
 #include <ostream>
 
+namespace ifx {
+
 /*
  * Model class is an encapsulation of many meshes take up a single model
  */
@@ -17,15 +19,18 @@ public:
      * If object already exists, loads it from cache.
      */
     static std::shared_ptr<Model> MakeModel(
-                std::string filepath, 
-                std::vector<std::unique_ptr<Mesh>> meshes);
+            std::string filepath,
+            std::vector<std::unique_ptr<Mesh>> meshes);
+
     ~Model();
 
-    std::vector<Mesh*> getMeshes();
-    Mesh* getMesh(int i);
+    std::vector<Mesh *> getMeshes();
 
-    void draw(const Program& program);
-    void drawInstanced(const Program& program, int count);
+    Mesh *getMesh(int i);
+
+    void draw(const Program &program);
+
+    void drawInstanced(const Program &program, int count);
 
     std::string toString() const;
 
@@ -36,5 +41,6 @@ private:
     std::vector<std::unique_ptr<Mesh>> meshes;
 
 };
+}
 
 #endif //DUCK_MODEL_H

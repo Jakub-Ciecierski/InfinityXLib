@@ -3,11 +3,11 @@
 
 #include <memory>
 
-class Mesh;
 class Program;
 
 namespace ifx {
 
+class Mesh;
 class Window;
 class FBO;
 

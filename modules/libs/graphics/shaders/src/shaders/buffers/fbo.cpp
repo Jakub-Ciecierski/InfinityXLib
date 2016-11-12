@@ -1,10 +1,13 @@
 #include "shaders/buffers/fbo.h"
 
+#include <shaders/textures/texture.h>
+
 #include <stdexcept>
+#include <memory>
 
 namespace ifx {
 
-FBO::FBO(Texture texture, FBOType type) :
+FBO::FBO(std::shared_ptr<Texture2D> texture, FBOType type) :
         texture_(texture),
         type_(type),
         compiled_(false){
@@ -55,7 +58,7 @@ void FBO::compileDepth(){
 void FBO::compileTexture(GLenum attachment){
     glFramebufferTexture2D(GL_FRAMEBUFFER,
                            attachment,
-                           GL_TEXTURE_2D, texture_.id, 0);
+                           GL_TEXTURE_2D, texture_->id(), 0);
 }
 
 void FBO::compileRBO(){
@@ -63,7 +66,7 @@ void FBO::compileRBO(){
     glGenRenderbuffers(1, &rbo);
     glBindRenderbuffer(GL_RENDERBUFFER, rbo);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,
-                          texture_.width, texture_.height);
+                          texture_->width(), texture_->height());
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
     glFramebufferRenderbuffer(GL_FRAMEBUFFER,

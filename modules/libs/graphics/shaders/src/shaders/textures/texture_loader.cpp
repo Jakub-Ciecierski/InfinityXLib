@@ -6,7 +6,7 @@
 #include <stdexcept>
 
 using namespace std;
-
+/*
 TextureLoader::TextureLoader(){}
 
 TextureLoader::~TextureLoader() {}
@@ -188,4 +188,4 @@ Texture TextureLoader::loadCubemap(vector<string> filepathFaces){
     Texture tex = contructTexture(textureID, GL_TEXTURE_CUBE_MAP);
     tex.texType = TextureTypes::CUBEMAP;
     return tex;
-}
+}*/

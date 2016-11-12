@@ -29,8 +29,8 @@ void Renderer::HandleEvents() {
     }
 }
 
-void Renderer::SetScene(std::unique_ptr<Scene> scene){
-    scene_ = std::move(scene);
+void Renderer::SetScene(std::shared_ptr<Scene> scene){
+    scene_ = scene;
 }
 
 void Renderer::SetGUI(std::unique_ptr<GUI> gui){

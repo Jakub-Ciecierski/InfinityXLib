@@ -14,6 +14,9 @@ Controls::Controls() {
 }
 
 Controls::~Controls() {
+    delete mouse_events_.LeftMouse;
+    delete mouse_events_.RightMouse;
+    delete mouse_events_.MiddleMouse;
 }
 
 Controls& Controls::GetInstance(){
@@ -54,6 +57,11 @@ void Controls::OnMouseEvent(float xpos, float ypos){
     mouse_events_.pos_y = ypos;
 }
 
+void Controls::OnMouseScrollEvent(float xoffset, float yoffset){
+    mouse_events_.scroll_x_offset = xoffset;
+    mouse_events_.scroll_y_offset = yoffset;
+}
+
 void Controls::SetControlMode(ControlMode control_mode){
     control_mode_ = control_mode;
 }
@@ -62,6 +70,5 @@ void Controls::Update(){
     mouse_events_.prev_pos_x = mouse_events_.pos_x;
     mouse_events_.prev_pos_y = mouse_events_.pos_y;
 }
-
 
 }

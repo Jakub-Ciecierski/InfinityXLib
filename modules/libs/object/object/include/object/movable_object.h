@@ -45,6 +45,8 @@ public:
     void scale(const glm::vec3 &scale);
 
     const glm::vec3& getPosition();
+    const glm::vec3& getRotation();
+    const glm::vec3& getScale();
     const glm::vec3& getDirection();
 
     const glm::mat4 GetModelMatrix();

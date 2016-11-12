@@ -1,5 +1,5 @@
 #include <shaders/data/shader_data.h>
-
+/*
 GLenum GetTextureInternalFormatPrimitive(TextureInternalFormat format){
     if(format == TextureInternalFormat::R)
         return GL_RED;
@@ -15,7 +15,7 @@ GLenum GetTexturePixelTypePrimitive(TexturePixelType type){
     else if(type == TexturePixelType::UNSIGNED_BYTE)
         return GL_UNSIGNED_BYTE;
 }
-
+*/
 
 // Maximum number of textures
 const int MAX_TEX_COUNT = 16;
@@ -55,6 +55,8 @@ const std::string TESSELLATION_LVL_OUTER_NAME = "TessLevelOuter";
 
 const std::string PATCH_ID_I_NAME = "patchIDI";
 const std::string PATCH_ID_J_NAME = "patchIDJ";
+const std::string PATCH_ROW_COUNT_NAME = "patchRowCount";
+const std::string PATCH_COLUMN_COUNT_NAME = "patchColumnCount";
 
 const std::string LIGHT_POINTLIGHT_COUNT = "pointlightCount";
 const std::string LIGHT_DIRLIGHT_COUNT = "dirlightCount";

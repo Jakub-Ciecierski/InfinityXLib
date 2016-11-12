@@ -61,6 +61,14 @@ const glm::vec3& MovableObject::getPosition() {
     return this->position;
 }
 
+const glm::vec3& MovableObject::getRotation(){
+    return this->rotation;
+}
+
+const glm::vec3& MovableObject::getScale(){
+    return this->scaleFactor;
+}
+
 const glm::vec3& MovableObject::getDirection(){
     return this->direction;
 }

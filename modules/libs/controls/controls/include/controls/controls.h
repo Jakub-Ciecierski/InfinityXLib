@@ -22,7 +22,7 @@ public:
 
     ControlMode control_mode() {return control_mode_;}
     const Keys& keyboard_keys() {return keyboard_keys_;}
-    const MouseEvents& mouse_events() {return mouse_events_;}
+    MouseEvents& mouse_events() {return mouse_events_;}
 
     static Controls& GetInstance();
 
@@ -30,6 +30,7 @@ public:
     void OnMouseButtonEvent(MouseButtonType type, bool is_pressed,
                             float xpos, float ypos);
     void OnMouseEvent(float xpos, float ypos);
+    void OnMouseScrollEvent(float xoffset, float yoffset);
 
     void SetControlMode(ControlMode control_mode);
 

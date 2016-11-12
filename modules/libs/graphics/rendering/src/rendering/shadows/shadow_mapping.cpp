@@ -37,32 +37,36 @@ void ShadowMapping::Render(Scene* scene){
     }
 
     glActiveTexture(GL_TEXTURE0);
-    fbo_->texture().Bind();
+    fbo_->texture()->Bind();
     glUniform1i(glGetUniformLocation(program_->getID(),
                                      TEXTURE_SHADOW_MAP.c_str()), 0);
 }
 
-Texture ShadowMapping::CreateTexture(){
-    Texture texture = TextureLoader().CreateEmptyTexture(
-            TextureTypes::FBO,
-            TextureInternalFormat::DEPTH_COMPONENT,
-            TexturePixelType::FLOAT,
-            dimensions_.width, dimensions_.height);
-    texture.AddParameter(TextureParameter{GL_TEXTURE_MIN_FILTER, GL_NEAREST});
-    texture.AddParameter(TextureParameter{GL_TEXTURE_MAG_FILTER, GL_NEAREST});
+std::shared_ptr<Texture2D> ShadowMapping::CreateTexture(){
+    auto texture
+            = Texture2D::MakeTexture2DEmpty("shadow_mapping",
+                                            TextureTypes::FBO,
+                                            TextureInternalFormat::DEPTH_COMPONENT,
+                                            TexturePixelType::FLOAT,
+                                            dimensions_.width,
+                                            dimensions_.height);
+
+    texture->AddParameter(TextureParameter{GL_TEXTURE_MIN_FILTER, GL_NEAREST});
+    texture->AddParameter(TextureParameter{GL_TEXTURE_MAG_FILTER, GL_NEAREST});
     // Pixels outside shadow mapp range will have value indicating no shadow.
-    texture.AddParameter(TextureParameter{GL_TEXTURE_WRAP_S,
-                                          GL_CLAMP_TO_BORDER});
-    texture.AddParameter(TextureParameter{GL_TEXTURE_WRAP_T,
-                                          GL_CLAMP_TO_BORDER});
-    texture.Bind();
+    texture->AddParameter(TextureParameter{GL_TEXTURE_WRAP_S,
+                                           GL_CLAMP_TO_BORDER});
+    texture->AddParameter(TextureParameter{GL_TEXTURE_WRAP_T,
+                                           GL_CLAMP_TO_BORDER});
+    texture->Bind();
     GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
     glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-    texture.Unbind();
+    texture->Unbind();
+
     return texture;
 }
 
-void ShadowMapping::InitFBO(Texture texture){
+void ShadowMapping::InitFBO(std::shared_ptr<Texture2D> texture){
     fbo_.reset(new FBO(texture, FBOType::DEPTH));
     fbo_->compile();
 }
