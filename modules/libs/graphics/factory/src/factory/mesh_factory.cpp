@@ -836,8 +836,9 @@ std::unique_ptr<Mesh> MeshFactory::LoadRoom() {
             16, 17, 19, 17, 18, 19,        // bottom
             23, 21, 20, 23, 22, 21,        // top
     };
-    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices,
-                                        GL_TRIANGLES));
+
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices, GL_TRIANGLES));
+
     mesh->AddTexture(TextureFactory().LoadPortalTextureDiffuse());
     mesh->AddTexture(TextureFactory().LoadPortalTextureSpecular());
 
@@ -854,19 +855,19 @@ std::unique_ptr<Mesh> MeshFactory::LoadFloor(){
             // Front
             Vertex{vec3(1.0f, 1.0f, 0.0f),
                    vec3(0.0f, 0.0f, -1.0f), vec2(1.0f, 1.0f)},
-            Vertex{vec3(1.0f, 0.0f, 0.0f),
+            Vertex{vec3(1.0f, -1.0f, 0.0f),
                    vec3(0.0f, 0.0f, -1.0f), vec2(1.0f, 0.0f)},
-            Vertex{vec3(0.0f, 0.0f, 0.0f),
+            Vertex{vec3(-1.0f, -1.0f, 0.0f),
                    vec3(0.0f, 0.0f, -1.0f), vec2(0.0f, 0.0f)},
-            Vertex{vec3(0.0f, 1.0f, 0.0f),
+            Vertex{vec3(-1.0f, 1.0f, 0.0f),
                    vec3(0.0f, 0.0f, -1.0f), vec2(0.0f, 1.0f)},
     };
 
     vector <GLuint> indices = {
             0, 1, 3, 1, 2, 3,            // front
     };
-    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices,
-                                          GL_TRIANGLES));
+
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices,GL_TRIANGLES));
 
     mesh->AddTexture(TextureFactory().LoadPortalTextureDiffuse());
     mesh->AddTexture(TextureFactory().LoadPortalTextureSpecular());
