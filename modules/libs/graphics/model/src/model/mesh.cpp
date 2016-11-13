@@ -1,31 +1,21 @@
 #include "model/mesh.h"
 
-#include <shaders/textures/texture.h>
-#include <stdexcept>
-
 using namespace std;
 
 namespace ifx {
 
-Mesh::Mesh() {
-
-}
-
 Mesh::Mesh(std::vector<Vertex> vertices,
-           vector<GLuint> &indices,
-           GLenum drawingMode, GLenum polygonMode) :
-        vertices_(vertices), indices(indices) {
-    this->primitive_mode_ = drawingMode;
-    this->polygonMode = polygonMode;
-    checkError();
-
+           vector<GLuint> &indices) :
+        vertices_(vertices),
+        indices(indices),
+        primitive_draw_mode_(PrimitiveDrawMode::TRIANGLES),
+        polygon_mode_(PolygonMode::FILL),
+        material_(std::make_shared<Material>()){
     computeTangetBasis();
     initBuffers();
 }
 
-Mesh::~Mesh() {
-
-}
+Mesh::~Mesh() {}
 
 void Mesh::computeTangetBasis() {
     const int DATA_PER_FACE = 3;
@@ -124,10 +114,6 @@ void Mesh::computeAndStoreTangetBasis(Vertex &v0, Vertex &v1, Vertex &v2) {
 
 }
 
-void Mesh::checkError() {
-
-}
-
 void Mesh::initBuffers() {
     vao_.reset(new VAO());
 
@@ -138,11 +124,11 @@ void Mesh::initBuffers() {
 }
 
 void Mesh::bindTextures(const Program &program) {
-    BindTexture(textures_.diffuse, MATERIAL_DIFFUSE_NAME, program, 0);
-    BindTexture(textures_.specular, MATERIAL_SPECULAR_NAME, program, 1);
-    BindTexture(textures_.normal, MATERIAL_NORMAL_NAME, program, 2);
-    BindTexture(textures_.displacement, MATERIAL_DISPLACEMENT_NAME, program, 3);
-    BindTexture(textures_.fbo, TEXTURE_SCREEN_NAME, program, 4);
+    BindTexture(material_->diffuse, MATERIAL_DIFFUSE_NAME, program, 0);
+    BindTexture(material_->specular, MATERIAL_SPECULAR_NAME, program, 1);
+    BindTexture(material_->normal, MATERIAL_NORMAL_NAME, program, 2);
+    BindTexture(material_->displacement, MATERIAL_DISPLACEMENT_NAME, program, 3);
+    BindTexture(material_->fbo, TEXTURE_SCREEN_NAME, program, 4);
 }
 
 void Mesh::BindTexture(std::shared_ptr<Texture2D> texture,
@@ -155,51 +141,27 @@ void Mesh::BindTexture(std::shared_ptr<Texture2D> texture,
     texture->Bind();
     glUniform1i(glGetUniformLocation(program.getID(),
                                      program_location.c_str()), i);
-    //texture->Unbind();
 }
 
 void Mesh::bindColor(const Program &program) {
     GLint matShineLoc = glGetUniformLocation(program.getID(),
                                              MATERIAL_SHININESS_NAME.c_str());
-    glUniform1f(matShineLoc, material.shininess);
-}
-
-void Mesh::setPolygonMode(GLenum polygonMode) {
-    this->polygonMode = polygonMode;
-}
-
-void Mesh::setPrimitiveMode(GLenum drawingMode) {
-    this->primitive_mode_ = drawingMode;
-}
-
-void Mesh::setMaterial(const Material &material) {
-    this->material = material;
-}
-
-void Mesh::AddTexture(std::shared_ptr<Texture2D> texture){
-    if(texture->texture_type() == TextureTypes::DIFFUSE)
-        textures_.diffuse = texture;
-    if(texture->texture_type() == TextureTypes::SPECULAR)
-        textures_.specular = texture;
-    if(texture->texture_type() == TextureTypes::NORMAL)
-        textures_.normal = texture;
-    if(texture->texture_type() == TextureTypes::DISPLACEMENT)
-        textures_.displacement = texture;
-    if(texture->texture_type() == TextureTypes::FBO)
-        textures_.fbo = texture;
+    glUniform1f(matShineLoc, material_->shininess);
 }
 
 void Mesh::draw(const Program &program) {
     program.use();
 
-    glPolygonMode(GL_FRONT_AND_BACK, polygonMode);
+    glPolygonMode(GL_FRONT_AND_BACK,
+                  PolygonModeToNative(polygon_mode_));
 
     this->bindTextures(program);
     this->bindColor(program);
 
     vao_->bind();
 
-    glDrawElements(primitive_mode_, indices.size(), GL_UNSIGNED_INT, 0);
+    glDrawElements(PrimitiveDrawModeToNative(primitive_draw_mode_),
+                   indices.size(), GL_UNSIGNED_INT, 0);
 
     vao_->unbind();
 }
@@ -207,14 +169,16 @@ void Mesh::draw(const Program &program) {
 void Mesh::drawInstanced(const Program &program, int count) {
     program.use();
 
-    glPolygonMode(GL_FRONT_AND_BACK, polygonMode);
+    glPolygonMode(GL_FRONT_AND_BACK,
+                  PolygonModeToNative(polygon_mode_));
 
     this->bindTextures(program);
     this->bindColor(program);
 
     vao_->bind();
 
-    glDrawElementsInstanced(primitive_mode_, indices.size(),
+    glDrawElementsInstanced(PrimitiveDrawModeToNative(primitive_draw_mode_),
+                            indices.size(),
                             GL_UNSIGNED_INT, 0, count);
 
     vao_->unbind();
@@ -242,4 +206,21 @@ std::string Mesh::toString() const {
 */
     return str;
 }
+
+GLenum Mesh::PrimitiveDrawModeToNative(PrimitiveDrawMode mode){
+    if(mode == PrimitiveDrawMode::TRIANGLES)
+        return GL_TRIANGLES;
+    if(mode == PrimitiveDrawMode::PATCHES)
+        return GL_PATCHES;
+}
+
+GLenum Mesh::PolygonModeToNative(PolygonMode mode){
+    if(mode == PolygonMode::FILL)
+        return GL_FILL;
+    if(mode == PolygonMode::LINES)
+        return GL_LINES;
+    if(mode == PolygonMode::LINE)
+        return GL_LINE;
+}
+
 }

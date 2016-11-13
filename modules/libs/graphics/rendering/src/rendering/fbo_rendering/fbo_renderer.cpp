@@ -3,7 +3,6 @@
 #include <math/math_ifx.h>
 #include <shaders/buffers/fbo.h>
 #include <model/mesh.h>
-#include <shaders/textures/texture_loader.h>
 #include <rendering/window.h>
 #include <shaders/textures/texture.h>
 
@@ -15,10 +14,7 @@ FBORenderer::FBORenderer(Window* window) :
     initScreenMesh();
 }
 
-FBORenderer::~FBORenderer(){
-    delete fbo_;
-    delete screenMesh_;
-}
+FBORenderer::~FBORenderer(){}
 
 void FBORenderer::SetProgram(std::shared_ptr<Program> program){
     program_ = program;
@@ -54,7 +50,7 @@ void FBORenderer::initFBO(Window* window){
     texture->AddParameter(TextureParameter{GL_TEXTURE_MIN_FILTER, GL_LINEAR});
     texture->AddParameter(TextureParameter{GL_TEXTURE_MAG_FILTER, GL_LINEAR});
 
-    fbo_ = new FBO(texture, FBOType::COLOR_DEPTH);
+    fbo_ = std::unique_ptr<FBO>(new FBO(texture, FBOType::COLOR_DEPTH));
     fbo_->compile();
 }
 
@@ -72,8 +68,11 @@ void FBORenderer::initScreenMesh(){
     };
     std::vector <GLuint> indices = { 0, 1, 3, 1, 2, 3 };
 
-    screenMesh_ = new Mesh(vertices, indices);
-    screenMesh_->AddTexture(fbo_->texture());
+    screenMesh_ = std::unique_ptr<Mesh>(new Mesh(vertices, indices));
+
+    auto material = std::make_shared<Material>();
+    material->AddTexture(fbo_->texture());
+    screenMesh_->material(material);
 }
 
 }

@@ -6,38 +6,14 @@ namespace ifx {
 
 Patch::Patch(std::vector<Vertex> vertices,
              std::vector<GLuint> &indices,
-             float tessLevelInner,
-             float tessLevelOuter,
-             int vertexCountPerPatch,
-             int idI, int idJ) :
-        Mesh(vertices, indices,
-             GL_LINES, GL_PATCHES),
-        tessLevelInner(tessLevelInner), tessLevelOuter(tessLevelOuter),
-        vertexCountPerPatch(vertexCountPerPatch),
-        doDrawControlPolygon(false),
-        idI(idI), idJ(idJ) {
+             TesselationParams tesselation_params):
+        Mesh(vertices, indices),
+        tesselation_params_(tesselation_params) {
+    primitive_draw_mode_ = PrimitiveDrawMode::PATCHES;
+    polygon_mode_ = PolygonMode::LINES;
 }
 
-Patch::Patch(std::vector<Vertex> vertices,
-             std::vector<GLuint> &indices,
-             float tessLevelInner,
-             float tessLevelOuter,
-             int vertexCountPerPatch,
-             int idI, int idJ,
-             int row_count, int column_count) :
-        Mesh(vertices, indices,
-             GL_LINES, GL_PATCHES),
-        tessLevelInner(tessLevelInner), tessLevelOuter(tessLevelOuter),
-        vertexCountPerPatch(vertexCountPerPatch),
-        doDrawControlPolygon(false),
-        idI(idI), idJ(idJ),
-        row_count_(row_count),
-        column_count_(column_count){
-}
-
-Patch::~Patch() {
-
-}
+Patch::~Patch() {}
 
 void Patch::bindTessLevel(const Program &program) {
     GLint tessInnerLoc
@@ -55,49 +31,24 @@ void Patch::bindTessLevel(const Program &program) {
             = glGetUniformLocation(program.getID(),
                                    PATCH_ID_J_NAME.c_str());
 
-    glUniform1f(tessInnerLoc, this->tessLevelInner);
-    glUniform1f(tessOuterLoc, this->tessLevelOuter);
-    glUniform1i(idILoc, this->idI);
-    glUniform1i(idJLoc, this->idJ);
+    glUniform1f(tessInnerLoc, tesselation_params_.tess_level_inner);
+    glUniform1f(tessOuterLoc, tesselation_params_.tess_level_outer);
+    glUniform1i(idILoc, tesselation_params_.id_i);
+    glUniform1i(idJLoc, tesselation_params_.id_j);
 
     glUniform1f(glGetUniformLocation(program.getID(),
                                      PATCH_ROW_COUNT_NAME.c_str()),
-                this->row_count_);
+                tesselation_params_.row_count);
     glUniform1f(glGetUniformLocation(program.getID(),
                                      PATCH_COLUMN_COUNT_NAME.c_str()),
-                this->column_count_);
-}
-
-void Patch::addToTessLevelInner(float lvl) {
-    tessLevelInner += lvl;
-    if (tessLevelInner < 1) {
-        tessLevelInner = 1;
-    }
-}
-
-void Patch::addToTessLevelOuter(float lvl) {
-    tessLevelOuter += lvl;
-    if (tessLevelOuter < 1) {
-        tessLevelOuter = 1;
-    }
-}
-
-void Patch::setTessLevelInner(float lvl) {
-    this->tessLevelInner = lvl;
-}
-
-void Patch::setTessLevelOuter(float lvl) {
-    this->tessLevelOuter = lvl;
-}
-
-void Patch::setDrawPolygon(bool val) {
-    this->doDrawControlPolygon = val;
+                tesselation_params_.column_count);
 }
 
 void Patch::draw(const Program &program) {
     bindTessLevel(program);
-    // TODO should be called once
-    glPatchParameteri(GL_PATCH_VERTICES, vertexCountPerPatch);
+
+    glPatchParameteri(GL_PATCH_VERTICES,
+                      tesselation_params_.vertex_count_per_patch);
 
     Mesh::draw(program);
 }

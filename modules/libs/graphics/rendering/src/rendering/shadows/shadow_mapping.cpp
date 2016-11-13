@@ -2,7 +2,6 @@
 
 #include <lighting/types/light_directional.h>
 #include <shaders/buffers/fbo.h>
-#include <shaders/textures/texture_loader.h>
 #include <rendering/scene/scene.h>
 #include <shaders/program.h>
 

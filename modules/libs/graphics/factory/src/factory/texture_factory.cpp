@@ -1,6 +1,5 @@
 #include "factory/texture_factory.h"
 
-#include <shaders/textures/texture_loader.h>
 #include <resources/resources.h>
 
 namespace ifx {

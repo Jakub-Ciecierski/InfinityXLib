@@ -1,7 +1,5 @@
 #include "model_loader/model_loader.h"
 
-#include <shaders/textures/texture_loader.h>
-
 #include <stdexcept>
 #include <iostream>
 
@@ -54,11 +52,6 @@ void ModelLoader::processNode(aiNode *node, const aiScene *scene,
         std::unique_ptr<Mesh> ifxMesh =
                 std::move(this->processMesh(mesh, scene));
 
-        // TODO Find better solution for shininess !
-        Material material;
-        material.shininess = 322.0f;
-        ifxMesh->setMaterial(material);
-
         meshes.push_back(std::move(ifxMesh));
     }
     for (GLuint i = 0; i < node->mNumChildren; i++) {
@@ -77,8 +70,10 @@ std::unique_ptr<Mesh> ModelLoader::processMesh(aiMesh *mesh,
     textures = processTextures(mesh, scene);
 
     auto mesh_ifx = std::unique_ptr<Mesh>(new Mesh(vertices, indices));
+    auto material = std::make_shared<Material>();
     for(unsigned int i = 0; i < textures.size();i++)
-        mesh_ifx->AddTexture(textures[i]);
+        material->AddTexture(textures[i]);
+    mesh_ifx->material(material);
 
     return mesh_ifx;
 }

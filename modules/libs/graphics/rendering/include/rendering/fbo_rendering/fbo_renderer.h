@@ -37,12 +37,12 @@ private:
     void initFBO(Window* window);
     void initScreenMesh();
 
-    FBO* fbo_;
+    std::unique_ptr<FBO> fbo_;
 
     /**
      * The quad mesh which will render the screen.
      */
-    Mesh* screenMesh_;
+    std::unique_ptr<Mesh> screenMesh_;
 
     std::shared_ptr<Program> program_;
 };

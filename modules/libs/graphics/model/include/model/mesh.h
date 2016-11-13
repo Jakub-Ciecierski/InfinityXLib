@@ -1,9 +1,9 @@
 #ifndef DUCK_MESH_H
 #define DUCK_MESH_H
 
+#include <model/material.h>
 #include "shaders/program.h"
 #include "shaders/data/shader_data.h"
-
 #include "shaders/buffers/vbo.h"
 #include "shaders/buffers/vao.h"
 
@@ -17,12 +17,20 @@ namespace ifx {
 
 class Texture2D;
 
-struct Textures {
-    std::shared_ptr<Texture2D> diffuse;
-    std::shared_ptr<Texture2D> specular;
-    std::shared_ptr<Texture2D> normal;
-    std::shared_ptr<Texture2D> displacement;
-    std::shared_ptr<Texture2D> fbo;
+/**
+ * Draw the polygon in filling mode or just the lines.
+ */
+enum class PolygonMode{
+    FILL,
+    LINES,
+    LINE // Use for to draw lines for Patches
+};
+
+/**
+ * How to interpret the vertices.
+ */
+enum class PrimitiveDrawMode{
+    TRIANGLES, PATCHES
 };
 
 /*
@@ -34,12 +42,8 @@ struct Textures {
  */
 class Mesh {
 public:
-    Mesh();
-
     Mesh(std::vector<Vertex> vertices,
-         std::vector<GLuint> &indices,
-         GLenum drawingMode = GL_TRIANGLES,
-         GLenum polygonMode = GL_FILL);
+         std::vector<GLuint> &indices);
 
     Mesh(const Mesh &mesh) = delete;
     Mesh &operator=(const Mesh &other) = delete;
@@ -51,40 +55,21 @@ public:
     VAO *vao() { return vao_.get(); };
     VBO *vbo() { return vbo_.get(); };
 
+    std::shared_ptr<Material> material(){return material_;}
+    void material(std::shared_ptr<Material> material){material_ = material;}
 
-    void setPolygonMode(GLenum polygonMode);
-
-    void setPrimitiveMode(GLenum drawingMode);
-
-    void setMaterial(const Material &material);
-
-    void AddTexture(std::shared_ptr<Texture2D> texture);
+    PrimitiveDrawMode primitive_draw_mode(){return primitive_draw_mode_;}
+    PolygonMode polygon_mode() {return polygon_mode_;}
+    void primitive_draw_mode(PrimitiveDrawMode mode){
+        primitive_draw_mode_ = mode;}
+    void polygon_mode(PolygonMode mode) {polygon_mode_ = mode;}
 
     virtual void draw(const Program &program);
-
     virtual void drawInstanced(const Program &program, int count);
 
     std::string toString() const;
 
 protected:
-    std::vector<Vertex> vertices_;
-    std::vector<GLuint> indices;
-    Textures textures_;
-
-    GLenum primitive_mode_;
-    GLenum polygonMode;
-
-    Material material;
-
-    std::unique_ptr<VAO> vao_;
-    std::unique_ptr<VBO> vbo_;
-    std::unique_ptr<EBO> ebo_;
-
-    /*
-     * Checks for errors in the Mesh class and throws exceptions;
-     */
-    void checkError();
-
     /*
      * Computes the Tanget Basis for all faces
      */
@@ -106,6 +91,21 @@ protected:
                      const Program &program, int id);
 
     void bindColor(const Program &program);
+
+    GLenum PrimitiveDrawModeToNative(PrimitiveDrawMode mode);
+    GLenum PolygonModeToNative(PolygonMode mode);
+
+    std::vector<Vertex> vertices_;
+    std::vector<GLuint> indices;
+
+    PrimitiveDrawMode primitive_draw_mode_;
+    PolygonMode polygon_mode_;
+
+    std::shared_ptr<Material> material_;
+
+    std::unique_ptr<VAO> vao_;
+    std::unique_ptr<VBO> vbo_;
+    std::unique_ptr<EBO> ebo_;
 };
 }
 

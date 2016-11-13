@@ -1,7 +1,6 @@
 #include "factory/mesh_factory.h"
 
 #include "factory/texture_factory.h"
-#include <shaders/textures/texture_loader.h>
 #include <shaders/textures/texture.h>
 #include <model/patch/patch.h>
 #include <vector>
@@ -60,12 +59,7 @@ std::unique_ptr<Mesh> MeshFactory::CreateQuad(int width, int heigth){
         x += dx;
     }
 
-    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices,
-                                        GL_TRIANGLES));
-
-    Material material;
-    material.shininess = 32.0f;
-    mesh->setMaterial(material);
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices));
 
     return mesh;
 }
@@ -148,20 +142,17 @@ std::unique_ptr<Mesh> MeshFactory:: LoadBicubicBezierPatch(float startX,
             12, 13, 14, 15
     };
     auto mesh = std::unique_ptr<Mesh>(new Patch(vertices, indices,
-                                               2.0f, 2.0f, vertices.size(),
-                                                idI, idJ));
-    mesh->AddTexture(TextureFactory().LoadTesselationDiffuse());
-    mesh->AddTexture(TextureFactory().LoadTesselationSpecular());
-    mesh->AddTexture(TextureFactory().LoadTesselationHeight());
-    mesh->AddTexture(TextureFactory().LoadTesselationNormals());
+                                                TesselationParams{2.0f, 2.0f,
+                                                                  vertices.size(),
+                                                                  idI, idJ,
+                                                                  0, 0}));
+    auto material = std::make_shared<Material>();
+    material->AddTexture(TextureFactory().LoadTesselationDiffuse());
+    material->AddTexture(TextureFactory().LoadTesselationSpecular());
+    material->AddTexture(TextureFactory().LoadTesselationHeight());
+    material->AddTexture(TextureFactory().LoadTesselationNormals());
 
-    mesh->setPolygonMode(GL_LINE);
-    mesh->setPrimitiveMode(GL_PATCHES);
-
-    Material material;
-    material.shininess = 32.0f;
-
-    mesh->setMaterial(material);
+    mesh->material(material);
 
     return mesh;
 }
@@ -271,20 +262,18 @@ std::unique_ptr<Mesh> MeshFactory::LoadBicubicBezierPolygon(float startX,
     };
 
     auto mesh = std::unique_ptr<Mesh>(new Patch(vertices, indices,
-                                                2.0f, 2.0f,
-                                                vertices.size(), idI, idJ));
-    mesh->AddTexture(TextureFactory().LoadTesselationDiffuse());
-    mesh->AddTexture(TextureFactory().LoadTesselationSpecular());
-    mesh->AddTexture(TextureFactory().LoadTesselationHeight());
-    mesh->AddTexture(TextureFactory().LoadTesselationNormals());
+                                                TesselationParams{
+                                                        2.0f, 2.0f,
+                                                        vertices.size(),
+                                                        idI, idJ}));
+    auto material = std::make_shared<Material>();
+    material->AddTexture(TextureFactory().LoadTesselationDiffuse());
+    material->AddTexture(TextureFactory().LoadTesselationSpecular());
+    material->AddTexture(TextureFactory().LoadTesselationHeight());
+    material->AddTexture(TextureFactory().LoadTesselationNormals());
 
-    mesh->setPolygonMode(GL_FILL);
-    mesh->setPrimitiveMode(GL_LINES);
 
-    Material material;
-    material.shininess = 32.0f;
-
-    mesh->setMaterial(material);
+    mesh->material(material);
 
     return mesh;
 }
@@ -362,16 +351,9 @@ std::unique_ptr<Mesh> MeshFactory::LoadBicubicBezierAsymmetricPatch() {
     };
 
     std::unique_ptr<Mesh> mesh(new Patch(vertices, indices,
-                           2.0f, 2.0f, vertices.size()));
-
-
-    mesh->setPolygonMode(GL_LINE);
-    mesh->setPrimitiveMode(GL_PATCHES);
-
-    Material material;
-    material.shininess = 332.0f;
-
-    mesh->setMaterial(material);
+                                         TesselationParams{
+                                                 2.0f, 2.0f,
+                                                 vertices.size()}));
 
     return mesh;
 }
@@ -399,14 +381,8 @@ std::unique_ptr<Mesh> MeshFactory::LoadPatch() {
             0, 1, 2, 3
     };
 
-
-    std::unique_ptr<Mesh> mesh(new Patch(vertices, indices));
-    mesh->setPolygonMode(GL_LINE);
-    mesh->setPrimitiveMode(GL_PATCHES);
-
-    Material material;
-    material.shininess = 32.0f;
-    mesh->setMaterial(material);
+    std::unique_ptr<Mesh> mesh(new Patch(vertices, indices,
+                                         TesselationParams{}));
 
     return mesh;
 }
@@ -488,10 +464,6 @@ std::unique_ptr<Mesh> MeshFactory::LoadCubemap() {
 
     std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices));
 
-    Material material;
-    material.shininess = 32.0f;
-    mesh->setMaterial(material);
-
     return mesh;
 }
 
@@ -570,22 +542,19 @@ std::unique_ptr<Mesh> MeshFactory::LoadCAMMaterial() {
             23, 21, 20, 23, 22, 21,        // top
     };
 
-    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices,
-                                        GL_TRIANGLES));
-    mesh->AddTexture(Texture2D::MakeTexture2DFromFile(
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices));
+    auto material = std::make_shared<Material>();
+    material->AddTexture(Texture2D::MakeTexture2DFromFile(
             ifx::Resources::GetInstance().GetResourcePath(
                     "cam/box1.png", ifx::ResourceType::TEXTURE),
             TextureTypes::DIFFUSE
     ));
-    mesh->AddTexture(Texture2D::MakeTexture2DFromFile(
+    material->AddTexture(Texture2D::MakeTexture2DFromFile(
             ifx::Resources::GetInstance().GetResourcePath(
                     "cam/box1.png", ifx::ResourceType::TEXTURE),
             TextureTypes::SPECULAR
     ));
-
-    Material material;
-    material.shininess = 32.0f;
-    mesh->setMaterial(material);
+    mesh->material(material);
 
     return mesh;
 }
@@ -665,14 +634,12 @@ std::unique_ptr<Mesh> MeshFactory::LoadCube() {
             23, 21, 20, 23, 22, 21,        // top
     };
 
-    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices,
-                                        GL_TRIANGLES));
-    mesh->AddTexture(TextureFactory().LoadContainerDiffuse());
-    mesh->AddTexture(TextureFactory().LoadContainerSpecular());
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices));
+    auto material = std::make_shared<Material>();
+    material->AddTexture(TextureFactory().LoadContainerDiffuse());
+    material->AddTexture(TextureFactory().LoadContainerSpecular());
 
-    Material material;
-    material.shininess = 32.0f;
-    mesh->setMaterial(material);
+    mesh->material(material);
 
     return mesh;
 }
@@ -753,12 +720,7 @@ std::unique_ptr<Mesh> MeshFactory::LoadCubeUnTextured() {
             23, 21, 20, 23, 22, 21,        // top
     };
 
-    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices,
-                                        GL_TRIANGLES));
-
-    Material material;
-    material.shininess = 32.0f;
-    mesh->setMaterial(material);
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices));
 
     return mesh;
 }
@@ -837,14 +799,11 @@ std::unique_ptr<Mesh> MeshFactory::LoadRoom() {
             23, 21, 20, 23, 22, 21,        // top
     };
 
-    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices, GL_TRIANGLES));
-
-    mesh->AddTexture(TextureFactory().LoadPortalTextureDiffuse());
-    mesh->AddTexture(TextureFactory().LoadPortalTextureSpecular());
-
-    Material material;
-    material.shininess = 32.0f;
-    mesh->setMaterial(material);
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices));
+    auto material = std::make_shared<Material>();
+    material->AddTexture(TextureFactory().LoadPortalTextureDiffuse());
+    material->AddTexture(TextureFactory().LoadPortalTextureSpecular());
+    mesh->material(material);
 
     return mesh;
 }
@@ -867,14 +826,13 @@ std::unique_ptr<Mesh> MeshFactory::LoadFloor(){
             0, 1, 3, 1, 2, 3,            // front
     };
 
-    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices,GL_TRIANGLES));
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices));
 
-    mesh->AddTexture(TextureFactory().LoadPortalTextureDiffuse());
-    mesh->AddTexture(TextureFactory().LoadPortalTextureSpecular());
+    auto material = std::make_shared<Material>();
+    material->AddTexture(TextureFactory().LoadPortalTextureDiffuse());
+    material->AddTexture(TextureFactory().LoadPortalTextureSpecular());
 
-    Material material;
-    material.shininess = 32.0f;
-    mesh->setMaterial(material);
+    mesh->material(material);
 
     return mesh;
 }
@@ -954,8 +912,7 @@ std::unique_ptr<Mesh> MeshFactory::LoadLamp() {
     };
     TextureFactory textureLoader;
 
-    std::unique_ptr<Mesh> mesh(new Mesh(
-            vertices, indices, GL_TRIANGLES));
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices));
     return mesh;
 }
 
@@ -1010,13 +967,8 @@ std::unique_ptr<Mesh> MeshFactory::LoadSphere(float radius) {
         }
     }
 
-    auto mesh = std::unique_ptr<Mesh>(
-            new Mesh(vertices, indices, GL_TRIANGLES));
+    auto mesh = std::unique_ptr<Mesh>(new Mesh(vertices, indices));
     //mesh->setPolygonMode(GL_LINE);
-
-    Material material;
-    material.shininess = 32.0f;
-    mesh->setMaterial(material);
 
     return mesh;
 }

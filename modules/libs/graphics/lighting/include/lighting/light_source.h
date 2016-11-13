@@ -12,6 +12,21 @@
 
 namespace ifx {
 
+struct Light{
+    glm::vec3 ambient;
+    glm::vec3 diffuse;
+    glm::vec3 specular;
+
+    // Attenuation
+    float constant;
+    float linear;
+    float quadratic;
+
+    // FlashLight cutOff angle, in degrees
+    float cutOff;
+    float outerCutOff;
+};
+
 /*
  * Light source. Can be rendered if mesh was provided.
  * Light source can be bound if RenderObject and thus follow its position.
@@ -50,6 +65,12 @@ public:
     void render(const Program &program);
 
 protected:
+    /*
+     * Derived classes should implement special binding mechanism.
+     * Such as binding direction for directional light.
+     */
+    virtual void bind(const Program &program, int id = -1) = 0;
+
     Light light;
     glm::vec3 position;
 
@@ -57,12 +78,6 @@ protected:
 
     // If true the position will be taken from renderObject if possible.
     bool isFollow;
-
-    /*
-     * Derived classes should implement special binding mechanism.
-     * Such as binding direction for directional light.
-     */
-    virtual void bind(const Program &program, int id = -1) = 0;
 
 };
 }

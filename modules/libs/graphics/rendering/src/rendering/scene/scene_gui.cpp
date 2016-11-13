@@ -34,7 +34,9 @@ void SceneWindowGUI::RenderWindow(){
         display_names_[i] = render_objects[i]->id().name().c_str();
     }
     ImGui::ListBox("Scene", &scene_listbox_item_current_,
-                   display_names_.data(), size, std::min(size, 10));
+                   display_names_.data(),
+                   size,
+                   std::min(size, 10));
 
     if(ImGui::CollapsingHeader("Selected Object"))
         RenderObjectInfo(render_objects[scene_listbox_item_current_]);
