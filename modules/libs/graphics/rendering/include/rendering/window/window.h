@@ -7,6 +7,7 @@
 #include <controls/event_handler.h>
 
 namespace ifx {
+
 /*
  * Windows Context, encapsulating the GLFW handle
  */
@@ -18,6 +19,8 @@ public:
 
     int* width() {return &width_;}
     int* height() {return &height_;}
+
+    void Resize(int width, int height);
 
     void Terminate();
 
@@ -42,6 +45,9 @@ private:
     void init();
     void setViewport();
 };
+
+void GLFWframebuffersizefun(GLFWwindow *, int, int);
+
 }
 
 #endif //DUCK_WINDOW_H
