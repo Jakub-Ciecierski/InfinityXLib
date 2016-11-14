@@ -1,6 +1,6 @@
-#include "rendering/windows_container.h"
+#include "rendering/window/windows_container.h"
 
-#include <rendering/window.h>
+#include <rendering/window/window.h>
 #include <GLFW/glfw3.h>
 
 namespace ifx {

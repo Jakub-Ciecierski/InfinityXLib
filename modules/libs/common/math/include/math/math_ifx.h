@@ -38,6 +38,7 @@ LineSphereIntersection Intersection(const LineIntersection& line,
 float Magnitude(const glm::vec3& v1);
 
 float EuclideanDistance(const glm::vec3& v1, const glm::vec3& v2);
+float EuclideanDistance(const glm::vec2& v1, const glm::vec2& v2);
 
 float dot(const glm::vec3& v1, const glm::vec3& v2);
 

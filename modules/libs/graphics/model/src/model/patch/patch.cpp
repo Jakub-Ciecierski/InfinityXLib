@@ -10,7 +10,7 @@ Patch::Patch(std::vector<Vertex> vertices,
         Mesh(vertices, indices),
         tesselation_params_(tesselation_params) {
     primitive_draw_mode_ = PrimitiveDrawMode::PATCHES;
-    polygon_mode_ = PolygonMode::LINES;
+    polygon_mode_ = PolygonMode::FILL;
 }
 
 Patch::~Patch() {}

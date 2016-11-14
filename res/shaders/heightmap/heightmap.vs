@@ -30,7 +30,9 @@ void main()
                           vec4(0, 0, 1, 0.0),
                           vec4(0.0, height, 0.0, 1));
 
+    //721385
     mat4 MVP = ProjectionMatrix * ViewMatrix * translate * ModelMatrix;
+    //mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
     gl_Position = MVP * pos4;
 
     // Fragment position is used to

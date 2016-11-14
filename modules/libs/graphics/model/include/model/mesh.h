@@ -22,7 +22,7 @@ class Texture2D;
  */
 enum class PolygonMode{
     FILL,
-    LINES,
+    LINES, // draw lines for Triangles
     LINE // Use for to draw lines for Patches
 };
 
@@ -97,11 +97,10 @@ protected:
 
     std::vector<Vertex> vertices_;
     std::vector<GLuint> indices;
+    std::shared_ptr<Material> material_;
 
     PrimitiveDrawMode primitive_draw_mode_;
     PolygonMode polygon_mode_;
-
-    std::shared_ptr<Material> material_;
 
     std::unique_ptr<VAO> vao_;
     std::unique_ptr<VBO> vbo_;

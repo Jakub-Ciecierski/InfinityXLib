@@ -2,7 +2,6 @@
 
 #include <factory/mesh_factory.h>
 #include <model_loader/model_loader.h>
-#include <model/model_memory_manager.h>
 #include <resources/resources.h>
 
 #include <memory>

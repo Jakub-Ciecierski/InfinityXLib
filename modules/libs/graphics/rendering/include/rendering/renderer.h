@@ -3,7 +3,7 @@
 
 #include <controls/event_handler.h>
 #include <rendering/scene/scene.h>
-#include <rendering/window.h>
+#include <rendering/window/window.h>
 #include <rendering/shadows/shadow_mapping.h>
 
 #include <memory>

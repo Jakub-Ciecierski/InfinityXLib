@@ -14,7 +14,8 @@ ResourceMemoryCache& ResourceMemoryCache::GetInstance(){
 }
 
 bool ResourceMemoryCache::Add(std::shared_ptr<Resource> resource){
-    if(Exists(resource->filepath()))
+    if(Exists(resource->filepath()) ||
+            resource->filepath().compare(NO_FILEPATH) == 0 )
         return false;
     resources_.push_back(resource);
 }

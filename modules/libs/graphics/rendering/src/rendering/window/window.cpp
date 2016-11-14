@@ -1,8 +1,8 @@
-#include "rendering/window.h"
+#include "rendering/window/window.h"
 
 #include <stdexcept>
 #include <controls/controls.h>
-#include <rendering/windows_container.h>
+#include <rendering/window/windows_container.h>
 #include <iostream>
 
 namespace ifx {

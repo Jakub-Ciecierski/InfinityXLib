@@ -40,6 +40,15 @@ float EuclideanDistance(const glm::vec3& v1, const glm::vec3& v2){
     return sqrt(x_d + y_d + z_d);
 }
 
+float EuclideanDistance(const glm::vec2& v1, const glm::vec2& v2){
+    float x_d = v1.x - v2.x;
+    x_d = x_d * x_d;
+    float y_d = v1.y - v2.y;
+    y_d = y_d * y_d;
+
+    return sqrt(x_d + y_d);
+}
+
 float dot(const glm::vec3& v1, const glm::vec3& v2){
     return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
 }

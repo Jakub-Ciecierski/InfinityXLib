@@ -8,9 +8,9 @@ Mesh::Mesh(std::vector<Vertex> vertices,
            vector<GLuint> &indices) :
         vertices_(vertices),
         indices(indices),
+        material_(std::make_shared<Material>()),
         primitive_draw_mode_(PrimitiveDrawMode::TRIANGLES),
-        polygon_mode_(PolygonMode::FILL),
-        material_(std::make_shared<Material>()){
+        polygon_mode_(PolygonMode::FILL){
     computeTangetBasis();
     initBuffers();
 }
@@ -21,7 +21,6 @@ void Mesh::computeTangetBasis() {
     const int DATA_PER_FACE = 3;
     int faceCount = indices.size() / DATA_PER_FACE;
     int vertexIndex = 0;
-
 
     for (int i = 0; i < faceCount; i++) {
         if (vertexIndex >= indices.size()) {
@@ -186,24 +185,6 @@ void Mesh::drawInstanced(const Program &program, int count) {
 
 std::string Mesh::toString() const {
     string str = "";
-    int diffuseTexCount = 0;
-    int specularTexCount = 0;
-    int normalTexCount = 0;
-    /*
-    for (unsigned int i = 0; i < textures.size(); i++) {
-        if (textures[i].texType == TextureTypes::DIFFUSE)
-            diffuseTexCount++;
-        if (textures[i].texType == TextureTypes::SPECULAR)
-            specularTexCount++;
-        if (textures[i].texType == TextureTypes::NORMAL)
-            normalTexCount++;
-    }
-
-    str += "Vertices Count:          " + to_string(vertices_.size()) + "\n";
-    str += "Texture Diffuse Count:   " + to_string(diffuseTexCount) + "\n";
-    str += "Texture Specular Count:  " + to_string(specularTexCount) + "\n";
-    str += "Texture Normal Count:  " + to_string(normalTexCount) + "\n";
-*/
     return str;
 }
 

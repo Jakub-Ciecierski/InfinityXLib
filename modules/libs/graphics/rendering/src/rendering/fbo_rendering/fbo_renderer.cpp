@@ -3,7 +3,7 @@
 #include <math/math_ifx.h>
 #include <shaders/buffers/fbo.h>
 #include <model/mesh.h>
-#include <rendering/window.h>
+#include <rendering/window/window.h>
 #include <shaders/textures/texture.h>
 
 namespace ifx {

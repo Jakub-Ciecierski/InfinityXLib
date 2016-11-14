@@ -72,7 +72,7 @@ void main(){
         gl_TessLevelOuter[3] = bottomCurveTessLevel + TessLevelOuter;
         gl_TessLevelOuter[0] = leftCurveTessLevel + TessLevelOuter;
         gl_TessLevelOuter[1] = topCurveTessLevel + TessLevelOuter;
-
+/*
         float lvl = 25;
         gl_TessLevelInner[0] = lvl;
         gl_TessLevelInner[1] = lvl;
@@ -81,6 +81,7 @@ void main(){
         gl_TessLevelOuter[3] = lvl;
         gl_TessLevelOuter[0] = lvl;
         gl_TessLevelOuter[1] = lvl;
+        */
     }
 }
 

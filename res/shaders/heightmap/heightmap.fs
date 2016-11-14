@@ -275,6 +275,7 @@ void main() {
 
     float height = texture(height_map, TexCoords).x;
     color = vec4(result, 1.0f);
+    //color = vec4(height, height, height, 1.0f);
 
     float depthValue = texture(shadow_map, TexCoords).r;
     //color = vec4(vec3(depthValue), 1.0);

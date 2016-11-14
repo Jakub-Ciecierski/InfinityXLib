@@ -382,7 +382,9 @@ std::unique_ptr<Mesh> MeshFactory::LoadPatch() {
     };
 
     std::unique_ptr<Mesh> mesh(new Patch(vertices, indices,
-                                         TesselationParams{}));
+                                         TesselationParams{
+                                                 2.0f, 2.0f,
+                                                 vertices.size()}));
 
     return mesh;
 }
