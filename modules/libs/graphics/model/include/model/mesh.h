@@ -30,7 +30,8 @@ enum class PolygonMode{
  * How to interpret the vertices.
  */
 enum class PrimitiveDrawMode{
-    TRIANGLES, PATCHES
+    TRIANGLES, PATCHES,
+    LINES, POINTS
 };
 
 /*

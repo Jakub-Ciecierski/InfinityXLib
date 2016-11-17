@@ -49,7 +49,7 @@ public:
     const glm::vec3& getScale();
     const glm::vec3& getDirection();
 
-    const glm::mat4 GetModelMatrix();
+    const glm::mat4& GetModelMatrix();
 protected:
     void initVectors();
 

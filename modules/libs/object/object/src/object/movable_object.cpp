@@ -73,7 +73,7 @@ const glm::vec3& MovableObject::getDirection(){
     return this->direction;
 }
 
-const glm::mat4 MovableObject::GetModelMatrix(){
+const glm::mat4& MovableObject::GetModelMatrix(){
     update();
     return ModelMatrix;
 }

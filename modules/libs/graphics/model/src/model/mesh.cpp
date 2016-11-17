@@ -193,6 +193,10 @@ GLenum Mesh::PrimitiveDrawModeToNative(PrimitiveDrawMode mode){
         return GL_TRIANGLES;
     if(mode == PrimitiveDrawMode::PATCHES)
         return GL_PATCHES;
+    if(mode == PrimitiveDrawMode::LINES)
+        return GL_LINES;
+    if(mode == PrimitiveDrawMode::POINTS)
+        return GL_POINTS;
 }
 
 GLenum Mesh::PolygonModeToNative(PolygonMode mode){
