@@ -918,6 +918,62 @@ std::unique_ptr<Mesh> MeshFactory::LoadLamp() {
     return mesh;
 }
 
+std::unique_ptr<Mesh> MeshFactory::LoadHalfSphere(float radius) {
+    std::vector<Vertex> vertices;
+    std::vector<GLuint> indices;
+
+    /// ------
+    double latitudeBands = 20;
+    double longitudeBands = 20;
+
+    for (double latNumber = 0; latNumber <= (latitudeBands); latNumber++) {
+        double theta = latNumber * 1/2 * M_PI / latitudeBands;
+        //theta /= 2.0f;
+
+        double sinTheta = sin(theta);
+        double cosTheta = cos(theta);
+
+        for (double longNumber = 0; longNumber <= longitudeBands; longNumber++) {
+            double phi = longNumber * 2 * M_PI / longitudeBands;
+            double sinPhi = sin(phi);
+            double cosPhi = cos(phi);
+
+            Vertex vs;
+            vs.Normal = glm::vec3(cosPhi * sinTheta,
+                                  cosTheta,
+                                  sinPhi * sinTheta);
+            vs.TexCoords = glm::vec2(1 - (longNumber / longitudeBands),
+                                     1 - (latNumber / latitudeBands));
+            vs.Position = glm::vec3(radius * vs.Normal[0],
+                                    (radius * vs.Normal[1]) - radius,
+                                    radius * vs.Normal[2]);
+            vs.Normal = -vs.Normal;
+            vertices.push_back(vs);
+        }
+
+        for (int latNumber = 0; latNumber < latitudeBands; latNumber++) {
+            for (int longNumber = 0; longNumber < longitudeBands; longNumber++) {
+                int first = (latNumber * (longitudeBands + 1)) + longNumber;
+                int second = first + longitudeBands + 1;
+
+                indices.push_back(first);
+                indices.push_back(second);
+                indices.push_back(first + 1);
+
+                indices.push_back(second);
+                indices.push_back(second + 1);
+                indices.push_back(first + 1);
+
+            }
+        }
+    }
+
+    auto mesh = std::unique_ptr<Mesh>(new Mesh(vertices, indices));
+    //mesh->setPolygonMode(GL_LINE);
+
+    return mesh;
+}
+
 std::unique_ptr<Mesh> MeshFactory::LoadSphere(float radius) {
     std::vector<Vertex> vertices;
     std::vector<GLuint> indices;
@@ -974,6 +1030,7 @@ std::unique_ptr<Mesh> MeshFactory::LoadSphere(float radius) {
 
     return mesh;
 }
+
 
 } // ifx
 

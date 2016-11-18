@@ -39,6 +39,7 @@ public:
     static std::unique_ptr<Mesh> LoadLamp();
 
     static std::unique_ptr<Mesh> LoadCubeUnTextured();
+    static std::unique_ptr<Mesh> LoadHalfSphere(float radius = 2);
     static std::unique_ptr<Mesh> LoadSphere(float radius = 2);
 };
 }
