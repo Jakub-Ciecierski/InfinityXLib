@@ -12,16 +12,16 @@ class Simulation;
 class GameLoop {
 public:
 
-    GameLoop(std::unique_ptr<Renderer> renderer);
+    GameLoop(std::shared_ptr<Renderer> renderer);
     ~GameLoop();
 
-    Renderer* renderer(){return renderer_.get();}
+    std::shared_ptr<Renderer> renderer(){return renderer_;}
 
     void AddSimulation(std::shared_ptr<Simulation> simulation);
     void Start();
 
 private:
-    std::unique_ptr<Renderer> renderer_;
+    std::shared_ptr<Renderer> renderer_;
     std::vector<std::shared_ptr<Simulation>> simulations_;
 
 };

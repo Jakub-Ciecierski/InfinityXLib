@@ -1,22 +1,24 @@
-#include "rendering/scene/scene_gui.h"
+#include "engine_gui/views/scene_view.h"
 
 #include <rendering/scene/scene.h>
+#include <object/render_object.h>
+
 #include <gui/imgui/imgui.h>
 #include <gui/imgui/imgui_internal.h>
 
 namespace ifx {
 
-SceneWindowGUI::SceneWindowGUI(std::shared_ptr<Scene> scene) :
+SceneView::SceneView(std::shared_ptr<Scene> scene) :
         scene_(scene),
         scene_listbox_item_current_(0){ }
 
-SceneWindowGUI::~SceneWindowGUI(){ }
+SceneView::~SceneView(){ }
 
-void SceneWindowGUI::Render(){
+void SceneView::Render(){
     RenderWindow();
 }
 
-void SceneWindowGUI::RenderWindow(){
+void SceneView::RenderWindow(){
     ImGui::SetNextWindowSize(ImVec2(350,600));
     ImGui::Begin("Scene");
 
@@ -40,7 +42,7 @@ void SceneWindowGUI::RenderWindow(){
     ImGui::End();
 }
 
-void SceneWindowGUI::RenderObjectInfo(
+void SceneView::RenderObjectInfo(
         std::shared_ptr<RenderObject> render_object){
     ImGui::BulletText("Name: %s", render_object->id().name().c_str());
     if(ImGui::TreeNode("Transform")){
@@ -56,14 +58,14 @@ void SceneWindowGUI::RenderObjectInfo(
     }
 }
 
-void SceneWindowGUI::RenderTransform(
+void SceneView::RenderTransform(
         std::shared_ptr<RenderObject> render_object){
     RenderPosition(render_object);
     RenderRotation(render_object);
     RenderScale(render_object);
 }
 
-void SceneWindowGUI::RenderPosition(
+void SceneView::RenderPosition(
         std::shared_ptr<RenderObject> render_object){
     static float raw[3];
     const glm::vec3& position = render_object->getPosition();
@@ -75,7 +77,7 @@ void SceneWindowGUI::RenderPosition(
     render_object->moveTo(glm::vec3(raw[0], raw[1], raw[2]));
 }
 
-void SceneWindowGUI::RenderRotation(
+void SceneView::RenderRotation(
         std::shared_ptr<RenderObject> render_object){
     static float raw[3];
     const glm::vec3& rotation = render_object->getRotation();
@@ -87,7 +89,7 @@ void SceneWindowGUI::RenderRotation(
     render_object->rotateTo(glm::vec3(raw[0], raw[1], raw[2]));
 }
 
-void SceneWindowGUI::RenderScale(std::shared_ptr<RenderObject> render_object){
+void SceneView::RenderScale(std::shared_ptr<RenderObject> render_object){
     static float raw[3];
     const glm::vec3& scale = render_object->getScale();
     raw[0] = scale.x;
@@ -98,7 +100,7 @@ void SceneWindowGUI::RenderScale(std::shared_ptr<RenderObject> render_object){
     render_object->scale(glm::vec3(raw[0], raw[1], raw[2]));
 }
 
-void SceneWindowGUI::RenderProperties(
+void SceneView::RenderProperties(
         std::shared_ptr<RenderObject> render_object){
     static bool do_render;
     do_render = render_object->do_render();
