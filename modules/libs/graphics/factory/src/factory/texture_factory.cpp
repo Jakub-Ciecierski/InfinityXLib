@@ -108,6 +108,30 @@ std::shared_ptr<Texture2D> TextureFactory::LoadDynamicBlueSpecularTexture() {
     return texture;
 }
 */
+
+std::shared_ptr<Texture2D> TextureFactory::CreateSolidColorTexture(
+        const glm::vec3& color,
+        TextureTypes texture_type,
+        int n, int m){
+    auto texture = Texture2D::MakeTexture2DEmpty(NO_FILEPATH,
+                                                 texture_type,
+                                                 TextureInternalFormat::RGB,
+                                                 TexturePixelType::UNSIGNED_BYTE,
+                                                 n, m);
+    int data_size = n*m*3;
+    std::vector<unsigned char> data;
+    data.resize(data_size);
+    int i = 0;
+    while(i < data_size){
+        data[i++] = color.x;
+        data[i++] = color.y;
+        data[i++] = color.z;
+    }
+    texture->InitData((void*)data.data(), n, m);
+
+    return texture;
+}
+
 std::shared_ptr<Texture2D> TextureFactory::LoadTesselationDiffuse() {
     return Texture2D::MakeTexture2DFromFile(
             ifx::Resources::GetInstance()

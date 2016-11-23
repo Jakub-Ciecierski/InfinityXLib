@@ -8,13 +8,9 @@ namespace ifx {
 
 SceneWindowGUI::SceneWindowGUI(std::shared_ptr<Scene> scene) :
         scene_(scene),
-        scene_listbox_item_current_(0){
+        scene_listbox_item_current_(0){ }
 
-}
-
-SceneWindowGUI::~SceneWindowGUI(){
-
-}
+SceneWindowGUI::~SceneWindowGUI(){ }
 
 void SceneWindowGUI::Render(){
     RenderWindow();
@@ -27,19 +23,20 @@ void SceneWindowGUI::RenderWindow(){
     std::vector<std::shared_ptr<RenderObject>>& render_objects
             = scene_->render_objects();
     int size = render_objects.size();
-    if(size == 0) return;
+    if(size != 0 ){
+        display_names_.resize(size);
+        for(unsigned int i = 0; i < size; i++){
+            display_names_[i] = render_objects[i]->id().name().c_str();
+        }
+        ImGui::ListBox("Scene", &scene_listbox_item_current_,
+                       display_names_.data(),
+                       size,
+                       std::min(size, 10));
 
-    display_names_.resize(size);
-    for(unsigned int i = 0; i < size; i++){
-        display_names_[i] = render_objects[i]->id().name().c_str();
+        if(ImGui::CollapsingHeader("Selected Object"))
+            RenderObjectInfo(render_objects[scene_listbox_item_current_]);
     }
-    ImGui::ListBox("Scene", &scene_listbox_item_current_,
-                   display_names_.data(),
-                   size,
-                   std::min(size, 10));
 
-    if(ImGui::CollapsingHeader("Selected Object"))
-        RenderObjectInfo(render_objects[scene_listbox_item_current_]);
     ImGui::End();
 }
 
