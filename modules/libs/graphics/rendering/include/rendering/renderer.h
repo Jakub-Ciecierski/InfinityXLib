@@ -40,7 +40,7 @@ public:
     Window* window()  {return window_.get();}
     RenderingType rendering_type(){return rendering_type_;}
     ShadowsType shadow_type(){return shadow_type_;};
-
+    int render_id(){return render_id_;}
     // Overridden from EventHandler.
     void HandleEvents() override;
     void Update();
@@ -72,6 +72,8 @@ private:
 
     std::unique_ptr<FBORenderer> fbo_renderer_;
     std::unique_ptr<ShadowMapping> shadow_mapping_;
+
+    int render_id_ = 0;
 };
 
 }

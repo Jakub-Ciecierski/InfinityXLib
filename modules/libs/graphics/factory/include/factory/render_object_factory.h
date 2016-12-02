@@ -21,17 +21,19 @@ public:
     std::unique_ptr<FBORenderer> CreateFBORenderer(Window* window);
     ShadowMapping* CreateShadowMapping();
 
+    std::shared_ptr<RenderObject> CreateQuad(int x = 50, int y = 50);
+    std::shared_ptr<RenderObject> CreateAxis();
+
     std::unique_ptr<RenderObject> CreateRoom();
     std::unique_ptr<RenderObject> CreateSpring();
     std::unique_ptr<RenderObject> CreateMassSpring();
 
+    std::unique_ptr<RenderObject> CreateNanosuitObject();
+    std::unique_ptr<RenderObject> CreateFloor();
+    std::unique_ptr<RenderObject> CreateLampObject();
+
     RenderObject* CreateAsteroidField();
     RenderObject* CreateAsteroid();
-    std::unique_ptr<RenderObject> CreateNanosuitObject();
-
-    std::unique_ptr<RenderObject> CreateFloor();
-
-    std::unique_ptr<RenderObject> CreateLampObject();
 
     /*
     RenderObject* loadBicubicBezierSurfaceC0Object();

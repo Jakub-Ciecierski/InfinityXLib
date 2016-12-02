@@ -36,7 +36,7 @@ public:
 
     void ReloadProgams();
     void SetCamera(std::unique_ptr<Camera> camera);
-    void render();
+    void render(int id = 0);
 
     /**
      * Overrides all programs used and renders the entire scene using

@@ -5,6 +5,7 @@
 #include <resources/resources.h>
 
 #include <memory>
+#include <factory/texture_factory.h>
 
 namespace ifx {
 
@@ -30,12 +31,28 @@ std::shared_ptr<Model> ModelFactory::LoadNanoSuitModel() {
 }
 
 std::shared_ptr<Model> ModelFactory::CreateQuad(int x, int y){
-    MeshFactory meshLoader;
-
     std::vector<std::unique_ptr<Mesh>> meshes;
     meshes.push_back(std::move(MeshFactory::CreateQuad(x,y)));
 
     return Model::MakeModel("Quad", std::move(meshes));
+}
+
+std::shared_ptr<Model> ModelFactory::CreateAxis(){
+    std::vector<std::unique_ptr<Mesh>> meshes;
+
+    auto x_cone = MeshFactory::CreateCone();
+    auto texture_x_diff = TextureFactory().CreateSolidColorTexture(
+            glm::vec3(255,0,0), TextureTypes::DIFFUSE);
+    auto texture_x_spec = TextureFactory().CreateSolidColorTexture(
+            glm::vec3(255,0,0), TextureTypes::SPECULAR);
+    auto material = std::make_shared<Material>();
+    material->AddTexture(texture_x_spec);
+    material->AddTexture(texture_x_diff);
+    x_cone->material(material);
+
+    meshes.push_back(std::move(x_cone));
+
+    return Model::MakeModel("Cone", std::move(meshes));
 }
 
 std::shared_ptr<Model> ModelFactory::LoadBicubicBezierSurfaceC0() {

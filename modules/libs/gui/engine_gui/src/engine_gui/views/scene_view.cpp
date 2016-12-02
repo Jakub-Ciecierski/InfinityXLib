@@ -16,6 +16,7 @@ SceneView::~SceneView(){ }
 
 void SceneView::Render(){
     RenderWindow();
+    ImGui::ShowTestWindow();
 }
 
 void SceneView::RenderWindow(){

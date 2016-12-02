@@ -17,6 +17,7 @@ public:
     ~MeshFactory();
 
     static std::unique_ptr<Mesh> CreateQuad(int x, int y);
+    static std::unique_ptr<Mesh> CreateCone(float radius = 1, float height = 1);
 
     static std::unique_ptr<Mesh> LoadBicubicBezierPatch(float startX,
                                                         float startY,

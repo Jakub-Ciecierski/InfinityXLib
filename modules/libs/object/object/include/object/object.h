@@ -10,14 +10,16 @@
 #include <string>
 
 class Object {
-private:
+protected:
 
     ObjectID id_;
 
 public:
 
     Object(ObjectID id);
-    ObjectID& id(){return id_;}
+    ObjectID& id() {return id_;}
+    void id(ObjectID id){id_ = id;}
+
     virtual ~Object();
 
     virtual void update() = 0;

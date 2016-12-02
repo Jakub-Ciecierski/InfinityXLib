@@ -12,11 +12,12 @@ public:
     ~ObjectID();
 
     std::string name(){return name_;}
+    int key(){return key_;}
 
     bool operator==(const ObjectID& id) const;
     bool operator!=(const ObjectID &id) const;
 private:
-    int key;
+    int key_;
     std::string name_;
 };
 

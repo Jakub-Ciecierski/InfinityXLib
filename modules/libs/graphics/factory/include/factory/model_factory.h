@@ -17,6 +17,7 @@ public:
     static std::shared_ptr<Model> LoadNanoSuitModel();
 
     static std::shared_ptr<Model> CreateQuad(int x, int y);
+    static std::shared_ptr<Model> CreateAxis();
 
     static std::shared_ptr<Model> LoadBicubicBezierSurfaceC0();
     static std::shared_ptr<Model> LoadBicubicBezierPatch();

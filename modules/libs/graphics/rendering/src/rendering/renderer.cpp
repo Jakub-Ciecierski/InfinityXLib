@@ -91,20 +91,31 @@ void Renderer::Update(){
 }
 
 void Renderer::Render(){
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    render_id_ = 0;
+    while(render_id_ < 2) {
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    if(rendering_type_ == RenderingType::NORMAL)
-        RenderNormal();
-    if(rendering_type_ == RenderingType::FBO_TEXTURE)
-        RenderFBOTexture();
+        if (rendering_type_ == RenderingType::NORMAL) {
+            RenderNormal();
+        }
 
-    if(gui_){
-        gui_->Render();
+        if (rendering_type_ == RenderingType::FBO_TEXTURE)
+            RenderFBOTexture();
+
+        if (gui_) {
+            gui_->Render();
+        }
+
+        render_id_++;
+
     }
-
     glfwSwapBuffers(window_->getHandle());
+
+    glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
 }
 
 void Renderer::RenderNormal(){
@@ -125,12 +136,16 @@ void Renderer::RenderNormalNoShadow(){
 void Renderer::RenderNormalShadowMapping(){
     shadow_mapping_->Render(scene_.get());
 
-    glViewport(0, 0, *(window_->width()), *(window_->height()));
-    glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
+    if(render_id_ == 0){
+        glViewport(0, 0,
+                   *(window_->width())/2, * (window_->height()));
+    }
+    if(render_id_ == 1){
+        glViewport(*(window_->width())/2, 0,
+                   *(window_->width())/2, *(window_->height()));
+    }
 
-    scene_->render();
+    scene_->render(render_id_);
 }
 
 void Renderer::RenderFBOTexture(){

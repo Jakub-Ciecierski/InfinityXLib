@@ -22,6 +22,8 @@ public:
     RenderObject(ObjectID id,
                  std::vector<std::shared_ptr<Model>>);
 
+    //RenderObject(const RenderObject& other);
+
     virtual ~RenderObject();
 
     const std::vector<std::shared_ptr<Program>> &programs() { return programs_; }

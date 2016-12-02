@@ -10,6 +10,7 @@
 #include <GLFW/glfw3.h>
 #include <rendering/renderer.h>
 #include <factory/scene_factory.h>
+#include <factory/texture_factory.h>
 
 namespace ifx{
 
@@ -50,6 +51,44 @@ ShadowMapping* RenderObjectFactory::CreateShadowMapping(){
     std::shared_ptr<Program> program = ProgramFactory().LoadShadowMappingProgram();
     return new ShadowMapping(Dimensions{4024, 4024}, program);
 };
+
+std::shared_ptr<RenderObject> RenderObjectFactory::CreateQuad(int x, int y){
+    auto program = ProgramFactory().LoadMainProgram();
+    auto model = ModelFactory::CreateQuad(x, y);
+
+    auto render_object
+            = std::shared_ptr<RenderObject>(
+                    new RenderObject(ObjectID(0, "Plane"), model));
+    auto texture_diff = TextureFactory().CreateSolidColorTexture(
+            glm::vec3(125,125,125), TextureTypes::DIFFUSE);
+    auto texture_spec = TextureFactory().CreateSolidColorTexture(
+            glm::vec3(125,125,125), TextureTypes::SPECULAR);
+    auto material = std::make_shared<Material>();
+    material->AddTexture(texture_spec);
+    material->AddTexture(texture_diff);
+    render_object->models()[0]->getMesh(0)->material(material);
+    render_object->models()[0]->getMesh(0)->polygon_mode(PolygonMode::LINE);
+
+    render_object->addProgram(program);
+    render_object->rotateTo(glm::vec3(90 ,0,0));
+    float scale = 10;
+    render_object->scale(scale);
+    render_object->moveTo(glm::vec3(-scale/2, 0, -scale/2));
+
+    return render_object;
+}
+
+std::shared_ptr<RenderObject> RenderObjectFactory::CreateAxis(){
+    auto program = ProgramFactory().LoadMainProgram();
+    auto model = ModelFactory::CreateAxis();
+
+    auto render_object
+            = std::shared_ptr<RenderObject>(new RenderObject(
+                    ObjectID(0, "Axis"), model));
+    render_object->addProgram(program);
+
+    return render_object;
+}
 
 std::unique_ptr<RenderObject> RenderObjectFactory::CreateRoom(){
     std::shared_ptr<Program> program = ProgramFactory().LoadMainProgram();

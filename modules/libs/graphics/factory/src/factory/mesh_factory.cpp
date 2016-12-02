@@ -64,7 +64,49 @@ std::unique_ptr<Mesh> MeshFactory::CreateQuad(int width, int heigth){
     return mesh;
 }
 
-std::unique_ptr<Mesh> MeshFactory:: LoadBicubicBezierPatch(float startX,
+std::unique_ptr<Mesh> MeshFactory::CreateCone(float radius, float height){
+    std::vector<Vertex> vertices;
+    std::vector<GLuint> indices;
+
+    /// ------
+    double longitudeBands = 360;
+
+    for (double longNumber = 0; longNumber <= longitudeBands; longNumber++) {
+        double phi = longNumber * 2 * M_PI / longitudeBands;
+        double sinPhi = sin(phi);
+        double cosPhi = cos(phi);
+        double coneAngle = atan(radius / height);
+
+        Vertex vs;
+        glm::vec3 a = glm::vec3(cos(phi), 0, sin(phi));
+        a = a * (float)cos(coneAngle);
+
+        glm::vec3 b = glm::vec3(0, 1, 0);
+        b = b * (float)sin(coneAngle);
+
+        vs.Normal = a + b;
+        vs.TexCoords = glm::vec2(1 - (longNumber / longitudeBands),
+                                 1 - (longNumber / longitudeBands));
+        float h = 0;
+        if(longNumber == longitudeBands)
+            h = height;
+        vs.Position = glm::vec3(radius*sinPhi, h, radius*cosPhi);
+
+        vertices.push_back(vs);
+
+        if(longNumber == longitudeBands)
+            continue;
+        indices.push_back(longNumber);
+        indices.push_back(longitudeBands);
+        indices.push_back(longNumber + 1);
+    }
+
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices));
+
+    return mesh;
+}
+
+std::unique_ptr<Mesh> MeshFactory::LoadBicubicBezierPatch(float startX,
                                                           float startY,
                                                           float depth,
                                                           int idI, int idJ) {

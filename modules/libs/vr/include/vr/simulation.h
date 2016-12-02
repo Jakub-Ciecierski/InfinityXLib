@@ -15,7 +15,7 @@ public:
     virtual void Update() = 0;
 
     bool IsRunning();
-    void SetRunning(bool value);
+    virtual void SetRunning(bool value);
 
     void Play();
     void Pause();

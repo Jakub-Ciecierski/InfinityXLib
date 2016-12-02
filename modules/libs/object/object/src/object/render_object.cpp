@@ -15,6 +15,11 @@ RenderObject::RenderObject(ObjectID id,
         models_(models),
         do_render_(true){
 }
+/*
+RenderObject::RenderObject(const RenderObject& other) :
+        ifx::MovableObject(other.id_){
+    models_ = other.models_;
+}*/
 
 RenderObject::~RenderObject() { }
 
@@ -33,10 +38,11 @@ void RenderObject::addProgram(std::shared_ptr<Program> program) {
 }
 
 void RenderObject::render(const Program &program) {
-    if (!do_render_)
-        return;
     if (before_render_)
         before_render_(&program);
+
+    if (!do_render_)
+        return;
 
     program.use();
 

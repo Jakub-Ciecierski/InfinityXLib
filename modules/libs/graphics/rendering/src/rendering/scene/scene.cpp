@@ -49,9 +49,15 @@ void Scene::SetCamera(std::unique_ptr<Camera> camera){
     camera_ = std::move(camera);
 }
 
-void Scene::render(){
-    for(auto& render_object : render_objects_)
+void Scene::render(int id){
+    for(auto& render_object : render_objects_){
+        if(id == 0 && render_object->id().key() == -2)
+            continue;
+        if(id == 1 && render_object->id().key() == -1)
+            continue;
         render(render_object.get());
+    }
+
 }
 
 void Scene::render(const Program* program){

@@ -45,15 +45,15 @@ std::shared_ptr<Texture2D> Texture2D::MakeTexture2DFromFile(
         int width, height;
         unsigned char *image = SOIL_load_image(filepath.c_str(),
                                                &width, &height, 0,
-                                               SOIL_LOAD_RGB);
+                                               SOIL_LOAD_RGBA);
         if (image == NULL) {
             std::string info = "NULL returned";
             throw new std::invalid_argument(info);
         }
         //texture->InitData((void*)image, width, height);
         texture->Bind();
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-                     width, height, 0, GL_RGB,
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+                     width, height, 0, GL_RGBA,
                      GL_UNSIGNED_BYTE, image);
         texture->Unbind();
         SOIL_free_image_data(image);

@@ -4,12 +4,12 @@
 
 #include "object/object_id.h"
 
-ObjectID::ObjectID(int key) : key(key){
+ObjectID::ObjectID(int key) : key_(key){
 
 }
 
 ObjectID::ObjectID(int key, std::string name) :
-    key(key), name_(name){
+    key_(key), name_(name){
 
 }
 
@@ -18,9 +18,9 @@ ObjectID::~ObjectID() {
 }
 
 bool ObjectID::operator==(const ObjectID &id) const {
-    return id.key == this->key;
+    return id.key_ == this->key_;
 }
 
 bool ObjectID::operator!=(const ObjectID &id) const {
-    return id.key != this->key;
+    return id.key_ != this->key_;
 }

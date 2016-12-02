@@ -59,6 +59,7 @@ void Window::setViewport() {
     glfwGetFramebufferSize(glfwWindow, &width_, &height_);
 
     glViewport(0, 0, width_, height_);
+
 }
 
 int Window::shouldClose() {
