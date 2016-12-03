@@ -1,5 +1,7 @@
-#ifndef PROJECT_SCENE_GUI_H
-#define PROJECT_SCENE_GUI_H
+#ifndef PROJECT_SCENE_VIEW_H
+#define PROJECT_SCENE_VIEW_H
+
+#include <engine_gui/view.h>
 
 #include <memory>
 #include <vector>
@@ -9,13 +11,13 @@ namespace ifx {
 class Scene;
 class RenderObject;
 
-class SceneWindowGUI {
+class SceneView : public View{
 public:
 
-    SceneWindowGUI(std::shared_ptr<Scene> scene);
-    ~SceneWindowGUI();
+    SceneView(std::shared_ptr<Scene> scene);
+    ~SceneView();
 
-    void Render();
+    void Render() override;
 
 private:
     void RenderWindow();
@@ -37,4 +39,4 @@ private:
 };
 }
 
-#endif //PROJECT_SCENE_GUI_H
+#endif //PROJECT_SCENE_VIEW_H

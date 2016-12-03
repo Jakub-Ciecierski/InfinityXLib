@@ -646,7 +646,6 @@ std::unique_ptr<Mesh> MeshFactory::LoadCube() {
     return mesh;
 }
 
-
 std::unique_ptr<Mesh> MeshFactory::LoadCubeUnTextured() {
     // Position, Normal, TexCoord
     vector <Vertex> vertices = {

@@ -5,8 +5,8 @@
 
 namespace ifx {
 
-GameLoop::GameLoop(std::unique_ptr<Renderer> renderer) :
-        renderer_(std::move(renderer)){ }
+GameLoop::GameLoop(std::shared_ptr<Renderer> renderer) :
+        renderer_(renderer){ }
 
 GameLoop::~GameLoop(){
 
