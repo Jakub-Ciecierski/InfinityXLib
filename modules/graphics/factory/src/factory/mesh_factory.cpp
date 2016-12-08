@@ -830,8 +830,17 @@ std::unique_ptr<Mesh> MeshFactory::LoadFloor(){
     std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices));
 
     auto material = std::make_shared<Material>();
-    material->AddTexture(TextureFactory().LoadPortalTextureDiffuse());
-    material->AddTexture(TextureFactory().LoadPortalTextureSpecular());
+
+    material->AddTexture(Texture2D::MakeTexture2DFromFile(
+            ifx::Resources::GetInstance().GetResourcePath(
+                    "wood_diffuse.png", ifx::ResourceType::TEXTURE),
+            TextureTypes::DIFFUSE
+    ));
+    material->AddTexture(Texture2D::MakeTexture2DFromFile(
+            ifx::Resources::GetInstance().GetResourcePath(
+                    "wood_specular.png", ifx::ResourceType::TEXTURE),
+            TextureTypes::SPECULAR
+    ));
 
     mesh->material(material);
 
