@@ -1,10 +1,13 @@
 cmake_minimum_required(VERSION 3.3)
-set(LIB_NAME "objects_ifx")
+
 set(TEST_NAME "test_objects_ifx")
 project(${TEST_NAME})
 
-set(PROJECT_ROOT "../../..")
-set(DEPS_DIR_NAME "dependencies")
+set(INC_DIR include)
+set(SRC_DIR src)
+set(DEPS_DIR dependencies)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${IFX_LIB_UNITTESTS_BUILD_DIR})
 
 #---------------------------------
 # MACROS
@@ -22,27 +25,56 @@ MACRO(FIND_INCLUDE_DIR return_list regex)
     SET(${return_list} ${dir_list})
 ENDMACRO()
 
-add_subdirectory(${PROJECT_ROOT}/${DEPS_DIR_NAME}/googletest)
+
+#if (NOT TARGET gtest_main)
+
+#endif()
+#add_subdirectory(${IFX_ROOT}/${DEPS_DIR}/googletest
+        #${IFX_BUILD_DIR}/InfinityX/dependencies)
+#add_subdirectory(${IFX_ROOT}/${DEPS_DIR_NAME}/googletest)
+
+
+#---------------------------------
+# INCLUDES
+#---------------------------------
+
+include_directories(${IFX_ROOT}/${DEPS_DIR}/googletest/${INC_DIR})
+
+include_directories(${IFX_ROOT}/modules/graphics/model/${INC_DIR})
+include_directories(${IFX_ROOT}/modules/graphics/shaders/${INC_DIR})
+include_directories(${IFX_ROOT}/modules/common/math/${INC_DIR})
+include_directories(${IFX_ROOT}/dependencies/glm/${INC_DIR})
+
+# SHADERS
+find_package(OpenGL REQUIRED)
+include_directories(${IFX_ROOT}/${DEPS_DIR}/glew-2.0.0/include)
+include_directories(${OPENGL_INCLUDE_DIRS})
+include_directories(${IFX_ROOT}/modules/common/math/${INC_DIR})
+include_directories(${IFX_ROOT}/modules/common/resources/${INC_DIR})
+
+# MATH
+include_directories(${IFX_ROOT}/dependencies/glm/${INC_DIR})
+include_directories(${IFX_ROOT}/dependencies/SOIL/src)
 
 #---------------------------------
 # COMPILE FLAGS
 #---------------------------------
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 
 #---------------------------------
 # PROJECT
 #---------------------------------
 
 # INCLUDE AUTOMATIC SEARCH
-FIND_INCLUDE_DIR(INC_DIRS modules/include/*.h)
-include_directories(${INC_DIRS})
+FIND_INCLUDE_DIR(INC_DIRS include/*.h)
+include_directories(${INC_DIR})
 
 # SOURCES AUTOMATIC SEARCH
 file(GLOB_RECURSE SRC_FILES src/*.cpp)
 set(SPAM )
 
-add_executable(${TEST_NAME}  ${SRC_FILES})
+add_executable(${TEST_NAME} ${SRC_FILES})
 
 target_link_libraries(${TEST_NAME} gtest gtest_main)
 target_link_libraries(${TEST_NAME} ${LIB_NAME} )

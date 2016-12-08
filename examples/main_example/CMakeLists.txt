@@ -7,8 +7,7 @@ set(INC_DIR include)
 set(SRC_DIR src)
 set(DEPS_DIR dependencies)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ./bin)
-
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${IFX_APP_BUILD_DIR})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 
 add_definitions(
@@ -41,11 +40,27 @@ set(SOURCE_FILES )
 
 add_executable(${APP_NAME} ${SOURCE_FILES} ${SRC_FILES})
 
+
+#----------------------------------
+# EXTERNAL
+#----------------------------------
+
+add_subdirectory(${IFX_ROOT}/${DEPS_DIR} ${IFX_LIB_DEPS_BUILD_DIR})
+
+include_directories(${IFX_ROOT}/${DEPS_DIR}/glfw-3.1.2/${INC_DIR})
+include_directories(${IFX_ROOT}/${DEPS_DIR}/assimp-3.1.1/${INC_DIR})
+include_directories(${IFX_ROOT}/${DEPS_DIR}/SOIL/src)
+include_directories(${IFX_ROOT}/${DEPS_DIR}/glm/${INC_DIR})
+include_directories(${IFX_ROOT}/${DEPS_DIR}/glew-2.0.0/include)
+
+find_package(OpenGL REQUIRED)
+include_directories(${OPENGL_INCLUDE_DIRS})
+
 #---------------------------------
 # IFX LIBS
 #---------------------------------
 
-add_subdirectory(${IFX_ROOT}/modules ./build)
+add_subdirectory(${IFX_ROOT} ${IFX_LIB_BUILD_DIR})
 
 include_directories(${IFX_ROOT}/modules/controls/controls/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/graphics/model/${INC_DIR})
@@ -61,21 +76,6 @@ include_directories(${IFX_ROOT}/modules/vr/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/logic/game_loop/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/gui/gui/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/gui/engine_gui/${INC_DIR})
-
-#----------------------------------
-# EXTERNAL
-#----------------------------------
-
-add_subdirectory(${IFX_ROOT}/${DEPS_DIR} ./build/dependencies)
-
-include_directories(${IFX_ROOT}/${DEPS_DIR}/glfw-3.1.2/${INC_DIR})
-include_directories(${IFX_ROOT}/${DEPS_DIR}/assimp-3.1.1/${INC_DIR})
-include_directories(${IFX_ROOT}/${DEPS_DIR}/SOIL/src)
-include_directories(${IFX_ROOT}/${DEPS_DIR}/glm/${INC_DIR})
-include_directories(${IFX_ROOT}/${DEPS_DIR}/glew-2.0.0/include)
-
-find_package(OpenGL REQUIRED)
-include_directories(${OPENGL_INCLUDE_DIRS})
 
 #---------------------------------
 # LINK

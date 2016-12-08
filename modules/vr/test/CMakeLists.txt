@@ -1,9 +1,7 @@
 cmake_minimum_required(VERSION 3.3)
-set(LIB_NAME "vr_ifx")
 set(TEST_NAME "test_vr_ifx")
 project(${TEST_NAME})
 
-set(PROJECT_ROOT "../../..")
 set(DEPS_DIR_NAME "dependencies")
 
 #---------------------------------
@@ -22,7 +20,7 @@ MACRO(FIND_INCLUDE_DIR return_list regex)
     SET(${return_list} ${dir_list})
 ENDMACRO()
 
-add_subdirectory(${PROJECT_ROOT}/${DEPS_DIR_NAME}/googletest)
+add_subdirectory(${IFX_ROOT}/${DEPS_DIR_NAME}/googletest)
 
 #---------------------------------
 # COMPILE FLAGS
@@ -35,7 +33,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 #---------------------------------
 
 # INCLUDE AUTOMATIC SEARCH
-FIND_INCLUDE_DIR(INC_DIRS modules/include/*.h)
+FIND_INCLUDE_DIR(INC_DIRS include/*.h)
 include_directories(${INC_DIRS})
 
 # SOURCES AUTOMATIC SEARCH

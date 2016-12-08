@@ -71,3 +71,8 @@ set_target_properties(${LIB_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY lib)
 #---------------------------------
 # TESTS
 #---------------------------------
+
+if (${IFX_BUILD_UNITTESTS})
+    add_subdirectory(test)
+endif()
+
