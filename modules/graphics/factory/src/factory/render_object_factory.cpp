@@ -13,43 +13,9 @@
 
 namespace ifx{
 
-RenderObjectFactory::RenderObjectFactory(){
-}
+RenderObjectFactory::RenderObjectFactory() {}
 
-RenderObjectFactory::~RenderObjectFactory() {
-
-}
-
-std::unique_ptr<Renderer> RenderObjectFactory::CreateRenderer(){
-    auto renderer = std::unique_ptr<ifx::Renderer>(new ifx::Renderer());
-    renderer->SetShadowsType(ifx::ShadowsType::SHADOW_MAPPING);
-    ifx::Window* window = renderer->window();
-    auto fbo_renderer = ifx::RenderObjectFactory().CreateFBORenderer(window);
-    renderer->SetFBORenderer(std::move(fbo_renderer));
-    renderer->SetShadowMapping(ifx::RenderObjectFactory().CreateShadowMapping());
-
-    auto camera
-            = std::unique_ptr<ifx::Camera>(new ifx::Camera(ObjectID(1),
-                                                           window->width(),
-                                                           window->height()));
-    auto scene = ifx::SceneFactory().CreateScene(std::move(camera));
-    renderer->SetScene(std::move(scene));
-
-    return renderer;
-}
-
-std::unique_ptr<FBORenderer> RenderObjectFactory::CreateFBORenderer(
-        Window* window){
-    auto fbo_renderer = std::unique_ptr<FBORenderer>(new FBORenderer(window));
-    fbo_renderer->SetProgram(ProgramFactory().LoadFBOProgram());
-
-    return fbo_renderer;
-}
-
-ShadowMapping* RenderObjectFactory::CreateShadowMapping(){
-    std::shared_ptr<Program> program = ProgramFactory().LoadShadowMappingProgram();
-    return new ShadowMapping(Dimensions{4024, 4024}, program);
-};
+RenderObjectFactory::~RenderObjectFactory() {}
 
 std::unique_ptr<RenderObject> RenderObjectFactory::CreateRoom(){
     std::shared_ptr<Program> program = ProgramFactory().LoadMainProgram();
@@ -203,7 +169,7 @@ std::unique_ptr<RenderObject> RenderObjectFactory::CreateFloor(){
     renderObject->addProgram(nano_program);
     //renderObject->addProgram(normal_vision_program);
 
-    float scaleFactor = 15.005f;
+    float scaleFactor = 5.005f;
     renderObject->scale(glm::vec3(scaleFactor, scaleFactor, scaleFactor));
     renderObject->rotateTo(glm::vec3(90, 0, 0));
 

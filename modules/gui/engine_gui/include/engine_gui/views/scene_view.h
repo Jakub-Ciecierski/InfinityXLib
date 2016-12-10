@@ -22,6 +22,7 @@ public:
 private:
     void RenderWindow();
 
+    void RenderSceneList();
     void RenderObjectInfo(std::shared_ptr<RenderObject> render_object);
 
     void RenderTransform(std::shared_ptr<RenderObject> render_object);

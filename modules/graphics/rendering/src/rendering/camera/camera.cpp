@@ -1,6 +1,6 @@
 #include "rendering/camera/camera.h"
 
-#include <controls/controls.h>
+#include <controls/controls_events.h>
 #include "shaders/data/shader_data.h"
 
 namespace ifx {

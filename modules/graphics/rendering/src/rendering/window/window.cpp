@@ -1,7 +1,7 @@
 #include "rendering/window/window.h"
 
 #include <stdexcept>
-#include <controls/controls.h>
+#include <controls/controls_events.h>
 #include <rendering/window/windows_container.h>
 #include <iostream>
 

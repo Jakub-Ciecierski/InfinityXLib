@@ -2,6 +2,7 @@
 
 using namespace glm;
 namespace ifx {
+
 RenderObject::RenderObject(ObjectID id,
                            std::shared_ptr<Model> model) :
         ifx::MovableObject(id),

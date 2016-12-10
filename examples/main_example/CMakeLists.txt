@@ -73,7 +73,8 @@ include_directories(${IFX_ROOT}/modules/common/resources/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/common/math/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/graphics/factory/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/vr/${INC_DIR})
-include_directories(${IFX_ROOT}/modules/logic/game_loop/${INC_DIR})
+include_directories(${IFX_ROOT}/modules/game/game/${INC_DIR})
+include_directories(${IFX_ROOT}/modules/physics/physics/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/gui/gui/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/gui/engine_gui/${INC_DIR})
 
@@ -82,11 +83,11 @@ include_directories(${IFX_ROOT}/modules/gui/engine_gui/${INC_DIR})
 #---------------------------------
 
 target_link_libraries(${APP_NAME}
-        factory_ifx model_loader_ifx model_ifx
+        game_ifx factory_ifx physics_ifx
+        model_loader_ifx model_ifx
         rendering_ifx shaders_ifx math_ifx
         lighting_ifx object_ifx resources_ifx controls_ifx
-        vr_ifx game_loop_ifx
-        gui_ifx engine_gui_ifx)
+        vr_ifx gui_ifx engine_gui_ifx)
 
 target_link_libraries(${APP_NAME} SOIL)
 target_link_libraries(${APP_NAME} assimp)

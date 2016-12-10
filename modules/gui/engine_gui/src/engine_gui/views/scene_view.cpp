@@ -19,6 +19,10 @@ void SceneView::Render(){
 }
 
 void SceneView::RenderWindow(){
+    RenderSceneList();
+}
+
+void SceneView::RenderSceneList(){
     ImGui::SetNextWindowSize(ImVec2(350,600));
     ImGui::Begin("Scene");
 

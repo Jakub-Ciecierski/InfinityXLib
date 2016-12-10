@@ -1,7 +1,7 @@
 #include "rendering/renderer.h"
 
 #include <controls/glfw_callbacks.h>
-#include <controls/controls.h>
+#include <controls/controls_events.h>
 #include <rendering/fbo_rendering/fbo_renderer.h>
 #include <gui/gui.h>
 
@@ -49,8 +49,8 @@ void Renderer::SetFBORenderer(std::unique_ptr<FBORenderer> fbo_renderer){
     fbo_renderer_ = std::move(fbo_renderer);
 }
 
-void Renderer::SetShadowMapping(ShadowMapping* shadow_mapping){
-    shadow_mapping_.reset(shadow_mapping);
+void Renderer::SetShadowMapping(std::unique_ptr<ShadowMapping> shadow_mapping){
+    shadow_mapping_ = std::move(shadow_mapping);
 }
 
 void Renderer::initGLFWRenderContext(){

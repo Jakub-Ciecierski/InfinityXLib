@@ -1,6 +1,6 @@
 #include "controls/glfw_callbacks.h"
 
-#include <controls/controls.h>
+#include <controls/controls_events.h>
 #include "gui/imgui/impl/imgui_impl_glfw_gl3.h"
 
 namespace ifx {
@@ -13,17 +13,17 @@ void key_callback(GLFWwindow *window, int key,
     }
     // Duplication on purpose.
     ImGui_ImplGlfwGL3_KeyCallback(window, key, scancode, action, mode);
-    Controls::GetInstance().OnKeyboardEvent(action, key);
+    ControlsEvents::GetInstance().OnKeyboardEvent(action, key);
 }
 
 void mouse_callback(GLFWwindow *window,
                     double x, double y) {
-    Controls::GetInstance().OnMouseEvent(x, y);
+    ControlsEvents::GetInstance().OnMouseEvent(x, y);
 }
 
 void mouse_button_callback(GLFWwindow *window,
                            int button, int action, int mods) {
-    Controls& controls = Controls::GetInstance();
+    ControlsEvents& controls = ControlsEvents::GetInstance();
 
     if(ImGui::GetIO().WantCaptureMouse){
         ImGui_ImplGlfwGL3_MouseButtonCallback(window, button, action, mods);
@@ -58,7 +58,7 @@ void mousescroll_callback(GLFWwindow *window,
         ImGui_ImplGlfwGL3_ScrollCallback(window, xoffset, yoffset);
         return;
     }
-    Controls::GetInstance().OnMouseScrollEvent(xoffset, yoffset);
+    ControlsEvents::GetInstance().OnMouseScrollEvent(xoffset, yoffset);
 }
 
 void char_callback(GLFWwindow* window, unsigned int c){
