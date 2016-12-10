@@ -1,4 +1,5 @@
 #version 400 core
+#extension GL_EXT_gpu_shader4 : enable
 
 layout (location = 0) in vec3 position;
 layout (location = 1) in vec3 normal;
@@ -17,6 +18,7 @@ uniform mat4 ProjectionMatrix;
 void main()
 {
     vec4 pos4 = vec4(position, 1.0f);
+
     mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
     gl_Position = MVP * pos4;
 
