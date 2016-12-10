@@ -51,7 +51,7 @@ public:
     void SetRenderingType(RenderingType type);
     void SetShadowsType(ShadowsType type);
     void SetFBORenderer(std::unique_ptr<FBORenderer> fbo_renderer);
-    void SetShadowMapping(ShadowMapping* shadow_mapping);
+    void SetShadowMapping(std::unique_ptr<ShadowMapping> shadow_mapping);
 
     void LimitFPS(bool val);
 private:

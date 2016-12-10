@@ -1,6 +1,6 @@
 #include "scene/scene.h"
 
-#include <controls/controls.h>
+#include <controls/controls_events.h>
 
 namespace ifx {
 
