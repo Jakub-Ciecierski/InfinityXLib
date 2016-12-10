@@ -53,6 +53,13 @@ void Renderer::SetShadowMapping(ShadowMapping* shadow_mapping){
     shadow_mapping_.reset(shadow_mapping);
 }
 
+void Renderer::LimitFPS(bool val){
+    if(val)
+        glfwSwapInterval(1);
+    else
+        glfwSwapInterval(0);
+}
+
 void Renderer::initGLFWRenderContext(){
     glfwInit();
     // OpenGL version required
@@ -66,8 +73,7 @@ void Renderer::initGLFWRenderContext(){
     int height = 1000;
     window_ .reset(new Window(width, height, "InfinityX"));
 
-    // Dont limit FPS
-    glfwSwapInterval(0);
+    LimitFPS(false);
 }
 
 void Renderer::initOpenGLContext(){

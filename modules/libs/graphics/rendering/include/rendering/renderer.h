@@ -53,6 +53,7 @@ public:
     void SetFBORenderer(std::unique_ptr<FBORenderer> fbo_renderer);
     void SetShadowMapping(ShadowMapping* shadow_mapping);
 
+    void LimitFPS(bool val);
 private:
     void initGLFWRenderContext();
     void initOpenGLContext();
