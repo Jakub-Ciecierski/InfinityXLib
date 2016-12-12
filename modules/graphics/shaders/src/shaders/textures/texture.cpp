@@ -38,7 +38,7 @@ std::shared_ptr<Texture2D> Texture2D::MakeTexture2DFromFile(
             = std::static_pointer_cast<Texture2D>(
                     ifx::ResourceMemoryCache::GetInstance().Get(filepath));
     if(!texture) {
-        TextureInternalFormat format = TextureInternalFormat::RGB;
+        TextureInternalFormat format = TextureInternalFormat::RGBA;
         TexturePixelType pixel_type = TexturePixelType::UNSIGNED_BYTE;
         texture = std::shared_ptr<Texture2D>(
                 new Texture2D(filepath, type, format, pixel_type));
@@ -46,15 +46,15 @@ std::shared_ptr<Texture2D> Texture2D::MakeTexture2DFromFile(
         int c = -1;
         unsigned char *image = SOIL_load_image(filepath.c_str(),
                                                &width, &height, &c,
-                                               SOIL_LOAD_RGB);
+                                               SOIL_LOAD_RGBA);
         if (image == NULL) {
             std::string info = "NULL returned";
             throw new std::invalid_argument(info);
         }
         //texture->InitData((void*)image, width, height);
         texture->Bind();
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-                     width, height, 0, GL_RGB,
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+                     width, height, 0, GL_RGBA,
                      GL_UNSIGNED_BYTE, image);
         texture->Unbind();
         SOIL_free_image_data(image);
@@ -121,6 +121,8 @@ GLenum Texture2D::GetTextureInternalFormatPrimitive(){
         return GL_RED;
     else if(format_ == TextureInternalFormat::RGB)
         return GL_RGB;
+    else if(format_ == TextureInternalFormat::RGBA)
+        return GL_RGBA;
     else if(format_ == TextureInternalFormat::DEPTH_COMPONENT)
         return GL_DEPTH_COMPONENT;
     else

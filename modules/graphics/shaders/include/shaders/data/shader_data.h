@@ -38,6 +38,7 @@ extern const std::string MATERIAL_SPECULAR_NAME;
 extern const std::string MATERIAL_NORMAL_NAME;
 extern const std::string MATERIAL_DISPLACEMENT_NAME;
 extern const std::string MATERIAL_SHININESS_NAME;
+extern const std::string MATERIAL_ALPHA_NAME;
 
 extern const std::string TEXTURE_CUBEMAP_NAME;
 // Used in FBO screen rendering

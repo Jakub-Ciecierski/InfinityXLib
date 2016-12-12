@@ -38,17 +38,17 @@ LightDirectional *LightingFactory::loadDirLight() {
     LightDirectional *lightSource = new LightDirectional();
 
     Light light;
-    /*
+
     light.ambient = glm::vec3(0.5f, 0.5f, 0.5f);
     light.diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
     light.specular = glm::vec3(1.0f, 1.0f, 1.0f);
-*/
+/*
     light.ambient = glm::vec3(0.4f, 0.4f, 0.4f);
     light.diffuse = glm::vec3(0.4f, 0.4f, 0.4f);
-    light.specular = glm::vec3(0.1f, 0.1f, 0.1f);
+    light.specular = glm::vec3(0.1f, 0.1f, 0.1f);*/
     lightSource->setLight(light);
 
-    lightSource->setPosition(glm::vec3(0.0f, 3.0f, 0.0f));
+    lightSource->setPosition(glm::vec3(0.0f, 2.5f, 0.0f));
     lightSource->setLookAt(glm::vec3(0,0,0));
     lightSource->setFollow(false);
 

@@ -31,6 +31,7 @@ struct Material {
     sampler2D normal;
 
     float shininess;
+    float alpha;
 };
 
 #define MAX_LIGHT_COUNT 16
@@ -272,8 +273,5 @@ void main() {
         result += computeSpotLight(spotLights[i], norm, FragPos, viewDir, TBN);
     }
 
-    color = vec4(result, 1.0f);
-
-    float depthValue = texture(shadow_map, TexCoords).r;
-    //color = vec4(vec3(depthValue), 1.0);
+    color = vec4(result, material.alpha);
 }

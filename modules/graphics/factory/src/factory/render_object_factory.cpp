@@ -197,7 +197,8 @@ std::unique_ptr<RenderObject> RenderObjectFactory::CreateFloor(){
     std::shared_ptr<Model> nanosuitModel = ModelFactory::LoadFloorModel();
 
     auto renderObject
-            = std::unique_ptr<RenderObject>(new RenderObject(ObjectID(0),
+            = std::unique_ptr<RenderObject>(new RenderObject(ObjectID(0,
+                                                                      "Floor"),
                                                      nanosuitModel));
 
     renderObject->addProgram(nano_program);

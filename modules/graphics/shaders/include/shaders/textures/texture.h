@@ -13,7 +13,7 @@ enum class TextureTypes{
 };
 
 enum class TextureInternalFormat{
-    R, RGB, DEPTH_COMPONENT
+    R, RGB, RGBA, DEPTH_COMPONENT
 };
 
 enum class TexturePixelType{

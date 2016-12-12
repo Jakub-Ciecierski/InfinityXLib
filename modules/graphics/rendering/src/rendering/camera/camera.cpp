@@ -72,6 +72,7 @@ void Camera::rotate(const glm::vec3 &rotation) {
 
 void Camera::rotateTo(const glm::vec3 &rotation) {
     this->rotation = rotation;
+
     clampRotation();
 }
 
@@ -79,8 +80,8 @@ void Camera::update() {
     HandleEvents();
 
     ProjectionMatrix = glm::perspective(FOV,
-                                        (float) (*width) / (float) (*height),
-                                        near, far);
+                                    (float) (*width) / (float) (*height),
+                                    near, far);
 
     direction.x = cos(glm::radians(rotation.x))
                   * cos(glm::radians(rotation.y));

@@ -13,6 +13,7 @@ const std::string MATERIAL_SPECULAR_NAME = "material.specular";
 const std::string MATERIAL_NORMAL_NAME = "material.normal";
 const std::string MATERIAL_DISPLACEMENT_NAME = "material.displacement";
 const std::string MATERIAL_SHININESS_NAME = "material.shininess";
+const std::string MATERIAL_ALPHA_NAME = "material.alpha";
 
 const std::string TEXTURE_CUBEMAP_NAME = "cubemap";
 const std::string TEXTURE_SCREEN_NAME = "screen_texture";

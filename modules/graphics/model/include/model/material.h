@@ -9,6 +9,8 @@ namespace ifx {
 
 struct Material {
     float shininess = 32.0f;
+    float alpha = 1.0f; // use < 0 if you want to the texture to override it.
+
     std::shared_ptr<Texture2D> diffuse;
     std::shared_ptr<Texture2D> specular;
     std::shared_ptr<Texture2D> normal;

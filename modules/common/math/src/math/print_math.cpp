@@ -14,4 +14,8 @@ void PrintMat3(const glm::mat3 &mat){
     std::cout << mat[0].z << ", " << mat[1].z << ", " << mat[2].z << std::endl;
 }
 
+void PrintQuat(const glm::quat &q){
+    std::cout << q.x << ", " << q.y << ", " << q.z << ", " << q.w << std::endl;
+}
+
 }
