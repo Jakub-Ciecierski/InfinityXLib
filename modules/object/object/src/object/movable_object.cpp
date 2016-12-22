@@ -14,7 +14,7 @@ MovableObject::~MovableObject() {
 void MovableObject::update(){
     ModelMatrix = glm::mat4(1.0f);
 
-    glm::mat4 Translate = translate(glm::mat4(1.0f), position);
+    TranslateMatrix = translate(glm::mat4(1.0f), position);
 
     glm::mat4 RotateX = glm::rotate(glm::mat4(1.0f),
                                     glm::radians(rotation.x),
@@ -30,7 +30,7 @@ void MovableObject::update(){
 
     glm::mat4 Rotate =  RotateZ * RotateY * RotateX;
 
-    ModelMatrix = Translate * Rotate * Scale;
+    ModelMatrix = TranslateMatrix * Rotate * Scale;
 }
 
 void MovableObject::moveTo(const glm::vec3 &position) {
@@ -76,6 +76,11 @@ const glm::vec3& MovableObject::getDirection(){
 const glm::mat4& MovableObject::GetModelMatrix(){
     update();
     return ModelMatrix;
+}
+
+const glm::mat4& MovableObject::GetTranslateMatrix(){
+    update();
+    return TranslateMatrix;
 }
 
 void MovableObject::initVectors(){

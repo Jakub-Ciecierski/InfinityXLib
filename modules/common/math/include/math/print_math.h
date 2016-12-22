@@ -7,6 +7,7 @@
 namespace ifx{
 void PrintVec3(const glm::vec3& vec);
 void PrintMat3(const glm::mat3& mat);
+void PrintMat4(const glm::mat4 &mat);
 void PrintQuat(const glm::quat &q);
 }
 

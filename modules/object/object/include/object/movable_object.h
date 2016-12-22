@@ -50,6 +50,8 @@ public:
     const glm::vec3& getDirection();
 
     const glm::mat4& GetModelMatrix();
+    const glm::mat4& GetTranslateMatrix();
+
 protected:
     void initVectors();
 
@@ -60,6 +62,7 @@ protected:
     glm::vec3 direction;
 
     glm::mat4 ModelMatrix;
+    glm::mat4 TranslateMatrix;
 
 private:
 
