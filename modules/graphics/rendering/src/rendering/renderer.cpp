@@ -19,7 +19,7 @@ Renderer::Renderer() :
 Renderer::~Renderer(){}
 
 void Renderer::HandleEvents() {
-    Controls& controls = Controls::GetInstance();
+    ControlsEvents& controls = ControlsEvents::GetInstance();
     const Keys& keys = controls.keyboard_keys();
 
     if (keys[GLFW_KEY_R]){
@@ -93,7 +93,7 @@ void Renderer::initGLFWCallbacks(){
 void Renderer::Update(){
     window_->update();
     scene_->update();
-    Controls::GetInstance().Update();
+    ControlsEvents::GetInstance().Update();
 }
 
 void Renderer::Render(){

@@ -21,7 +21,7 @@ Camera::~Camera() {
 }
 
 void Camera::HandleEvents() {
-    Controls& controls = Controls::GetInstance();
+    ControlsEvents& controls = ControlsEvents::GetInstance();
     float movementSpeed = 0.001f;
     float rotationSpeed = 0.1f;
 
