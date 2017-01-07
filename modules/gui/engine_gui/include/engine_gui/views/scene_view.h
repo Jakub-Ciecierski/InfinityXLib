@@ -8,35 +8,40 @@
 
 namespace ifx {
 
-class Scene;
+class SceneContainer;
 class RenderObject;
+class GameObject;
+class GameComponent;
+
+class GameObjectView;
+class GameComponentView;
 
 class SceneView : public View{
 public:
 
-    SceneView(std::shared_ptr<Scene> scene);
+    SceneView(std::shared_ptr<SceneContainer> scene);
     ~SceneView();
 
     void Render() override;
 
 private:
     void RenderWindow();
+    void RenderGameObjectsList(
+            std::vector<std::shared_ptr<GameObject>>& game_objects);
+    void RenderGameComponentsList(std::shared_ptr<GameObject> game_object,
+                                  int game_object_id);
 
-    void RenderSceneList();
-    void RenderObjectInfo(std::shared_ptr<RenderObject> render_object);
+    std::string GetComponentName(std::shared_ptr<GameComponent> game_component,
+                                 int game_object_id,
+                                 int component_id);
 
-    void RenderTransform(std::shared_ptr<RenderObject> render_object);
-    void RenderPosition(std::shared_ptr<RenderObject> render_object);
-    void RenderRotation(std::shared_ptr<RenderObject> render_object);
-    void RenderScale(std::shared_ptr<RenderObject> render_object);
+    std::shared_ptr<SceneContainer> scene_;
 
-    void RenderProperties(std::shared_ptr<RenderObject> render_object);
+    std::shared_ptr<GameObject> selected_game_object_;
+    std::shared_ptr<GameComponent> selected_game_component_;
 
-    std::shared_ptr<Scene> scene_;
-
-    std::vector<const char*> display_names_;
-    int scene_listbox_item_current_;
-
+    std::unique_ptr<GameObjectView> game_object_view_;
+    std::unique_ptr<GameComponentView> game_component_view_;
 };
 }
 

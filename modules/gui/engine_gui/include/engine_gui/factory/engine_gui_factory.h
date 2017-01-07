@@ -9,17 +9,19 @@ class EngineGUI;
 class MainMenu;
 class Renderer;
 class SceneView;
-class Scene;
+class SceneContainer;
 
 class EngineGUIFactory {
 public:
     EngineGUIFactory();
     ~EngineGUIFactory();
 
-    std::shared_ptr<EngineGUI> CreateEngineGUI(std::shared_ptr<Renderer> renderer);
+    std::shared_ptr<EngineGUI> CreateEngineGUI(
+            std::shared_ptr<SceneContainer> scene);
 private:
     std::shared_ptr<MainMenu> CreateMainMenu();
-    std::shared_ptr<SceneView> CreateSceneView(std::shared_ptr<Scene> scene);
+    std::shared_ptr<SceneView> CreateSceneView(
+            std::shared_ptr<SceneContainer> scene);
 };
 
 }

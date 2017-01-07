@@ -30,13 +30,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 #---------------------------------
 
 include_directories(${IFX_ROOT}/modules/vr/${INC_DIR})
-include_directories(${IFX_ROOT}/modules/graphics/rendering/${INC_DIR})
+include_directories(${IFX_ROOT}/modules/graphics/${INC_DIR})
 
 include_directories(${IFX_ROOT}/modules/common/math/${INC_DIR})
-include_directories(${IFX_ROOT}/modules/graphics/shaders/${INC_DIR})
-include_directories(${IFX_ROOT}/modules/graphics/model/${INC_DIR})
-include_directories(${IFX_ROOT}/modules/graphics/lighting/${INC_DIR})
-include_directories(${IFX_ROOT}/modules/graphics/factory/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/object/object/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/controls/controls/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/physics/${INC_DIR})
@@ -90,3 +86,7 @@ set_target_properties(${LIB_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY lib)
 #---------------------------------
 # TESTS
 #---------------------------------
+
+#if (${IFX_BUILD_UNITTESTS})
+#    add_subdirectory(test)
+#endif()

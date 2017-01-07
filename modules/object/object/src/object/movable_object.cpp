@@ -2,6 +2,10 @@
 
 namespace ifx {
 
+MovableObject::MovableObject() : Object(ObjectID(0)){
+    initVectors();
+}
+
 MovableObject::MovableObject(ObjectID id) :
         Object(id) {
     initVectors();
@@ -31,6 +35,12 @@ void MovableObject::update(){
     glm::mat4 Rotate =  RotateZ * RotateY * RotateX;
 
     ModelMatrix = TranslateMatrix * Rotate * Scale;
+
+    direction.x = cos(glm::radians(rotation.x))
+                  * cos(glm::radians(rotation.y));
+    direction.y = sin(glm::radians(rotation.y));
+    direction.z = sin(glm::radians(rotation.x)) * cos(glm::radians(rotation.y));
+    direction = glm::normalize(direction);
 }
 
 void MovableObject::moveTo(const glm::vec3 &position) {
@@ -55,6 +65,10 @@ void MovableObject::scale(float scale) {
 
 void MovableObject::scale(const glm::vec3 &scale) {
     this->scaleFactor = scale;
+}
+
+void MovableObject::LookAt(const glm::vec3& v){
+    look_at_ = v;
 }
 
 const glm::vec3& MovableObject::getPosition() {
@@ -85,7 +99,8 @@ const glm::mat4& MovableObject::GetTranslateMatrix(){
 
 void MovableObject::initVectors(){
     scaleFactor = glm::vec3(1.0f, 1.0f, 1.0f);
-    direction = glm::vec3(0.0f, 0.0f, 0.0f);
+    direction = glm::vec3(0.0f, -1.0f, 0.0f);
+    look_at_ = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
 

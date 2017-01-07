@@ -1,21 +1,23 @@
 #ifndef DUCK_RENDER_OBJECT_H
 #define DUCK_RENDER_OBJECT_H
 
-#include <model/mesh.h>
-#include <model/model.h>
 #include <math/math_ifx.h>
-#include <shaders/program.h>
 #include <object/movable_object.h>
+#include <object/game_component.h>
 
 #include <functional>
 #include <memory>
 
+class Program;
+
 namespace ifx {
+
+class Model;
 
 /*
  * RenderObject is used to render Meshes.
  */
-class RenderObject : public ifx::MovableObject {
+class RenderObject : public GameComponent {
 public:
     RenderObject(ObjectID id,
                  std::shared_ptr<Model>);
@@ -44,7 +46,7 @@ public:
     /*
      * Binds the Model matrix and draws Mesh
      */
-    virtual void render(const Program &program);
+    virtual void Render(const Program &program);
 
 protected:
     std::vector<std::shared_ptr<Model>> models_;

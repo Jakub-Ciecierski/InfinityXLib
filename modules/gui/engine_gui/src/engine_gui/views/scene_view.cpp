@@ -1,16 +1,25 @@
 #include "engine_gui/views/scene_view.h"
 
-#include <rendering/scene/scene.h>
+#include <game/scene_container.h>
 #include <object/render_object.h>
 
 #include <gui/imgui/imgui.h>
 #include <gui/imgui/imgui_internal.h>
+#include <iostream>
+#include <object/game_component.h>
+#include <object/game_object.h>
+#include <engine_gui/views/scene_view/game_object_view.h>
+#include <engine_gui/views/scene_view/game_component_view.h>
 
 namespace ifx {
 
-SceneView::SceneView(std::shared_ptr<Scene> scene) :
+SceneView::SceneView(std::shared_ptr<SceneContainer> scene) :
         scene_(scene),
-        scene_listbox_item_current_(0){ }
+        selected_game_object_(nullptr),
+        selected_game_component_(nullptr){
+    game_object_view_.reset(new GameObjectView());
+    game_component_view_.reset(new GameComponentView());
+}
 
 SceneView::~SceneView(){ }
 
@@ -19,97 +28,102 @@ void SceneView::Render(){
 }
 
 void SceneView::RenderWindow(){
-    RenderSceneList();
-}
-
-void SceneView::RenderSceneList(){
-    ImGui::SetNextWindowSize(ImVec2(350,600));
     ImGui::Begin("Scene");
+    RenderGameObjectsList(scene_->game_objects());
+    ImGui::End();
 
-    std::vector<std::shared_ptr<RenderObject>>& render_objects
-            = scene_->render_objects();
-    int size = render_objects.size();
-    if(size != 0 ){
-        display_names_.resize(size);
-        for(int i = 0; i < size; i++){
-            display_names_[i] = render_objects[i]->id().name().c_str();
-        }
-        ImGui::ListBox("Scene", &scene_listbox_item_current_,
-                       display_names_.data(),
-                       size,
-                       std::min(size, 10));
+    ImGui::Begin("Selected Game Object");
+    if(selected_game_object_)
+        game_object_view_->Render(selected_game_object_);
+    ImGui::End();
 
-        if(ImGui::CollapsingHeader("Selected Object"))
-            RenderObjectInfo(render_objects[scene_listbox_item_current_]);
-    }
-
+    ImGui::Begin("Selected Game Component");
+    if(selected_game_component_)
+        game_component_view_->Render(selected_game_component_);
     ImGui::End();
 }
 
-void SceneView::RenderObjectInfo(
-        std::shared_ptr<RenderObject> render_object){
-    ImGui::BulletText("Name: %s", render_object->id().name().c_str());
-    if(ImGui::TreeNode("Transform")){
-        RenderTransform(render_object);
+void SceneView::RenderGameObjectsList(
+        std::vector<std::shared_ptr<GameObject>>& game_objects){
+    if (ImGui::TreeNode("Game Objects")){
+        static int selection_mask = (1 << 2);
+
+        int node_clicked = -1;
+        for(int i = 0;i < game_objects.size(); i++){
+            ImGuiTreeNodeFlags node_flags
+                    = ImGuiTreeNodeFlags_OpenOnArrow |
+                            ImGuiTreeNodeFlags_OpenOnDoubleClick |
+                            ((selection_mask & (1 << i)) ?
+                             ImGuiTreeNodeFlags_Selected : 0);
+            bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i,
+                                               node_flags,
+                                               "GameObject %d", i);
+            if (ImGui::IsItemClicked()){
+                node_clicked = i;
+            }
+            if (node_open){
+                RenderGameComponentsList(game_objects[i],
+                                         i);
+                ImGui::TreePop();
+            }
+            if (node_clicked != -1){
+                selection_mask = (1 << node_clicked);
+                selected_game_object_ = game_objects[i];
+            }
+        }
         ImGui::TreePop();
     }
-    if(ImGui::TreeNode("Properties")){
-        RenderProperties(render_object);
-        ImGui::TreePop();
+}
+
+void SceneView::RenderGameComponentsList(
+        std::shared_ptr<GameObject> game_object,
+        int game_object_id){
+    int node_clicked = -1;
+    static int selection_mask = (1 << 2);
+    auto game_components = game_object->GetComponents();
+    int size = game_components.size();
+
+    // TODO
+    const int single_selection_hack = 25;
+    int id_start = game_object_id * single_selection_hack;
+
+    for(int i = 0; i < size; i++){
+
+        int id = id_start+i;
+        ImGuiTreeNodeFlags node_flags
+                = ImGuiTreeNodeFlags_OpenOnArrow
+                  | ImGuiTreeNodeFlags_OpenOnDoubleClick
+                  | ((selection_mask & (1 << id)) ?
+                     ImGuiTreeNodeFlags_Selected : 0);
+
+        ImGui::TreeNodeEx((void*)(intptr_t)id,
+                          node_flags
+                          | ImGuiTreeNodeFlags_Leaf
+                          | ImGuiTreeNodeFlags_NoTreePushOnOpen,
+                          GetComponentName(game_components[i],
+                                           game_object_id,i).c_str(), id);
+        if (ImGui::IsItemClicked())
+            node_clicked = i;
+
+        if (node_clicked != -1){
+            selection_mask = (1 << node_clicked + id_start);
+            selected_game_component_ = game_components[i];
+        }
     }
-    if(ImGui::TreeNode("Components TODO")){
-        ImGui::TreePop();
-    }
 }
 
-void SceneView::RenderTransform(
-        std::shared_ptr<RenderObject> render_object){
-    RenderPosition(render_object);
-    RenderRotation(render_object);
-    RenderScale(render_object);
-}
-
-void SceneView::RenderPosition(
-        std::shared_ptr<RenderObject> render_object){
-    static float raw[3];
-    const glm::vec3& position = render_object->getPosition();
-    raw[0] = position.x;
-    raw[1] = position.y;
-    raw[2] = position.z;
-
-    ImGui::SliderFloat3("Position", raw, -2, 2);
-    render_object->moveTo(glm::vec3(raw[0], raw[1], raw[2]));
-}
-
-void SceneView::RenderRotation(
-        std::shared_ptr<RenderObject> render_object){
-    static float raw[3];
-    const glm::vec3& rotation = render_object->getRotation();
-    raw[0] = rotation.x;
-    raw[1] = rotation.y;
-    raw[2] = rotation.z;
-
-    ImGui::SliderFloat3("Rotation", raw, 0, 360);
-    render_object->rotateTo(glm::vec3(raw[0], raw[1], raw[2]));
-}
-
-void SceneView::RenderScale(std::shared_ptr<RenderObject> render_object){
-    static float raw[3];
-    const glm::vec3& scale = render_object->getScale();
-    raw[0] = scale.x;
-    raw[1] = scale.y;
-    raw[2] = scale.z;
-
-    ImGui::SliderFloat3("Scale", raw, -5, 5);
-    render_object->scale(glm::vec3(raw[0], raw[1], raw[2]));
-}
-
-void SceneView::RenderProperties(
-        std::shared_ptr<RenderObject> render_object){
-    static bool do_render;
-    do_render = render_object->do_render();
-    ImGui::Checkbox("Do Render", &do_render);
-    render_object->do_render(do_render);
+std::string SceneView::GetComponentName(
+        std::shared_ptr<GameComponent> game_component,
+        int game_object_id,
+        int component_id){
+    std::string str = "";
+    //str += std::to_string(game_object_id);
+    //str += ".";
+    str += std::to_string(component_id);
+    str += " [";
+    str += GameComponent::GetTypeString(game_component->type());
+    str += "]";
+    return str;
 }
 
 } // namespace ifx

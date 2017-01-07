@@ -13,7 +13,8 @@ public:
     PhysicsSimulationFactory();
     ~PhysicsSimulationFactory();
 
-    std::shared_ptr<PhysicsSimulation> Create();
+    virtual std::shared_ptr<PhysicsSimulation> Create();
+
 private:
 };
 }

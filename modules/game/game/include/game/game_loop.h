@@ -9,11 +9,13 @@ namespace ifx {
 class Renderer;
 class PhysicsSimulation;
 class Simulation;
+class SceneContainer;
 
 class GameLoop {
 public:
     GameLoop(std::shared_ptr<Renderer> renderer,
-             std::shared_ptr<PhysicsSimulation> physics_simulation);
+             std::shared_ptr<PhysicsSimulation> physics_simulation,
+             std::shared_ptr<SceneContainer> scene);
     ~GameLoop();
 
     std::shared_ptr<Renderer> renderer(){return renderer_;}
@@ -26,6 +28,8 @@ public:
 private:
     std::shared_ptr<Renderer> renderer_;
     std::shared_ptr<PhysicsSimulation> physics_simulation_;
+
+    std::shared_ptr<SceneContainer> scene_;
 
     std::vector<std::shared_ptr<Simulation>> simulations_;
 

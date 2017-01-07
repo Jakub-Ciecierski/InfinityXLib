@@ -1,9 +1,0 @@
-graphics/lighting
-graphics/model
-graphics/model_loader
-graphics/shaders
-graphics/rendering
-graphics/scene
-
-common/resources
-common/math

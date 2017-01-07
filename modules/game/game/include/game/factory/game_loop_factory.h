@@ -5,9 +5,10 @@
 
 namespace ifx {
 
-class PhysicsSimulationFactory;
-class RendererFactory;
+class Renderer;
+class PhysicsSimulation;
 class GameLoop;
+class SceneContainer;
 
 class GameLoopFactory {
 public:
@@ -15,11 +16,11 @@ public:
     GameLoopFactory();
     ~GameLoopFactory();
 
-    std::shared_ptr<GameLoop> Create();
+    std::shared_ptr<GameLoop> Create(
+            std::shared_ptr<Renderer> renderer,
+            std::shared_ptr<PhysicsSimulation> physics_simulation,
+            std::shared_ptr<SceneContainer> scene);
 private:
-
-    std::shared_ptr<RendererFactory> renderer_factory_;
-    std::shared_ptr<PhysicsSimulationFactory> physics_simulation_factory;
 };
 }
 

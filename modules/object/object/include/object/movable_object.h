@@ -1,20 +1,20 @@
 #ifndef PROJECT_MOVABLE_OBJECT_H
 #define PROJECT_MOVABLE_OBJECT_H
 
-#include <object/object.h>
 #include <math/math_ifx.h>
+#include <object/object.h>
 
 namespace ifx {
 
-/**
- * TODO MovableObject should not be an object.
- */
 class MovableObject : public Object {
 public:
 
+    MovableObject();
     MovableObject(ObjectID id);
 
     ~MovableObject();
+
+    const glm::vec3& look_at(){return look_at_;}
 
     // Overridden from Object
     virtual void update() override;
@@ -44,6 +44,8 @@ public:
     void scale(float scale);
     void scale(const glm::vec3 &scale);
 
+    void LookAt(const glm::vec3& v);
+
     const glm::vec3& getPosition();
     const glm::vec3& getRotation();
     const glm::vec3& getScale();
@@ -59,6 +61,7 @@ protected:
     glm::vec3 rotation;
     glm::vec3 scaleFactor;
 
+    glm::vec3 look_at_;
     glm::vec3 direction;
 
     glm::mat4 ModelMatrix;

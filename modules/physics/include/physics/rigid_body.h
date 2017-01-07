@@ -1,9 +1,11 @@
 #ifndef PROJECT_RIGID_BODY_H
 #define PROJECT_RIGID_BODY_H
 
+#include <object/game_component.h>
+
 namespace ifx {
 
-class RigidBody {
+class RigidBody : public GameComponent {
 public:
 
     RigidBody();

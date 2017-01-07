@@ -2,6 +2,7 @@
 
 #include <engine_gui/views/main_menu.h>
 #include <engine_gui/views/scene_view.h>
+#include <gui/imgui/imgui.h>
 
 namespace ifx{
 
@@ -12,6 +13,7 @@ EngineGUI::EngineGUI(EngineGUICreateParams& create_params) :
 EngineGUI::~EngineGUI(){}
 
 void EngineGUI::Render(){
+    ImGui::ShowTestWindow();
     if(main_menu_)
         main_menu_->Render();
     if(scene_view_)

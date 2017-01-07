@@ -34,8 +34,7 @@ include_directories(${IFX_ROOT}/modules/common/math/${INC_DIR})
 include_directories(${IFX_ROOT}/dependencies/glm/${INC_DIR})
 
 # OBJECT
-include_directories(${IFX_ROOT}/modules/graphics/model/${INC_DIR})
-include_directories(${IFX_ROOT}/modules/graphics/shaders/${INC_DIR})
+include_directories(${IFX_ROOT}/modules/graphics/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/common/math/${INC_DIR})
 include_directories(${IFX_ROOT}/dependencies/glm/${INC_DIR})
 

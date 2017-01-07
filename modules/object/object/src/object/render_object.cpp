@@ -1,18 +1,20 @@
 #include "object/render_object.h"
 
+#include <graphics/model/model.h>
+
 using namespace glm;
 namespace ifx {
 
 RenderObject::RenderObject(ObjectID id,
                            std::shared_ptr<Model> model) :
-        ifx::MovableObject(id),
+        GameComponent(GameComponentType::RENDER),
         do_render_(true) {
     models_.push_back(model);
 }
 
 RenderObject::RenderObject(ObjectID id,
                            std::vector<std::shared_ptr<Model>> models) :
-        ifx::MovableObject(id),
+        GameComponent(GameComponentType::RENDER),
         models_(models),
         do_render_(true){
 }
@@ -33,7 +35,7 @@ void RenderObject::addProgram(std::shared_ptr<Program> program) {
     programs_.push_back(program);
 }
 
-void RenderObject::render(const Program &program) {
+void RenderObject::Render(const Program &program) {
     if (!do_render_)
         return;
     if (before_render_)
