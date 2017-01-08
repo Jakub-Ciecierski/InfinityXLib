@@ -7,7 +7,7 @@ namespace ifx {
 
 class LightSource;
 
-class LightView {
+class LightView{
 public:
 
     LightView();

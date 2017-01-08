@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.3)
 
-#SET(IFX_ROOT "${CMAKE_SOURCE_DIR}/../")
-SET(IFX_ROOT "${CMAKE_SOURCE_DIR}/InfinityXLib/")
+SET(IFX_ROOT "${CMAKE_SOURCE_DIR}/../")
+#SET(IFX_ROOT "${CMAKE_SOURCE_DIR}/InfinityXLib/")
 
 SET(BUILD_DIR "./build/")
 

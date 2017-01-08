@@ -53,6 +53,7 @@ public:
 
     const glm::mat4& GetModelMatrix();
     const glm::mat4& GetTranslateMatrix();
+    const glm::mat4& GetRotationMatrix();
 
 protected:
     void initVectors();
@@ -66,6 +67,7 @@ protected:
 
     glm::mat4 ModelMatrix;
     glm::mat4 TranslateMatrix;
+    glm::mat4 RotationMatrix;
 
 private:
 

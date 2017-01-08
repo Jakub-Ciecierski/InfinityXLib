@@ -15,6 +15,7 @@ class GameComponent;
 
 class GameObjectView;
 class GameComponentView;
+class SceneManipulatorView;
 
 class SceneView : public View{
 public:
@@ -42,6 +43,7 @@ private:
 
     std::unique_ptr<GameObjectView> game_object_view_;
     std::unique_ptr<GameComponentView> game_component_view_;
+    std::unique_ptr<SceneManipulatorView> scene_manipulator_view_;
 };
 }
 

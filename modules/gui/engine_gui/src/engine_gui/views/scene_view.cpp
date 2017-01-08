@@ -10,6 +10,7 @@
 #include <object/game_object.h>
 #include <engine_gui/views/scene_view/game_object_view.h>
 #include <engine_gui/views/scene_view/game_component_view.h>
+#include <engine_gui/views/scene_manipulator_view.h>
 
 namespace ifx {
 
@@ -19,6 +20,7 @@ SceneView::SceneView(std::shared_ptr<SceneContainer> scene) :
         selected_game_component_(nullptr){
     game_object_view_.reset(new GameObjectView());
     game_component_view_.reset(new GameComponentView());
+    scene_manipulator_view_.reset(new SceneManipulatorView());
 }
 
 SceneView::~SceneView(){ }
@@ -41,6 +43,16 @@ void SceneView::RenderWindow(){
     if(selected_game_component_)
         game_component_view_->Render(selected_game_component_);
     ImGui::End();
+
+    ImGui::Begin("Manipulator");
+    if(selected_game_component_) {
+        auto active_camera = scene_->GetActiveCamera();
+        if (active_camera) {
+            scene_manipulator_view_->Render(selected_game_component_,
+                                            active_camera);
+        }
+    }
+    ImGui::End();
 }
 
 void SceneView::RenderGameObjectsList(
@@ -48,8 +60,8 @@ void SceneView::RenderGameObjectsList(
     if (ImGui::TreeNode("Game Objects")){
         static int selection_mask = (1 << 2);
 
-        int node_clicked = -1;
         for(int i = 0;i < game_objects.size(); i++){
+            int node_clicked = -1;
             ImGuiTreeNodeFlags node_flags
                     = ImGuiTreeNodeFlags_OpenOnArrow |
                             ImGuiTreeNodeFlags_OpenOnDoubleClick |
@@ -62,8 +74,7 @@ void SceneView::RenderGameObjectsList(
                 node_clicked = i;
             }
             if (node_open){
-                RenderGameComponentsList(game_objects[i],
-                                         i);
+                RenderGameComponentsList(game_objects[i], i);
                 ImGui::TreePop();
             }
             if (node_clicked != -1){
@@ -78,7 +89,6 @@ void SceneView::RenderGameObjectsList(
 void SceneView::RenderGameComponentsList(
         std::shared_ptr<GameObject> game_object,
         int game_object_id){
-    int node_clicked = -1;
     static int selection_mask = (1 << 2);
     auto game_components = game_object->GetComponents();
     int size = game_components.size();
@@ -88,7 +98,7 @@ void SceneView::RenderGameComponentsList(
     int id_start = game_object_id * single_selection_hack;
 
     for(int i = 0; i < size; i++){
-
+        int node_clicked = -1;
         int id = id_start+i;
         ImGuiTreeNodeFlags node_flags
                 = ImGuiTreeNodeFlags_OpenOnArrow

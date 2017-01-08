@@ -18,8 +18,29 @@
 #include <example_gui.h>
 
 std::shared_ptr<ifx::LightDirectional> CreateDirectionalLight();
+std::shared_ptr<ifx::LightSpotlight> CreateSpotLight();
 
 std::shared_ptr<ifx::LightDirectional> CreateDirectionalLight(){
+    ifx::LightParams light;
+
+    light.ambient = glm::vec3(0.5f, 0.5f, 0.5f);
+    light.diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
+    light.specular = glm::vec3(1.0f, 1.0f, 1.0f);
+/*
+    auto light_source = std::shared_ptr<ifx::LightDirectional>(
+            new ifx::LightDirectional(light));
+*/
+    auto light_source = std::shared_ptr<ifx::LightDirectional>(
+            new ifx::LightDirectional(light));
+    light_source->rotateTo(glm::vec3(0, 270, 0));
+
+    light_source->moveTo(glm::vec3(0.0f, 2.5f, 0.0f));
+    light_source->LookAt(glm::vec3(0,0,0));
+
+    return light_source;
+}
+
+std::shared_ptr<ifx::LightSpotlight> CreateSpotLight(){
     ifx::LightParams light;
 
     light.ambient = glm::vec3(0.5f, 0.5f, 0.5f);
@@ -55,6 +76,7 @@ int main() {
     game_object1->Add(ifx::RenderObjectFactory().CreateFloor());
 
     game_object2->Add(std::move(lamp));
+    game_object2->Add(CreateSpotLight());
     game_object2->Add(CreateDirectionalLight());
 
     game_object3->Add(ifx::RenderObjectFactory().CreateNanosuitObject());

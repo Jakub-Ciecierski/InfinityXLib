@@ -2,6 +2,8 @@
 
 #include <object/game_object.h>
 #include <game/scene_distributor.h>
+#include <object/game_component.h>
+#include <graphics/rendering/camera/camera.h>
 
 namespace ifx{
 
@@ -35,6 +37,19 @@ bool SceneContainer::Remove(std::shared_ptr<GameObject> game_object){
         }
     }
     return false;
+}
+
+std::shared_ptr<Camera> SceneContainer::GetActiveCamera(){
+    std::shared_ptr<Camera> camera = nullptr;
+
+    for(auto& object : game_objects_){
+        auto cameras = object->GetComponents(GameComponentType::CAMERA);
+        if(cameras.size() != 0){
+            camera = std::static_pointer_cast<Camera>(cameras[0]);
+        }
+    }
+
+    return camera;
 }
 
 void SceneContainer::OnAdd(std::shared_ptr<GameObject> game_object){
