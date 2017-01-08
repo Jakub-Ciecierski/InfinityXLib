@@ -47,8 +47,9 @@ glm::mat4 LightDirectional::GetLightSpaceMatrix() {
     glm::mat4 light_projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f,
                                              near_plane, far_plane);
     const glm::vec3 UP = glm::vec3(0.01f, 1.0f, 0.01f);
-    glm::mat4 light_view = glm::lookAt(getPosition(),
-                                       look_at(),
+
+    glm::mat4 light_view = glm::lookAt(position,
+                                       position + direction,
                                        UP);
 
     return light_projection * light_view;
