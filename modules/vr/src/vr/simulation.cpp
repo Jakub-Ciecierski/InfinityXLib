@@ -1,3 +1,4 @@
+#include <GLFW/glfw3.h>
 #include "vr/simulation.h"
 
 namespace ifx {
@@ -17,6 +18,34 @@ void Simulation::Play(){
 }
 void Simulation::Pause(){
     running_ = false;
+}
+
+void Simulation::Reset(){
+    time_data_.total_time = 0.0f;
+    time_data_.current_time = 0.0f;
+    time_data_.time_since_last_update = 0.0f;
+    time_data_.last_time = glfwGetTime();
+    time_data_.simulation_length = 10.0f;
+}
+bool Simulation::UpdateTime(){
+    time_data_.current_time = glfwGetTime();
+    if(!running_){
+        time_data_.last_time = time_data_.current_time;
+        return false;
+    }
+    double elapsed = time_data_.current_time - time_data_.last_time;
+    time_data_.time_since_last_update += elapsed;
+    time_data_.total_time += elapsed;
+    time_data_.last_time = time_data_.current_time;
+
+    if(time_data_.total_time > time_data_.simulation_length){
+        SetRunning(false);
+        return false;
+    }
+    if(time_data_.time_since_last_update >= time_data_.time_delta){
+        time_data_.time_since_last_update = 0.0f;
+        return true;
+    }
 }
 
 }

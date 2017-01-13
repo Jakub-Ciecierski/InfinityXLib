@@ -45,16 +45,20 @@ bool SceneDistributor::Remove(std::shared_ptr<GameObject> game_object){
     for(auto& component : components){
         switch(component->type()){
             case GameComponentType::RENDER:
-                return Remove(std::static_pointer_cast<RenderObject>
-                                      (component));
+                Remove(std::static_pointer_cast<RenderObject>(component));
+                break;
             case GameComponentType::LIGHT:
-                return Remove(std::static_pointer_cast<LightSource>(component));
+                Remove(std::static_pointer_cast<LightSource>(component));
+                break;
             case GameComponentType::CAMERA:
-                return Remove(std::static_pointer_cast<Camera>(component));
+                Remove(std::static_pointer_cast<Camera>(component));
+                break;
             case GameComponentType::PHYSICS:
-                return Remove(std::static_pointer_cast<RigidBody>(component));
+                Remove(std::static_pointer_cast<RigidBody>(component));
+                break;
         }
     }
+    return true;
 }
 
 void SceneDistributor::Add(std::shared_ptr<RenderObject> render_object){
