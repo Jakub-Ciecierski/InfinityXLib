@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.3)
 
 SET(IFX_ROOT "${CMAKE_SOURCE_DIR}/../")
-#SET(IFX_ROOT "${CMAKE_SOURCE_DIR}/InfinityXLib/")
 
 SET(BUILD_DIR "./build/")
 
@@ -14,4 +13,5 @@ SET(IFX_UNITTESTS_LIBS_BUILD_DIR "${BUILD_DIR}/InfinityX/unit_tests/libs")
 
 SET(IFX_BUILD_UNITTESTS ON)
 
-add_subdirectory(main_example)
+#add_subdirectory(main_example)
+add_subdirectory(bullet_example)

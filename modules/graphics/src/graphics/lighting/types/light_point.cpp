@@ -29,7 +29,7 @@ void LightPoint::bind(const Program &program, int id) {
                                               builder.ATTEN_LINEAR.c_str());
     GLint attenQuadLoc = glGetUniformLocation(program.getID(),
                                               builder.ATTEN_QUAD.c_str());
-
+    auto position = getPosition();
     glUniform3f(lightPosLoc, position.x, position.y, position.z);
 
     glUniform3f(lightAmbientLoc,

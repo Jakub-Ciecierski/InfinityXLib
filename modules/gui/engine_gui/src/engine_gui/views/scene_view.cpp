@@ -45,10 +45,10 @@ void SceneView::RenderWindow(){
     ImGui::End();
 
     ImGui::Begin("Manipulator");
-    if(selected_game_component_) {
+    if(selected_game_object_) {
         auto active_camera = scene_->GetActiveCamera();
         if (active_camera) {
-            scene_manipulator_view_->Render(selected_game_component_,
+            scene_manipulator_view_->Render(selected_game_object_,
                                             active_camera);
         }
     }

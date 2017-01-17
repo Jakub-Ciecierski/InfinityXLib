@@ -16,6 +16,7 @@ void GameObject::update(){
 }
 
 void GameObject::Add(std::shared_ptr<GameComponent> game_component){
+    game_component->SetParent(this);
     components_.push_back(game_component);
 }
 

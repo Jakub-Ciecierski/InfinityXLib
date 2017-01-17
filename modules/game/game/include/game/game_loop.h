@@ -11,6 +11,16 @@ class PhysicsSimulation;
 class Simulation;
 class SceneContainer;
 
+struct GameTimeData{
+    float last_time = 0;
+    float current_time = 0;
+
+    float total_time = 0;
+
+    float time_since_last_update = 0;
+    const float time_delta = 1.0f / 60.0f;
+};
+
 class GameLoop {
 public:
     GameLoop(std::shared_ptr<Renderer> renderer,
@@ -26,6 +36,8 @@ public:
     void Start();
 
 private:
+    bool UpdateTime();
+
     std::shared_ptr<Renderer> renderer_;
     std::shared_ptr<PhysicsSimulation> physics_simulation_;
 
@@ -33,6 +45,7 @@ private:
 
     std::vector<std::shared_ptr<Simulation>> simulations_;
 
+    GameTimeData time_data_;
 };
 }
 

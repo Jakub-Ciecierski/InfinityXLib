@@ -37,6 +37,7 @@ void LightDirectional::bind(const Program &program, int id) {
                 light_params_.specular.x,
                 light_params_.specular.y,
                 light_params_.specular.z);
+    auto& direction = getDirection();
     glUniform3f(lightDirLoc, direction.x, direction.y, direction.z);
     glUniformMatrix4fv(lightSpaceMatrixLoc, 1, GL_FALSE,
                        glm::value_ptr(GetLightSpaceMatrix()));
@@ -48,6 +49,8 @@ glm::mat4 LightDirectional::GetLightSpaceMatrix() {
                                              near_plane, far_plane);
     const glm::vec3 UP = glm::vec3(0.01f, 1.0f, 0.01f);
 
+    auto& position = getPosition();
+    auto& direction = getDirection();
     glm::mat4 light_view = glm::lookAt(position,
                                        position + direction,
                                        UP);

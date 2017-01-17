@@ -22,7 +22,8 @@ void MovableObjectView::Render(std::shared_ptr<MovableObject> movable_object){
 void MovableObjectView::RenderPosition(
         std::shared_ptr<MovableObject> movable_object){
     static float raw[3];
-    const glm::vec3& position = movable_object->getPosition();
+    const glm::vec3& position = movable_object->local_transform().position;
+
     raw[0] = position.x;
     raw[1] = position.y;
     raw[2] = position.z;
@@ -34,7 +35,8 @@ void MovableObjectView::RenderPosition(
 void MovableObjectView::RenderRotation(
         std::shared_ptr<MovableObject> movable_object){
     static float raw[3];
-    const glm::vec3& rotation = movable_object->getRotation();
+    const glm::vec3& rotation = movable_object->local_transform().rotation;
+
     raw[0] = rotation.x;
     raw[1] = rotation.y;
     raw[2] = rotation.z;
@@ -45,7 +47,7 @@ void MovableObjectView::RenderRotation(
 void MovableObjectView::RenderScale(
         std::shared_ptr<MovableObject> movable_object){
     static float raw[3];
-    const glm::vec3& scale = movable_object->getScale();
+    const glm::vec3& scale = movable_object->local_transform().scale;
     raw[0] = scale.x;
     raw[1] = scale.y;
     raw[2] = scale.z;

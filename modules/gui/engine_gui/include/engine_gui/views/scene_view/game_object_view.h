@@ -5,6 +5,7 @@
 
 namespace ifx {
 
+class MovableObjectView;
 class GameObject;
 
 class GameObjectView {
@@ -15,6 +16,8 @@ public:
 
     void Render(std::shared_ptr<GameObject> game_object);
 private:
+
+    std::unique_ptr<MovableObjectView> movable_object_view_;
 };
 }
 

@@ -41,7 +41,8 @@ void LightSpotlight::bind(const Program &program, int id) {
 
     GLint lightOuterCutoffLoc = glGetUniformLocation(program.getID(),
                                                      builder.OUTCUTOFF.c_str());
-
+    auto& position = getPosition();
+    auto& direction = getDirection();
     glUniform3f(lightPosLoc, position.x, position.y, position.z);
     glUniform3f(lightDirLoc, direction.x, direction.y, direction.z);
 

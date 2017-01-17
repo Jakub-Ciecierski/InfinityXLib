@@ -4,7 +4,15 @@
 #include <math/math_ifx.h>
 #include <object/object.h>
 
+#include <memory>
+
 namespace ifx {
+
+struct TransformData {
+    glm::vec3 position = glm::vec3(0,0,0);
+    glm::vec3 rotation = glm::vec3(0,0,0);
+    glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
+};
 
 class MovableObject : public Object {
 public:
@@ -15,6 +23,12 @@ public:
     ~MovableObject();
 
     const glm::vec3& look_at(){return look_at_;}
+    const TransformData& local_transform() {return local_transform_;}
+    const TransformData& global_transform() {
+        UpdateGlobal();
+        return global_transform_;
+    }
+    MovableObject* movable_parent(){return parent_object_;}
 
     // Overridden from Object
     virtual void update() override;
@@ -49,18 +63,25 @@ public:
     const glm::vec3& getPosition();
     const glm::vec3& getRotation();
     const glm::vec3& getScale();
+
     const glm::vec3& getDirection();
 
     const glm::mat4& GetModelMatrix();
     const glm::mat4& GetTranslateMatrix();
     const glm::mat4& GetRotationMatrix();
 
+    void SetParent(MovableObject* parent_object);
+
 protected:
+    void UpdateGlobal();
+    void SetDirection(const glm::vec3& dir);
+
+private:
     void initVectors();
 
-    glm::vec3 position;
-    glm::vec3 rotation;
-    glm::vec3 scaleFactor;
+    TransformData local_transform_;
+    // Global is used if parent_object is set
+    TransformData global_transform_;
 
     glm::vec3 look_at_;
     glm::vec3 direction;
@@ -69,8 +90,8 @@ protected:
     glm::mat4 TranslateMatrix;
     glm::mat4 RotationMatrix;
 
-private:
-
+    // If set, it defines the local coordinate system for this object
+    MovableObject* parent_object_;
 };
 }
 

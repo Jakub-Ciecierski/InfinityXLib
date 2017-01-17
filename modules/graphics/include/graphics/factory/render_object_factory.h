@@ -28,6 +28,7 @@ public:
     std::unique_ptr<RenderObject> CreateFloor();
 
     std::unique_ptr<RenderObject> CreateLampObject();
+    std::shared_ptr<RenderObject> CreateCube();
 
     /*
     RenderObject* loadBicubicBezierSurfaceC0Object();

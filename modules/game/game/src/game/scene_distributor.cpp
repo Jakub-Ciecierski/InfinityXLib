@@ -74,7 +74,7 @@ void SceneDistributor::Add(std::shared_ptr<Camera> camera){
 }
 
 void SceneDistributor::Add(std::shared_ptr<RigidBody> rigid_body){
-
+    physics_simulation_->Add(rigid_body);
 }
 
 bool SceneDistributor::Remove(std::shared_ptr<RenderObject> render_object){
@@ -90,7 +90,7 @@ bool SceneDistributor::Remove(std::shared_ptr<Camera> camera){
 }
 
 bool SceneDistributor::Remove(std::shared_ptr<RigidBody> rigid_body){
-
+    return physics_simulation_->Remove(rigid_body);
 }
 
 }

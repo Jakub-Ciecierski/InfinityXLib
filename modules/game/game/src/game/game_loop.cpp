@@ -24,7 +24,11 @@ void GameLoop::AddSimulation(std::shared_ptr<Simulation> simulation) {
 void GameLoop::Start(){
     while(!renderer_->window()->shouldClose()) {
         renderer_->Render();
-        physics_simulation_->Update();
+
+        if(!UpdateTime())
+            continue;
+
+        physics_simulation_->Update(time_data_.time_delta);
         scene_->Update();
         ControlsEvents::GetInstance().Update();
 
@@ -32,4 +36,20 @@ void GameLoop::Start(){
             simulation->Update();
     }
 }
+
+bool GameLoop::UpdateTime(){
+    time_data_.current_time = glfwGetTime();
+
+    double elapsed = time_data_.current_time - time_data_.last_time;
+    time_data_.time_since_last_update += elapsed;
+    time_data_.total_time += elapsed;
+    time_data_.last_time = time_data_.current_time;
+
+    if(time_data_.time_since_last_update >= time_data_.time_delta){
+        time_data_.time_since_last_update = 0.0f;
+        return true;
+    }
+    return false;
+}
+
 }

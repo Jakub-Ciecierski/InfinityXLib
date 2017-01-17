@@ -46,7 +46,7 @@ void RenderObject::Render(const Program &program) {
     // Model
     GLint transformLoc = glGetUniformLocation(program.getID(),
                                               MODEL_MATRIX_NAME.c_str());
-    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(ModelMatrix));
+    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(GetModelMatrix()));
 
     for(auto& model : models_)
         model->draw(program);

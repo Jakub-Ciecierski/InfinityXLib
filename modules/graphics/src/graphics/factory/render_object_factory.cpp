@@ -198,6 +198,17 @@ std::unique_ptr<RenderObject> RenderObjectFactory::CreateLampObject(){
     return renderObject;
 }
 
+std::shared_ptr<RenderObject> RenderObjectFactory::CreateCube(){
+    std::shared_ptr<Model> model = ModelFactory::LoadCubeModel();
+    std::shared_ptr<Program> program = ProgramFactory().LoadMainProgram();
+
+    auto renderObject = std::shared_ptr<RenderObject>(
+            new RenderObject(ObjectID(0), model));
+    renderObject->addProgram(program);
+
+    return renderObject;
+}
+
 /*
 RenderObject *RenderObjectFactory::loadBicubicBezierSurfaceC0Object() {
     RenderObject* renderObject
