@@ -17,7 +17,7 @@ class GameObjectView;
 class GameComponentView;
 class SceneManipulatorView;
 
-class SceneView : public View{
+class SceneView : public View {
 public:
 
     SceneView(std::shared_ptr<SceneContainer> scene);

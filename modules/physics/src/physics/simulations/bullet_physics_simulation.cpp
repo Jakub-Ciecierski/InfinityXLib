@@ -1,5 +1,4 @@
 #include "physics/simulations/bullet_physics_simulation.h"
-
 #include <physics/rigid_body.h>
 
 #include <BulletCollision/CollisionDispatch/btCollisionDispatcher.h>
@@ -36,6 +35,9 @@ bool BulletPhysicsSimulation::Remove(std::shared_ptr<RigidBody> rigid_body){
 }
 
 void BulletPhysicsSimulation::Update(float time_delta){
+    if(!is_running_)
+        return;
+
     SynchronizeRigidBodiesTransform();
     dynamics_world_->stepSimulation(time_delta);
     SynchronizeGameObjectsTransform();

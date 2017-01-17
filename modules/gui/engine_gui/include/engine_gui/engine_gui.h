@@ -7,10 +7,12 @@ namespace ifx{
 
 class MainMenu;
 class SceneView;
+class PhysicsSimulationView;
 
 struct EngineGUICreateParams {
     std::shared_ptr<MainMenu> main_menu;
     std::shared_ptr<SceneView> scene_view;
+    std::shared_ptr<PhysicsSimulationView> physics_simulation_view;
 };
 
 class EngineGUI {
@@ -23,6 +25,7 @@ public:
 private:
     std::shared_ptr<MainMenu> main_menu_;
     std::shared_ptr<SceneView> scene_view_;
+    std::shared_ptr<PhysicsSimulationView> physics_simulation_view_;
 };
 
 }
