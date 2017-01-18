@@ -32,6 +32,9 @@
 #include <BulletDynamics/ConstraintSolver/btGeneric6DofSpringConstraint.h>
 #include <BulletDynamics/ConstraintSolver/btPoint2PointConstraint.h>
 #include <BulletDynamics/ConstraintSolver/btConeTwistConstraint.h>
+#include <graphics/factory/texture_factory.h>
+#include <graphics/model/material.h>
+#include <graphics/model/model.h>
 
 std::shared_ptr<ifx::LightDirectional> CreateDirectionalLight();
 std::shared_ptr<ifx::LightSpotlight> CreateSpotLight();
@@ -41,7 +44,7 @@ std::shared_ptr<ifx::RigidBody> CreateRigidFloor();
 std::shared_ptr<ifx::GameObject> CreateGameObjectCamera(
         std::shared_ptr<ifx::Game> game);
 std::shared_ptr<ifx::GameObject> CreateGameObjectLight();
-std::shared_ptr<ifx::GameObject> CreateGameObjectBox(const glm::vec3& scale);
+std::shared_ptr<ifx::GameObject> CreateGameObjectBox(const glm::vec3& scale, int tex_id = 0);
 std::shared_ptr<ifx::GameObject> CreateGameObjectFloor();
 std::shared_ptr<ifx::GameObject> CreateGameObjectCeiling();
 
@@ -136,7 +139,7 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectLight(){
     return game_object;
 }
 
-std::shared_ptr<ifx::GameObject> CreateGameObjectBox(const glm::vec3& scale){
+std::shared_ptr<ifx::GameObject> CreateGameObjectBox(const glm::vec3& scale, int tex_id){
     float scale_factor = 0.25;
     glm::vec3 scaled_scale = scale * scale_factor;
     auto game_object = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
@@ -146,6 +149,33 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectBox(const glm::vec3& scale){
 
     game_object->Add(CreateRigidBox(scaled_scale));
     game_object->Add(render_object);
+
+    std::string str_text_diff = "";
+    std::string str_text_spec = "";
+
+    if(tex_id == 1){
+        str_text_diff = "portal/portal_wall.jpg";
+        str_text_spec = "portal/portal_wall_spec.jpg";
+    }else if(tex_id == 0){
+        str_text_diff = "robot/head.jpg";
+        str_text_spec = "robot/head_spec.jpg";
+    }
+
+    auto texture_diff = ifx::Texture2D::MakeTexture2DFromFile(
+            ifx::Resources::GetInstance()
+                    .GetResourcePath(str_text_diff,
+                                     ifx::ResourceType::TEXTURE),
+            ifx::TextureTypes::DIFFUSE);
+    auto texture_spec = ifx::Texture2D::MakeTexture2DFromFile(
+            ifx::Resources::GetInstance()
+                    .GetResourcePath(str_text_spec,
+                                     ifx::ResourceType::TEXTURE),
+            ifx::TextureTypes::SPECULAR);
+
+    auto material = std::make_shared<ifx::Material>();
+    material->AddTexture(texture_diff);
+    material->AddTexture(texture_spec);
+    render_object->models()[0]->getMesh(0)->material(material);
 
     return game_object;
 
@@ -208,21 +238,6 @@ void AddTorsoArm1Constraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
         std::shared_ptr<ifx::RigidBody> body1,
         std::shared_ptr<ifx::RigidBody> body2){
-    /*
-    btTransform frameInA, frameInB;
-    frameInA = btTransform::getIdentity();
-    frameInA.setOrigin(btVector3(btScalar(-2.), btScalar(0.), btScalar(0.)));
-    frameInB = btTransform::getIdentity();
-    frameInB.setOrigin(btVector3(btScalar(0.), btScalar(0.), btScalar(0.)));
-
-    auto constraint = new btConeTwistConstraint(
-            *body1->rigid_body_bt(),
-            *body2->rigid_body_bt(), frameInA, frameInB);
-
-    simulation->dynamics_world_bt()->addConstraint(constraint, true);
-*/
-
-
     btVector3 pivot1(0, 0, -1.0);
     btVector3 pivot2(0, -1.0, 0.0);
 
@@ -252,6 +267,7 @@ int main() {
 
     auto lights = CreateGameObjectLight();
     lights->moveTo(glm::vec3(0.0f, 3.0f, 0.0f));
+    lights->rotateTo(glm::vec3(0,180,0));
 
     auto camera = CreateGameObjectCamera(game);
     camera->moveTo(glm::vec3(-7, 2, 0));
@@ -263,19 +279,19 @@ int main() {
     ceiling->moveTo(glm::vec3(0.0f, 10.0f, 0.0f));
 
     glm::vec3 scale1 = glm::vec3(3,3,3);
-    auto head = CreateGameObjectBox(scale1);
+    auto head = CreateGameObjectBox(scale1, 0);
     head->moveTo(glm::vec3(0.0f, 7.0f, 0.0f));
 
     glm::vec3 scale2 = glm::vec3(2,5,2);
-    auto torso = CreateGameObjectBox(scale2);
+    auto torso = CreateGameObjectBox(scale2, 1);
     torso->moveTo(glm::vec3(0.0f, 4.0f, 0.0f));
 
     glm::vec3 scale3 = glm::vec3(0.7,4,0.7);
-    auto arm1 = CreateGameObjectBox(scale3);
+    auto arm1 = CreateGameObjectBox(scale3, 1);
     arm1->moveTo(glm::vec3(0.0f, 3.6f, -1.4f));
     arm1->rotateTo(glm::vec3(218.0f, 0.0f, 0.0f));
 
-    auto arm2 = CreateGameObjectBox(scale3);
+    auto arm2 = CreateGameObjectBox(scale3, 1);
     arm2->moveTo(glm::vec3(0.0f, 3.6f, 1.4f));
     arm2->rotateTo(glm::vec3(140.0f, 0.0f, 0.0f));
 
@@ -287,7 +303,6 @@ int main() {
     game->scene()->Add(torso);
     game->scene()->Add(arm1);
     game->scene()->Add(arm2);
-
 
     auto ceiling_rigid_bodies = ceiling->GetComponents(
             std::move(ifx::GameComponentType::PHYSICS));

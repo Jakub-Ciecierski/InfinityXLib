@@ -47,6 +47,12 @@ void BulletPhysicsSimulation::SetGravity(const glm::vec3& g){
     dynamics_world_->setGravity(btVector3(g.x, g.y, g.z));
 }
 
+glm::vec3 BulletPhysicsSimulation::GetGravity(){
+    auto gravity = dynamics_world_->getGravity();
+
+    return glm::vec3(gravity.x(), gravity.y(), gravity.z());
+}
+
 void BulletPhysicsSimulation::AddImpulse(){
     for(auto& rigid_body : rigid_bodies_){
         btVector3 impulse(0.1, 1.1, 0.1);

@@ -17,7 +17,7 @@ void PhysicsSimulationView::Render(){
         RenderBasicInfo();
         ImGui::TreePop();
     }
-
+    RenderGravity();
     RenderImpulse();
 
     ImGui::End();
@@ -31,6 +31,22 @@ void PhysicsSimulationView::RenderBasicInfo(){
     if(ImGui::Button(button_display.c_str())){
         physics_simulation_->is_running(!is_running);
     }
+}
+
+void PhysicsSimulationView::RenderGravity() {
+    static float raw[3];
+    auto gravity = physics_simulation_->GetGravity();
+
+    raw[0] = gravity.x;
+    raw[1] = gravity.y;
+    raw[2] = gravity.z;
+
+    ImGui::SliderFloat3("Gravity", raw, -20, 20);
+    gravity.x = raw[0];
+    gravity.y = raw[1];
+    gravity.z = raw[2];
+
+   physics_simulation_->SetGravity(gravity);
 }
 
 void PhysicsSimulationView::RenderImpulse(){

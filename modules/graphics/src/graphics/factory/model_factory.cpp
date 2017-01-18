@@ -136,7 +136,7 @@ std::shared_ptr<Model> ModelFactory::LoadCubeModel() {
     std::vector<std::unique_ptr<Mesh>> meshes;
     meshes.push_back(std::move(meshLoader.LoadCube()));
 
-    return Model::MakeModel("CubeModel", std::move(meshes));
+    return Model::MakeModel(ifx::NO_FILEPATH, std::move(meshes));
 }
 
 std::shared_ptr<Model> ModelFactory::LoadRoomModel() {

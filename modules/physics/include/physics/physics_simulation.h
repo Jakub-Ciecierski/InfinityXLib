@@ -19,7 +19,9 @@ public:
     void is_running(bool v){is_running_ = v;}
 
     virtual void Update(float time_delta) = 0;
+
     virtual void SetGravity(const glm::vec3& g) = 0;
+    virtual glm::vec3 GetGravity() = 0;
 
     virtual void AddImpulse() = 0;
 

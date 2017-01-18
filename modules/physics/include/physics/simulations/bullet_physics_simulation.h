@@ -27,7 +27,9 @@ public:
     virtual bool Remove(std::shared_ptr<RigidBody> rigid_body) override;
 
     virtual void Update(float time_delta) override;
+
     virtual void SetGravity(const glm::vec3& g) override;
+    virtual glm::vec3 GetGravity() override;
 
     virtual void AddImpulse() override;
 private:
