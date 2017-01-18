@@ -65,7 +65,7 @@ void MovableObject::UpdateGlobal(){
 
     global_transform_.position = local_transform_.position + parent_position;
     global_transform_.rotation = local_transform_.rotation + parent_rotation;
-    global_transform_.scale = local_transform_.scale;
+    global_transform_.scale = local_transform_.scale * parent_scale;
 }
 
 void MovableObject::moveTo(const glm::vec3 &position) {

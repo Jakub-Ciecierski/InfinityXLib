@@ -519,7 +519,7 @@ void	AllConstraintDemo::initPhysics()
 	{ 
 		// create a universal joint using generic 6DOF constraint
 		// create two rigid bodies
-		// static bodyA (parent) on top:
+		// static bodyA (parent) on top:btPoint2PointConstraint
 		btTransform tr;
 		tr.setIdentity();
 		tr.setOrigin(btVector3(btScalar(20.), btScalar(4.), btScalar(0.)));

@@ -17,6 +17,8 @@ public:
 
     virtual void Render() override;
 private:
+    void RenderBasicInfo();
+    void RenderImpulse();
 
     std::shared_ptr<PhysicsSimulation> physics_simulation_;
 };

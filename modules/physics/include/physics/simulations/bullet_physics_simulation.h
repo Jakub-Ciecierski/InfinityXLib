@@ -19,12 +19,17 @@ public:
     BulletPhysicsSimulation();
     ~BulletPhysicsSimulation();
 
+    std::shared_ptr<btDiscreteDynamicsWorld> dynamics_world_bt(){
+        return dynamics_world_;
+    }
+
     virtual void Add(std::shared_ptr<RigidBody> rigid_body) override;
     virtual bool Remove(std::shared_ptr<RigidBody> rigid_body) override;
 
     virtual void Update(float time_delta) override;
     virtual void SetGravity(const glm::vec3& g) override;
 
+    virtual void AddImpulse() override;
 private:
     /**
      * Synchronizes transform of game object and rigid bodies

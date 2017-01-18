@@ -6,8 +6,8 @@
 #include <BulletCollision/BroadphaseCollision/btDbvtBroadphase.h>
 #include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
 #include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
+#include <BulletDynamics/Dynamics/btRigidBody.h>
 #include <iostream>
-#include <math/print_math.h>
 
 namespace ifx {
 
@@ -47,6 +47,13 @@ void BulletPhysicsSimulation::SetGravity(const glm::vec3& g){
     dynamics_world_->setGravity(btVector3(g.x, g.y, g.z));
 }
 
+void BulletPhysicsSimulation::AddImpulse(){
+    for(auto& rigid_body : rigid_bodies_){
+        btVector3 impulse(0.1, 1.1, 0.1);
+        rigid_body->rigid_body_bt()->applyCentralImpulse(impulse);
+    }
+}
+
 void BulletPhysicsSimulation::SynchronizeRigidBodiesTransform(){
     for(auto& rigid_body : rigid_bodies_){
         auto parent = rigid_body->movable_parent();
@@ -66,12 +73,6 @@ void BulletPhysicsSimulation::SynchronizeRigidBodiesTransform(){
 
         // TODO
         rigid_body->rigid_body_bt()->activate(true);
-/*
-        transform = rigid_body->rigid_body_bt()->getWorldTransform();
-        std::cout
-        << transform.getOrigin().x() << ", "
-        << transform.getOrigin().y() << ", "
-        << transform.getOrigin().z() << std::endl;*/
     }
 }
 
@@ -86,11 +87,6 @@ void BulletPhysicsSimulation::SynchronizeGameObjectsTransform(){
         auto rotation_quat = transform.getRotation();
         glm::quat glm_quat = glm::quat(rotation_quat.w(), rotation_quat.x(),
                                        rotation_quat.y(), rotation_quat.z());
-/*
-        std::cout
-        << transform.getOrigin().x() << ", "
-        << transform.getOrigin().y() << ", "
-        << transform.getOrigin().z() << std::endl;*/
 
         parent->moveTo(glm::vec3(origin.x(), origin.y(), origin.z()));
         parent->rotateTo(glm::degrees(glm::eulerAngles(glm_quat)));
@@ -119,9 +115,7 @@ void BulletPhysicsSimulation::InitEmptyDynamicsWorld(){
                                         solver_.get(),
                                         collision_configuration_.get()));
 
-
-    SetGravity(glm::vec3(0, -2.21,0));
-    //SetGravity(glm::vec3(0,-9.81,0));
+    SetGravity(glm::vec3(0,-9.81,0));
 }
 
 }

@@ -3,7 +3,7 @@
 namespace ifx {
 
 PhysicsSimulation::PhysicsSimulation() :
-        is_running_(true){}
+        is_running_(false){}
 PhysicsSimulation::~PhysicsSimulation(){}
 
 void PhysicsSimulation::Play(){
@@ -12,7 +12,6 @@ void PhysicsSimulation::Play(){
 void PhysicsSimulation::Pause(){
     is_running_ = false;
 }
-
 
 void PhysicsSimulation::Add(std::shared_ptr<RigidBody> rigid_body){
     rigid_bodies_.push_back(rigid_body);

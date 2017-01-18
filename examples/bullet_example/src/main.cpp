@@ -1,3 +1,7 @@
+/**
+ * Bullet example with two boxes
+ */
+
 #include <game/game_loop.h>
 #include <game/factory/game_loop_factory.h>
 #include <graphics/factory/render_object_factory.h>
