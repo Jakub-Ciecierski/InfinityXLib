@@ -16,6 +16,11 @@ RigidBody::RigidBody(std::shared_ptr<CollisionShape> collision_shape,
     Init();
 }
 
+RigidBody::RigidBody() :
+        GameComponent(GameComponentType::PHYSICS),
+        collision_shape_(nullptr),
+        mass_(0){}
+
 RigidBody::~RigidBody(){}
 
 void RigidBody::Init(){

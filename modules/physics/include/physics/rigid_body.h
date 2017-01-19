@@ -14,12 +14,12 @@ class RigidBody : public GameComponent {
 public:
 
     RigidBody(std::shared_ptr<CollisionShape> collision_shape, float mass);
-    ~RigidBody();
+    RigidBody();
+    virtual ~RigidBody();
 
     std::shared_ptr<btRigidBody> rigid_body_bt(){return rigid_body_bt_;}
 
-private:
-    void Init();
+protected:
 
     std::shared_ptr<btRigidBody> rigid_body_bt_;
     std::shared_ptr<btMotionState> motion_state_bt_;
@@ -27,6 +27,8 @@ private:
     std::shared_ptr<CollisionShape> collision_shape_;
 
     float mass_;
+private:
+    void Init();
 };
 
 }

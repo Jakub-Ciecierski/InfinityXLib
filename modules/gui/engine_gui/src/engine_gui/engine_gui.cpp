@@ -15,7 +15,6 @@ EngineGUI::EngineGUI(EngineGUICreateParams& create_params) :
 EngineGUI::~EngineGUI(){}
 
 void EngineGUI::Render(){
-    ImGui::ShowTestWindow();
     if(main_menu_)
         main_menu_->Render();
     if(scene_view_)

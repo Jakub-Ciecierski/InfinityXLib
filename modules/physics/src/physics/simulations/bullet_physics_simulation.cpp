@@ -11,13 +11,14 @@
 
 namespace ifx {
 
-BulletPhysicsSimulation::BulletPhysicsSimulation() :
-        broadphase_(nullptr),
-        dispatcher_(nullptr),
-        solver_(nullptr),
-        collision_configuration_(nullptr),
-        dynamics_world_(nullptr){
-    Init();
+BulletPhysicsSimulation::BulletPhysicsSimulation(
+        const BulletPhysicsSimulationCreateParams& params) :
+        broadphase_(params.broadphase),
+        dispatcher_(params.dispatcher),
+        solver_(params.solver),
+        collision_configuration_(params.collision_configuration),
+        dynamics_world_(params.dynamics_world){
+    SetGravity(glm::vec3(0,-9.81,0));
 }
 
 BulletPhysicsSimulation::~BulletPhysicsSimulation(){}
@@ -97,31 +98,6 @@ void BulletPhysicsSimulation::SynchronizeGameObjectsTransform(){
         parent->moveTo(glm::vec3(origin.x(), origin.y(), origin.z()));
         parent->rotateTo(glm::degrees(glm::eulerAngles(glm_quat)));
     }
-}
-
-void BulletPhysicsSimulation::Init(){
-    InitEmptyDynamicsWorld();
-}
-
-void BulletPhysicsSimulation::InitEmptyDynamicsWorld(){
-    collision_configuration_
-            = std::shared_ptr<btDefaultCollisionConfiguration>(
-            new btDefaultCollisionConfiguration());
-
-    dispatcher_ = std::shared_ptr<btCollisionDispatcher>(
-            new btCollisionDispatcher(collision_configuration_.get()));
-
-    broadphase_ = std::shared_ptr<btDbvtBroadphase>(new btDbvtBroadphase());
-
-    solver_ = std::shared_ptr<btSequentialImpulseConstraintSolver>(
-            new btSequentialImpulseConstraintSolver());
-    dynamics_world_ = std::shared_ptr<btDiscreteDynamicsWorld>(
-            new btDiscreteDynamicsWorld(dispatcher_.get(),
-                                        broadphase_.get(),
-                                        solver_.get(),
-                                        collision_configuration_.get()));
-
-    SetGravity(glm::vec3(0,-9.81,0));
 }
 
 }

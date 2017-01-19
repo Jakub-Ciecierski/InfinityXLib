@@ -2,7 +2,7 @@
 
 #include <game/game_loop.h>
 #include <graphics/factory/renderer_factory.h>
-#include <physics/factory/physics_simulation_factory.h>
+#include <physics/factory/bullet_physics_simulation_factory.h>
 
 namespace ifx {
 

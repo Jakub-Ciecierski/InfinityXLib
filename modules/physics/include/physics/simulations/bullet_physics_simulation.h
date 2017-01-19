@@ -10,18 +10,25 @@ class btBroadphaseInterface;
 class btCollisionDispatcher;
 class btConstraintSolver;
 class btDefaultCollisionConfiguration;
-class btDiscreteDynamicsWorld;
+class btDynamicsWorld;
 
 namespace ifx {
 
+struct BulletPhysicsSimulationCreateParams{
+    std::shared_ptr<btBroadphaseInterface> broadphase;
+    std::shared_ptr<btCollisionDispatcher> dispatcher;
+    std::shared_ptr<btConstraintSolver> solver;
+    std::shared_ptr<btDefaultCollisionConfiguration> collision_configuration;
+    std::shared_ptr<btDynamicsWorld> dynamics_world;
+};
+
 class BulletPhysicsSimulation : public PhysicsSimulation {
 public:
-    BulletPhysicsSimulation();
+    BulletPhysicsSimulation(const BulletPhysicsSimulationCreateParams& params);
     ~BulletPhysicsSimulation();
 
-    std::shared_ptr<btDiscreteDynamicsWorld> dynamics_world_bt(){
-        return dynamics_world_;
-    }
+    std::shared_ptr<btDynamicsWorld> dynamics_world_bt(){
+        return dynamics_world_;}
 
     virtual void Add(std::shared_ptr<RigidBody> rigid_body) override;
     virtual bool Remove(std::shared_ptr<RigidBody> rigid_body) override;
@@ -39,14 +46,11 @@ private:
     void SynchronizeRigidBodiesTransform();
     void SynchronizeGameObjectsTransform();
 
-    void Init();
-    void InitEmptyDynamicsWorld();
-
     std::shared_ptr<btBroadphaseInterface> broadphase_;
     std::shared_ptr<btCollisionDispatcher> dispatcher_;
     std::shared_ptr<btConstraintSolver> solver_;
     std::shared_ptr<btDefaultCollisionConfiguration> collision_configuration_;
-    std::shared_ptr<btDiscreteDynamicsWorld> dynamics_world_;
+    std::shared_ptr<btDynamicsWorld> dynamics_world_;
 
 };
 }

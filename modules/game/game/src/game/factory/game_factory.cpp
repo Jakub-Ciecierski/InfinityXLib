@@ -6,7 +6,7 @@
 #include <game/game.h>
 #include <game/scene_container.h>
 
-#include <physics/factory/physics_simulation_factory.h>
+#include <physics/factory/bullet_physics_simulation_factory.h>
 
 #include <graphics/rendering/renderer.h>
 #include <graphics/factory/renderer_factory.h>
@@ -20,25 +20,40 @@ GameFactory::GameFactory(){
             = std::shared_ptr<SceneContainerFactory>(
             new SceneContainerFactory());
     renderer_factory_ = std::shared_ptr<RendererFactory>(new RendererFactory());
-    physics_simulation_factory
-            = std::shared_ptr<PhysicsSimulationFactory>(
-            new PhysicsSimulationFactory());
+    physics_simulation_factory_
+            = std::shared_ptr<BulletPhysicsSimulationFactory>(
+            new BulletPhysicsSimulationFactory());
 }
-
-GameFactory::GameFactory(std::shared_ptr<GameLoopFactory> game_loop_factory,
-                         std::shared_ptr<SceneContainerFactory> scene_factory,
-                         std::shared_ptr<RendererFactory> renderer_factory,
-                         std::shared_ptr<PhysicsSimulationFactory> physics_factory) :
-        game_loop_factory_(game_loop_factory),
-        scene_factory_(scene_factory),
-        renderer_factory_(renderer_factory),
-        physics_simulation_factory(physics_factory){}
 
 GameFactory::~GameFactory(){}
 
+GameFactory& GameFactory::SetGameLoopFactory(
+        std::shared_ptr<GameLoopFactory> game_loop_factory){
+    game_loop_factory_ = game_loop_factory;
+    return *this;
+}
+
+GameFactory& GameFactory::SetSceneContainerFactory(
+        std::shared_ptr<SceneContainerFactory> scene_factory){
+    scene_factory_ = scene_factory;
+    return *this;
+}
+
+GameFactory& GameFactory::SetRendererFactory(
+        std::shared_ptr<RendererFactory> renderer_factory){
+    renderer_factory_ = renderer_factory;
+    return *this;
+}
+
+GameFactory& GameFactory::SetBulletPhysicsSimulationFactory(
+        std::shared_ptr<BulletPhysicsSimulationFactory> physics_simulation_factory){
+    physics_simulation_factory_ = physics_simulation_factory;
+    return *this;
+}
+
 std::shared_ptr<Game> GameFactory::Create(){
     auto renderer = renderer_factory_->Create();
-    auto physics_simulation = physics_simulation_factory->Create();
+    auto physics_simulation = physics_simulation_factory_->Create();
 
     auto scene = scene_factory_->Create(renderer->scene_renderer(),
                                         physics_simulation);
