@@ -19,6 +19,9 @@ public:
 
     std::shared_ptr<btRigidBody> rigid_body_bt(){return rigid_body_bt_;}
 
+    glm::vec3 GetLinearVelocity();
+    void SetLinearVelocity(const glm::vec3& vel);
+
 protected:
 
     std::shared_ptr<btRigidBody> rigid_body_bt_;

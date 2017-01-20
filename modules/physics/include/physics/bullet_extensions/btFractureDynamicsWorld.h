@@ -11,6 +11,7 @@ class btTransform;
 #include <memory>
 namespace ifx{
 class SceneContainer;
+class GameObject;
 }
 
 ///The btFractureDynamicsWorld class enabled basic glue and fracture of objects. 
@@ -26,6 +27,7 @@ class btFractureDynamicsWorld : public btDiscreteDynamicsWorld
 	void	breakDisconnectedParts( btFractureBody* fracObj);
 
 	std::shared_ptr<ifx::SceneContainer> scene_;
+	float impact_threshold_;
 public:
 
 	btFractureDynamicsWorld ( btDispatcher* dispatcher,btBroadphaseInterface* pairCache,btConstraintSolver* constraintSolver,btCollisionConfiguration* collisionConfiguration);
@@ -35,6 +37,9 @@ public:
 	virtual void	removeRigidBody(btRigidBody* body);
 
 	void	solveConstraints(btContactSolverInfo& solverInfo);
+
+	float impact_threshold(){return impact_threshold_;}
+	void impact_threshold(float v){impact_threshold_ = v;}
 
 	///either fracture or glue (!fracture)
 	void	setFractureMode(bool fracture)
@@ -53,6 +58,9 @@ public:
 
 	///normally those callbacks are called internally by the 'solveConstraints'
 	void fractureCallback();
+
+	std::shared_ptr<ifx::GameObject> Find(
+			std::shared_ptr<ifx::SceneContainer> scene, btCollisionObject* body);
 
 };
 

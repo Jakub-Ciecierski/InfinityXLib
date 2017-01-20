@@ -3,7 +3,7 @@
 namespace ifx {
 
 PhysicsSimulation::PhysicsSimulation() :
-        is_running_(true){}
+        is_running_(false){}
 PhysicsSimulation::~PhysicsSimulation(){}
 
 void PhysicsSimulation::Play(){

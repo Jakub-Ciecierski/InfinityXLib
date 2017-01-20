@@ -74,6 +74,8 @@ public:
     const glm::vec3& getDirection();
 
     const glm::mat4& GetModelMatrix();
+    const glm::mat4& GetManipulationModelMatrix();
+
     const glm::mat4& GetTranslateMatrix();
     const glm::mat4& GetRotationMatrix();
 
@@ -94,6 +96,8 @@ private:
     glm::vec3 direction;
 
     glm::mat4 ModelMatrix;
+    // Used for Manipulation view;
+    glm::mat4 ManipulationModelMatrix;
     glm::mat4 TranslateMatrix;
     glm::mat4 RotationMatrix;
 

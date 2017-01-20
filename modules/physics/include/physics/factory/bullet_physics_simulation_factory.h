@@ -10,6 +10,7 @@ namespace ifx {
 
 struct BulletPhysicsSimulationCreateParams;
 class PhysicsSimulation;
+class SceneContainer;
 
 enum class DynamicWorldType {
     DISCRETE, FRACTURE
@@ -22,7 +23,6 @@ public:
     ~BulletPhysicsSimulationFactory();
 
     virtual std::shared_ptr<PhysicsSimulation> Create();
-
     BulletPhysicsSimulationFactory& SetDynamicWorldType(DynamicWorldType type);
 
 private:

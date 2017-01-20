@@ -32,6 +32,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 include_directories(${IFX_ROOT}/modules/object/object/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/common/math/${INC_DIR})
 
+# TODO cycle dependency with game/game
+include_directories(${IFX_ROOT}/modules/game/game/${INC_DIR})
+
 #---------------------------------
 # PROJECT
 #---------------------------------

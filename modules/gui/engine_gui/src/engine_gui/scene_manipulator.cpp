@@ -20,7 +20,7 @@ void SceneManipulator::Manipulate(std::shared_ptr<MovableObject> movable_object,
     const float *view = glm::value_ptr(camera->getViewMatrix());
     const float *projection = glm::value_ptr(camera->getProjectionMatrix());
 
-    auto model = movable_object->GetModelMatrix();
+    auto model = movable_object->GetManipulationModelMatrix();
     float *new_model_matrix = glm::value_ptr(model);
 
     ImGuizmo::Manipulate(view, projection,

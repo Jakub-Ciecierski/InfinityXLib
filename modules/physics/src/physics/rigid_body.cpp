@@ -23,6 +23,17 @@ RigidBody::RigidBody() :
 
 RigidBody::~RigidBody(){}
 
+glm::vec3 RigidBody::GetLinearVelocity(){
+    auto vel = rigid_body_bt_->getLinearVelocity();
+
+    return glm::vec3(vel.x(), vel.y(), vel.z());
+}
+
+void RigidBody::SetLinearVelocity(const glm::vec3& vel){
+    auto vel_bt = btVector3(vel.x, vel.y, vel.z);
+    rigid_body_bt_->setLinearVelocity(vel_bt);
+}
+
 void RigidBody::Init(){
     motion_state_bt_  = std::shared_ptr<btDefaultMotionState>(
             new btDefaultMotionState());
