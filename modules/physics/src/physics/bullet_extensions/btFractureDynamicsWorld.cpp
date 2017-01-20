@@ -262,7 +262,7 @@ void btFractureDynamicsWorld::glueCallback()
 				newBody->applyImpulse(imp, rel_pos);
 			}
 
-            std::cout << "totalMass: " << totalMass << std::endl;
+            //std::cout << "totalMass: " << totalMass << std::endl;
             // <IFX>
             auto new_game_object = std::shared_ptr<ifx::GameObject>(
                     new ifx::GameObject());
@@ -468,85 +468,116 @@ void	btFractureDynamicsWorld::breakDisconnectedParts( btFractureBody* fracObj)
     auto render_components
             = corresponding_game_object->GetComponents
                     (std::move(ifx::GameComponentType::RENDER));
-	for ( startIslandIndex=0;startIslandIndex<numElem;startIslandIndex = endIslandIndex)
-	{
+	for ( startIslandIndex=0;startIslandIndex<numElem;startIslandIndex = endIslandIndex) {
 		int islandId = unionFind.getElement(startIslandIndex).m_id;
-		for (endIslandIndex = startIslandIndex+1;(endIslandIndex<numElem) && (unionFind.getElement(endIslandIndex).m_id == islandId);endIslandIndex++)
-		{
+		for (endIslandIndex = startIslandIndex + 1;
+			 (endIslandIndex < numElem) && (unionFind.getElement(endIslandIndex).m_id == islandId); endIslandIndex++) {
 		}
 
-	//	int fractureObjectIndex = -1;
+		//	int fractureObjectIndex = -1;
 
-		int numShapes=0;
+		int numShapes = 0;
 
 
-		btCompoundShape* newCompound = new btCompoundShape();
+		btCompoundShape *newCompound = new btCompoundShape();
 		btAlignedObjectArray<btScalar> masses;
 
-        auto ifx_world_transform
-                = ifx::BT2IFXTransform(fracObj->getWorldTransform());
-        auto new_game_object =
-                std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
+		auto ifx_world_transform
+				= ifx::BT2IFXTransform(fracObj->getWorldTransform());
+		auto new_game_object =
+				std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
 		int idx;
-		for (idx=startIslandIndex;idx<endIslandIndex;idx++)
-        //for (idx=endIslandIndex-1;idx>=startIslandIndex;idx--)
+
+		for (idx = startIslandIndex; idx < endIslandIndex; idx++)
+			//for (idx=endIslandIndex-1;idx>=startIslandIndex;idx--)
 		{
 			int i = unionFind.getElement(idx).m_sz;
-	//		btCollisionShape* shape = compound->getChildShape(i);
-			newCompound->addChildShape(compound->getChildTransform(i),compound->getChildShape(i));
+			//		btCollisionShape* shape = compound->getChildShape(i);
+
+			// YOLO1
+
+			newCompound->addChildShape(compound->getChildTransform(i), compound->getChildShape(i));
+
 			masses.push_back(fracObj->m_masses[i]);
 			numShapes++;
-            auto& transform = compound->getChildTransform(i);
-            auto compound_transform = ifx::BT2IFXTransform(transform);
+			auto &transform = compound->getChildTransform(i);
+			auto compound_transform = ifx::BT2IFXTransform(transform);
 
-            if(i >= render_components.size())
-                throw std::invalid_argument("Not a proper render component id");
+			if (i >= render_components.size())
+				throw std::invalid_argument("Not a proper render component id");
 
-            ifx::TransformData local_transform
-                    = render_components[i]->local_transform();
-
-            local_transform.position = compound_transform.position;
-            local_transform.rotation = compound_transform.rotation;
-
-            render_components[i]->local_transform(local_transform);
-            new_game_object->Add(render_components[i]);
+			ifx::TransformData local_transform
+					= render_components[i]->local_transform();
+			local_transform.position = compound_transform.position;
+			local_transform.rotation = compound_transform.rotation;
+			//ifx::PrintVec3(compound_transform.position);
+			//render_components[i]->local_transform(local_transform);
+			new_game_object->Add(render_components[i]);
 		}
 
-        // Reset local transform of render bodies
-        if(numShapes == 1){
-            auto render_objects = new_game_object->GetComponents
-                    (ifx::GameComponentType::RENDER);
-            for(auto& render_object : render_objects){
-                ifx::TransformData data = render_object->local_transform();
-                data.position = glm::vec3(0,0,0);
-                data.rotation = glm::vec3(0,0,0);
-                render_object->local_transform(data);
-            }
-        }
-		if (numShapes)
-		{
-			btFractureBody* newBody = addNewBody(fracObj->getWorldTransform(),&masses[0],newCompound);
+		// Reset local transform of render bodies
+		if (numShapes == 1) {
+			auto render_objects = new_game_object->GetComponents
+					(ifx::GameComponentType::RENDER);
+			for (auto &render_object : render_objects) {
+				ifx::TransformData data = render_object->local_transform();
+				data.position = glm::vec3(0, 0, 0);
+				data.rotation = glm::vec3(0, 0, 0);
+				render_object->local_transform(data);
+			}
+		}
+		if (numShapes) {
+			btFractureBody *newBody = addNewBody(fracObj->getWorldTransform(), &masses[0], newCompound);
 			newBody->setLinearVelocity(fracObj->getLinearVelocity());
 			newBody->setAngularVelocity(fracObj->getAngularVelocity());
 
-            auto new_body_bt = std::shared_ptr<btFractureBody>(newBody);
-            auto new_body = std::shared_ptr<ifx::FractureRigidBody>(
-                    new ifx::FractureRigidBody(new_body_bt));
+			auto new_body_bt = std::shared_ptr<btFractureBody>(newBody);
+			auto new_body = std::shared_ptr<ifx::FractureRigidBody>(
+					new ifx::FractureRigidBody(new_body_bt));
 
-            ifx::PrintVec3(ifx_world_transform.position);
+/*
+			// <YOLO>
+			for (idx = startIslandIndex; idx < endIslandIndex; idx++)
+				//for (idx=endIslandIndex-1;idx>=startIslandIndex;idx--)
+			{
+				btCompoundShape* compound_new = (btCompoundShape*)newBody->getCollisionShape();
+				int i = unionFind.getElement(idx).m_sz;
+				//		btCollisionShape* shape = compound->getChildShape(i);
 
-            new_game_object->local_transform(ifx_world_transform);
-            new_game_object->Add(new_body);
+				// YOLO1
 
-            scene_->Add(new_game_object);
+				auto &transform = compound_new->getChildTransform(i);
+				auto compound_transform = ifx::BT2IFXTransform(transform);
+
+				if (i >= render_components.size())
+					throw std::invalid_argument("Not a proper render component id");
+
+				ifx::TransformData local_transform
+						= render_components[i]->local_transform();
+				local_transform.position = compound_transform.position;
+				local_transform.rotation = compound_transform.rotation;
+				float x = transform.getOrigin().x();
+				//std::cout << x << std::endl;
+				//ifx::PrintVec3(compound_transform.position);
+				//std::cout <<  std::endl;
+
+
+				render_components[i]->local_transform(local_transform);
+				//new_game_object->Add(render_components[i]);
+			}
+			// </YOLO>
+*/
+			//ifx::PrintVec3(ifx_world_transform.position);
+
+			auto new_ifx_transfer = ifx::BT2IFXTransform(newBody->getWorldTransform());
+			new_game_object->local_transform(new_ifx_transfer);
+
+			new_game_object->Add(new_body);
+			scene_->Add(new_game_object);
 			numIslands++;
 		}
 
 	}
-
-
-
-
     scene_->Remove(corresponding_game_object);
 	//removeRigidBody(fracObj);//should it also be removed from the array?
 
