@@ -20,7 +20,7 @@ public:
     std::shared_ptr<Texture2D> CreateSolidColorTexture(
             const glm::vec3& color,
             TextureTypes texture_type,
-            int n = 512, int m = 512);
+            int n = 1, int m = 1);
 
     std::shared_ptr<Texture2D> LoadExampleCubemap();
 

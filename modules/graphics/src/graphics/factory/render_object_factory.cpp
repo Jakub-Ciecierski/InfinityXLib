@@ -10,6 +10,7 @@
 #include <GLFW/glfw3.h>
 #include <graphics/rendering/renderer.h>
 #include <graphics/factory/scene_factory.h>
+#include <graphics/factory/texture_factory.h>
 
 namespace ifx{
 
@@ -207,6 +208,34 @@ std::shared_ptr<RenderObject> RenderObjectFactory::CreateCube(){
     renderObject->addProgram(program);
 
     return renderObject;
+}
+
+std::shared_ptr<RenderObject> RenderObjectFactory::CreateLine(
+        const glm::vec3& p1, const glm::vec3& p2){
+    auto material = std::shared_ptr<ifx::Material>(new ifx::Material());
+    glm::vec3 color(0, 0, 255);
+    material->diffuse = ifx::TextureFactory().CreateSolidColorTexture(
+            color, ifx::TextureTypes::DIFFUSE);
+    material->specular = ifx::TextureFactory().CreateSolidColorTexture(
+            color, ifx::TextureTypes::SPECULAR);
+
+    auto model = ifx::ModelFactory::CreateLine(p1, p2);
+    model->getMesh(0)->material(material);
+    auto program = ifx::ProgramFactory().LoadMainProgram();
+
+    auto render_object
+            = std::shared_ptr<ifx::RenderObject>(
+                    new ifx::RenderObject(ObjectID(0),model));
+    render_object->addProgram(program);
+
+    render_object->SetBeforeRender([](const Program* program){
+        glLineWidth(6);
+    });
+    render_object->SetAfterRender([](const Program* program){
+        glLineWidth(1);
+    });
+
+    return render_object;
 }
 
 /*

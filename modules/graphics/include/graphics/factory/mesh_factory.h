@@ -17,6 +17,8 @@ public:
     ~MeshFactory();
 
     static std::unique_ptr<Mesh> CreateQuad(int x, int y);
+    static std::unique_ptr<Mesh> CreateLine(const glm::vec3& p1,
+                                            const glm::vec3& p2);
 
     static std::unique_ptr<Mesh> LoadBicubicBezierPatch(float startX,
                                                         float startY,
@@ -41,6 +43,7 @@ public:
     static std::unique_ptr<Mesh> LoadCubeUnTextured();
     static std::unique_ptr<Mesh> LoadHalfSphere(float radius = 2);
     static std::unique_ptr<Mesh> LoadSphere(float radius = 2);
+    static std::unique_ptr<Mesh> LoadCircle(float radius = 2);
 };
 }
 

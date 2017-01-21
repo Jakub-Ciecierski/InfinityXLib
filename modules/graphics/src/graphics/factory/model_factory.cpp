@@ -183,7 +183,21 @@ std::shared_ptr<Model> ModelFactory::LoadSphere(float radius){
     std::vector<std::unique_ptr<Mesh>> meshes;
     meshes.push_back(std::move(MeshFactory::LoadSphere(radius)));
 
-    return Model::MakeModel("Floor", std::move(meshes));
+    return Model::MakeModel(ifx::NO_FILEPATH, std::move(meshes));
 }
 
+std::shared_ptr<Model> ModelFactory::LoadCircle(float radius){
+    std::vector<std::unique_ptr<Mesh>> meshes;
+    meshes.push_back(std::move(MeshFactory::LoadCircle(radius)));
+
+    return Model::MakeModel(ifx::NO_FILEPATH, std::move(meshes));
+}
+
+std::shared_ptr<Model> ModelFactory::CreateLine(const glm::vec3& p1,
+                                                const glm::vec3& p2){
+    std::vector<std::unique_ptr<Mesh>> meshes;
+    meshes.push_back(std::move(MeshFactory::CreateLine(p1,p2)));
+
+    return Model::MakeModel(ifx::NO_FILEPATH, std::move(meshes));
+}
 } // ifx

@@ -4,7 +4,7 @@
 namespace ifx {
 
 struct SimulationTimeData{
-    float simulation_length = 10;
+    float simulation_length = -1;
 
     float last_time = 0;
     float current_time = 0;

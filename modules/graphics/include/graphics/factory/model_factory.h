@@ -34,6 +34,9 @@ public:
 
     static std::shared_ptr<Model> LoadModel(std::string path);
     static std::shared_ptr<Model> LoadSphere(float radius = 2.0f);
+    static std::shared_ptr<Model> LoadCircle(float radius = 2.0f);
+    static std::shared_ptr<Model> CreateLine(const glm::vec3& p1,
+                                             const glm::vec3& p2);
 
 };
 } // ifx

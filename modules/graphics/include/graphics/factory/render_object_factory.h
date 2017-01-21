@@ -30,6 +30,9 @@ public:
     std::unique_ptr<RenderObject> CreateLampObject();
     std::shared_ptr<RenderObject> CreateCube();
 
+    std::shared_ptr<RenderObject> CreateLine(const glm::vec3& p1,
+                                             const glm::vec3& p2);
+
     /*
     RenderObject* loadBicubicBezierSurfaceC0Object();
     RenderObject* loadBicubicBezierPatchObject();

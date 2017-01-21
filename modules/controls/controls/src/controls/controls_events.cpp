@@ -12,9 +12,6 @@ ControlsEvents::ControlsEvents() {
 }
 
 ControlsEvents::~ControlsEvents() {
-    delete mouse_events_.LeftMouse;
-    delete mouse_events_.RightMouse;
-    delete mouse_events_.MiddleMouse;
 }
 
 ControlsEvents& ControlsEvents::GetInstance(){
