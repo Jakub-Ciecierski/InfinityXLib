@@ -32,6 +32,9 @@ public:
 
     std::shared_ptr<RenderObject> CreateLine(const glm::vec3& p1,
                                              const glm::vec3& p2);
+    std::shared_ptr<RenderObject> CreateLine(const glm::vec3& p1,
+                                             const glm::vec3& p2,
+                                             const glm::vec3& color);
 
     /*
     RenderObject* loadBicubicBezierSurfaceC0Object();

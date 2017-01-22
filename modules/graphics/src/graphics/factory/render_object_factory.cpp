@@ -212,8 +212,17 @@ std::shared_ptr<RenderObject> RenderObjectFactory::CreateCube(){
 
 std::shared_ptr<RenderObject> RenderObjectFactory::CreateLine(
         const glm::vec3& p1, const glm::vec3& p2){
-    auto material = std::shared_ptr<ifx::Material>(new ifx::Material());
     glm::vec3 color(0, 0, 255);
+
+    return CreateLine(p1, p2, color);
+}
+
+std::shared_ptr<RenderObject> RenderObjectFactory::CreateLine(
+        const glm::vec3& p1,
+        const glm::vec3& p2,
+        const glm::vec3& color){
+    auto material = std::shared_ptr<ifx::Material>(new ifx::Material());
+
     material->diffuse = ifx::TextureFactory().CreateSolidColorTexture(
             color, ifx::TextureTypes::DIFFUSE);
     material->specular = ifx::TextureFactory().CreateSolidColorTexture(

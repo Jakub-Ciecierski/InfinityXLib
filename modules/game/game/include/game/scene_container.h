@@ -30,6 +30,8 @@ public:
     void Add(std::shared_ptr<GameObject> game_object);
     bool Remove(std::shared_ptr<GameObject> game_object);
 
+    bool Exists(std::shared_ptr<GameObject> game_object);
+
     std::shared_ptr<Camera> GetActiveCamera();
 
 private:

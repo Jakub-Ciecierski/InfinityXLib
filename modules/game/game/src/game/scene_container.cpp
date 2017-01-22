@@ -39,6 +39,15 @@ bool SceneContainer::Remove(std::shared_ptr<GameObject> game_object){
     return false;
 }
 
+bool SceneContainer::Exists(std::shared_ptr<GameObject> game_object){
+    for(unsigned int i = 0; i < game_objects_.size(); i++){
+        if(game_objects_[i] == game_object){
+            return true;
+        }
+    }
+    return false;
+}
+
 std::shared_ptr<Camera> SceneContainer::GetActiveCamera(){
     std::shared_ptr<Camera> camera = nullptr;
 

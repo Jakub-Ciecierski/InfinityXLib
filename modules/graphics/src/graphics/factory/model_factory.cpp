@@ -176,7 +176,7 @@ std::shared_ptr<Model> ModelFactory::LoadFloorModel(){
     std::vector<std::unique_ptr<Mesh>> meshes;
     meshes.push_back(std::move(meshLoader.LoadFloor()));
 
-    return Model::MakeModel("Floor", std::move(meshes));
+    return Model::MakeModel(NO_FILEPATH, std::move(meshes));
 }
 
 std::shared_ptr<Model> ModelFactory::LoadSphere(float radius){

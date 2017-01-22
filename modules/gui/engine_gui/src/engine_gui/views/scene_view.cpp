@@ -36,7 +36,7 @@ void SceneView::RenderWindow(){
 
     ImGui::Begin("Selected Game Object");
     if(selected_game_object_)
-        game_object_view_->Render(selected_game_object_);
+        game_object_view_->Render(selected_game_object_, scene_);
     ImGui::End();
 
     ImGui::Begin("Selected Game Component");
