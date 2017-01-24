@@ -35,6 +35,7 @@
 #include <graphics/factory/texture_factory.h>
 #include <graphics/model/material.h>
 #include <graphics/model/model.h>
+#include <BulletDynamics/ConstraintSolver/btHingeConstraint.h>
 
 std::shared_ptr<ifx::LightDirectional> CreateDirectionalLight();
 std::shared_ptr<ifx::LightSpotlight> CreateSpotLight();
@@ -61,6 +62,22 @@ void AddTorsoArm1Constraint(
         std::shared_ptr<ifx::RigidBody> body1,
         std::shared_ptr<ifx::RigidBody> body2);
 void AddTorsoArm2Constraint(
+        std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
+        std::shared_ptr<ifx::RigidBody> body1,
+        std::shared_ptr<ifx::RigidBody> body2);
+void AddTorsoLeg1Constraint(
+        std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
+        std::shared_ptr<ifx::RigidBody> body1,
+        std::shared_ptr<ifx::RigidBody> body2);
+void AddTorsoLeg2Constraint(
+        std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
+        std::shared_ptr<ifx::RigidBody> body1,
+        std::shared_ptr<ifx::RigidBody> body2);
+void AddTorsoFeet1Constraint(
+        std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
+        std::shared_ptr<ifx::RigidBody> body1,
+        std::shared_ptr<ifx::RigidBody> body2);
+void AddTorsoFeet2Constraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
         std::shared_ptr<ifx::RigidBody> body1,
         std::shared_ptr<ifx::RigidBody> body2);
@@ -225,8 +242,8 @@ void AddHeadTorsoConstraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
         std::shared_ptr<ifx::RigidBody> body1,
         std::shared_ptr<ifx::RigidBody> body2){
-    btVector3 pivot1(0, -1.5, 0);
-    btVector3 pivot2(0, 1.5, 0);
+    btVector3 pivot1(0, -1.3, 0);
+    btVector3 pivot2(0, 0.9, 0);
 
     auto constraint = new btPoint2PointConstraint(
             *body1->rigid_body_bt(),
@@ -238,7 +255,8 @@ void AddTorsoArm1Constraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
         std::shared_ptr<ifx::RigidBody> body1,
         std::shared_ptr<ifx::RigidBody> body2){
-    btVector3 pivot1(0, 0, -1.0);
+    //btVector3 pivot1(0, 0, -1.0);
+    btVector3 pivot1(0, 0.5, -0.6);
     btVector3 pivot2(0, -1.0, 0.0);
 
     auto constraint = new btPoint2PointConstraint(
@@ -251,13 +269,75 @@ void AddTorsoArm2Constraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
         std::shared_ptr<ifx::RigidBody> body1,
         std::shared_ptr<ifx::RigidBody> body2){
-    btVector3 pivot1(0, 0, 1.0);
+    btVector3 pivot1(0, 0.5, 0.6);
     btVector3 pivot2(0, -1.0, 0.0);
 
     auto constraint = new btPoint2PointConstraint(
             *body1->rigid_body_bt(),
             *body2->rigid_body_bt(), pivot1, pivot2);
     simulation->dynamics_world_bt()->addConstraint(constraint, true);
+}
+
+void AddTorsoLeg1Constraint(
+        std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
+        std::shared_ptr<ifx::RigidBody> body1,
+        std::shared_ptr<ifx::RigidBody> body2){
+    btVector3 pivot1(0, -1.3, -0.5);
+    btVector3 pivot2(0, 1, 0.0);
+
+    auto constraint = new btPoint2PointConstraint(
+            *body1->rigid_body_bt(),
+            *body2->rigid_body_bt(), pivot1, pivot2);
+    simulation->dynamics_world_bt()->addConstraint(constraint, true);
+}
+
+void AddTorsoLeg2Constraint(
+        std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
+        std::shared_ptr<ifx::RigidBody> body1,
+        std::shared_ptr<ifx::RigidBody> body2){
+    btVector3 pivot1(0, -1.3, 0.5);
+    btVector3 pivot2(0, 1, 0.0);
+
+    auto constraint = new btPoint2PointConstraint(
+            *body1->rigid_body_bt(),
+            *body2->rigid_body_bt(), pivot1, pivot2);
+    simulation->dynamics_world_bt()->addConstraint(constraint, true);
+}
+
+void AddTorsoFeet1Constraint(
+        std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
+        std::shared_ptr<ifx::RigidBody> body1,
+        std::shared_ptr<ifx::RigidBody> body2){
+    btVector3 pivotInA(0, -1 ,0);
+    btVector3 pivotInB(0.4, 0, 0);
+    btVector3 axisInA(0,0,1);
+    btVector3 axisInB(0,0,1);
+
+    btHingeConstraint* hinge
+            = new btHingeAccumulatedAngleConstraint(*body1->rigid_body_bt(),
+                                    *body2->rigid_body_bt(),
+                                    pivotInA,pivotInB,
+                                    axisInA,axisInB, true);
+    hinge->setLimit(1.5*M_PI, 2*M_PI, 10);
+    simulation->dynamics_world_bt()->addConstraint(hinge, true);
+}
+
+void AddTorsoFeet2Constraint(
+        std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
+        std::shared_ptr<ifx::RigidBody> body1,
+        std::shared_ptr<ifx::RigidBody> body2){
+    btVector3 pivotInA(0, -1 ,0);
+    btVector3 pivotInB(0.4, 0, 0);
+    btVector3 axisInA(0,0,1);
+    btVector3 axisInB(0,0,1);
+
+    btHingeConstraint* hinge
+            = new btHingeAccumulatedAngleConstraint(*body1->rigid_body_bt(),
+                                                    *body2->rigid_body_bt(),
+                                                    pivotInA,pivotInB,
+                                                    axisInA,axisInB, true);
+    hinge->setLimit(1.5*M_PI, 2*M_PI, 10);
+    simulation->dynamics_world_bt()->addConstraint(hinge, true);
 }
 
 int main() {
@@ -295,6 +375,20 @@ int main() {
     arm2->moveTo(glm::vec3(0.0f, 3.6f, 1.4f));
     arm2->rotateTo(glm::vec3(140.0f, 0.0f, 0.0f));
 
+    auto leg1 = CreateGameObjectBox(scale3, 1);
+    leg1->moveTo(glm::vec3(-0.32f, 1.7f, -0.32f));
+
+    auto leg2 = CreateGameObjectBox(scale3, 1);
+    leg2->moveTo(glm::vec3(-0.32f, 1.7f, 0.32f));
+
+    glm::vec3 scale4 = glm::vec3(1.56, 0.25, 1.03);
+    auto feet1 = CreateGameObjectBox(scale4, 1);
+    feet1->moveTo(glm::vec3(-0.76f, 0.6f, -0.32f));
+    //feet1->rotateTo(glm::vec3(180.0f, 0.0f, 0.0f));
+
+    auto feet2 = CreateGameObjectBox(scale4, 1);
+    feet2->moveTo(glm::vec3(-0.76f, 0.6f, 0.32f));
+
     game->scene()->Add(lights);
     game->scene()->Add(camera);
     game->scene()->Add(floor);
@@ -303,6 +397,10 @@ int main() {
     game->scene()->Add(torso);
     game->scene()->Add(arm1);
     game->scene()->Add(arm2);
+    game->scene()->Add(leg1);
+    game->scene()->Add(leg2);
+    game->scene()->Add(feet1);
+    game->scene()->Add(feet2);
 
     auto ceiling_rigid_bodies = ceiling->GetComponents(
             std::move(ifx::GameComponentType::PHYSICS));
@@ -329,6 +427,26 @@ int main() {
     auto arm2_rigid_body = std::static_pointer_cast<ifx::RigidBody>(
             arm2_rigid_bodies[0]);
 
+    auto leg1_rigid_bodies = leg1->GetComponents(
+            std::move(ifx::GameComponentType::PHYSICS));
+    auto leg1_rigid_body = std::static_pointer_cast<ifx::RigidBody>(
+            leg1_rigid_bodies[0]);
+
+    auto leg2_rigid_bodies = leg2->GetComponents(
+            std::move(ifx::GameComponentType::PHYSICS));
+    auto leg2_rigid_body = std::static_pointer_cast<ifx::RigidBody>(
+            leg2_rigid_bodies[0]);
+
+    auto feet1_rigid_bodies = feet1->GetComponents(
+            std::move(ifx::GameComponentType::PHYSICS));
+    auto feet1_rigid_body = std::static_pointer_cast<ifx::RigidBody>(
+            feet1_rigid_bodies [0]);
+
+    auto feet2_rigid_bodies = feet2->GetComponents(
+            std::move(ifx::GameComponentType::PHYSICS));
+    auto feet2_rigid_body = std::static_pointer_cast<ifx::RigidBody>(
+            feet2_rigid_bodies [0]);
+
     AddSpringConstraint(
             std::static_pointer_cast<ifx::BulletPhysicsSimulation>
                            (game->game_loop()->physics_simulation()),
@@ -348,6 +466,26 @@ int main() {
             std::static_pointer_cast<ifx::BulletPhysicsSimulation>
                     (game->game_loop()->physics_simulation()),
             torso_rigid_body, arm2_rigid_body);
+
+    AddTorsoLeg1Constraint(
+            std::static_pointer_cast<ifx::BulletPhysicsSimulation>
+                    (game->game_loop()->physics_simulation()),
+            torso_rigid_body, leg1_rigid_body);
+
+    AddTorsoLeg2Constraint(
+            std::static_pointer_cast<ifx::BulletPhysicsSimulation>
+                    (game->game_loop()->physics_simulation()),
+            torso_rigid_body, leg2_rigid_body);
+
+    AddTorsoFeet1Constraint(
+            std::static_pointer_cast<ifx::BulletPhysicsSimulation>
+                    (game->game_loop()->physics_simulation()),
+            leg1_rigid_body, feet1_rigid_body);
+
+    AddTorsoFeet2Constraint(
+            std::static_pointer_cast<ifx::BulletPhysicsSimulation>
+                    (game->game_loop()->physics_simulation()),
+            leg2_rigid_body, feet2_rigid_body);
 
     auto gui = std::shared_ptr<ExampleGUI>(
             new ExampleGUI(
