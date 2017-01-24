@@ -11,9 +11,20 @@ SceneRenderer::SceneRenderer(){
 }
 SceneRenderer::~SceneRenderer(){}
 
-void SceneRenderer::Render() const{
-    for(auto& render_object : render_objects_)
+void SceneRenderer::Render(int id) const{
+    for(auto& render_object : render_objects_){
+        if(id == 0 && render_object->id().key_id() == -2)
+            continue;
+        if(id == 1 && render_object->id().key_id() == -1)
+            continue;
         Render(render_object);
+    }
+}
+
+void SceneRenderer::Render() const{
+    for(auto& render_object : render_objects_){
+        Render(render_object);
+    }
 }
 
 void SceneRenderer::Render(const std::shared_ptr<Program> program) const{

@@ -27,6 +27,7 @@ public:
     const std::shared_ptr<LightGroup> light_group() const {return light_group_;}
     const std::shared_ptr<Camera> camera(){return camera_;}
 
+    void Render(int id) const;
     void Render() const;
     void Render(const std::shared_ptr<Program> program) const;
 

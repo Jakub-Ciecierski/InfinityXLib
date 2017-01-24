@@ -36,7 +36,7 @@ public:
 
     virtual void Reset();
 protected:
-    bool UpdateTime();
+    virtual bool UpdateTime();
 
     bool running_;
 

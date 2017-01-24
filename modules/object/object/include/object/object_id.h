@@ -12,6 +12,8 @@ public:
     ~ObjectID();
 
     std::string name(){return name_;}
+    int key_id(){return key;}
+    void key_id(int keyy){key = keyy;}
 
     bool operator==(const ObjectID& id) const;
     bool operator!=(const ObjectID &id) const;

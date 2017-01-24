@@ -71,6 +71,8 @@ private:
     std::unique_ptr<FBORenderer> fbo_renderer_;
     std::unique_ptr<ShadowMapping> shadow_mapping_;
     std::shared_ptr<SceneRenderer> scene_renderer_;
+
+    int render_id_ = 0;
 };
 
 }
