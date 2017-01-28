@@ -33,6 +33,8 @@ public:
     physics_simulation(){return physics_simulation_;}
 
     void AddSimulation(std::shared_ptr<Simulation> simulation);
+    bool RemoveSimulation(std::shared_ptr<Simulation> simulation);
+
     void Start();
 
 private:

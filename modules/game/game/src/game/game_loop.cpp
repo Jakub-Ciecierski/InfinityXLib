@@ -21,6 +21,16 @@ void GameLoop::AddSimulation(std::shared_ptr<Simulation> simulation) {
     simulations_.push_back(simulation);
 }
 
+bool GameLoop::RemoveSimulation(std::shared_ptr<Simulation> simulation){
+    for(unsigned int i = 0; i < simulations_.size(); i++){
+        if(simulations_[i] == simulation){
+            simulations_.erase(simulations_.begin() + i);
+            return true;
+        }
+    }
+    return false;
+}
+
 void GameLoop::Start(){
     while(!renderer_->window()->shouldClose()) {
         renderer_->Render();

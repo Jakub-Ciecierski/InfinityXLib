@@ -171,9 +171,17 @@ std::unique_ptr<RenderObject> RenderObjectFactory::CreateFloor(){
     renderObject->addProgram(nano_program);
     //renderObject->addProgram(normal_vision_program);
 
-    float scaleFactor = 5.005f;
+    float scaleFactor = 5.0f;
     renderObject->scale(glm::vec3(scaleFactor, scaleFactor, scaleFactor));
     renderObject->rotateTo(glm::vec3(90, 0, 0));
+
+    renderObject->SetBeforeRender([](const Program* program){
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+    });
+    renderObject->SetAfterRender([](const Program* program){
+        glDisable(GL_CULL_FACE);
+    });
 
     return renderObject;
 }
