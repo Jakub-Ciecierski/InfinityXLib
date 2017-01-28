@@ -1,5 +1,6 @@
 #include "graphics/rendering/renderer.h"
 
+#include <graphics/shaders/program.h>
 #include <controls/glfw_callbacks.h>
 #include <controls/controls_events.h>
 #include <graphics/rendering/fbo_rendering/fbo_renderer.h>
@@ -27,12 +28,14 @@ Renderer::~Renderer(){
 void Renderer::HandleEvents() {
     ControlsEvents& controls = ControlsEvents::GetInstance();
     const Keys& keys = controls.keyboard_keys();
-/*
+
     if (keys[GLFW_KEY_R]){
-        scene_->ReloadProgams();
-        if(fbo_renderer_->program())
-            fbo_renderer_->program()->Reload();
-    }*/
+        auto programs = ResourceMemoryCache::GetInstance().GetResources(
+                ResourceType::SHADER);
+        for(auto& program : programs){
+            std::static_pointer_cast<Program>(program)->Reload();
+        }
+    }
 }
 
 void Renderer::SetGUI(std::shared_ptr<GUI> gui){
@@ -109,6 +112,7 @@ void Renderer::Render(){
     glfwSwapBuffers(window_->getHandle());
 
     window_->update();
+    HandleEvents();
 }
 
 void Renderer::RenderNormal(){

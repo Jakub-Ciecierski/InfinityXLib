@@ -52,6 +52,15 @@ void ResourceMemoryCache::ClearAll(){
     resources_.clear();
 }
 
+std::vector<std::shared_ptr<Resource>> ResourceMemoryCache::GetResources(
+        ResourceType type){
+    std::vector<std::shared_ptr<Resource>> resources;
+    for(auto& resource : resources_){
+        if(resource->type() == type)
+            resources.push_back(resource);
+    }
+    return resources;
+}
 
     
 

@@ -7,6 +7,7 @@
 namespace ifx {
 
 class Resource;
+enum class ResourceType;
 
 class ResourceMemoryCache {
 public:
@@ -41,6 +42,8 @@ public:
      * no other object uses that resource.
      */
     void ClearAll();
+
+    std::vector<std::shared_ptr<Resource>> GetResources(ResourceType type);
 
 private:
     ResourceMemoryCache();

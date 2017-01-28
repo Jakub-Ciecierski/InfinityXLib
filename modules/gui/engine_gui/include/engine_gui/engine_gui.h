@@ -20,6 +20,8 @@ public:
     EngineGUI(EngineGUICreateParams& create_params);
     ~EngineGUI();
 
+    std::shared_ptr<SceneView> scene_view(){return scene_view_;}
+
     void Render();
 
 private:

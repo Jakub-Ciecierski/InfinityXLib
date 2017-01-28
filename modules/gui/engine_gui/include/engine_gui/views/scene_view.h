@@ -23,6 +23,11 @@ public:
     SceneView(std::shared_ptr<SceneContainer> scene);
     ~SceneView();
 
+    void SetSelectedGameObject(
+            std::shared_ptr<GameObject> selected_game_object){
+        selected_game_object_ = selected_game_object;
+    }
+
     void Render() override;
 
 private:
