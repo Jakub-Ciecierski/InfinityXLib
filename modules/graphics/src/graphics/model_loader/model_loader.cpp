@@ -29,7 +29,9 @@ std::shared_ptr<Model> ModelLoader::loadModel() {
     Assimp::Importer importer;
     const aiScene *scene =
             importer.ReadFile(filepath,
-                              aiProcess_Triangulate | aiProcess_FlipUVs);
+                              aiProcess_Triangulate
+                              | aiProcess_FlipUVs
+                              | aiProcess_CalcTangentSpace);
 
     checkError(scene, string(importer.GetErrorString()));
 
@@ -68,6 +70,8 @@ std::unique_ptr<Mesh> ModelLoader::processMesh(aiMesh *mesh,
     vertices = processVertices(mesh);
     indices = processIndices(mesh);
     textures = processTextures(mesh, scene);
+    if(!mesh->HasTangentsAndBitangents())
+        calculateTBN(vertices, indices);
 
     auto mesh_ifx = std::unique_ptr<Mesh>(new Mesh(vertices, indices));
     auto material = std::make_shared<Material>();
@@ -91,12 +95,23 @@ vector<Vertex> ModelLoader::processVertices(aiMesh *mesh) {
 
         glm::vec3 vNorm;
         if (mesh->mNormals != nullptr) {
-            std::cout << "No normals" << std::endl;
             vNorm.x = mesh->mNormals[i].x;
             vNorm.y = mesh->mNormals[i].y;
             vNorm.z = mesh->mNormals[i].z;
+        }else{
+            std::cout << "No normals" << std::endl;
         }
         vertex.Normal = vNorm;
+
+        if(mesh->HasTangentsAndBitangents()){
+            vertex.Tangent.x = mesh->mTangents[i].x;
+            vertex.Tangent.y = mesh->mTangents[i].y;
+            vertex.Tangent.z = mesh->mTangents[i].z;
+
+            vertex.Binormal.x = mesh->mBitangents[i].x;
+            vertex.Binormal.y = mesh->mBitangents[i].y;
+            vertex.Binormal.z = mesh->mBitangents[i].z;
+        }
 
         // Assimp has up to 8 different textureCoords, we only care about one
         if (mesh->mTextureCoords[0]) {
@@ -109,6 +124,7 @@ vector<Vertex> ModelLoader::processVertices(aiMesh *mesh) {
         }
         vertices.push_back(vertex);
     }
+
     return vertices;
 }
 
@@ -121,8 +137,60 @@ vector<GLuint> ModelLoader::processIndices(aiMesh *mesh) {
             indices.push_back(face.mIndices[j]);
         }
     }
-
     return indices;
+}
+
+
+void ModelLoader::calculateTBN(std::vector<Vertex>& vertices,
+                               const std::vector<GLuint>& indices){
+    std::cout << "Calculating Tangents And Bitangents" << std::endl;
+    const int DATA_PER_FACE = 3;
+    int faceCount = indices.size() / DATA_PER_FACE;
+    unsigned int vertexIndex = 0;
+
+    for (int i = 0; i < faceCount; i++) {
+        if (vertexIndex >= indices.size()) {
+            throw new std::invalid_argument("computeTangetBasis out of bounds");
+        }
+        calculateTBN(vertices[indices[vertexIndex + 0]],
+                     vertices[indices[vertexIndex + 1]],
+                     vertices[indices[vertexIndex + 2]]);
+        vertexIndex += DATA_PER_FACE;
+    }
+}
+
+void ModelLoader::calculateTBN(Vertex &v0, Vertex &v1, Vertex &v2) {
+    glm::vec2 &uv0 = v0.TexCoords;
+    glm::vec2 &uv1 = v1.TexCoords;
+    glm::vec2 &uv2 = v2.TexCoords;
+
+    glm::vec3 edge1 = v1.Position - v0.Position;
+    glm::vec3 edge2 = v2.Position - v0.Position;
+
+    glm::vec2 deltaUV1 = uv1 - uv0;
+    glm::vec2 deltaUV2 = uv2 - uv0;
+
+    float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+    glm::vec3 tangent;
+    tangent.x = (edge1.x * deltaUV2.y - edge2.x * deltaUV1.y) * r;
+    tangent.y = (edge1.y * deltaUV2.y - edge2.y * deltaUV1.y) * r;
+    tangent.z = (edge1.z * deltaUV2.y - edge2.z * deltaUV1.y) * r;
+
+    glm::vec3 bitangent;
+    bitangent.x = (edge2.x * deltaUV1.x - edge1.x * deltaUV2.x) * r;
+    bitangent.y = (edge2.y * deltaUV1.x - edge1.y * deltaUV2.x) * r;
+    bitangent.z = (edge2.z * deltaUV1.x - edge1.z * deltaUV2.x) * r;
+
+    tangent = glm::normalize(tangent);
+    bitangent = glm::normalize(bitangent);
+
+    v0.Tangent = tangent;
+    v1.Tangent = tangent;
+    v2.Tangent = tangent;
+
+    v0.Binormal = bitangent;
+    v1.Binormal = bitangent;
+    v2.Binormal = bitangent;
 }
 
 std::vector<std::shared_ptr<Texture2D>> ModelLoader::processTextures(
@@ -137,15 +205,12 @@ std::vector<std::shared_ptr<Texture2D>> ModelLoader::processTextures(
                 = loadMaterialTextures(material, aiTextureType_SPECULAR,
                                        TextureTypes::SPECULAR);
         // WARNING aiTextureType_HEIGHT hide the Normal maps !!
+        // For .obj format the normal map is under aiTextureType_HEIGHT.
+        // TODO check the format.
         std::vector<std::shared_ptr<Texture2D>> normalMaps
                 = loadMaterialTextures(material, aiTextureType_HEIGHT,
                                        TextureTypes::NORMAL);
-        /*
-        // Or maybe not !
-        normalMaps
-                = loadMaterialTextures(material, aiTextureType_NORMALS,
-                                       TextureTypes::NORMAL);
-                                       */
+
         textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
         textures.insert(textures.end(), specularMaps.begin(),
                         specularMaps.end());

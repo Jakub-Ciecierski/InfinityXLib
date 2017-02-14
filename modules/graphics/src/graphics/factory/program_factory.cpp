@@ -26,6 +26,20 @@ std::shared_ptr<Program> ProgramFactory::LoadMainProgram(){
     return ProgramLoader().CreateProgram(vertex_path, fragment_path);
 }
 
+std::shared_ptr<Program> ProgramFactory::LoadMainNormalMappingProgram(){
+    ifx::Resources& resources = ifx::Resources::GetInstance();
+
+    std::string vertex_path =
+            resources.GetResourcePath("main/normal_mapping/main.vs",
+                                      ifx::ResourceType::SHADER);
+    std::string fragment_path =
+            resources.GetResourcePath("main/normal_mapping/main.fs",
+                                      ifx::ResourceType::SHADER);
+
+    return ProgramLoader().CreateProgram(vertex_path, fragment_path);
+}
+
+
 std::shared_ptr<Program> ProgramFactory::LoadHeightmapProgram(){
     ifx::Resources& resources = ifx::Resources::GetInstance();
 

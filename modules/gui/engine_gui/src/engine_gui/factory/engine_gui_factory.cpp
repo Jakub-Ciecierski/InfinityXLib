@@ -16,8 +16,10 @@ std::shared_ptr<EngineGUI> EngineGUIFactory::CreateEngineGUI(
         std::shared_ptr<SceneContainer> scene,
         std::shared_ptr<PhysicsSimulation> physics_simulation){
     EngineGUICreateParams create_params{
-            CreateMainMenu(), CreateSceneView(scene),
+            CreateMainMenu(),
+            CreateSceneView(scene),
             CreatePhysicsSimulationView(physics_simulation)};
+
     return std::shared_ptr<EngineGUI>(new EngineGUI(create_params));
 }
 

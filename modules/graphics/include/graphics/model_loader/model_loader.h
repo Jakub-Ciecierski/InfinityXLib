@@ -54,6 +54,10 @@ private:
      */
     std::vector<GLuint> processIndices(aiMesh *mesh);
 
+    void calculateTBN(std::vector<Vertex>& vertices,
+                      const std::vector<GLuint>& indices);
+    void calculateTBN(Vertex& v0, Vertex& v1, Vertex& v2);
+
     /*
      * Loads all textures.
      * Uses loadMaterialTextures to load all textures of specific type.

@@ -47,6 +47,7 @@ add_executable(${APP_NAME} ${SOURCE_FILES} ${SRC_FILES})
 
 add_subdirectory(${IFX_ROOT}/${DEPS_DIR} ${IFX_LIB_DEPS_BUILD_DIR})
 
+include_directories(${IFX_ROOT}/${DEPS_DIR}/bullet3/src/)
 include_directories(${IFX_ROOT}/${DEPS_DIR}/glfw-3.1.2/${INC_DIR})
 include_directories(${IFX_ROOT}/${DEPS_DIR}/assimp-3.1.1/${INC_DIR})
 include_directories(${IFX_ROOT}/${DEPS_DIR}/SOIL/src)
@@ -80,7 +81,8 @@ include_directories(${IFX_ROOT}/modules/gui/engine_gui/${INC_DIR})
 target_link_libraries(${APP_NAME} engine_gui_ifx
         game_ifx graphics_ifx physics_ifx
         resources_ifx controls_ifx object_ifx math_ifx
-        vr_ifx gui_ifx)
+        vr_ifx gui_ifx
+        BulletDynamics BulletCollision)
 
 target_link_libraries(${APP_NAME} SOIL)
 target_link_libraries(${APP_NAME} assimp)

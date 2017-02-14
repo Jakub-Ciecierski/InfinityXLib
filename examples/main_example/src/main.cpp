@@ -16,9 +16,12 @@
 #include <graphics/rendering/renderer.h>
 #include <engine_gui/engine_gui.h>
 #include <example_gui.h>
+#include <graphics/shaders/loaders/program_loader.h>
+#include <graphics/model_loader/model_loader.h>
 
 std::shared_ptr<ifx::LightDirectional> CreateDirectionalLight();
 std::shared_ptr<ifx::LightSpotlight> CreateSpotLight();
+std::shared_ptr<ifx::GameObject> CreateCyborg();
 
 std::shared_ptr<ifx::LightDirectional> CreateDirectionalLight(){
     ifx::LightParams light;
@@ -60,6 +63,35 @@ std::shared_ptr<ifx::LightSpotlight> CreateSpotLight(){
     return light_source;
 }
 
+std::shared_ptr<ifx::GameObject> CreateCyborg(){
+    ifx::Resources& resources = ifx::Resources::GetInstance();
+    std::string vertex_path =
+            resources.GetResourcePath("main/normal_mapping/main.vs",
+                                      ifx::ResourceType::SHADER);
+    std::string fragment_path =
+            resources.GetResourcePath("main/normal_mapping/main.fs",
+                                      ifx::ResourceType::SHADER);
+    auto program = ProgramLoader().CreateProgram(vertex_path,
+                                                 fragment_path);
+    std::string model_path = ifx::Resources::GetInstance().GetResourcePath
+            ("cyborg/cyborg.obj", ifx::ResourceType::MODEL);
+    auto model = ifx::ModelLoader(model_path).loadModel();
+
+    auto render_object
+            = std::shared_ptr<ifx::RenderObject>(
+                    new ifx::RenderObject(ObjectID(0), model));
+
+    render_object->addProgram(program);
+
+    float scaleFactor = 0.5f;
+    render_object->scale(glm::vec3(scaleFactor, scaleFactor, scaleFactor));
+
+    auto game_object = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
+    game_object->Add(render_object);
+
+    return game_object;
+}
+
 int main() {
     auto game_factory
             = std::shared_ptr<ifx::GameFactory>(new ifx::GameFactory());
@@ -87,11 +119,13 @@ int main() {
     game->scene()->Add(game_object2);
     game->scene()->Add(game_object3);
     game->scene()->Add(game_object4);
+    game->scene()->Add(CreateCyborg());
 
     auto gui = std::shared_ptr<ExampleGUI>(
             new ExampleGUI(
                     game->game_loop()->renderer()->window()->getHandle(),
-                    game->scene()));
+                    game->scene(),
+                    game->game_loop()->physics_simulation()));
     game->game_loop()->renderer()->SetGUI(gui);
 
     game->Start();

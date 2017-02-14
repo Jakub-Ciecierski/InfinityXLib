@@ -96,10 +96,10 @@ uniform vec3 viewPos;
 float ShadowMappingCalculation(vec4 fragPosLightSpace);
 
 vec3 computePointLight(PointLight light, vec3 norm, vec3 fragPos,
-                       vec3 viewDir);
-vec3 computeDirLight(DirLight light, vec3 norm, vec3 viewDir);
+                       vec3 viewDir, mat3 TBN);
+vec3 computeDirLight(DirLight light, vec3 norm, vec3 viewDir, mat3 TBN);
 vec3 computeSpotLight(SpotLight light, vec3 norm, vec3 fragPos,
-                      vec3 viewDir);
+                      vec3 viewDir, mat3 TBN);
 
 vec3 computeAmbient(vec3 ambientLight);
 vec3 computeDiffuse(vec3 norm, vec3 lightDir, vec3 diffuseLight);
@@ -143,8 +143,13 @@ float ShadowMappingCalculation(vec4 fragPosLightSpace){
     return shadow;
 }
 
-vec3 computePointLight(PointLight light, vec3 norm, vec3 fragPos, vec3 viewDir){
+vec3 computePointLight(PointLight light, vec3 norm, vec3 fragPos,
+                        vec3 viewDir, mat3 TBN){
     vec3 lightDir = normalize(light.position - fragPos);
+
+    // ---- Transform to TBN basis ----- //
+    viewDir = TBN * viewDir;
+    lightDir = TBN * lightDir;
 
     vec3 ambient = computeAmbient(light.ambient);
     vec3 diffuse = computeDiffuse(norm, lightDir, light.diffuse);
@@ -165,8 +170,12 @@ vec3 computePointLight(PointLight light, vec3 norm, vec3 fragPos, vec3 viewDir){
     return result;
 }
 
-vec3 computeDirLight(DirLight light, vec3 norm, vec3 viewDir){
+vec3 computeDirLight(DirLight light, vec3 norm, vec3 viewDir, mat3 TBN){
     vec3 lightDir = normalize(-light.direction);
+
+    // ---- Transform to TBN basis ----- //
+    viewDir = TBN * viewDir;
+    lightDir = TBN * lightDir;
 
     vec3 ambient = computeAmbient(light.ambient);
     vec3 diffuse = computeDiffuse(norm, lightDir, light.diffuse);
@@ -181,8 +190,13 @@ vec3 computeDirLight(DirLight light, vec3 norm, vec3 viewDir){
     return result;
 }
 
-vec3 computeSpotLight(SpotLight light, vec3 norm, vec3 fragPos, vec3 viewDir){
+vec3 computeSpotLight(SpotLight light, vec3 norm, vec3 fragPos, vec3 viewDir,
+                      mat3 TBN){
     vec3 lightDir = normalize(light.position - fragPos);
+
+    // ---- Transform to TBN basis ----- //
+    viewDir = TBN * viewDir;
+    lightDir = TBN * lightDir;
 
     vec3 ambient = computeAmbient(light.ambient);
     vec3 diffuse = computeDiffuse(norm, lightDir, light.diffuse);
@@ -238,23 +252,30 @@ vec3 computeSpecular(vec3 norm, vec3 lightDir,
 }
 
 vec3 GetNormal(){
-    return normalize(Normal);
+    if(textureSize(material.normal, 0).x <= 1){
+        return normalize(Normal);
+    }else{
+        // Load normal from normal map and normalize to [-1. 1].
+        return normalize(texture(material.normal, TexCoords).rgb * 2.0 - 1.0);
+    }
 }
 
 void main() {
     vec3 norm = GetNormal();
     vec3 viewDir = normalize(viewPos - FragPos);
+    mat3 TBN = transpose(mat3(Tangent, Binormal, Normal));
 
     vec3 result = vec3(0.0f, 0.0f, 0.0f);
 
     for(int i = 0; i < pointlightCount; i++){
-        result += computePointLight(pointLights[i], norm, FragPos, viewDir);
+        result += computePointLight(pointLights[i], norm, FragPos, viewDir,
+                                    TBN);
     }
     for(int i = 0; i < dirlightCount; i++){
-        result += computeDirLight(dirLights[i], norm, viewDir);
+        result += computeDirLight(dirLights[i], norm, viewDir, TBN);
     }
     for(int i = 0; i < spotlightCount; i++){
-        result += computeSpotLight(spotLights[i], norm, FragPos, viewDir);
+        result += computeSpotLight(spotLights[i], norm, FragPos, viewDir, TBN);
     }
 
     color = vec4(result, material.alpha);

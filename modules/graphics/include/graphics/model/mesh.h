@@ -71,16 +71,6 @@ public:
     std::string toString() const;
 
 protected:
-    /*
-     * Computes the Tanget Basis for all faces
-     */
-    void computeTangetBasis();
-
-    /*
-     * Computes Tanget Basis for the face represented by the vertices
-     */
-    void computeAndStoreTangetBasis(Vertex &v1, Vertex &v2, Vertex &v3);
-
     void initBuffers();
 
     /*
@@ -90,6 +80,7 @@ protected:
     void BindTexture(std::shared_ptr<Texture2D> texture,
                      std::string program_location,
                      const Program &program, int id);
+    void unbindTextures();
 
     void bindColor(const Program &program);
 
