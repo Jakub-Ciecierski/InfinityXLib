@@ -10,7 +10,7 @@
 #include <object/game_object.h>
 #include <engine_gui/views/scene_view/game_object_view.h>
 #include <engine_gui/views/scene_view/game_component_view.h>
-#include <engine_gui/views/scene_manipulator_view.h>
+#include <engine_gui/views/scene_view/scene_manipulator_view.h>
 
 namespace ifx {
 
@@ -31,28 +31,50 @@ void SceneView::Render(){
 
 void SceneView::RenderWindow(){
     ImGui::Begin("Scene");
-    RenderGameObjectsList(scene_->game_objects());
+    RenderGameObjectsList();
+    RenderSelectedGameObject();
+    RenderSelectedGameComponent();
+    RenderManipulator();
     ImGui::End();
+}
 
-    ImGui::Begin("Selected Game Object");
-    if(selected_game_object_)
-        game_object_view_->Render(selected_game_object_, scene_);
-    ImGui::End();
+void SceneView::RenderGameObjectsList(){
+    if (ImGui::CollapsingHeader("Scene Objects")) {
+        RenderGameObjectsList(scene_->game_objects());
+    }
+}
 
-    ImGui::Begin("Selected Game Component");
-    if(selected_game_component_)
-        game_component_view_->Render(selected_game_component_);
-    ImGui::End();
-
-    ImGui::Begin("Manipulator");
-    if(selected_game_object_) {
-        auto active_camera = scene_->GetActiveCamera();
-        if (active_camera) {
-            scene_manipulator_view_->Render(selected_game_object_,
-                                            active_camera);
+void SceneView::RenderSelectedGameObject(){
+    if (selected_game_object_) {
+        if (ImGui::CollapsingHeader("Selected Game Object")) {
+            ImGui::PushID("0");
+            game_object_view_->Render(selected_game_object_, scene_);
+            ImGui::PopID();
         }
     }
-    ImGui::End();
+}
+
+void SceneView::RenderSelectedGameComponent(){
+    if (selected_game_component_) {
+        if (ImGui::CollapsingHeader("Selected Game Component")) {
+            ImGui::PushID("1");
+            game_component_view_->Render(selected_game_component_);
+            ImGui::PopID();
+        }
+    }
+}
+
+void SceneView::RenderManipulator(){
+    if (selected_game_object_) {
+        (ImGui::CollapsingHeader("Manipulator"));
+        {
+            auto active_camera = scene_->GetActiveCamera();
+            if (active_camera) {
+                scene_manipulator_view_->Render(selected_game_object_,
+                                                active_camera);
+            }
+        }
+    }
 }
 
 void SceneView::RenderGameObjectsList(

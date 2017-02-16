@@ -32,6 +32,12 @@ public:
 
 private:
     void RenderWindow();
+
+    void RenderGameObjectsList();
+    void RenderSelectedGameObject();
+    void RenderSelectedGameComponent();
+    void RenderManipulator();
+
     void RenderGameObjectsList(
             std::vector<std::shared_ptr<GameObject>>& game_objects);
     void RenderGameComponentsList(std::shared_ptr<GameObject> game_object,
@@ -40,6 +46,7 @@ private:
     std::string GetComponentName(std::shared_ptr<GameComponent> game_component,
                                  int game_object_id,
                                  int component_id);
+
 
     std::shared_ptr<SceneContainer> scene_;
 
