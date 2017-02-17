@@ -9,7 +9,8 @@ namespace ifx {
 SceneManipulator::SceneManipulator() :
     movable_object_(nullptr),
     camera_(nullptr),
-    operation_(SceneManipulatorOperation::TRANSLATE){
+    operation_(SceneManipulatorOperation::TRANSLATE),
+    show_(true){
     ImGuizmo::Enable(true);
 }
 

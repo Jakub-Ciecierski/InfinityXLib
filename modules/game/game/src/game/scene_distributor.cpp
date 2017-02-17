@@ -2,7 +2,7 @@
 
 #include <graphics/rendering/scene_renderer.h>
 #include <physics/physics_simulation.h>
-#include <object/game_object.h>
+#include <game/game_object.h>
 #include <object/game_component.h>
 
 #include <object/render_object.h>
@@ -23,42 +23,50 @@ SceneDistributor::~SceneDistributor(){}
 void SceneDistributor::Add(std::shared_ptr<GameObject> game_object){
     auto components = game_object->GetComponents();
     for(auto& component : components){
-        switch(component->type()){
-            case GameComponentType::RENDER:
-                Add(std::static_pointer_cast<RenderObject>(component));
-                break;
-            case GameComponentType::LIGHT:
-                Add(std::static_pointer_cast<LightSource>(component));
-                break;
-            case GameComponentType::CAMERA:
-                Add(std::static_pointer_cast<Camera>(component));
-                break;
-            case GameComponentType::PHYSICS:
-                Add(std::static_pointer_cast<RigidBody>(component));
-                break;
-        }
+        Add(component);
     }
 }
 
 bool SceneDistributor::Remove(std::shared_ptr<GameObject> game_object){
     auto components = game_object->GetComponents();
     for(auto& component : components){
-        switch(component->type()){
-            case GameComponentType::RENDER:
-                Remove(std::static_pointer_cast<RenderObject>(component));
-                break;
-            case GameComponentType::LIGHT:
-                Remove(std::static_pointer_cast<LightSource>(component));
-                break;
-            case GameComponentType::CAMERA:
-                Remove(std::static_pointer_cast<Camera>(component));
-                break;
-            case GameComponentType::PHYSICS:
-                Remove(std::static_pointer_cast<RigidBody>(component));
-                break;
-        }
+        Remove(component);
     }
     return true;
+}
+
+void SceneDistributor::Add(std::shared_ptr<GameComponent> game_component){
+    switch(game_component->type()){
+        case GameComponentType::RENDER:
+            Add(std::static_pointer_cast<RenderObject>(game_component));
+            break;
+        case GameComponentType::LIGHT:
+            Add(std::static_pointer_cast<LightSource>(game_component));
+            break;
+        case GameComponentType::CAMERA:
+            Add(std::static_pointer_cast<Camera>(game_component));
+            break;
+        case GameComponentType::PHYSICS:
+            Add(std::static_pointer_cast<RigidBody>(game_component));
+            break;
+    }
+}
+
+bool SceneDistributor::Remove(std::shared_ptr<GameComponent> game_component){
+    switch(game_component->type()){
+        case GameComponentType::RENDER:
+            Remove(std::static_pointer_cast<RenderObject>(game_component));
+            break;
+        case GameComponentType::LIGHT:
+            Remove(std::static_pointer_cast<LightSource>(game_component));
+            break;
+        case GameComponentType::CAMERA:
+            Remove(std::static_pointer_cast<Camera>(game_component));
+            break;
+        case GameComponentType::PHYSICS:
+            Remove(std::static_pointer_cast<RigidBody>(game_component));
+            break;
+    }
 }
 
 void SceneDistributor::Add(std::shared_ptr<RenderObject> render_object){

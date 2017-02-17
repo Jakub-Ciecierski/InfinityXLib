@@ -4,7 +4,6 @@
 #include <memory>
 
 class btDiscreteDynamicsWorld;
-class btFractureDynamicsWorld;
 
 namespace ifx {
 
@@ -31,8 +30,7 @@ private:
 
     std::shared_ptr<btDiscreteDynamicsWorld> CreateDiscreteDynamicWorld(
             const std::shared_ptr<BulletPhysicsSimulationCreateParams>);
-    std::shared_ptr<btFractureDynamicsWorld> CreateFractureDynamicWorld(
-            const std::shared_ptr<BulletPhysicsSimulationCreateParams>);
+
     DynamicWorldType dynamic_world_type_;
 };
 }

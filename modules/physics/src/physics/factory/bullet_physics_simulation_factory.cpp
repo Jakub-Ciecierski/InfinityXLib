@@ -1,6 +1,5 @@
 #include "physics/factory/bullet_physics_simulation_factory.h"
 
-#include <physics/bullet_extensions/btFractureDynamicsWorld.h>
 #include <physics/physics_simulation.h>
 #include <physics/simulations/bullet_physics_simulation.h>
 #include <BulletCollision/BroadphaseCollision/btDbvtBroadphase.h>
@@ -53,7 +52,7 @@ BulletPhysicsSimulationFactory::CreateBulletDynamics(){
             break;
         case DynamicWorldType::FRACTURE:
             create_params->dynamics_world
-                    = CreateFractureDynamicWorld(create_params);
+                    = CreateDiscreteDynamicWorld(create_params);
             break;
     }
     return create_params;
@@ -64,16 +63,6 @@ BulletPhysicsSimulationFactory::CreateDiscreteDynamicWorld(
         const std::shared_ptr<BulletPhysicsSimulationCreateParams> params){
     return std::shared_ptr<btDiscreteDynamicsWorld>(
             new btDiscreteDynamicsWorld(
-                    params->dispatcher.get(),
-                    params->broadphase.get(),
-                    params->solver.get(),
-                    params->collision_configuration.get()));
-}
-std::shared_ptr<btFractureDynamicsWorld>
-BulletPhysicsSimulationFactory::CreateFractureDynamicWorld(
-        const std::shared_ptr<BulletPhysicsSimulationCreateParams> params){
-    return std::shared_ptr<btFractureDynamicsWorld>(
-            new btFractureDynamicsWorld(
                     params->dispatcher.get(),
                     params->broadphase.get(),
                     params->solver.get(),

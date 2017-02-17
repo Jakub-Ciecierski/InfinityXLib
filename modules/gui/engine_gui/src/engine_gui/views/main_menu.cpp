@@ -47,6 +47,13 @@ void MainMenu::RenderView(){
         ImGui::MenuItem("Scene", NULL, scene_view_->show());
         ImGui::MenuItem("Physics", NULL, physics_simulation_view_->show());
         ImGui::MenuItem("ImGui Demo", NULL, imgui_demo_view_->show());
+
+        static bool show_all = true;
+        if(ImGui::MenuItem("All", NULL, &show_all)){
+            scene_view_->show(show_all);
+            physics_simulation_view_->show(show_all);
+        }
+
         ImGui::EndMenu();
     }
 }

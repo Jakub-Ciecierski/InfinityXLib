@@ -32,6 +32,8 @@ public:
 
     bool Exists(std::shared_ptr<GameObject> game_object);
 
+    std::shared_ptr<GameObject> CreateAndAddEmptyGameObject();
+
     std::shared_ptr<Camera> GetActiveCamera();
 
 private:

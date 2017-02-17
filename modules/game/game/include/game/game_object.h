@@ -8,6 +8,7 @@
 namespace ifx {
 
 class GameComponent;
+class SceneDistributor;
 enum class GameComponentType;
 
 /**
@@ -21,7 +22,8 @@ enum class GameComponentType;
  */
 class GameObject : public MovableObject {
 public:
-    GameObject();
+    GameObject(std::shared_ptr<SceneDistributor> scene_distributor);
+
     ~GameObject();
 
     // Overridden from MovableObject
@@ -34,8 +36,11 @@ public:
             const GameComponentType&& type);
     std::vector<std::shared_ptr<GameComponent>>& GetComponents();
 
+    bool Exists(std::shared_ptr<GameComponent> game_component);
 private:
     std::vector<std::shared_ptr<GameComponent>> components_;
+
+    std::shared_ptr<SceneDistributor> scene_distributor_;
 
 };
 }

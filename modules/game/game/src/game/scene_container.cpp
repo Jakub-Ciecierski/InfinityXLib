@@ -1,6 +1,6 @@
 #include "game/scene_container.h"
 
-#include <object/game_object.h>
+#include <game/game_object.h>
 #include <game/scene_distributor.h>
 #include <object/game_component.h>
 #include <graphics/rendering/camera/camera.h>
@@ -22,8 +22,8 @@ void SceneContainer::Update(){
 }
 
 void SceneContainer::Add(std::shared_ptr<GameObject> game_object){
-    OnAdd(game_object);
-
+    if(Exists(game_object))
+        return;
     game_objects_.push_back(game_object);
 }
 
@@ -46,6 +46,13 @@ bool SceneContainer::Exists(std::shared_ptr<GameObject> game_object){
         }
     }
     return false;
+}
+
+std::shared_ptr<GameObject> SceneContainer::CreateAndAddEmptyGameObject(){
+    auto game_object = std::shared_ptr<GameObject>(
+            new GameObject(scene_distributor_));
+    Add(game_object);
+    return game_object;
 }
 
 std::shared_ptr<Camera> SceneContainer::GetActiveCamera(){

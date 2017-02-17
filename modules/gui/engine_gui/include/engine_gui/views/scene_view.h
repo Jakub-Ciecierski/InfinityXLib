@@ -36,14 +36,23 @@ private:
     void RenderWindow();
 
     void RenderGameObjectsList();
+    void RenderGameObjectsListContextMenu();
+
     void RenderSelectedGameObject();
     void RenderSelectedGameComponent();
     void RenderManipulator();
 
     void RenderGameObjectsList(
             std::vector<std::shared_ptr<GameObject>>& game_objects);
+    void RenderGameObjectContextMenu(std::shared_ptr<GameObject> game_object,
+                                     int game_object_id);
+
     void RenderGameComponentsList(std::shared_ptr<GameObject> game_object,
                                   int game_object_id);
+    void RenderGameComponentContextMenu(
+            std::shared_ptr<GameObject> game_object,
+            std::shared_ptr<GameComponent> component,
+            int component_id);
 
     std::string GetComponentName(std::shared_ptr<GameComponent> game_component,
                                  int game_object_id,

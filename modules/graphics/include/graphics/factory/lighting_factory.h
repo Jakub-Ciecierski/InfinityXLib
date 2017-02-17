@@ -6,6 +6,8 @@
 #include <graphics/lighting/types/light_spotlight.h>
 #include <graphics/rendering/camera/camera.h>
 
+#include <memory>
+
 namespace ifx {
 /*
  * Loads specific lights to the system
@@ -18,11 +20,9 @@ public:
     LightingFactory();
     ~LightingFactory();
 
-    LightPoint *loadPointLight();
-    LightDirectional *loadDirLight();
-    LightSpotlight *loadSpotlight();
-
-    LightGroup* createGroupLight(Camera* camera);
+    std::shared_ptr<ifx::LightPoint> CreatePointLight();
+    std::shared_ptr<ifx::LightDirectional> CreateDirectionalLight();
+    std::shared_ptr<ifx::LightSpotlight> CreateSpotLight();
 
 };
 }

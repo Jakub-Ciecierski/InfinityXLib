@@ -5,7 +5,7 @@
 #include <game/factory/game_factory.h>
 #include <game/game.h>
 #include <game/scene_container.h>
-#include <object/game_object.h>
+#include <game/game_object.h>
 #include <graphics/factory/scene_factory.h>
 #include <graphics/lighting/light_source.h>
 #include <graphics/lighting/types/light_directional.h>
@@ -21,7 +21,8 @@
 
 std::shared_ptr<ifx::LightDirectional> CreateDirectionalLight();
 std::shared_ptr<ifx::LightSpotlight> CreateSpotLight();
-std::shared_ptr<ifx::GameObject> CreateCyborg();
+std::shared_ptr<ifx::GameObject> CreateCyborg(
+        std::shared_ptr<ifx::SceneContainer> scene);
 
 std::shared_ptr<ifx::LightDirectional> CreateDirectionalLight(){
     ifx::LightParams light;
@@ -63,7 +64,8 @@ std::shared_ptr<ifx::LightSpotlight> CreateSpotLight(){
     return light_source;
 }
 
-std::shared_ptr<ifx::GameObject> CreateCyborg(){
+std::shared_ptr<ifx::GameObject> CreateCyborg(
+        std::shared_ptr<ifx::SceneContainer> scene){
     ifx::Resources& resources = ifx::Resources::GetInstance();
     std::string vertex_path =
             resources.GetResourcePath("main/normal_mapping/main.vs",
@@ -86,7 +88,7 @@ std::shared_ptr<ifx::GameObject> CreateCyborg(){
     float scaleFactor = 0.5f;
     render_object->scale(glm::vec3(scaleFactor, scaleFactor, scaleFactor));
 
-    auto game_object = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
+    auto game_object = scene->CreateAndAddEmptyGameObject();
     game_object->Add(render_object);
 
     return game_object;
@@ -96,11 +98,11 @@ int main() {
     auto game_factory
             = std::shared_ptr<ifx::GameFactory>(new ifx::GameFactory());
     auto game = game_factory->Create();
-
-    auto game_object1 = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
-    auto game_object2 = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
-    auto game_object3 = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
-    auto game_object4 = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
+    auto scene = game->scene();
+    auto game_object1 = scene->CreateAndAddEmptyGameObject();
+    auto game_object2 = scene->CreateAndAddEmptyGameObject();
+    auto game_object3 = scene->CreateAndAddEmptyGameObject();
+    auto game_object4 = scene->CreateAndAddEmptyGameObject();
 
     auto lamp = ifx::RenderObjectFactory().CreateLampObject();
     lamp->moveTo(glm::vec3(0.0f, 2.7f, 0.0f));
@@ -115,11 +117,7 @@ int main() {
     game_object4->Add(
             ifx::SceneFactory().CreateCamera(game->game_loop()->renderer()->window()));
 
-    game->scene()->Add(game_object1);
-    game->scene()->Add(game_object2);
-    game->scene()->Add(game_object3);
-    game->scene()->Add(game_object4);
-    game->scene()->Add(CreateCyborg());
+    CreateCyborg(game->scene());
 
     auto gui = std::shared_ptr<ExampleGUI>(
             new ExampleGUI(
