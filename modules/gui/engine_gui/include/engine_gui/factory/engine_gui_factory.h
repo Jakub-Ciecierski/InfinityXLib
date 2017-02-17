@@ -12,6 +12,7 @@ class SceneView;
 class SceneContainer;
 class PhysicsSimulation;
 class PhysicsSimulationView;
+class ImGuiDemoView;
 
 class EngineGUIFactory {
 public:
@@ -22,11 +23,14 @@ public:
             std::shared_ptr<SceneContainer> scene,
             std::shared_ptr<PhysicsSimulation> physics_simulation);
 private:
-    std::shared_ptr<MainMenu> CreateMainMenu();
     std::shared_ptr<SceneView> CreateSceneView(
             std::shared_ptr<SceneContainer> scene);
     std::shared_ptr<PhysicsSimulationView> CreatePhysicsSimulationView(
             std::shared_ptr<PhysicsSimulation> physics_simulation);
+    std::shared_ptr<MainMenu> CreateMainMenu(
+            std::shared_ptr<SceneView> scene_view,
+            std::shared_ptr<PhysicsSimulationView> physics_simulation_view,
+            std::shared_ptr<ImGuiDemoView> imgui_demo_view);
 };
 
 }

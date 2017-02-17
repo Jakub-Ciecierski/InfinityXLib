@@ -105,9 +105,8 @@ void Renderer::Render(){
     if(rendering_type_ == RenderingType::FBO_TEXTURE)
         RenderFBOTexture();
 
-    if(gui_){
+    if(gui_)
         gui_->Render();
-    }
 
     glfwSwapBuffers(window_->getHandle());
 
@@ -133,6 +132,10 @@ void Renderer::RenderNormalNoShadow(){
 void Renderer::RenderNormalShadowMapping(){
     shadow_mapping_->Render(scene_renderer_);
 
+    // Shadow mapping binds its own FBO
+    if(rendering_type_ == RenderingType::FBO_TEXTURE)
+        fbo_renderer_->Bind();
+
     glViewport(0, 0, *(window_->width()), *(window_->height()));
     glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -142,7 +145,7 @@ void Renderer::RenderNormalShadowMapping(){
 }
 
 void Renderer::RenderFBOTexture(){
-    if(fbo_renderer_ == nullptr)
+    if(!fbo_renderer_)
         return;
     // First Pass
     fbo_renderer_->Bind();

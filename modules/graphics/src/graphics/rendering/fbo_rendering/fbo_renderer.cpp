@@ -29,7 +29,8 @@ void FBORenderer::Render(){
 }
 
 void FBORenderer::Render(Program* program){
-    if (program_ == nullptr) return;
+    if (!program_)
+        return;
 
     fbo_->unbind();
 

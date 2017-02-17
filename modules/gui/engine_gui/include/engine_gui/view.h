@@ -9,10 +9,10 @@ public:
     virtual ~View();
 
     void show(bool val){show_ = val;}
-    bool show(){return show_;}
+    bool* show(){return &show_;}
 
     virtual void Render() = 0;
-private:
+protected:
     bool show_;
 
 };

@@ -31,8 +31,7 @@ float[kernel_size] getEdgeDetectionKernel();
 
 void main()
 {
-    color = getGrayscale();
-    //color = getConvolutionColor();
+    color = getColor();
 }
 
 vec4 getColor(){

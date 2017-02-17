@@ -30,6 +30,8 @@ void SceneView::Render(){
 }
 
 void SceneView::RenderWindow(){
+    if(!show_)
+        return;
     ImGui::Begin("Scene");
     RenderGameObjectsList();
     RenderSelectedGameObject();

@@ -11,6 +11,9 @@ PhysicsSimulationView::PhysicsSimulationView(
 PhysicsSimulationView::~PhysicsSimulationView(){}
 
 void PhysicsSimulationView::Render(){
+    if(!show_)
+        return;
+
     ImGui::Begin("Physics");
 
     if(ImGui::TreeNode("Simulation")){
