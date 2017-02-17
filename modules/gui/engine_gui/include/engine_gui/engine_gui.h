@@ -35,6 +35,8 @@ public:
     void RenderSceneObjects();
 
 private:
+    void SetDefaultTheme();
+
     std::shared_ptr<MainMenu> main_menu_;
     std::shared_ptr<SceneView> scene_view_;
     std::shared_ptr<PhysicsSimulationView> physics_simulation_view_;

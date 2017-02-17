@@ -3,14 +3,9 @@
 
 namespace ifx {
 
-class Theme {
-public:
+void GUIThemeDracula();
+void GUIThemeIMGUIDefault();
 
-    Theme();
-    ~Theme();
-
-private:
-};
 }
 
 #endif //PROJECT_THEME_H

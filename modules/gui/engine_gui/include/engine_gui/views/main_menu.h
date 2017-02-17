@@ -24,6 +24,7 @@ private:
     void RenderFile();
     void RenderEdit();
     void RenderView();
+    void RenderWindow();
 
     std::shared_ptr<SceneView> scene_view_;
     std::shared_ptr<PhysicsSimulationView> physics_simulation_view_;

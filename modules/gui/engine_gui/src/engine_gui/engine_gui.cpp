@@ -5,6 +5,7 @@
 #include <engine_gui/views/physics_simulation_view.h>
 #include <engine_gui/views/imgui_demo_view.h>
 #include <engine_gui/scene_manipulator.h>
+#include <gui/theme.h>
 
 namespace ifx{
 
@@ -12,7 +13,9 @@ EngineGUI::EngineGUI(EngineGUICreateParams& create_params) :
         main_menu_(create_params.main_menu),
         scene_view_(create_params.scene_view),
         physics_simulation_view_(create_params.physics_simulation_view),
-        imgui_demo_view_(create_params.imgui_demo_view){}
+        imgui_demo_view_(create_params.imgui_demo_view){
+    SetDefaultTheme();
+}
 
 EngineGUI::~EngineGUI(){}
 
@@ -29,6 +32,10 @@ void EngineGUI::Render(){
 
 void EngineGUI::RenderSceneObjects(){
     scene_view_->scene_manipulator()->Manipulate();
+}
+
+void EngineGUI::SetDefaultTheme(){
+    GUIThemeDracula();
 }
 
 }
