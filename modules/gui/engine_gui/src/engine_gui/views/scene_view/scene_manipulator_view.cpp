@@ -3,7 +3,9 @@
 
 namespace ifx{
 
-SceneManipulatorView::SceneManipulatorView() :
+SceneManipulatorView::SceneManipulatorView(
+        std::shared_ptr<SceneManipulator> scene_manipulator) :
+        scene_manipulator_(scene_manipulator),
         current_operation_(SceneManipulatorOperation::ROTATE),
         render_(true){}
 SceneManipulatorView::~SceneManipulatorView(){}
@@ -11,9 +13,15 @@ SceneManipulatorView::~SceneManipulatorView(){}
 void SceneManipulatorView::Render(std::shared_ptr<MovableObject> movable_object,
                                   std::shared_ptr<Camera> camera){
     RenderConfig();
-    if(render_)
+    scene_manipulator_->show(render_);
+    scene_manipulator_->movable_object(movable_object);
+    scene_manipulator_->camera(camera);
+    scene_manipulator_->operation(current_operation_);
+
+    /*
         scene_manipulator_->Manipulate(movable_object,
                                        camera, current_operation_);
+                                       */
 }
 
 void SceneManipulatorView::RenderConfig(){

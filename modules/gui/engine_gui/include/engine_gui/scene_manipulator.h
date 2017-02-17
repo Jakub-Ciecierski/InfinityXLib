@@ -23,9 +23,19 @@ public:
     SceneManipulator();
     ~SceneManipulator();
 
+    void movable_object(std::shared_ptr<MovableObject> object){
+        movable_object_ = object;};
+    void camera(std::shared_ptr<Camera> new_camera){camera_ = new_camera;}
+    void operation(SceneManipulatorOperation new_operation){
+        operation_ = new_operation;}
+
+    bool show(){return show_;}
+    void show(bool v){show_ = v;}
+
     void Manipulate(std::shared_ptr<MovableObject> movable_object,
                     std::shared_ptr<Camera> camera,
                     SceneManipulatorOperation operation);
+    void Manipulate();
 private:
     void Manipulate(std::shared_ptr<MovableObject> movable_object,
                     const float* new_model_matrix,
@@ -34,6 +44,11 @@ private:
     ImGuizmo::OPERATION GetNativeOperationMode(
             SceneManipulatorOperation operation);
 
+    std::shared_ptr<MovableObject> movable_object_;
+    std::shared_ptr<Camera> camera_;
+    SceneManipulatorOperation operation_;
+
+    bool show_;
 };
 }
 

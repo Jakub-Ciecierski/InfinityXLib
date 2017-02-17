@@ -18,6 +18,11 @@ void ExampleGUI::Render(){
     NewFrame();
 
     engine_gui_->Render();
+    RenderSceneObjects();
 
     ImGui::Render();
+}
+
+void ExampleGUI::RenderSceneObjects(){
+    engine_gui_->RenderSceneObjects();
 }

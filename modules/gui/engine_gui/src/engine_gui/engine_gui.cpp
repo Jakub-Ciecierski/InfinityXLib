@@ -4,8 +4,7 @@
 #include <engine_gui/views/scene_view.h>
 #include <engine_gui/views/physics_simulation_view.h>
 #include <engine_gui/views/imgui_demo_view.h>
-
-#include <gui/imgui/imgui.h>
+#include <engine_gui/scene_manipulator.h>
 
 namespace ifx{
 
@@ -26,6 +25,10 @@ void EngineGUI::Render(){
         physics_simulation_view_->Render();
     if(imgui_demo_view_)
         imgui_demo_view_->Render();
+}
+
+void EngineGUI::RenderSceneObjects(){
+    scene_view_->scene_manipulator()->Manipulate();
 }
 
 }

@@ -16,7 +16,7 @@ class Camera;
 class SceneManipulatorView {
 public:
 
-    SceneManipulatorView();
+    SceneManipulatorView(std::shared_ptr<SceneManipulator> scene_manipulator);
     ~SceneManipulatorView();
 
     void Render(std::shared_ptr<MovableObject> movable_object,

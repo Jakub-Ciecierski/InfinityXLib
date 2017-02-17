@@ -6,7 +6,10 @@
 
 namespace ifx {
 
-SceneManipulator::SceneManipulator() {
+SceneManipulator::SceneManipulator() :
+    movable_object_(nullptr),
+    camera_(nullptr),
+    operation_(SceneManipulatorOperation::TRANSLATE){
     ImGuizmo::Enable(true);
 }
 
@@ -30,6 +33,29 @@ void SceneManipulator::Manipulate(std::shared_ptr<MovableObject> movable_object,
 
     if (ImGuizmo::IsUsing())
         Manipulate(movable_object, new_model_matrix, operation);
+}
+
+void SceneManipulator::Manipulate() {
+    if(!show_)
+        return;
+    if(!movable_object_ || !camera_)
+        return;
+
+    ImGuizmo::BeginFrame();
+
+    const float *view = glm::value_ptr(camera_->getViewMatrix());
+    const float *projection = glm::value_ptr(camera_->getProjectionMatrix());
+
+    auto model = movable_object_->GetModelMatrix();
+    float *new_model_matrix = glm::value_ptr(model);
+
+    ImGuizmo::Manipulate(view, projection,
+                         GetNativeOperationMode(operation_),
+                         ImGuizmo::MODE::WORLD,
+                         new_model_matrix);
+
+    if (ImGuizmo::IsUsing())
+        Manipulate(movable_object_, new_model_matrix, operation_);
 }
 
 void SceneManipulator::Manipulate(std::shared_ptr<MovableObject> movable_object,

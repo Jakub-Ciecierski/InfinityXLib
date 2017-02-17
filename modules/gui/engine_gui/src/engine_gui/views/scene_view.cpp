@@ -11,6 +11,7 @@
 #include <engine_gui/views/scene_view/game_object_view.h>
 #include <engine_gui/views/scene_view/game_component_view.h>
 #include <engine_gui/views/scene_view/scene_manipulator_view.h>
+#include <engine_gui/scene_manipulator.h>
 
 namespace ifx {
 
@@ -18,9 +19,11 @@ SceneView::SceneView(std::shared_ptr<SceneContainer> scene) :
         scene_(scene),
         selected_game_object_(nullptr),
         selected_game_component_(nullptr){
+    scene_manipulator_
+            = std::shared_ptr<SceneManipulator>(new SceneManipulator());
     game_object_view_.reset(new GameObjectView());
     game_component_view_.reset(new GameComponentView());
-    scene_manipulator_view_.reset(new SceneManipulatorView());
+    scene_manipulator_view_.reset(new SceneManipulatorView(scene_manipulator_));
 }
 
 SceneView::~SceneView(){ }

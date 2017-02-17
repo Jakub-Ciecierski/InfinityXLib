@@ -24,7 +24,15 @@ public:
 
     std::shared_ptr<SceneView> scene_view(){return scene_view_;}
 
+    /**
+     * Renders windows and other non scene related stuff.
+     */
     void Render();
+
+    /**
+     * Renders scene objects e.g. manipulator.
+     */
+    void RenderSceneObjects();
 
 private:
     std::shared_ptr<MainMenu> main_menu_;

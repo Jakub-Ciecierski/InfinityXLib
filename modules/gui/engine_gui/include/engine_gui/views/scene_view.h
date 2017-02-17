@@ -16,6 +16,7 @@ class GameComponent;
 class GameObjectView;
 class GameComponentView;
 class SceneManipulatorView;
+class SceneManipulator;
 
 class SceneView : public View {
 public:
@@ -23,10 +24,11 @@ public:
     SceneView(std::shared_ptr<SceneContainer> scene);
     ~SceneView();
 
-    void SetSelectedGameObject(
-            std::shared_ptr<GameObject> selected_game_object){
-        selected_game_object_ = selected_game_object;
-    }
+    std::shared_ptr<SceneManipulator> scene_manipulator(){
+        return scene_manipulator_;}
+
+    void SetSelectedGameObject(std::shared_ptr<GameObject> game_object){
+        selected_game_object_ = game_object;}
 
     void Render() override;
 
@@ -49,6 +51,7 @@ private:
 
 
     std::shared_ptr<SceneContainer> scene_;
+    std::shared_ptr<SceneManipulator> scene_manipulator_;
 
     std::shared_ptr<GameObject> selected_game_object_;
     std::shared_ptr<GameComponent> selected_game_component_;

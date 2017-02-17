@@ -127,6 +127,7 @@ int main() {
                     game->scene(),
                     game->game_loop()->physics_simulation()));
     game->game_loop()->renderer()->SetGUI(gui);
-
+    game->game_loop()->renderer()->SetRenderingType
+            (ifx::RenderingType::FBO_TEXTURE);
     game->Start();
 }

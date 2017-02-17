@@ -17,6 +17,12 @@ public:
     void NewFrame();
 
     virtual void Render() = 0;
+
+    /**
+     * Renders objects to apear in the scene. (e.g. scene manipulator)
+     */
+    virtual void RenderSceneObjects() = 0;
+
 };
 }
 
