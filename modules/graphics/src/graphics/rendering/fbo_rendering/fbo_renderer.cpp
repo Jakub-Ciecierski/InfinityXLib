@@ -25,6 +25,7 @@ void FBORenderer::Bind(){
 }
 
 void FBORenderer::Render(){
+    glDisable(GL_DEPTH_TEST);
     Render(program_.get());
 }
 

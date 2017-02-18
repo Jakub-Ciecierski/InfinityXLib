@@ -1,9 +1,8 @@
 #include "graphics/rendering/shadows/shadow_mapping.h"
 
 #include <graphics/lighting/light_group.h>
-#include <graphics/lighting/types/light_directional.h>
+#include <graphics/lighting/types/light_spotlight.h>
 #include <graphics/shaders/buffers/fbo.h>
-#include <graphics/shaders/program.h>
 #include <graphics/rendering/scene_renderer.h>
 
 namespace ifx {
@@ -19,9 +18,11 @@ ShadowMapping::~ShadowMapping(){}
 
 void ShadowMapping::Render(const std::shared_ptr<SceneRenderer> scene){
     glViewport(0, 0, dimensions_.width, dimensions_.height);
-
+/*
     const std::vector<std::shared_ptr<LightDirectional>> lights
-            = scene->light_group()->GetDirectionalLights();
+            = scene->light_group()->GetDirectionalLights();*/
+    const std::vector<std::shared_ptr<LightSpotlight>> lights
+            = scene->light_group()->GetSpotlights();
     for(unsigned int i = 0; i < lights.size(); i++){
         program_->use();
         BindLightMatrix(program_.get(), lights[i].get());
@@ -74,7 +75,6 @@ void ShadowMapping::BindLightMatrix(const Program* program,
     GLint lightSpaceMatrixLoc
             = glGetUniformLocation(program->getID(),
                                    LIGHT_SPACE_MATRIX_NAME.c_str());
-    glm::mat4 mat = light->GetLightSpaceMatrix();
     glUniformMatrix4fv(lightSpaceMatrixLoc, 1, GL_FALSE,
                        glm::value_ptr(light->GetLightSpaceMatrix()));
 

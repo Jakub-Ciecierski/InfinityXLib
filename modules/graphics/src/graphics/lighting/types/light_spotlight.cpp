@@ -67,5 +67,11 @@ void LightSpotlight::bind(const Program &program, int id) {
                 glm::cos(glm::radians(light_params_.outerCutOff)));
     glUniform1f(lightCutoffLoc,
                 glm::cos(glm::radians(light_params_.cutOff)));
+
+    GLint lightSpaceMatrixLoc
+            = glGetUniformLocation(program.getID(),
+                                   builder.LIGHT_SPACE_MATRIX.c_str());
+    glUniformMatrix4fv(lightSpaceMatrixLoc, 1, GL_FALSE,
+                       glm::value_ptr(GetLightSpaceMatrix()));
 }
 }

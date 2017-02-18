@@ -152,7 +152,6 @@ void Renderer::RenderFBOTexture(){
     RenderNormal();
 
     // Second Pass
-    glDisable(GL_DEPTH_TEST);
     fbo_renderer_->Render();
 }
 

@@ -6,7 +6,7 @@
 #include <game/scene_container.h>
 
 #include <object/render_object.h>
-#include <object/game_object.h>
+#include <game/game_object.h>
 
 #include <graphics/lighting/types/light_point.h>
 #include <graphics/lighting/light_group.h>
@@ -17,6 +17,7 @@
 #include <memory>
 
 TEST(Game, GameFactory_Default) {
+
     auto game_factory
             = std::shared_ptr<ifx::GameFactory>(new ifx::GameFactory());
     auto game = game_factory->Create();
@@ -32,13 +33,11 @@ TEST(Game,
             new ifx::RenderObject(ObjectID(2), nullptr));
     auto light = std::shared_ptr<ifx::LightPoint>(
             new ifx::LightPoint(ifx::LightParams{}));
+    auto game_object = game1->scene()->CreateAndAddEmptyGameObject();
 
-    auto game_object = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
     game_object->Add(render_object);
     game_object->Add(light);
 
-    auto scene = game1->scene();
-    scene->Add(game_object);
 
     auto scene_renderer = game1->game_loop()->renderer()->scene_renderer();
 
@@ -58,12 +57,10 @@ TEST(Game,
     const auto light = std::shared_ptr<ifx::LightPoint>(
             new ifx::LightPoint(ifx::LightParams{}));
 
-    auto game_object = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
+    auto game_object = game->scene()->CreateAndAddEmptyGameObject();
+
     game_object->Add(render_object);
     game_object->Add(light);
-
-    auto scene = game->scene();
-    scene->Add(game_object);
 
     auto scene_renderer = game->game_loop()->renderer()->scene_renderer();
 
@@ -83,16 +80,11 @@ TEST(Game,
             new ifx::RenderObject(ObjectID(2), nullptr));
     auto render_object2 = std::shared_ptr<ifx::RenderObject>(
             new ifx::RenderObject(ObjectID(2), nullptr));
-
-    auto game_object1 = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
-    auto game_object2 = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
+    auto game_object1 = game->scene()->CreateAndAddEmptyGameObject();
+    auto game_object2 = game->scene()->CreateAndAddEmptyGameObject();
 
     game_object1->Add(render_object1);
     game_object2->Add(render_object2);
-
-    auto scene = game->scene();
-    scene->Add(game_object1);
-    scene->Add(game_object2);
 
     auto scene_renderer = game->game_loop()->renderer()->scene_renderer();
 
@@ -112,8 +104,8 @@ TEST(Game,
     auto render_object2 = std::shared_ptr<ifx::RenderObject>(
             new ifx::RenderObject(ObjectID(2), nullptr));
 
-    auto game_object1 = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
-    auto game_object2 = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
+    auto game_object1 = game->scene()->CreateAndAddEmptyGameObject();
+    auto game_object2 = game->scene()->CreateAndAddEmptyGameObject();
 
     game_object1->Add(render_object1);
     game_object2->Add(render_object2);

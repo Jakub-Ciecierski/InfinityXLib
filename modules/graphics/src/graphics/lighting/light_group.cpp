@@ -41,6 +41,19 @@ LightGroup::GetDirectionalLights() const {
     return out_lights;
 }
 
+const std::vector<std::shared_ptr<LightSpotlight>>
+LightGroup::GetSpotlights() const {
+    std::vector<std::shared_ptr<LightSpotlight>> out_lights;
+
+    for(auto& light : lights_){
+        if(light->light_type() == LightType::SPOTLIGHT){
+            out_lights.push_back
+                    (std::static_pointer_cast<LightSpotlight>(light));
+        }
+    }
+    return out_lights;
+}
+
 void LightGroup::Add(std::shared_ptr<LightSource> light_source){
     this->lights_.push_back(light_source);
 

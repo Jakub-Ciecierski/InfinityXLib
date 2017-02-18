@@ -25,6 +25,8 @@ namespace ifx {
         std::string ATTEN_LINEAR;
         std::string ATTEN_QUAD;
 
+        std::string LIGHT_SPACE_MATRIX;
+
         SpotLightShaderBuilder(int id);
 
         virtual void build() override;

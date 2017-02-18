@@ -27,6 +27,7 @@ public:
 
     const std::vector<std::shared_ptr<LightDirectional>>
             GetDirectionalLights() const;
+    const std::vector<std::shared_ptr<LightSpotlight>> GetSpotlights() const;
 
     void Add(std::shared_ptr<LightSource> light_source);
     bool Remove(std::shared_ptr<LightSource> light_source);

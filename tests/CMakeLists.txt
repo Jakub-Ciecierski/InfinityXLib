@@ -81,7 +81,8 @@ include_directories(${IFX_ROOT}/modules/gui/engine_gui/${INC_DIR})
 target_link_libraries(${APP_NAME} object_ifx
         game_ifx graphics_ifx physics_ifx math_ifx
         resources_ifx controls_ifx
-        vr_ifx gui_ifx engine_gui_ifx)
+        vr_ifx gui_ifx engine_gui_ifx
+        BulletDynamics BulletCollision)
 
 target_link_libraries(${APP_NAME} gtest gtest_main)
 target_link_libraries(${APP_NAME} SOIL)

@@ -55,6 +55,12 @@ std::shared_ptr<GameObject> SceneContainer::CreateAndAddEmptyGameObject(){
     return game_object;
 }
 
+std::shared_ptr<GameObject> SceneContainer::CreateGameObject(){
+    auto game_object = std::shared_ptr<GameObject>(
+            new GameObject(scene_distributor_));
+    return game_object;
+}
+
 std::shared_ptr<Camera> SceneContainer::GetActiveCamera(){
     std::shared_ptr<Camera> camera = nullptr;
 

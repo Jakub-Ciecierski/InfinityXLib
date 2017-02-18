@@ -69,6 +69,8 @@ struct SpotLight{
     vec3 diffuse;
     vec3 specular;
 
+    mat4 LightSpaceMatrix;
+
     float constant;
     float linear;
     float quadratic;
@@ -205,7 +207,12 @@ vec3 computeSpotLight(SpotLight light, vec3 norm, vec3 fragPos, vec3 viewDir){
     diffuse *= attenuation * intensity;
     specular *= attenuation * intensity;
 
-    vec3 result = (ambient + diffuse + specular);
+
+    vec4 fragPosLightSpace = light.LightSpaceMatrix * vec4(FragPos, 1.0);
+    float shadow = ShadowMappingCalculation(fragPosLightSpace);
+    vec3 result = (ambient + (1.0 - shadow) * (diffuse + specular));
+
+    //vec3 result = (ambient + diffuse + specular);
     return result;
 }
 
