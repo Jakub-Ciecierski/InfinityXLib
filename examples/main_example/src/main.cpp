@@ -7,6 +7,7 @@
 #include <game/scene_container.h>
 #include <game/game_object.h>
 #include <graphics/factory/scene_factory.h>
+
 #include <graphics/lighting/light_source.h>
 #include <graphics/lighting/types/light_directional.h>
 #include <graphics/lighting/types/light_spotlight.h>

@@ -16,34 +16,29 @@ ShadowMapping::ShadowMapping(Dimensions dimensions,
 
 ShadowMapping::~ShadowMapping(){}
 
-void ShadowMapping::Render(const std::shared_ptr<SceneRenderer> scene){
+void ShadowMapping::Render(const std::shared_ptr<SceneRenderer> scene,
+                           LightDirectional* light){
     glViewport(0, 0, dimensions_.width, dimensions_.height);
+
+    program_->use();
+    BindLightMatrix(program_.get(), light);
+
+    fbo_->bind();
+    glClear(GL_DEPTH_BUFFER_BIT);
+    glCullFace(GL_FRONT); // peter panning
+    scene->Render(program_);
+    glCullFace(GL_BACK); // peter panning
+    fbo_->unbind();
 /*
-    const std::vector<std::shared_ptr<LightDirectional>> lights
-            = scene->light_group()->GetDirectionalLights();*/
-    const std::vector<std::shared_ptr<LightSpotlight>> lights
-            = scene->light_group()->GetSpotlights();
-    for(unsigned int i = 0; i < lights.size(); i++){
-        program_->use();
-        BindLightMatrix(program_.get(), lights[i].get());
-
-        fbo_->bind();
-        glClear(GL_DEPTH_BUFFER_BIT);
-        glCullFace(GL_FRONT); // peter panning
-        scene->Render(program_);
-        glCullFace(GL_BACK); // peter panning
-        fbo_->unbind();
-    }
-
     glActiveTexture(GL_TEXTURE0);
     fbo_->texture()->Bind();
     glUniform1i(glGetUniformLocation(program_->getID(),
-                                     TEXTURE_SHADOW_MAP.c_str()), 0);
+                                     TEXTURE_SHADOW_MAP.c_str()), 0);*/
 }
 
 std::shared_ptr<Texture2D> ShadowMapping::CreateTexture(){
     auto texture
-            = Texture2D::MakeTexture2DEmpty("shadow_mapping",
+            = Texture2D::MakeTexture2DEmpty(NO_FILEPATH,
                                             TextureTypes::FBO,
                                             TextureInternalFormat::DEPTH_COMPONENT,
                                             TexturePixelType::FLOAT,

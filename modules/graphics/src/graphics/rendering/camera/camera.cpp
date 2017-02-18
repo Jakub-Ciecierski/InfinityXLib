@@ -3,6 +3,8 @@
 #include <controls/controls_events.h>
 #include "graphics/shaders/data/shader_data.h"
 
+#include <GLFW/glfw3.h>
+
 namespace ifx {
 
 Camera::Camera(ObjectID id,

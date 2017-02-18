@@ -15,6 +15,8 @@ namespace ifx {
 
         std::string LIGHT_SPACE_MATRIX;
 
+        std::string SHADOW_MAP;
+
         DirlightShaderBuilder(int id);
 
         ~DirlightShaderBuilder();

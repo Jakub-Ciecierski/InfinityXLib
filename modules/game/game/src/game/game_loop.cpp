@@ -6,6 +6,8 @@
 #include <game/scene_container.h>
 #include <controls/controls_events.h>
 
+#include <GLFW/glfw3.h>
+
 namespace ifx {
 
 GameLoop::GameLoop(std::shared_ptr<Renderer> renderer,

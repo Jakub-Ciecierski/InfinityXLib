@@ -3,8 +3,10 @@
 
 #include <string>
 
-#include <GLFW/glfw3.h>
+//#include <GLFW/glfw3.h>
 #include <controls/event_handler.h>
+
+struct GLFWwindow;
 
 namespace ifx {
 

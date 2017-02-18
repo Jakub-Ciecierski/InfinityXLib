@@ -26,6 +26,7 @@ namespace ifx {
         std::string ATTEN_QUAD;
 
         std::string LIGHT_SPACE_MATRIX;
+        std::string SHADOW_MAP;
 
         SpotLightShaderBuilder(int id);
 

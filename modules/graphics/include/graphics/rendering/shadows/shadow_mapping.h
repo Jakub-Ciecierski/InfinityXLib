@@ -32,13 +32,14 @@ public:
     ShadowMapping(Dimensions dimensions,
                   std::shared_ptr<Program> program);
     ~ShadowMapping();
+    FBO* fbo(){return fbo_.get();}
 
     /**
      * Renders the scene in light's space, writing only depth buffer.
      * Changed Viewport
      */
-    void Render(const std::shared_ptr<SceneRenderer> scene);
-
+    void Render(const std::shared_ptr<SceneRenderer> scene,
+                LightDirectional* light);
 private:
     std::shared_ptr<Texture2D> CreateTexture();
     void InitFBO(std::shared_ptr<Texture2D> texture);

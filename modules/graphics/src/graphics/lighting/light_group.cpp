@@ -32,7 +32,8 @@ LightGroup::GetDirectionalLights() const {
     std::vector<std::shared_ptr<LightDirectional>> out_lights;
 
     for(auto& light : lights_){
-        if(light->light_type() == LightType::DIRECTIONAL){
+        if(light->light_type() == LightType::DIRECTIONAL ||
+                light->light_type() == LightType::SPOTLIGHT){
             out_lights.push_back
                     (std::static_pointer_cast<LightDirectional>(light));
         }

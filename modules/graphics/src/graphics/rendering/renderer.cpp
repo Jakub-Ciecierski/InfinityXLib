@@ -7,6 +7,8 @@
 #include <graphics/rendering/scene_renderer.h>
 #include <gui/gui.h>
 #include <resources/resource_memory_cache.h>
+#include <graphics/factory/program_factory.h>
+#include <graphics/rendering/shadows/shadow_mapping_renderer.h>
 
 namespace ifx {
 
@@ -16,8 +18,15 @@ Renderer::Renderer() :
     initGLFWRenderContext();
     initOpenGLContext();
     initGLFWCallbacks();
-
     scene_renderer_ = std::shared_ptr<SceneRenderer>(new SceneRenderer());
+
+    fbo_renderer_
+            = std::shared_ptr<FBORenderer>(new FBORenderer(window_.get()));
+    fbo_renderer_->SetProgram(ProgramFactory().LoadFBOProgram());
+
+    shadow_mapping_renderer_ = std::shared_ptr<ShadowMappingRenderer>
+            (new ShadowMappingRenderer(scene_renderer_,
+                                       window_));
 }
 
 Renderer::~Renderer(){
@@ -44,18 +53,6 @@ void Renderer::SetGUI(std::shared_ptr<GUI> gui){
 
 void Renderer::SetRenderingType(RenderingType type){
     rendering_type_ = type;
-}
-
-void Renderer::SetShadowsType(ShadowsType type){
-    shadow_type_ = type;
-}
-
-void Renderer::SetFBORenderer(std::unique_ptr<FBORenderer> fbo_renderer){
-    fbo_renderer_ = std::move(fbo_renderer);
-}
-
-void Renderer::SetShadowMapping(std::unique_ptr<ShadowMapping> shadow_mapping){
-    shadow_mapping_ = std::move(shadow_mapping);
 }
 
 void Renderer::LimitFPS(bool val){
@@ -100,56 +97,29 @@ void Renderer::Render(){
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    if(rendering_type_ == RenderingType::NORMAL)
-        RenderNormal();
-    if(rendering_type_ == RenderingType::FBO_TEXTURE)
-        RenderFBOTexture();
+    switch(rendering_type_){
+        case RenderingType::NORMAL:
+            RenderToScreen();
+            break;
+        case RenderingType::FBO_TEXTURE:
+            RenderToFBOTexture();
+            break;
+    }
 
     if(gui_)
         gui_->Render();
 
     glfwSwapBuffers(window_->getHandle());
-
     window_->update();
     HandleEvents();
 }
 
-void Renderer::RenderNormal(){
-    if(shadow_type_ == ShadowsType::NONE)
-        RenderNormalNoShadow();
-    if(shadow_type_ == ShadowsType::SHADOW_MAPPING)
-        RenderNormalShadowMapping();
+void Renderer::RenderToScreen(){
+    shadow_mapping_renderer_->Render(nullptr);
 }
 
-void Renderer::RenderNormalNoShadow(){
-    glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
-
-    scene_renderer_->Render();
-}
-
-void Renderer::RenderNormalShadowMapping(){
-    shadow_mapping_->Render(scene_renderer_);
-
-    // Shadow mapping binds its own FBO
-    if(rendering_type_ == RenderingType::FBO_TEXTURE)
-        fbo_renderer_->Bind();
-
-    glViewport(0, 0, *(window_->width()), *(window_->height()));
-    glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
-
-    scene_renderer_->Render();
-}
-
-void Renderer::RenderFBOTexture(){
-    if(!fbo_renderer_)
-        return;
-    // First Pass
-    fbo_renderer_->Bind();
-    RenderNormal();
+void Renderer::RenderToFBOTexture(){
+    shadow_mapping_renderer_->Render(fbo_renderer_);
 
     // Second Pass
     fbo_renderer_->Render();

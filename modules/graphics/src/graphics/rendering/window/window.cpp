@@ -1,9 +1,12 @@
 #include "graphics/rendering/window/window.h"
 
-#include <stdexcept>
 #include <controls/controls_events.h>
 #include <graphics/rendering/window/windows_container.h>
+
 #include <iostream>
+#include <stdexcept>
+
+#include <GLFW/glfw3.h>
 
 namespace ifx {
 

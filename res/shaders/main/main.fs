@@ -9,8 +9,6 @@
  *      1) Point Light
  *      2) Directional
  *      3) Spotlight
- *
- *  Bump Mapping (TODO Correct TBN)
  */
 
 // ---------- IN/OUT ---------- //
@@ -44,18 +42,8 @@ struct DirLight{
     vec3 specular;
 
     mat4 LightSpaceMatrix;
-};
 
-struct PointLight{
-    vec3 position;
-
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-
-    float constant;
-    float linear;
-    float quadratic;
+    sampler2D shadow_map;
 };
 
 struct SpotLight{
@@ -70,14 +58,24 @@ struct SpotLight{
     vec3 specular;
 
     mat4 LightSpaceMatrix;
+    sampler2D shadow_map;
 
     float constant;
     float linear;
     float quadratic;
 };
 
-// Shadow Mapping
-uniform sampler2D shadow_map;
+struct PointLight{
+    vec3 position;
+
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+
+    float constant;
+    float linear;
+    float quadratic;
+};
 
 // ---------- UNIFORMS ---------- //
 
@@ -95,7 +93,7 @@ uniform vec3 viewPos;
 // ---------- HEADERS ---------- //
 
 // Shadow Mapping
-float ShadowMappingCalculation(vec4 fragPosLightSpace);
+float ShadowMappingCalculation(vec4 fragPosLightSpace, sampler2D shadow_map);
 
 vec3 computePointLight(PointLight light, vec3 norm, vec3 fragPos,
                        vec3 viewDir);
@@ -109,7 +107,7 @@ vec3 computeSpecular(vec3 norm, vec3 lightDir,
                      vec3 viewDir, vec3 specularLight);
 vec3 GetNormal();
 
-float ShadowMappingCalculation(vec4 fragPosLightSpace){
+float ShadowMappingCalculation(vec4 fragPosLightSpace, sampler2D shadow_map){
     if(textureSize(shadow_map, 0).x <= 1)
         return 0.0;
 
@@ -176,7 +174,8 @@ vec3 computeDirLight(DirLight light, vec3 norm, vec3 viewDir){
 
     // Shadow Mapping
     vec4 fragPosLightSpace = light.LightSpaceMatrix * vec4(FragPos, 1.0);
-    float shadow = ShadowMappingCalculation(fragPosLightSpace);
+    float shadow = ShadowMappingCalculation(fragPosLightSpace,
+                                            light.shadow_map);
 
     vec3 result = (ambient + (1.0 - shadow) * (diffuse + specular));
 
@@ -209,7 +208,8 @@ vec3 computeSpotLight(SpotLight light, vec3 norm, vec3 fragPos, vec3 viewDir){
 
 
     vec4 fragPosLightSpace = light.LightSpaceMatrix * vec4(FragPos, 1.0);
-    float shadow = ShadowMappingCalculation(fragPosLightSpace);
+    float shadow = ShadowMappingCalculation(fragPosLightSpace,
+                                            light.shadow_map);
     vec3 result = (ambient + (1.0 - shadow) * (diffuse + specular));
 
     //vec3 result = (ambient + diffuse + specular);

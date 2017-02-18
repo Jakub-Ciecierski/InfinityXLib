@@ -4,6 +4,10 @@
 #include "graphics/lighting/light_source.h"
 
 namespace ifx {
+
+class ShadowMapping;
+class SceneRenderer;
+
 /*
  * Directional Light has a lookAt position which is used
  * to compute a direction.
@@ -16,9 +20,13 @@ public:
     LightDirectional(const LightParams& light_params);
     ~LightDirectional();
 
+    void RenderToShadowMap(const std::shared_ptr<SceneRenderer> scene);
+
     glm::mat4 GetLightSpaceMatrix();
 protected:
     virtual void bind(const Program &program, int id = -1) override;
+
+    std::shared_ptr<ShadowMapping> shadow_mapping_;
 };
 }
 

@@ -1,6 +1,8 @@
 #include <iostream>
 #include "controls/controls_events.h"
 
+#include <GLFW/glfw3.h>
+
 namespace ifx {
 
 ControlsEvents::ControlsEvents() {

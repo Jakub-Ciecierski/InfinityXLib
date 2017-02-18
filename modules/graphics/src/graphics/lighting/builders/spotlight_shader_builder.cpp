@@ -38,4 +38,7 @@ void SpotLightShaderBuilder::build() {
     LIGHT_SPACE_MATRIX = appendToBase(id,
                                       LIGHT_SPOTLIGHT_NAME,
                                       LIGHT_SPACE_MATRIX_NAME);
+    SHADOW_MAP = appendToBase(id,
+                              LIGHT_SPOTLIGHT_NAME,
+                              TEXTURE_SHADOW_MAP);
 }

@@ -1,10 +1,20 @@
-#include <graphics/lighting/builders/dirlight_shader_builder.h>
 #include "graphics/lighting/types/light_directional.h"
+
+#include <graphics/lighting/builders/dirlight_shader_builder.h>
+#include <graphics/factory/program_factory.h>
+#include <graphics/rendering/shadows/shadow_mapping.h>
+#include <graphics/rendering/fbo_rendering/fbo_renderer.h>
+#include <graphics/shaders/buffers/fbo.h>
+#include <graphics/shaders/textures/texture.h>
 
 using namespace ifx;
 
 LightDirectional::LightDirectional(const LightParams& light_params) :
-        LightSource(light_params, LightType::DIRECTIONAL){}
+        LightSource(light_params, LightType::DIRECTIONAL){
+    shadow_mapping_ = std::shared_ptr<ShadowMapping>(
+            new ShadowMapping(Dimensions{4024, 4024},
+                              ProgramFactory().LoadShadowMappingProgram()));
+}
 
 LightDirectional::~LightDirectional() {}
 
@@ -12,7 +22,6 @@ void LightDirectional::bind(const Program &program, int id) {
     ifx::DirlightShaderBuilder builder(id);
     builder.build();
 
-    // Light Direction
     GLint lightDirLoc = glGetUniformLocation(program.getID(),
                                              builder.DIRECTION.c_str());
     GLint lightAmbientLoc  = glGetUniformLocation(program.getID(),
@@ -41,6 +50,16 @@ void LightDirectional::bind(const Program &program, int id) {
     glUniform3f(lightDirLoc, direction.x, direction.y, direction.z);
     glUniformMatrix4fv(lightSpaceMatrixLoc, 1, GL_FALSE,
                        glm::value_ptr(GetLightSpaceMatrix()));
+
+    glActiveTexture(GL_TEXTURE0 + id);
+    shadow_mapping_->fbo()->texture()->Bind();
+    glUniform1i(glGetUniformLocation(program.getID(),
+                                     builder.SHADOW_MAP.c_str()), id);
+}
+
+void LightDirectional::RenderToShadowMap(
+        const std::shared_ptr<SceneRenderer> scene){
+    shadow_mapping_->Render(scene, this);
 }
 
 glm::mat4 LightDirectional::GetLightSpaceMatrix() {

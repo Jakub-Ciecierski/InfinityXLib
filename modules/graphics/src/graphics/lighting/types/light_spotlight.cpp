@@ -1,5 +1,8 @@
 #include <graphics/lighting/types/light_spotlight.h>
 #include <graphics/lighting/builders/spotlight_shader_builder.h>
+#include <graphics/rendering/shadows/shadow_mapping.h>
+#include <graphics/shaders/buffers/fbo.h>
+#include <graphics/shaders/textures/texture.h>
 
 namespace ifx {
 
@@ -73,5 +76,12 @@ void LightSpotlight::bind(const Program &program, int id) {
                                    builder.LIGHT_SPACE_MATRIX.c_str());
     glUniformMatrix4fv(lightSpaceMatrixLoc, 1, GL_FALSE,
                        glm::value_ptr(GetLightSpaceMatrix()));
+
+    int i = 1 + id;
+    glActiveTexture(GL_TEXTURE1 + id);
+    shadow_mapping_->fbo()->texture()->Bind();
+    glUniform1i(glGetUniformLocation(program.getID(),
+                                     builder.SHADOW_MAP.c_str()), i);
+
 }
 }

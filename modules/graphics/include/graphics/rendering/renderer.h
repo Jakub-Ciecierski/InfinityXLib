@@ -1,7 +1,6 @@
 #ifndef PROJECT_RENDERER_H
 #define PROJECT_RENDERER_H
 
-#include <graphics/rendering/shadows/shadow_mapping.h>
 #include <controls/event_handler.h>
 #include <graphics/rendering/window/window.h>
 
@@ -12,6 +11,7 @@ namespace ifx {
 class FBORenderer;
 class GUI;
 class SceneRenderer;
+class ShadowMappingRenderer;
 
 /**
  * Render to window directly or to texture.
@@ -19,13 +19,6 @@ class SceneRenderer;
  */
 enum class RenderingType{
     NORMAL, FBO_TEXTURE
-};
-
-/**
- * Type of shadows to render.
- */
-enum class ShadowsType{
-    NONE, SHADOW_MAPPING
 };
 
 /**
@@ -38,7 +31,6 @@ public:
 
     Window* window()  {return window_.get();}
     RenderingType rendering_type(){return rendering_type_;}
-    ShadowsType shadow_type(){return shadow_type_;};
     std::shared_ptr<SceneRenderer> scene_renderer(){return scene_renderer_;}
 
     // Overridden from EventHandler.
@@ -47,9 +39,6 @@ public:
 
     void SetGUI(std::shared_ptr<GUI> gui);
     void SetRenderingType(RenderingType type);
-    void SetShadowsType(ShadowsType type);
-    void SetFBORenderer(std::unique_ptr<FBORenderer> fbo_renderer);
-    void SetShadowMapping(std::unique_ptr<ShadowMapping> shadow_mapping);
 
     void LimitFPS(bool val);
 private:
@@ -57,20 +46,19 @@ private:
     void initOpenGLContext();
     void initGLFWCallbacks();
 
-    void RenderNormal();
-    void RenderNormalNoShadow();
-    void RenderNormalShadowMapping();
-    void RenderFBOTexture();
+    void RenderToScreen();
+    void RenderToFBOTexture();
 
-    std::unique_ptr<Window> window_;
+    std::shared_ptr<Window> window_;
     std::shared_ptr<GUI> gui_;
 
     RenderingType rendering_type_;
-    ShadowsType shadow_type_;
 
-    std::unique_ptr<FBORenderer> fbo_renderer_;
-    std::unique_ptr<ShadowMapping> shadow_mapping_;
+    std::shared_ptr<FBORenderer> fbo_renderer_;
+
     std::shared_ptr<SceneRenderer> scene_renderer_;
+
+    std::shared_ptr<ShadowMappingRenderer> shadow_mapping_renderer_;
 };
 
 }

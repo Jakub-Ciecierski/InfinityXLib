@@ -16,11 +16,6 @@ public:
     ~RendererFactory();
 
     virtual std::shared_ptr<Renderer> Create();
-
-private:
-    std::unique_ptr<FBORenderer> CreateFBORenderer(Window* window);
-    std::unique_ptr<ShadowMapping> CreateShadowMapping();
-
 };
 }
 
