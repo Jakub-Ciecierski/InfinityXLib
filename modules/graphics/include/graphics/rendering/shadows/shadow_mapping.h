@@ -44,6 +44,8 @@ public:
     ~ShadowMapping();
 
     FBO* fbo(){return fbo_.get();}
+
+    const Dimensions& dimensions(){return dimensions_;}
     ProjectionParameters& projection_parameters(){
         return projection_parameters_;}
 
@@ -55,6 +57,8 @@ public:
                 LightDirectional* light);
 
     glm::mat4 GetLightSpaceMatrix(LightDirectional* light);
+
+    void Reset(Dimensions&& new_dimensions);
 
 private:
     std::shared_ptr<Texture2D> CreateTexture();

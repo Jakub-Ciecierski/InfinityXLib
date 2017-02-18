@@ -30,7 +30,11 @@ private:
     void RenderSpotlight(std::shared_ptr<LightSource> light_source);
 
     void RenderShadowMapping(std::shared_ptr<LightSource> light_source);
+    void RenderShadowMappingCastShadow(
+            std::shared_ptr<LightDirectional> light_source);
     void RenderShadowMappingProjectionParameters(
+            std::shared_ptr<LightDirectional> light_source);
+    void RenderShadowMappingResolution(
             std::shared_ptr<LightDirectional> light_source);
 };
 }

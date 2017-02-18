@@ -46,6 +46,8 @@ public:
 
     LightParams& light_params() {return light_params_;}
     LightType light_type(){return light_type_;}
+    bool cast_shadow(){return cast_shadow_;}
+    void cast_shadow(bool v){cast_shadow_ = v;}
 
     static std::string LightTypeString(LightType type);
 
@@ -67,6 +69,8 @@ protected:
 
     LightParams light_params_;
     LightType light_type_;
+
+    bool cast_shadow_;
 };
 }
 

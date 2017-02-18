@@ -53,14 +53,17 @@ void LightDirectional::bind(const Program &program, int id) {
                        glm::value_ptr(
                                shadow_mapping_->GetLightSpaceMatrix(this)));
 
-    int i = TextureActivator::GetInstance().GetNextGlobalID();
-    glActiveTexture(GL_TEXTURE0 + i);
-    shadow_mapping_->fbo()->texture()->Bind();
-    glUniform1i(glGetUniformLocation(program.getID(),
-                                     builder.SHADOW_MAP.c_str()), i);
+    if(cast_shadow_){
+        int i = TextureActivator::GetInstance().GetNextGlobalID();
+        glActiveTexture(GL_TEXTURE0 + i);
+        shadow_mapping_->fbo()->texture()->Bind();
+        glUniform1i(glGetUniformLocation(program.getID(),
+                                         builder.SHADOW_MAP.c_str()), i);
+    }
 }
 
 void LightDirectional::RenderToShadowMap(
         const std::shared_ptr<SceneRenderer> scene){
-    shadow_mapping_->Render(scene, this);
+    if(cast_shadow_)
+        shadow_mapping_->Render(scene, this);
 }

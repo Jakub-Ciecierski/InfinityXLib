@@ -60,6 +60,11 @@ void ShadowMapping::InitFBO(std::shared_ptr<Texture2D> texture){
     fbo_->compile();
 }
 
+void ShadowMapping::Reset(Dimensions&& new_dimensions){
+    dimensions_ = new_dimensions;
+    InitFBO(CreateTexture());
+}
+
 void ShadowMapping::BindLightMatrix(const Program* program,
                                     LightDirectional* light){
     GLint lightSpaceMatrixLoc

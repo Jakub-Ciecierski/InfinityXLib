@@ -5,6 +5,7 @@ namespace ifx {
 LightSource::LightSource(const LightParams& light_params, LightType type) :
         light_params_(light_params),
         light_type_(type),
+        cast_shadow_(true),
         GameComponent(GameComponentType::LIGHT){
 }
 
