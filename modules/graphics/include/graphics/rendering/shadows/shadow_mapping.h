@@ -16,6 +16,16 @@ class LightDirectional;
 class Scene;
 class SceneRenderer;
 
+struct ProjectionParameters{
+    float near_plane = 0.1f;
+    float far_plane = 100.0f;
+
+    float left = -10.0f;
+    float right = 10.0f;
+    float bottom = -10.0f;
+    float up = 10.0f;
+};
+
 /**
  * Creates Shadows in the scene using the Shadow Mapping technique.
  *
@@ -32,7 +42,10 @@ public:
     ShadowMapping(Dimensions dimensions,
                   std::shared_ptr<Program> program);
     ~ShadowMapping();
+
     FBO* fbo(){return fbo_.get();}
+    ProjectionParameters& projection_parameters(){
+        return projection_parameters_;}
 
     /**
      * Renders the scene in light's space, writing only depth buffer.
@@ -40,6 +53,9 @@ public:
      */
     void Render(const std::shared_ptr<SceneRenderer> scene,
                 LightDirectional* light);
+
+    glm::mat4 GetLightSpaceMatrix(LightDirectional* light);
+
 private:
     std::shared_ptr<Texture2D> CreateTexture();
     void InitFBO(std::shared_ptr<Texture2D> texture);
@@ -54,6 +70,7 @@ private:
      * Dimensions of the shadow map. Used to create texture
      */
     Dimensions dimensions_;
+    ProjectionParameters projection_parameters_;
 
     glm::mat4 light_projection_;
     glm::mat4 light_view_;

@@ -76,7 +76,8 @@ void LightSpotlight::bind(const Program &program, int id) {
             = glGetUniformLocation(program.getID(),
                                    builder.LIGHT_SPACE_MATRIX.c_str());
     glUniformMatrix4fv(lightSpaceMatrixLoc, 1, GL_FALSE,
-                       glm::value_ptr(GetLightSpaceMatrix()));
+                       glm::value_ptr(
+                               shadow_mapping_->GetLightSpaceMatrix(this)));
 
     int i = TextureActivator::GetInstance().GetNextGlobalID();
     glActiveTexture(GL_TEXTURE0 + i);

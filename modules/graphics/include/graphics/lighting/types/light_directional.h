@@ -20,9 +20,10 @@ public:
     LightDirectional(const LightParams& light_params);
     ~LightDirectional();
 
+    std::shared_ptr<ShadowMapping> shadow_mapping(){return shadow_mapping_;}
+
     void RenderToShadowMap(const std::shared_ptr<SceneRenderer> scene);
 
-    glm::mat4 GetLightSpaceMatrix();
 protected:
     virtual void bind(const Program &program, int id = -1) override;
 

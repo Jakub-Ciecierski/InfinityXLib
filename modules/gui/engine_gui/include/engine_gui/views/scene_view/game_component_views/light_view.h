@@ -6,6 +6,7 @@
 namespace ifx {
 
 class LightSource;
+class LightDirectional;
 
 class LightView{
 public:
@@ -27,6 +28,10 @@ private:
     void RenderAttenuationQuadratic(std::shared_ptr<LightSource> light_source);
 
     void RenderSpotlight(std::shared_ptr<LightSource> light_source);
+
+    void RenderShadowMapping(std::shared_ptr<LightSource> light_source);
+    void RenderShadowMappingProjectionParameters(
+            std::shared_ptr<LightDirectional> light_source);
 };
 }
 

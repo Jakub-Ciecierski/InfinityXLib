@@ -29,11 +29,6 @@ void ShadowMapping::Render(const std::shared_ptr<SceneRenderer> scene,
     scene->Render(program_);
     glCullFace(GL_BACK); // peter panning
     fbo_->unbind();
-/*
-    glActiveTexture(GL_TEXTURE0);
-    fbo_->texture()->Bind();
-    glUniform1i(glGetUniformLocation(program_->getID(),
-                                     TEXTURE_SHADOW_MAP.c_str()), 0);*/
 }
 
 std::shared_ptr<Texture2D> ShadowMapping::CreateTexture(){
@@ -71,8 +66,27 @@ void ShadowMapping::BindLightMatrix(const Program* program,
             = glGetUniformLocation(program->getID(),
                                    LIGHT_SPACE_MATRIX_NAME.c_str());
     glUniformMatrix4fv(lightSpaceMatrixLoc, 1, GL_FALSE,
-                       glm::value_ptr(light->GetLightSpaceMatrix()));
+                       glm::value_ptr(GetLightSpaceMatrix(light)));
 
+}
+
+glm::mat4 ShadowMapping::GetLightSpaceMatrix(LightDirectional* light) {
+    glm::mat4 light_projection
+            = glm::ortho(projection_parameters_.left,
+                         projection_parameters_.right,
+                         projection_parameters_.bottom,
+                         projection_parameters_.up,
+                         projection_parameters_.near_plane,
+                         projection_parameters_.far_plane);
+    const glm::vec3 UP = glm::vec3(0.01f, 1.0f, 0.01f);
+
+    auto& position = light->getPosition();
+    auto& direction = light->getDirection();
+    glm::mat4 light_view = glm::lookAt(position,
+                                       position + direction,
+                                       UP);
+
+    return light_projection * light_view;
 }
 
 } // ifx

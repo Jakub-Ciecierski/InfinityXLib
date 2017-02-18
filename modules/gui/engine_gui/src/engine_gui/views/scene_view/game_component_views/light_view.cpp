@@ -1,6 +1,9 @@
 #include "engine_gui/views/scene_view/game_component_views/light_view.h"
 
 #include <graphics/lighting/light_source.h>
+#include <graphics/rendering/shadows/shadow_mapping.h>
+#include <graphics/lighting/types/light_directional.h>
+
 #include <gui/imgui/imgui.h>
 
 namespace ifx{
@@ -13,14 +16,16 @@ void LightView::Render(std::shared_ptr<LightSource> light_source){
     display += " [";
     display += LightSource::LightTypeString(light_source->light_type());
     display += "]";
-
+    ImGui::PushItemWidth(150);
     if(ImGui::TreeNode(display.c_str())){
         RenderColor(light_source);
         RenderAttenuation(light_source);
         RenderSpotlight(light_source);
+        RenderShadowMapping(light_source);
 
         ImGui::TreePop();
     }
+    ImGui::PopItemWidth();
 }
 
 void LightView::RenderColor(std::shared_ptr<LightSource> light_source){
@@ -108,6 +113,33 @@ void LightView::RenderSpotlight(std::shared_ptr<LightSource> light_source){
     if(ImGui::TreeNode("Cut off [degrees]")){
         ImGui::SliderFloat("Inner Cut off", &light_params.cutOff, 0, 360);
         ImGui::SliderFloat("Outer Cut off", &light_params.outerCutOff, 0, 360);
+
+        ImGui::TreePop();
+    }
+}
+
+void LightView::RenderShadowMapping(
+        std::shared_ptr<LightSource> light_source){
+    if(light_source->light_type() != LightType::SPOTLIGHT
+       && light_source->light_type() != LightType::DIRECTIONAL) return;
+
+    if(ImGui::TreeNode("Shadow Mapping")){
+        RenderShadowMappingProjectionParameters(
+                std::static_pointer_cast<LightDirectional>(light_source));
+        ImGui::TreePop();
+    }
+}
+
+void LightView::RenderShadowMappingProjectionParameters(
+        std::shared_ptr<LightDirectional> light_source){
+    auto& projection_parameters
+            = light_source->shadow_mapping()->projection_parameters();
+    if(ImGui::TreeNode("Projection Parameters")){
+
+        ImGui::SliderFloat("Near Plane", &projection_parameters.near_plane,
+                           0.1f, 100.0f);
+        ImGui::SliderFloat("Far Plane", &projection_parameters.far_plane,
+                           1.0f, 200.0f);
 
         ImGui::TreePop();
     }
