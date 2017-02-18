@@ -16,16 +16,21 @@ void LightView::Render(std::shared_ptr<LightSource> light_source){
     display += " [";
     display += LightSource::LightTypeString(light_source->light_type());
     display += "]";
-    ImGui::PushItemWidth(150);
+
     if(ImGui::TreeNode(display.c_str())){
         RenderColor(light_source);
-        RenderAttenuation(light_source);
-        RenderSpotlight(light_source);
-        RenderShadowMapping(light_source);
+
+        ImGui::PushItemWidth(150);
+        {
+            RenderAttenuation(light_source);
+            RenderSpotlight(light_source);
+            RenderShadowMapping(light_source);
+        }
+        ImGui::PopItemWidth();
 
         ImGui::TreePop();
     }
-    ImGui::PopItemWidth();
+
 }
 
 void LightView::RenderColor(std::shared_ptr<LightSource> light_source){
@@ -46,8 +51,8 @@ void LightView::RenderColorAmbient(std::shared_ptr<LightSource> light_source){
     raw[0] = v.x;
     raw[1] = v.y;
     raw[2] = v.z;
-
-    ImGui::SliderFloat3("Ambient", raw, 0, 1);
+    ImGui::ColorEdit3("Ambient", raw);
+    //ImGui::SliderFloat3("Ambient", raw, 0, 1);
     v = glm::vec3(raw[0], raw[1], raw[2]);
 }
 
@@ -59,8 +64,8 @@ void LightView::RenderColorDiffuse(std::shared_ptr<LightSource> light_source){
     raw[0] = v.x;
     raw[1] = v.y;
     raw[2] = v.z;
-
-    ImGui::SliderFloat3("Diffuse", raw, 0, 1);
+    ImGui::ColorEdit3("Diffuse", raw);
+    //ImGui::SliderFloat3("Diffuse", raw, 0, 1);
     v = glm::vec3(raw[0], raw[1], raw[2]);
 }
 
@@ -72,8 +77,8 @@ void LightView::RenderColorSpecular(std::shared_ptr<LightSource> light_source){
     raw[0] = v.x;
     raw[1] = v.y;
     raw[2] = v.z;
-
-    ImGui::SliderFloat3("Specular", raw, 0, 1);
+    ImGui::ColorEdit3("Specular", raw);
+    //ImGui::SliderFloat3("Specular", raw, 0, 1);
     v = glm::vec3(raw[0], raw[1], raw[2]);
 }
 
