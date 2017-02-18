@@ -6,6 +6,7 @@
 #include <graphics/rendering/fbo_rendering/fbo_renderer.h>
 #include <graphics/shaders/buffers/fbo.h>
 #include <graphics/shaders/textures/texture.h>
+#include <graphics/shaders/textures/texture_activator.h>
 
 using namespace ifx;
 
@@ -51,10 +52,11 @@ void LightDirectional::bind(const Program &program, int id) {
     glUniformMatrix4fv(lightSpaceMatrixLoc, 1, GL_FALSE,
                        glm::value_ptr(GetLightSpaceMatrix()));
 
-    glActiveTexture(GL_TEXTURE0 + id);
+    int i = TextureActivator::GetInstance().GetNextGlobalID();
+    glActiveTexture(GL_TEXTURE0 + i);
     shadow_mapping_->fbo()->texture()->Bind();
     glUniform1i(glGetUniformLocation(program.getID(),
-                                     builder.SHADOW_MAP.c_str()), id);
+                                     builder.SHADOW_MAP.c_str()), i);
 }
 
 void LightDirectional::RenderToShadowMap(

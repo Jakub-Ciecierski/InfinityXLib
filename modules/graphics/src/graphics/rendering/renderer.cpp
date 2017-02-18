@@ -9,6 +9,7 @@
 #include <resources/resource_memory_cache.h>
 #include <graphics/factory/program_factory.h>
 #include <graphics/rendering/shadows/shadow_mapping_renderer.h>
+#include <graphics/shaders/textures/texture_activator.h>
 
 namespace ifx {
 
@@ -96,6 +97,8 @@ void Renderer::Render(){
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    TextureActivator::GetInstance().ResetGlobal();
 
     switch(rendering_type_){
         case RenderingType::NORMAL:

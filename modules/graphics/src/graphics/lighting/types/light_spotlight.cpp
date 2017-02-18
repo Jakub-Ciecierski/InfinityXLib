@@ -3,6 +3,7 @@
 #include <graphics/rendering/shadows/shadow_mapping.h>
 #include <graphics/shaders/buffers/fbo.h>
 #include <graphics/shaders/textures/texture.h>
+#include <graphics/shaders/textures/texture_activator.h>
 
 namespace ifx {
 
@@ -77,8 +78,8 @@ void LightSpotlight::bind(const Program &program, int id) {
     glUniformMatrix4fv(lightSpaceMatrixLoc, 1, GL_FALSE,
                        glm::value_ptr(GetLightSpaceMatrix()));
 
-    int i = 1 + id;
-    glActiveTexture(GL_TEXTURE1 + id);
+    int i = TextureActivator::GetInstance().GetNextGlobalID();
+    glActiveTexture(GL_TEXTURE0 + i);
     shadow_mapping_->fbo()->texture()->Bind();
     glUniform1i(glGetUniformLocation(program.getID(),
                                      builder.SHADOW_MAP.c_str()), i);

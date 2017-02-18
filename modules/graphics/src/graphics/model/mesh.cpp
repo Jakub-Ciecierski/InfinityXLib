@@ -1,4 +1,5 @@
 #include <sstream>
+#include <graphics/shaders/textures/texture_activator.h>
 #include "graphics/model/mesh.h"
 
 using namespace std;
@@ -40,8 +41,9 @@ void Mesh::BindTexture(std::shared_ptr<Texture2D> texture,
     if(!texture){
         return;
     }
-    int i = id + 31;
-    glActiveTexture(GL_TEXTURE31 + id);
+
+    int i = TextureActivator::GetInstance().GetNextLocalID();
+    glActiveTexture(GL_TEXTURE0 + i);
     texture->Bind();
     glUniform1i(glGetUniformLocation(program.getID(),
                                      program_location.c_str()), i);
@@ -66,6 +68,7 @@ void Mesh::bindColor(const Program &program) {
 }
 
 void Mesh::draw(const Program &program) {
+    TextureActivator::GetInstance().ResetLocal();
     program.use();
 
     glPolygonMode(GL_FRONT_AND_BACK,
