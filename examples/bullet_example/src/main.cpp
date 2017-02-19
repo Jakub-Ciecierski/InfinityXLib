@@ -9,7 +9,7 @@
 #include <game/factory/game_factory.h>
 #include <game/game.h>
 #include <game/scene_container.h>
-#include <object/game_object.h>
+#include <game/game_object.h>
 #include <graphics/factory/scene_factory.h>
 #include <graphics/lighting/light_source.h>
 #include <graphics/lighting/types/light_directional.h>
@@ -33,8 +33,8 @@ std::shared_ptr<ifx::LightSpotlight> CreateSpotLight();
 std::shared_ptr<ifx::RigidBody> CreateRigidBox(glm::vec3 scale);
 std::shared_ptr<ifx::RigidBody> CreateRigidFloor();
 
-std::shared_ptr<ifx::GameObject> CreateGameObjectBox();
-std::shared_ptr<ifx::GameObject> CreateGameObjectFloor();
+std::shared_ptr<ifx::GameObject> CreateGameObjectBox(
+        std::shared_ptr<ifx::SceneContainer> scene);
 
 std::shared_ptr<ifx::LightDirectional> CreateDirectionalLight(){
     ifx::LightParams light;
@@ -90,8 +90,9 @@ std::shared_ptr<ifx::RigidBody> CreateRigidFloor(){
     return rigid_body;
 }
 
-std::shared_ptr<ifx::GameObject> CreateGameObjectBox(){
-    auto game_object = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
+std::shared_ptr<ifx::GameObject> CreateGameObjectBox(
+        std::shared_ptr<ifx::SceneContainer> scene){
+    auto game_object = scene->CreateAndAddEmptyGameObject();
     float scale = 0.25;
 
     auto render_object = ifx::RenderObjectFactory().CreateCube();
@@ -103,18 +104,16 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectBox(){
     return game_object;
 
 }
-std::shared_ptr<ifx::GameObject> CreateGameObjectFloor(){
 
-}
 
 int main() {
     auto game_factory
             = std::shared_ptr<ifx::GameFactory>(new ifx::GameFactory());
     auto game = game_factory->Create();
 
-    auto game_object1 = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
-    auto game_object2 = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
-    auto game_object3 = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
+    auto game_object1 = game->scene()->CreateAndAddEmptyGameObject();
+    auto game_object2 = game->scene()->CreateAndAddEmptyGameObject();
+    auto game_object3 = game->scene()->CreateAndAddEmptyGameObject();
 
     auto lamp = ifx::RenderObjectFactory().CreateLampObject();
 
@@ -131,16 +130,10 @@ int main() {
             ifx::SceneFactory().CreateCamera(game->game_loop()->renderer()->window()));
     game_object3->moveTo(glm::vec3(-7, 2, 0));
 
-    auto game_object4 = CreateGameObjectBox();
+    auto game_object4 = CreateGameObjectBox(game->scene());
     game_object4->moveTo(glm::vec3(0.0f, 10.0f, 0.0f));
-    auto game_object5 = CreateGameObjectBox();
+    auto game_object5 = CreateGameObjectBox(game->scene());
     game_object5->moveTo(glm::vec3(0.0f, 15.0f, 0.0f));
-
-    game->scene()->Add(game_object1);
-    game->scene()->Add(game_object2);
-    game->scene()->Add(game_object3);
-    game->scene()->Add(game_object4);
-    game->scene()->Add(game_object5);
 
     auto gui = std::shared_ptr<ExampleGUI>(
             new ExampleGUI(

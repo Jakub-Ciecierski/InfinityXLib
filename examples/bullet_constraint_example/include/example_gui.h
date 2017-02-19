@@ -20,6 +20,7 @@ public:
     ~ExampleGUI();
 
     virtual void Render() override;
+    virtual void RenderSceneObjects() override;
 private:
     std::shared_ptr<ifx::EngineGUI> engine_gui_;
 

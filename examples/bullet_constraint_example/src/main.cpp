@@ -9,7 +9,7 @@
 #include <game/factory/game_factory.h>
 #include <game/game.h>
 #include <game/scene_container.h>
-#include <object/game_object.h>
+#include <game/game_object.h>
 #include <graphics/factory/scene_factory.h>
 #include <graphics/lighting/light_source.h>
 #include <graphics/lighting/types/light_directional.h>
@@ -43,11 +43,17 @@ std::shared_ptr<ifx::RigidBody> CreateRigidBox(glm::vec3 scale);
 std::shared_ptr<ifx::RigidBody> CreateRigidFloor();
 
 std::shared_ptr<ifx::GameObject> CreateGameObjectCamera(
+        std::shared_ptr<ifx::SceneContainer> scene,
         std::shared_ptr<ifx::Game> game);
-std::shared_ptr<ifx::GameObject> CreateGameObjectLight();
-std::shared_ptr<ifx::GameObject> CreateGameObjectBox(const glm::vec3& scale, int tex_id = 0);
-std::shared_ptr<ifx::GameObject> CreateGameObjectFloor();
-std::shared_ptr<ifx::GameObject> CreateGameObjectCeiling();
+std::shared_ptr<ifx::GameObject> CreateGameObjectLight(
+        std::shared_ptr<ifx::SceneContainer> scene);
+std::shared_ptr<ifx::GameObject> CreateGameObjectBox(
+        std::shared_ptr<ifx::SceneContainer> scene,
+        const glm::vec3& scale, int tex_id = 0);
+std::shared_ptr<ifx::GameObject> CreateGameObjectFloor(
+        std::shared_ptr<ifx::SceneContainer> scene);
+std::shared_ptr<ifx::GameObject> CreateGameObjectCeiling(
+        std::shared_ptr<ifx::SceneContainer> scene);
 
 void AddSpringConstraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
@@ -136,18 +142,19 @@ std::shared_ptr<ifx::RigidBody> CreateRigidFloor(){
     return rigid_body;
 }
 
-std::shared_ptr<ifx::GameObject> CreateGameObjectCamera
-        (std::shared_ptr<ifx::Game> game){
-    auto game_object = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
-
+std::shared_ptr<ifx::GameObject> CreateGameObjectCamera(
+        std::shared_ptr<ifx::SceneContainer> scene,
+        std::shared_ptr<ifx::Game> game){
+    auto game_object = scene->CreateAndAddEmptyGameObject();
     game_object->Add(
             ifx::SceneFactory().CreateCamera(game->game_loop()->renderer()->window()));
 
     return game_object;
 }
 
-std::shared_ptr<ifx::GameObject> CreateGameObjectLight(){
-    auto game_object = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
+std::shared_ptr<ifx::GameObject> CreateGameObjectLight(
+        std::shared_ptr<ifx::SceneContainer> scene){
+    auto game_object = scene->CreateAndAddEmptyGameObject();
 
     game_object->Add(std::move(ifx::RenderObjectFactory().CreateLampObject()));
     game_object->Add(CreateSpotLight());
@@ -156,10 +163,12 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectLight(){
     return game_object;
 }
 
-std::shared_ptr<ifx::GameObject> CreateGameObjectBox(const glm::vec3& scale, int tex_id){
+std::shared_ptr<ifx::GameObject> CreateGameObjectBox(
+        std::shared_ptr<ifx::SceneContainer> scene,
+        const glm::vec3& scale, int tex_id){
     float scale_factor = 0.25;
     glm::vec3 scaled_scale = scale * scale_factor;
-    auto game_object = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
+    auto game_object = scene->CreateAndAddEmptyGameObject();
 
     auto render_object = ifx::RenderObjectFactory().CreateCube();
     render_object->scale(scaled_scale);
@@ -197,16 +206,18 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectBox(const glm::vec3& scale, int
     return game_object;
 
 }
-std::shared_ptr<ifx::GameObject> CreateGameObjectFloor(){
-    auto game_object = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
+std::shared_ptr<ifx::GameObject> CreateGameObjectFloor(
+        std::shared_ptr<ifx::SceneContainer> scene){
+    auto game_object = scene->CreateAndAddEmptyGameObject();
 
     game_object->Add(ifx::RenderObjectFactory().CreateFloor());
     game_object->Add(CreateRigidFloor());
     return game_object;
 }
 
-std::shared_ptr<ifx::GameObject> CreateGameObjectCeiling(){
-    auto game_object = std::shared_ptr<ifx::GameObject>(new ifx::GameObject());
+std::shared_ptr<ifx::GameObject> CreateGameObjectCeiling(
+        std::shared_ptr<ifx::SceneContainer> scene){
+    auto game_object = scene->CreateAndAddEmptyGameObject();
 
     game_object->Add(ifx::RenderObjectFactory().CreateFloor());
     game_object->Add(CreateRigidFloor());
@@ -345,62 +356,49 @@ int main() {
             = std::shared_ptr<ifx::GameFactory>(new ifx::GameFactory());
     auto game = game_factory->Create();
 
-    auto lights = CreateGameObjectLight();
+    auto lights = CreateGameObjectLight(game->scene());
     lights->moveTo(glm::vec3(0.0f, 3.0f, 0.0f));
     lights->rotateTo(glm::vec3(0,180,0));
 
-    auto camera = CreateGameObjectCamera(game);
+    auto camera = CreateGameObjectCamera(game->scene(), game);
     camera->moveTo(glm::vec3(-7, 2, 0));
 
-    auto floor = CreateGameObjectFloor();
+    auto floor = CreateGameObjectFloor(game->scene());
     floor->moveTo(glm::vec3(0.0f, 0.0f, 0.0f));
 
-    auto ceiling = CreateGameObjectCeiling();
+    auto ceiling = CreateGameObjectCeiling(game->scene());
     ceiling->moveTo(glm::vec3(0.0f, 10.0f, 0.0f));
 
     glm::vec3 scale1 = glm::vec3(3,3,3);
-    auto head = CreateGameObjectBox(scale1, 0);
+    auto head = CreateGameObjectBox(game->scene(), scale1, 0);
     head->moveTo(glm::vec3(0.0f, 7.0f, 0.0f));
 
     glm::vec3 scale2 = glm::vec3(2,5,2);
-    auto torso = CreateGameObjectBox(scale2, 1);
+    auto torso = CreateGameObjectBox(game->scene(), scale2, 1);
     torso->moveTo(glm::vec3(0.0f, 4.0f, 0.0f));
 
     glm::vec3 scale3 = glm::vec3(0.7,4,0.7);
-    auto arm1 = CreateGameObjectBox(scale3, 1);
+    auto arm1 = CreateGameObjectBox(game->scene(), scale3, 1);
     arm1->moveTo(glm::vec3(0.0f, 3.6f, -1.4f));
     arm1->rotateTo(glm::vec3(218.0f, 0.0f, 0.0f));
 
-    auto arm2 = CreateGameObjectBox(scale3, 1);
+    auto arm2 = CreateGameObjectBox(game->scene(), scale3, 1);
     arm2->moveTo(glm::vec3(0.0f, 3.6f, 1.4f));
     arm2->rotateTo(glm::vec3(140.0f, 0.0f, 0.0f));
 
-    auto leg1 = CreateGameObjectBox(scale3, 1);
+    auto leg1 = CreateGameObjectBox(game->scene(), scale3, 1);
     leg1->moveTo(glm::vec3(-0.32f, 1.7f, -0.32f));
 
-    auto leg2 = CreateGameObjectBox(scale3, 1);
+    auto leg2 = CreateGameObjectBox(game->scene(), scale3, 1);
     leg2->moveTo(glm::vec3(-0.32f, 1.7f, 0.32f));
 
     glm::vec3 scale4 = glm::vec3(1.56, 0.25, 1.03);
-    auto feet1 = CreateGameObjectBox(scale4, 1);
+    auto feet1 = CreateGameObjectBox(game->scene(), scale4, 1);
     feet1->moveTo(glm::vec3(-0.76f, 0.6f, -0.32f));
     //feet1->rotateTo(glm::vec3(180.0f, 0.0f, 0.0f));
 
-    auto feet2 = CreateGameObjectBox(scale4, 1);
+    auto feet2 = CreateGameObjectBox(game->scene(), scale4, 1);
     feet2->moveTo(glm::vec3(-0.76f, 0.6f, 0.32f));
-
-    game->scene()->Add(lights);
-    game->scene()->Add(camera);
-    game->scene()->Add(floor);
-    game->scene()->Add(ceiling);
-    game->scene()->Add(head);
-    game->scene()->Add(torso);
-    game->scene()->Add(arm1);
-    game->scene()->Add(arm2);
-    game->scene()->Add(leg1);
-    game->scene()->Add(leg2);
-    game->scene()->Add(feet1);
-    game->scene()->Add(feet2);
 
     auto ceiling_rigid_bodies = ceiling->GetComponents(
             std::move(ifx::GameComponentType::PHYSICS));
