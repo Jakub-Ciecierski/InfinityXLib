@@ -1,16 +1,15 @@
-#include "graphics/factory/render_object_factory.h"
+#include "factory/render_object_factory.h"
 
 #include "graphics/rendering/shadows/shadow_mapping.h"
 #include <math/math_ifx.h>
-#include <graphics/factory/model_factory.h>
-#include <graphics/factory/program_factory.h>
+#include <factory/model_factory.h>
+#include <factory/program_factory.h>
 #include <graphics/rendering/fbo_rendering/fbo_renderer.h>
 #include <graphics/rendering/instanced_render_object.h>
 
 #include <GLFW/glfw3.h>
 #include <graphics/rendering/renderer.h>
-#include <graphics/factory/scene_factory.h>
-#include <graphics/factory/texture_factory.h>
+#include <factory/texture_factory.h>
 
 namespace ifx{
 

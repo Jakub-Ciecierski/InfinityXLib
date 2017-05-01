@@ -1,5 +1,5 @@
 #include <graphics/lighting/light_group.h>
-#include "graphics/factory/lighting_factory.h"
+#include "factory/lighting_factory.h"
 
 #include <memory>
 

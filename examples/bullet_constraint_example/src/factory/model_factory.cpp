@@ -1,6 +1,6 @@
-#include "graphics/factory/model_factory.h"
+#include "factory/model_factory.h"
 
-#include <graphics/factory/mesh_factory.h>
+#include <factory/mesh_factory.h>
 #include <graphics/model_loader/model_loader.h>
 #include <resources/resources.h>
 
