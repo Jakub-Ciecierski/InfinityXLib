@@ -1,13 +1,16 @@
 #include "engine_gui/scene_manipulator.h"
 
-#include <object/movable_object.h>
+#include <game/game_component.h>
+#include <math/transform.h>
+#include <game/components/cameras/camera_component.h>
+
 #include <graphics/rendering/camera/camera.h>
 #include <math/print_math.h>
 
 namespace ifx {
 
 SceneManipulator::SceneManipulator() :
-    movable_object_(nullptr),
+        transformable_object_(nullptr),
     camera_(nullptr),
     operation_(SceneManipulatorOperation::TRANSLATE),
     show_(true){
@@ -16,8 +19,8 @@ SceneManipulator::SceneManipulator() :
 
 SceneManipulator::~SceneManipulator() { }
 
-void SceneManipulator::Manipulate(std::shared_ptr<MovableObject> movable_object,
-                                  std::shared_ptr<Camera> camera,
+void SceneManipulator::Manipulate(std::shared_ptr<Transformable> movable_object,
+                                  std::shared_ptr<CameraComponent> camera,
                                   SceneManipulatorOperation operation) {
     ImGuizmo::BeginFrame();
 
@@ -39,7 +42,7 @@ void SceneManipulator::Manipulate(std::shared_ptr<MovableObject> movable_object,
 void SceneManipulator::Manipulate() {
     if(!show_)
         return;
-    if(!movable_object_ || !camera_)
+    if(!transformable_object_ || !camera_)
         return;
 
     ImGuizmo::BeginFrame();
@@ -47,7 +50,7 @@ void SceneManipulator::Manipulate() {
     const float *view = glm::value_ptr(camera_->getViewMatrix());
     const float *projection = glm::value_ptr(camera_->getProjectionMatrix());
 
-    auto model = movable_object_->GetModelMatrix();
+    auto model = transformable_object_->GetModelMatrix();
     float *new_model_matrix = glm::value_ptr(model);
 
     ImGuizmo::Manipulate(view, projection,
@@ -56,10 +59,10 @@ void SceneManipulator::Manipulate() {
                          new_model_matrix);
 
     if (ImGuizmo::IsUsing())
-        Manipulate(movable_object_, new_model_matrix, operation_);
+        Manipulate(transformable_object_, new_model_matrix, operation_);
 }
 
-void SceneManipulator::Manipulate(std::shared_ptr<MovableObject> movable_object,
+void SceneManipulator::Manipulate(std::shared_ptr<Transformable> movable_object,
                                   const float *new_model_matrix,
                                   SceneManipulatorOperation operation) {
     float translate_raw[3];

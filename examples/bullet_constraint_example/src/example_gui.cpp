@@ -18,7 +18,7 @@ void ExampleGUI::Render(){
 
     engine_gui_->Render();
     RenderSceneObjects();
-    
+
     ImGui::Render();
 }
 

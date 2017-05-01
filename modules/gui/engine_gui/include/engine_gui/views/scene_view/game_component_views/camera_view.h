@@ -5,7 +5,7 @@
 
 namespace ifx {
 
-class Camera;
+class CameraComponent;
 
 class CameraView {
 public:
@@ -13,7 +13,7 @@ public:
     CameraView();
     ~CameraView();
 
-    void Render(std::shared_ptr<Camera> camera);
+    void Render(std::shared_ptr<CameraComponent> camera);
 private:
 };
 }

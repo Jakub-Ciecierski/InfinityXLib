@@ -2,8 +2,9 @@
 
 #include <game/game_object.h>
 #include <game/scene_distributor.h>
-#include <object/game_component.h>
+#include <game/game_component.h>
 #include <graphics/rendering/camera/camera.h>
+#include <game/components/cameras/camera_component.h>
 
 namespace ifx{
 
@@ -61,13 +62,13 @@ std::shared_ptr<GameObject> SceneContainer::CreateGameObject(){
     return game_object;
 }
 
-std::shared_ptr<Camera> SceneContainer::GetActiveCamera(){
-    std::shared_ptr<Camera> camera = nullptr;
+std::shared_ptr<CameraComponent> SceneContainer::GetActiveCamera(){
+    std::shared_ptr<CameraComponent> camera = nullptr;
 
     for(auto& object : game_objects_){
         auto cameras = object->GetComponents(GameComponentType::CAMERA);
         if(cameras.size() != 0){
-            camera = std::static_pointer_cast<Camera>(cameras[0]);
+            camera = std::dynamic_pointer_cast<CameraComponent>(cameras[0]);
         }
     }
 

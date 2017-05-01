@@ -1,7 +1,7 @@
 #include <gui/imgui/imgui.h>
 #include "engine_gui/views/scene_view/movable_object_view.h"
 
-#include <object/movable_object.h>
+#include <math/transform.h>
 #include <math/math_ifx.h>
 
 namespace ifx{
@@ -9,7 +9,7 @@ namespace ifx{
 MovableObjectView::MovableObjectView(){}
 MovableObjectView::~MovableObjectView(){}
 
-void MovableObjectView::Render(std::shared_ptr<MovableObject> movable_object){
+void MovableObjectView::Render(std::shared_ptr<Transformable> movable_object){
     if(ImGui::TreeNode("Transform")){
         RenderPosition(movable_object);
         RenderRotation(movable_object);
@@ -20,7 +20,7 @@ void MovableObjectView::Render(std::shared_ptr<MovableObject> movable_object){
 }
 
 void MovableObjectView::RenderPosition(
-        std::shared_ptr<MovableObject> movable_object){
+        std::shared_ptr<Transformable> movable_object){
     static float raw[3];
     const glm::vec3& position = movable_object->local_transform().position;
 
@@ -33,7 +33,7 @@ void MovableObjectView::RenderPosition(
 }
 
 void MovableObjectView::RenderRotation(
-        std::shared_ptr<MovableObject> movable_object){
+        std::shared_ptr<Transformable> movable_object){
     static float raw[3];
     const glm::vec3& rotation = movable_object->local_transform().rotation;
 
@@ -45,7 +45,7 @@ void MovableObjectView::RenderRotation(
     movable_object->rotateTo(glm::vec3(raw[0], raw[1], raw[2]));
 }
 void MovableObjectView::RenderScale(
-        std::shared_ptr<MovableObject> movable_object){
+        std::shared_ptr<Transformable> movable_object){
     static float raw[3];
     const glm::vec3& scale = movable_object->local_transform().scale;
     raw[0] = scale.x;
@@ -57,7 +57,7 @@ void MovableObjectView::RenderScale(
 }
 
 void MovableObjectView::RenderDirection(
-        std::shared_ptr<MovableObject> movable_object){
+        std::shared_ptr<Transformable> movable_object){
     static float raw[3];
     const glm::vec3& v = movable_object->getDirection();
     raw[0] = v.x;

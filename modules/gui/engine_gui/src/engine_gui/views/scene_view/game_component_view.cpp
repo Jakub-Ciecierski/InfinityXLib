@@ -5,11 +5,12 @@
 #include <engine_gui/views/scene_view/game_component_views/light_view.h>
 #include <engine_gui/views/scene_view/game_component_views/render_object_view.h>
 
-#include <object/movable_object.h>
-#include <object/game_component.h>
+#include <game/game_component.h>
 
+#include <game/components/render/render_component.h>
+#include <game/components/cameras/camera_component.h>
 #include <graphics/lighting/light_source.h>
-#include <object/render_object.h>
+#include <graphics/rendering/render_object.h>
 #include <graphics/rendering/camera/camera.h>
 
 namespace ifx{
@@ -24,21 +25,25 @@ GameComponentView::GameComponentView(){
 GameComponentView::~GameComponentView(){}
 
 void GameComponentView::Render(std::shared_ptr<GameComponent> game_component){
-    movable_object_view_->Render(game_component);
+    // TODO
+    movable_object_view_->Render(
+            std::dynamic_pointer_cast<Transformable>(game_component));
 
     switch(game_component->type()){
         case GameComponentType::LIGHT:
             light_view_->Render(
-                    std::static_pointer_cast<LightSource>(game_component));
+                    std::dynamic_pointer_cast<LightSource>(game_component));
             break;
         case GameComponentType::RENDER:
             render_object_view_->Render(
-                    std::static_pointer_cast<RenderObject>(game_component));
+                    std::dynamic_pointer_cast<RenderComponent>(game_component));
             break;
         case GameComponentType::CAMERA:
             camera_view_->Render(
-                    std::static_pointer_cast<Camera>(game_component));
+                    std::dynamic_pointer_cast<CameraComponent>(game_component));
             break;
+        default:
+            return;
     }
 }
 

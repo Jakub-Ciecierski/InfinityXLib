@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include <object/movable_object.h>
+#include <math/transform.h>
 
 namespace ifx {
 
@@ -20,7 +20,7 @@ enum class GameComponentType;
  * specific components and sending them to further process (e.g. all
  * render_objects should be be sent to the renderer.)
  */
-class GameObject : public MovableObject {
+class GameObject : public Transformable {
 public:
     GameObject(std::shared_ptr<SceneDistributor> scene_distributor);
 

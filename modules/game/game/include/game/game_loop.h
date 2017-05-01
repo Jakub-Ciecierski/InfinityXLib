@@ -8,7 +8,6 @@ namespace ifx {
 
 class Renderer;
 class PhysicsSimulation;
-class Simulation;
 class SceneContainer;
 
 struct GameTimeData{
@@ -32,9 +31,6 @@ public:
     std::shared_ptr<PhysicsSimulation>
     physics_simulation(){return physics_simulation_;}
 
-    void AddSimulation(std::shared_ptr<Simulation> simulation);
-    bool RemoveSimulation(std::shared_ptr<Simulation> simulation);
-
     void Start();
 
 private:
@@ -44,8 +40,6 @@ private:
     std::shared_ptr<PhysicsSimulation> physics_simulation_;
 
     std::shared_ptr<SceneContainer> scene_;
-
-    std::vector<std::shared_ptr<Simulation>> simulations_;
 
     GameTimeData time_data_;
 };

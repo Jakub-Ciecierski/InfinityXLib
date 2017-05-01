@@ -6,7 +6,7 @@
  */
 
 #include <LinearMath/btTransform.h>
-#include <object/movable_object.h>
+#include <math/transform.h>
 
 namespace ifx{
 

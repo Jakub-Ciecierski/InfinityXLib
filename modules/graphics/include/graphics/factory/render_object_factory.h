@@ -1,7 +1,7 @@
 #ifndef PROJECT_RENDER_OBJECT_FACTORY_H
 #define PROJECT_RENDER_OBJECT_FACTORY_H
 
-#include <object/render_object.h>
+#include <graphics/rendering/render_object.h>
 #include <memory>
 
 namespace ifx {

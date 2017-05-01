@@ -1,12 +1,13 @@
 #include "engine_gui/views/scene_view/game_component_views/render_object_view.h"
 
-#include <object/render_object.h>
+#include <graphics/rendering/render_object.h>
+#include <game/components/render/render_component.h>
 
 namespace ifx{
 
 RenderObjectView::RenderObjectView(){}
 RenderObjectView::~RenderObjectView(){}
 
-void RenderObjectView::Render(std::shared_ptr<RenderObject> render_object){}
+void RenderObjectView::Render(std::shared_ptr<RenderComponent> render_object){}
 
 }

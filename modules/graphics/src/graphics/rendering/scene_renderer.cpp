@@ -2,7 +2,7 @@
 
 #include <graphics/lighting/light_group.h>
 #include <graphics/rendering/camera/camera.h>
-#include <object/render_object.h>
+#include <graphics/rendering/render_object.h>
 
 namespace ifx {
 

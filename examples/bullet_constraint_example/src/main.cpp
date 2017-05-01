@@ -36,11 +36,19 @@
 #include <graphics/model/material.h>
 #include <graphics/model/model.h>
 #include <BulletDynamics/ConstraintSolver/btHingeConstraint.h>
+#include <game/components/cameras/factory/camera_factory.h>
+#include <graphics/factory/model_factory.h>
+#include <game/components/render/render_component.h>
+#include <graphics/factory/program_factory.h>
+#include <game/components/lights/light_spotlight_component.h>
+#include <game/components/lights/light_directional_component.h>
+#include <game/components/physics/rigid_body_component.h>
+#include <game/components/cameras/camera_component.h>
 
-std::shared_ptr<ifx::LightDirectional> CreateDirectionalLight();
-std::shared_ptr<ifx::LightSpotlight> CreateSpotLight();
-std::shared_ptr<ifx::RigidBody> CreateRigidBox(glm::vec3 scale);
-std::shared_ptr<ifx::RigidBody> CreateRigidFloor();
+std::shared_ptr<ifx::LightDirectionalComponent> CreateDirectionalLight();
+std::shared_ptr<ifx::LightSpotlightComponent> CreateSpotLight();
+std::shared_ptr<ifx::RigidBodyComponent> CreateRigidBox(glm::vec3 scale);
+std::shared_ptr<ifx::RigidBodyComponent> CreateRigidFloor();
 
 std::shared_ptr<ifx::GameObject> CreateGameObjectCamera(
         std::shared_ptr<ifx::SceneContainer> scene,
@@ -57,67 +65,92 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectCeiling(
 
 void AddSpringConstraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
-        std::shared_ptr<ifx::RigidBody> body1,
-        std::shared_ptr<ifx::RigidBody> body2);
+        std::shared_ptr<ifx::RigidBodyComponent> body1,
+        std::shared_ptr<ifx::RigidBodyComponent> body2);
 void AddHeadTorsoConstraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
-        std::shared_ptr<ifx::RigidBody> body1,
-        std::shared_ptr<ifx::RigidBody> body2);
+        std::shared_ptr<ifx::RigidBodyComponent> body1,
+        std::shared_ptr<ifx::RigidBodyComponent> body2);
 void AddTorsoArm1Constraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
-        std::shared_ptr<ifx::RigidBody> body1,
-        std::shared_ptr<ifx::RigidBody> body2);
+        std::shared_ptr<ifx::RigidBodyComponent> body1,
+        std::shared_ptr<ifx::RigidBodyComponent> body2);
 void AddTorsoArm2Constraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
-        std::shared_ptr<ifx::RigidBody> body1,
-        std::shared_ptr<ifx::RigidBody> body2);
+        std::shared_ptr<ifx::RigidBodyComponent> body1,
+        std::shared_ptr<ifx::RigidBodyComponent> body2);
 void AddTorsoLeg1Constraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
-        std::shared_ptr<ifx::RigidBody> body1,
-        std::shared_ptr<ifx::RigidBody> body2);
+        std::shared_ptr<ifx::RigidBodyComponent> body1,
+        std::shared_ptr<ifx::RigidBodyComponent> body2);
 void AddTorsoLeg2Constraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
-        std::shared_ptr<ifx::RigidBody> body1,
-        std::shared_ptr<ifx::RigidBody> body2);
+        std::shared_ptr<ifx::RigidBodyComponent> body1,
+        std::shared_ptr<ifx::RigidBodyComponent> body2);
 void AddTorsoFeet1Constraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
-        std::shared_ptr<ifx::RigidBody> body1,
-        std::shared_ptr<ifx::RigidBody> body2);
+        std::shared_ptr<ifx::RigidBodyComponent> body1,
+        std::shared_ptr<ifx::RigidBodyComponent> body2);
 void AddTorsoFeet2Constraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
-        std::shared_ptr<ifx::RigidBody> body1,
-        std::shared_ptr<ifx::RigidBody> body2);
+        std::shared_ptr<ifx::RigidBodyComponent> body1,
+        std::shared_ptr<ifx::RigidBodyComponent> body2);
 
-std::shared_ptr<ifx::LightDirectional> CreateDirectionalLight(){
+std::shared_ptr<ifx::RenderComponent> CreateFloor();
+
+std::shared_ptr<ifx::RenderComponent> CreateFloor(){
+    std::shared_ptr<Program> program = ifx::ProgramFactory().LoadMainProgram();
+    std::shared_ptr<ifx::Model> model = ifx::ModelFactory::LoadFloorModel();
+
+    auto render_object = std::shared_ptr<ifx::RenderComponent>(
+            new ifx::RenderComponent(model));
+    render_object->addProgram(program);
+
+    float scaleFactor = 5.0f;
+    render_object->scale(glm::vec3(scaleFactor, scaleFactor, scaleFactor));
+    render_object->rotateTo(glm::vec3(90, 0, 0));
+
+    render_object->SetBeforeRender([](const Program* program){
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+    });
+    render_object->SetAfterRender([](const Program* program){
+        glDisable(GL_CULL_FACE);
+    });
+
+    return render_object;
+}
+
+std::shared_ptr<ifx::LightDirectionalComponent> CreateDirectionalLight(){
     ifx::LightParams light;
 
     light.ambient = glm::vec3(0.5f, 0.5f, 0.5f);
     light.diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
     light.specular = glm::vec3(1.0f, 1.0f, 1.0f);
 
-    auto light_source = std::shared_ptr<ifx::LightDirectional>(
-            new ifx::LightDirectional(light));
+    auto light_source = std::shared_ptr<ifx::LightDirectionalComponent>(
+            new ifx::LightDirectionalComponent(light));
     light_source->rotateTo(glm::vec3(0, 270, 0));
     light_source->rotateTo(glm::vec3(322, 295, 0));
 
     return light_source;
 }
 
-std::shared_ptr<ifx::LightSpotlight> CreateSpotLight(){
+std::shared_ptr<ifx::LightSpotlightComponent> CreateSpotLight(){
     ifx::LightParams light;
 
     light.ambient = glm::vec3(0.5f, 0.5f, 0.5f);
     light.diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
     light.specular = glm::vec3(1.0f, 1.0f, 1.0f);
 
-    auto light_source = std::shared_ptr<ifx::LightSpotlight>(
-            new ifx::LightSpotlight(light));
+    auto light_source = std::shared_ptr<ifx::LightSpotlightComponent>(
+            new ifx::LightSpotlightComponent(light));
     light_source->rotateTo(glm::vec3(0, 270, 0));
 
     return light_source;
 }
 
-std::shared_ptr<ifx::RigidBody> CreateRigidBox(glm::vec3 scale){
+std::shared_ptr<ifx::RigidBodyComponent> CreateRigidBox(glm::vec3 scale){
     float a = 1;
     auto box_collision = std::shared_ptr<ifx::BoxCollisionShape>(
             new ifx::BoxCollisionShape(glm::vec3(a,a,a)));
@@ -125,19 +158,19 @@ std::shared_ptr<ifx::RigidBody> CreateRigidBox(glm::vec3 scale){
             scale.x, scale.y, scale.z));
 
     auto mass = 1.0f;
-    auto rigid_body = std::shared_ptr<ifx::RigidBody>(
-            new ifx::RigidBody(box_collision, mass));
+    auto rigid_body = std::shared_ptr<ifx::RigidBodyComponent>(
+            new ifx::RigidBodyComponent(box_collision, mass));
 
     return rigid_body;
 }
 
-std::shared_ptr<ifx::RigidBody> CreateRigidFloor(){
+std::shared_ptr<ifx::RigidBodyComponent> CreateRigidFloor(){
     auto box_collision = std::shared_ptr<ifx::BoxCollisionShape>(
             new ifx::BoxCollisionShape(glm::vec3(500,0.01,500)));
 
     auto mass = 0.0f;
-    auto rigid_body = std::shared_ptr<ifx::RigidBody>(
-            new ifx::RigidBody(box_collision, mass));
+    auto rigid_body = std::shared_ptr<ifx::RigidBodyComponent>(
+            new ifx::RigidBodyComponent(box_collision, mass));
 
     return rigid_body;
 }
@@ -146,8 +179,9 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectCamera(
         std::shared_ptr<ifx::SceneContainer> scene,
         std::shared_ptr<ifx::Game> game){
     auto game_object = scene->CreateAndAddEmptyGameObject();
-    game_object->Add(
-            ifx::SceneFactory().CreateCamera(game->game_loop()->renderer()->window()));
+    auto camera = ifx::CameraFactory().CreateCamera(
+            game->game_loop()->renderer()->window());
+    game_object->Add(std::dynamic_pointer_cast<ifx::GameComponent>(camera));
 
     return game_object;
 }
@@ -156,7 +190,17 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectLight(
         std::shared_ptr<ifx::SceneContainer> scene){
     auto game_object = scene->CreateAndAddEmptyGameObject();
 
-    game_object->Add(std::move(ifx::RenderObjectFactory().CreateLampObject()));
+    std::shared_ptr<Program> program = ifx::ProgramFactory().loadLampProgram();
+    std::shared_ptr<ifx::Model> model = ifx::ModelFactory::LoadLampModel();
+    auto render_object = std::shared_ptr<ifx::RenderComponent>(
+            new ifx::RenderComponent(model));
+    render_object->addProgram(program);
+    float scaleFactor = 0.05f;
+    render_object->scale(glm::vec3(scaleFactor, scaleFactor, scaleFactor));
+    render_object->moveTo(glm::vec3(0, 0.3, 0));
+
+    game_object->Add(std::dynamic_pointer_cast<ifx::GameComponent>(
+            render_object));
     game_object->Add(CreateSpotLight());
     game_object->Add(CreateDirectionalLight());
 
@@ -170,7 +214,11 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectBox(
     glm::vec3 scaled_scale = scale * scale_factor;
     auto game_object = scene->CreateAndAddEmptyGameObject();
 
-    auto render_object = ifx::RenderObjectFactory().CreateCube();
+    std::shared_ptr<ifx::Model> model = ifx::ModelFactory::LoadCubeModel();
+    std::shared_ptr<Program> program = ifx::ProgramFactory().LoadMainProgram();
+    auto render_object = std::shared_ptr<ifx::RenderComponent>(
+            new ifx::RenderComponent(model));
+    render_object->addProgram(program);
     render_object->scale(scaled_scale);
 
     game_object->Add(CreateRigidBox(scaled_scale));
@@ -210,7 +258,7 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectFloor(
         std::shared_ptr<ifx::SceneContainer> scene){
     auto game_object = scene->CreateAndAddEmptyGameObject();
 
-    game_object->Add(ifx::RenderObjectFactory().CreateFloor());
+    game_object->Add(CreateFloor());
     game_object->Add(CreateRigidFloor());
     return game_object;
 }
@@ -219,7 +267,7 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectCeiling(
         std::shared_ptr<ifx::SceneContainer> scene){
     auto game_object = scene->CreateAndAddEmptyGameObject();
 
-    game_object->Add(ifx::RenderObjectFactory().CreateFloor());
+    game_object->Add(CreateFloor());
     game_object->Add(CreateRigidFloor());
     game_object->rotateTo(glm::vec3(0,0,180));
     return game_object;
@@ -227,8 +275,8 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectCeiling(
 
 void AddSpringConstraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
-        std::shared_ptr<ifx::RigidBody> body1,
-        std::shared_ptr<ifx::RigidBody> body2){
+        std::shared_ptr<ifx::RigidBodyComponent> body1,
+        std::shared_ptr<ifx::RigidBodyComponent> body2){
     btTransform frameInA, frameInB;
     frameInA = btTransform::getIdentity();
     frameInA.setOrigin(btVector3(btScalar(0.), btScalar(2.), btScalar(0.)));
@@ -251,8 +299,8 @@ void AddSpringConstraint(
 
 void AddHeadTorsoConstraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
-        std::shared_ptr<ifx::RigidBody> body1,
-        std::shared_ptr<ifx::RigidBody> body2){
+        std::shared_ptr<ifx::RigidBodyComponent> body1,
+        std::shared_ptr<ifx::RigidBodyComponent> body2){
     btVector3 pivot1(0, -1.3, 0);
     btVector3 pivot2(0, 0.9, 0);
 
@@ -264,8 +312,8 @@ void AddHeadTorsoConstraint(
 
 void AddTorsoArm1Constraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
-        std::shared_ptr<ifx::RigidBody> body1,
-        std::shared_ptr<ifx::RigidBody> body2){
+        std::shared_ptr<ifx::RigidBodyComponent> body1,
+        std::shared_ptr<ifx::RigidBodyComponent> body2){
     //btVector3 pivot1(0, 0, -1.0);
     btVector3 pivot1(0, 0.5, -0.6);
     btVector3 pivot2(0, -1.0, 0.0);
@@ -278,8 +326,8 @@ void AddTorsoArm1Constraint(
 
 void AddTorsoArm2Constraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
-        std::shared_ptr<ifx::RigidBody> body1,
-        std::shared_ptr<ifx::RigidBody> body2){
+        std::shared_ptr<ifx::RigidBodyComponent> body1,
+        std::shared_ptr<ifx::RigidBodyComponent> body2){
     btVector3 pivot1(0, 0.5, 0.6);
     btVector3 pivot2(0, -1.0, 0.0);
 
@@ -291,8 +339,8 @@ void AddTorsoArm2Constraint(
 
 void AddTorsoLeg1Constraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
-        std::shared_ptr<ifx::RigidBody> body1,
-        std::shared_ptr<ifx::RigidBody> body2){
+        std::shared_ptr<ifx::RigidBodyComponent> body1,
+        std::shared_ptr<ifx::RigidBodyComponent> body2){
     btVector3 pivot1(0, -1.3, -0.5);
     btVector3 pivot2(0, 1, 0.0);
 
@@ -304,8 +352,8 @@ void AddTorsoLeg1Constraint(
 
 void AddTorsoLeg2Constraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
-        std::shared_ptr<ifx::RigidBody> body1,
-        std::shared_ptr<ifx::RigidBody> body2){
+        std::shared_ptr<ifx::RigidBodyComponent> body1,
+        std::shared_ptr<ifx::RigidBodyComponent> body2){
     btVector3 pivot1(0, -1.3, 0.5);
     btVector3 pivot2(0, 1, 0.0);
 
@@ -317,8 +365,8 @@ void AddTorsoLeg2Constraint(
 
 void AddTorsoFeet1Constraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
-        std::shared_ptr<ifx::RigidBody> body1,
-        std::shared_ptr<ifx::RigidBody> body2){
+        std::shared_ptr<ifx::RigidBodyComponent> body1,
+        std::shared_ptr<ifx::RigidBodyComponent> body2){
     btVector3 pivotInA(0, -1 ,0);
     btVector3 pivotInB(0.4, 0, 0);
     btVector3 axisInA(0,0,1);
@@ -335,8 +383,8 @@ void AddTorsoFeet1Constraint(
 
 void AddTorsoFeet2Constraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
-        std::shared_ptr<ifx::RigidBody> body1,
-        std::shared_ptr<ifx::RigidBody> body2){
+        std::shared_ptr<ifx::RigidBodyComponent> body1,
+        std::shared_ptr<ifx::RigidBodyComponent> body2){
     btVector3 pivotInA(0, -1 ,0);
     btVector3 pivotInB(0.4, 0, 0);
     btVector3 axisInA(0,0,1);
@@ -402,47 +450,47 @@ int main() {
 
     auto ceiling_rigid_bodies = ceiling->GetComponents(
             std::move(ifx::GameComponentType::PHYSICS));
-    auto ceiling_rigid_body = std::static_pointer_cast<ifx::RigidBody>(
+    auto ceiling_rigid_body = std::static_pointer_cast<ifx::RigidBodyComponent>(
             ceiling_rigid_bodies[0]);
 
     auto head_rigid_bodies = head->GetComponents(
             std::move(ifx::GameComponentType::PHYSICS));
-    auto head_rigid_body = std::static_pointer_cast<ifx::RigidBody>(
+    auto head_rigid_body = std::static_pointer_cast<ifx::RigidBodyComponent>(
             head_rigid_bodies[0]);
 
     auto torso_rigid_bodies = torso->GetComponents(
             std::move(ifx::GameComponentType::PHYSICS));
-    auto torso_rigid_body = std::static_pointer_cast<ifx::RigidBody>(
+    auto torso_rigid_body = std::static_pointer_cast<ifx::RigidBodyComponent>(
             torso_rigid_bodies[0]);
 
     auto arm1_rigid_bodies = arm1->GetComponents(
             std::move(ifx::GameComponentType::PHYSICS));
-    auto arm1_rigid_body = std::static_pointer_cast<ifx::RigidBody>(
+    auto arm1_rigid_body = std::static_pointer_cast<ifx::RigidBodyComponent>(
             arm1_rigid_bodies[0]);
 
     auto arm2_rigid_bodies = arm2->GetComponents(
             std::move(ifx::GameComponentType::PHYSICS));
-    auto arm2_rigid_body = std::static_pointer_cast<ifx::RigidBody>(
+    auto arm2_rigid_body = std::static_pointer_cast<ifx::RigidBodyComponent>(
             arm2_rigid_bodies[0]);
 
     auto leg1_rigid_bodies = leg1->GetComponents(
             std::move(ifx::GameComponentType::PHYSICS));
-    auto leg1_rigid_body = std::static_pointer_cast<ifx::RigidBody>(
+    auto leg1_rigid_body = std::static_pointer_cast<ifx::RigidBodyComponent>(
             leg1_rigid_bodies[0]);
 
     auto leg2_rigid_bodies = leg2->GetComponents(
             std::move(ifx::GameComponentType::PHYSICS));
-    auto leg2_rigid_body = std::static_pointer_cast<ifx::RigidBody>(
+    auto leg2_rigid_body = std::static_pointer_cast<ifx::RigidBodyComponent>(
             leg2_rigid_bodies[0]);
 
     auto feet1_rigid_bodies = feet1->GetComponents(
             std::move(ifx::GameComponentType::PHYSICS));
-    auto feet1_rigid_body = std::static_pointer_cast<ifx::RigidBody>(
+    auto feet1_rigid_body = std::static_pointer_cast<ifx::RigidBodyComponent>(
             feet1_rigid_bodies [0]);
 
     auto feet2_rigid_bodies = feet2->GetComponents(
             std::move(ifx::GameComponentType::PHYSICS));
-    auto feet2_rigid_body = std::static_pointer_cast<ifx::RigidBody>(
+    auto feet2_rigid_body = std::static_pointer_cast<ifx::RigidBodyComponent>(
             feet2_rigid_bodies [0]);
 
     AddSpringConstraint(
