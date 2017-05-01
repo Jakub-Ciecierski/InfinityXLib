@@ -1,20 +1,28 @@
 #include "graphics/lighting/types/light_directional.h"
 
 #include <graphics/lighting/builders/dirlight_shader_builder.h>
-#include <graphics/factory/program_factory.h>
 #include <graphics/rendering/shadows/shadow_mapping.h>
 #include <graphics/rendering/fbo_rendering/fbo_renderer.h>
 #include <graphics/shaders/buffers/fbo.h>
 #include <graphics/shaders/textures/texture.h>
 #include <graphics/shaders/textures/texture_activator.h>
+#include <graphics/shaders/loaders/program_loader.h>
 
 using namespace ifx;
 
 LightDirectional::LightDirectional(const LightParams& light_params) :
         LightSource(light_params, LightType::DIRECTIONAL){
+    ifx::Resources& resources = ifx::Resources::GetInstance();
+    std::string vertex_path =
+            resources.GetResourcePath("shadow_mapping/shadow_mapping.vs",
+                                      ifx::ResourceType::SHADER);
+    std::string fragment_path =
+            resources.GetResourcePath("shadow_mapping/shadow_mapping.fs",
+                                      ifx::ResourceType::SHADER);
+    auto program = ProgramLoader().CreateProgram(vertex_path, fragment_path);
+
     shadow_mapping_ = std::shared_ptr<ShadowMapping>(
-            new ShadowMapping(Dimensions{4024, 4024},
-                              ProgramFactory().LoadShadowMappingProgram()));
+            new ShadowMapping(Dimensions{4024, 4024}, program));
 }
 
 LightDirectional::~LightDirectional() {}

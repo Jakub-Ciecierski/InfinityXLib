@@ -1,6 +1,6 @@
 #include <game/game_loop.h>
 #include <game/factory/game_loop_factory.h>
-#include <graphics/factory/render_object_factory.h>
+#include <factory/render_object_factory.h>
 #include <graphics/rendering/renderer.h>
 #include <game/factory/game_factory.h>
 #include <game/game.h>
@@ -20,8 +20,8 @@
 #include <graphics/shaders/loaders/program_loader.h>
 #include <graphics/model_loader/model_loader.h>
 #include <game/components/render/render_component.h>
-#include <graphics/factory/program_factory.h>
-#include <graphics/factory/model_factory.h>
+#include <factory/program_factory.h>
+#include <factory/model_factory.h>
 #include <game/components/lights/light_spotlight_component.h>
 #include <game/components/lights/light_directional_component.h>
 #include <game/components/cameras/factory/camera_factory.h>

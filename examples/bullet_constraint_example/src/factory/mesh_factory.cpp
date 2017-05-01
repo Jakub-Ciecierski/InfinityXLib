@@ -1,6 +1,6 @@
-#include "graphics/factory/mesh_factory.h"
+#include "factory/mesh_factory.h"
 
-#include "graphics/factory/texture_factory.h"
+#include "factory/texture_factory.h"
 #include <graphics/shaders/textures/texture.h>
 #include <graphics/model/patch/patch.h>
 #include <vector>

@@ -1,4 +1,4 @@
-#include "graphics/factory/program_factory.h"
+#include "factory/program_factory.h"
 
 #include <graphics/shaders/loaders/program_loader.h>
 #include <resources/resources.h>

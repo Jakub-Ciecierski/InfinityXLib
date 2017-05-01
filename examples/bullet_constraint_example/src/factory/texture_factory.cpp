@@ -1,4 +1,4 @@
-#include "graphics/factory/texture_factory.h"
+#include "factory/texture_factory.h"
 
 #include <resources/resources.h>
 

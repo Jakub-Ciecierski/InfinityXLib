@@ -7,9 +7,9 @@
 #include <graphics/rendering/scene_renderer.h>
 #include <gui/gui.h>
 #include <resources/resource_memory_cache.h>
-#include <graphics/factory/program_factory.h>
 #include <graphics/rendering/shadows/shadow_mapping_renderer.h>
 #include <graphics/shaders/textures/texture_activator.h>
+#include <graphics/shaders/loaders/program_loader.h>
 
 namespace ifx {
 
@@ -23,7 +23,14 @@ Renderer::Renderer() :
 
     fbo_renderer_
             = std::shared_ptr<FBORenderer>(new FBORenderer(window_.get()));
-    fbo_renderer_->SetProgram(ProgramFactory().LoadFBOProgram());
+
+    ifx::Resources& resources = ifx::Resources::GetInstance();
+    std::string vertex_path =
+            resources.GetResourcePath("fbo/fbo.vs", ifx::ResourceType::SHADER);
+    std::string fragment_path =
+            resources.GetResourcePath("fbo/fbo.fs", ifx::ResourceType::SHADER);
+    auto program = ProgramLoader().CreateProgram(vertex_path, fragment_path);
+    fbo_renderer_->SetProgram(program);
 
     shadow_mapping_renderer_ = std::shared_ptr<ShadowMappingRenderer>
             (new ShadowMappingRenderer(scene_renderer_,
