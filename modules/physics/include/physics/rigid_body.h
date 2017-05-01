@@ -1,7 +1,7 @@
 #ifndef PROJECT_RIGID_BODY_H
 #define PROJECT_RIGID_BODY_H
 
-#include <object/game_component.h>
+#include <math/transform.h>
 
 class btRigidBody;
 class btMotionState;
@@ -10,7 +10,7 @@ namespace ifx {
 
 class CollisionShape;
 
-class RigidBody : public GameComponent {
+class RigidBody : public Transformable {
 public:
 
     RigidBody(std::shared_ptr<CollisionShape> collision_shape, float mass);

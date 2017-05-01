@@ -10,8 +10,7 @@ SceneFactory::~SceneFactory(){}
 
 std::shared_ptr<Camera> SceneFactory::CreateCamera(ifx::Window* window){
     auto camera
-            = std::shared_ptr<ifx::Camera>(new ifx::Camera(ObjectID(1),
-                                                           window->width(),
+            = std::shared_ptr<ifx::Camera>(new ifx::Camera(window->width(),
                                                            window->height()));
     return camera;
 }

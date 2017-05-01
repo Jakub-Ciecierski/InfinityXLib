@@ -23,8 +23,7 @@ std::unique_ptr<RenderObject> RenderObjectFactory::CreateRoom(){
     std::shared_ptr<Model> room_model = ModelFactory::LoadRoomModel();
 
     auto render_object
-            = std::unique_ptr<RenderObject>(new RenderObject(ObjectID(0),
-                                                             room_model));
+            = std::unique_ptr<RenderObject>(new RenderObject(room_model));
     render_object->addProgram(program);
     float scaleFactor = 2.0f;
     render_object->scale(glm::vec3(scaleFactor, scaleFactor, scaleFactor));
@@ -49,8 +48,7 @@ std::unique_ptr<RenderObject> RenderObjectFactory::CreateSpring(){
                                                      ResourceType::MODEL));
 
     auto render_object
-            = std::unique_ptr<RenderObject>(new RenderObject(ObjectID(0),
-                                                             model));
+            = std::unique_ptr<RenderObject>(new RenderObject(model));
     render_object->addProgram(program);
     float scale_factor = 0.022f;
     float scale_factor_y = 0.06f;
@@ -69,8 +67,7 @@ std::unique_ptr<RenderObject> RenderObjectFactory::CreateMassSpring(){
                                                      ResourceType::MODEL));
 
     auto render_object
-            = std::unique_ptr<RenderObject>(new RenderObject(ObjectID(0),
-                                                             model));
+            = std::unique_ptr<RenderObject>(new RenderObject(model));
     render_object->addProgram(program);
     float scale_factor = 0.025f;
     render_object->scale(glm::vec3(scale_factor, scale_factor, scale_factor));
@@ -114,7 +111,7 @@ RenderObject* RenderObjectFactory::CreateAsteroidField(){
     }
 
     InstancedRenderObject* instanced_render_object
-            = new InstancedRenderObject(ObjectID(0), model, instanced_data);
+            = new InstancedRenderObject(model, instanced_data);
     instanced_render_object->addProgram(program);
 
     return instanced_render_object;
@@ -126,7 +123,7 @@ RenderObject* RenderObjectFactory::CreateAsteroid(){
     std::shared_ptr<Model> model = ModelFactory::LoadAsteroidModel();
 
     RenderObject* renderObject
-            = new RenderObject(ObjectID(0), model);
+            = new RenderObject(model);
 
     renderObject->addProgram(program);
 
@@ -142,8 +139,7 @@ std::unique_ptr<RenderObject> RenderObjectFactory::CreateNanosuitObject(){
     std::shared_ptr<Model> nanosuitModel = ModelFactory::LoadNanoSuitModel();
 
     auto renderObject
-            = std::unique_ptr<RenderObject>(new RenderObject(ObjectID(0),
-                                                             nanosuitModel));
+            = std::unique_ptr<RenderObject>(new RenderObject(nanosuitModel));
 
     renderObject->addProgram(nano_program);
     //renderObject->addProgram(normal_vision_program);
@@ -164,9 +160,7 @@ std::unique_ptr<RenderObject> RenderObjectFactory::CreateFloor(){
     std::shared_ptr<Model> nanosuitModel = ModelFactory::LoadFloorModel();
 
     auto renderObject
-            = std::unique_ptr<RenderObject>(new RenderObject(ObjectID(0,
-                                                                      "Floor"),
-                                                     nanosuitModel));
+            = std::unique_ptr<RenderObject>(new RenderObject(nanosuitModel));
 
     renderObject->addProgram(nano_program);
     //renderObject->addProgram(normal_vision_program);
@@ -195,8 +189,7 @@ std::unique_ptr<RenderObject> RenderObjectFactory::CreateLampObject(){
     std::shared_ptr<Model> nanosuitModel = ModelFactory::LoadLampModel();
 
     auto renderObject
-            = std::unique_ptr<RenderObject>(new RenderObject(ObjectID(0),
-                                                             nanosuitModel));
+            = std::unique_ptr<RenderObject>(new RenderObject(nanosuitModel));
 
     renderObject->addProgram(nano_program);
 
@@ -212,7 +205,7 @@ std::shared_ptr<RenderObject> RenderObjectFactory::CreateCube(){
     std::shared_ptr<Program> program = ProgramFactory().LoadMainProgram();
 
     auto renderObject = std::shared_ptr<RenderObject>(
-            new RenderObject(ObjectID(0), model));
+            new RenderObject(model));
     renderObject->addProgram(program);
 
     return renderObject;
@@ -242,7 +235,7 @@ std::shared_ptr<RenderObject> RenderObjectFactory::CreateLine(
 
     auto render_object
             = std::shared_ptr<ifx::RenderObject>(
-                    new ifx::RenderObject(ObjectID(0),model));
+                    new ifx::RenderObject(model));
     render_object->addProgram(program);
 
     render_object->SetBeforeRender([](const Program* program){

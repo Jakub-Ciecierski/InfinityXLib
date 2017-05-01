@@ -1,7 +1,7 @@
 #ifndef PROJECT_INSTANCED_RENDERER_H
 #define PROJECT_INSTANCED_RENDERER_H
 
-#include <object/render_object.h>
+#include <graphics/rendering/render_object.h>
 #include <graphics/shaders/data/shader_data.h>
 
 #include <memory>
@@ -16,7 +16,7 @@ namespace ifx {
  */
 class InstancedRenderObject : public RenderObject {
 public:
-    InstancedRenderObject(ObjectID id, std::shared_ptr<Model> model,
+    InstancedRenderObject(std::shared_ptr<Model> model,
                           InstancedData& instanced_data);
 
     ~InstancedRenderObject();

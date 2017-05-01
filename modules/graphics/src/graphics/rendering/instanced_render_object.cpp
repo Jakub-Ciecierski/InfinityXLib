@@ -5,10 +5,9 @@
 
 namespace ifx {
 
-InstancedRenderObject::InstancedRenderObject(ObjectID id,
-                                             std::shared_ptr<Model> model,
+InstancedRenderObject::InstancedRenderObject(std::shared_ptr<Model> model,
                                              InstancedData& instanced_data) :
-    RenderObject(id, model),
+    RenderObject(model),
     instanced_data_(instanced_data) {
     const std::vector<Mesh*>& meshes = model->getMeshes();
     for(unsigned int i = 0; i < meshes.size(); i++){

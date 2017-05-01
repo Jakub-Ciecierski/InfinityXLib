@@ -2,9 +2,7 @@
 
 #include <views/scene_view/movable_object_view.h>
 
-#include <object/movable_object.h>
 #include <game/game_object.h>
-#include <object/game_component.h>
 
 namespace ifx{
 

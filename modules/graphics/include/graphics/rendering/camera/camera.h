@@ -2,21 +2,22 @@
 #define DUCK_CAMERA_H
 
 #include <graphics/shaders/program.h>
-#include <object/movable_object.h>
-#include <object/game_component.h>
 #include <math/math_ifx.h>
+#include <math/transform.h>
 #include <controls/event_handler.h>
+
+#include <memory>
 
 namespace ifx {
 
+
 /*
  * Camera represents the Projection and View Matrices.
- * Uses Eulor angles (lookAt) FPS style.
+ * Uses Euler angles (lookAt) FPS style.
  */
-class Camera : public EventHandler, public GameComponent{
+class Camera : public EventHandler, public Transformable{
 public:
-    Camera(ObjectID id,
-           int *width, int *height,
+    Camera(int *width, int *height,
            float FOV = 45.0f,
            float near = 0.01f, float far = 100.0f);
 
@@ -34,7 +35,7 @@ public:
     void rotateTo(const glm::vec3 &rotation) override;
 
     /**
-     * Override from GameComponent.
+     * Override from Transformable.
      */
     virtual void update() override;
 

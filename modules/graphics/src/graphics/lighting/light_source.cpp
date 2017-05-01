@@ -1,12 +1,13 @@
 #include <graphics/lighting/light_source.h>
 
+#include <math/transform.h>
+
 namespace ifx {
 
 LightSource::LightSource(const LightParams& light_params, LightType type) :
         light_params_(light_params),
         light_type_(type),
-        cast_shadow_(true),
-        GameComponent(GameComponentType::LIGHT){
+        cast_shadow_(true){
 }
 
 LightSource::~LightSource() {}

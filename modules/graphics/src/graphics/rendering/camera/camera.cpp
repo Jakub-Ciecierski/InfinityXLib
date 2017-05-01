@@ -7,10 +7,8 @@
 
 namespace ifx {
 
-Camera::Camera(ObjectID id,
-               int *width, int *height,
+Camera::Camera(int *width, int *height,
                float FOV, float near, float far) :
-        GameComponent(GameComponentType::CAMERA),
         width(width), height(height),
         FOV(FOV), near(near), far(far) {
     WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -66,13 +64,13 @@ void Camera::HandleEvents() {
 }
 
 void Camera::rotate(const glm::vec3 &rotation) {
-    MovableObject::rotate(rotation);
+    Transformable::rotate(rotation);
 
     //clampRotation();
 }
 
 void Camera::rotateTo(const glm::vec3 &rotation) {
-    MovableObject::rotateTo(rotation);
+    Transformable::rotateTo(rotation);
 
     //clampRotation();
 }
@@ -81,9 +79,9 @@ void Camera::update() {
     HandleEvents();
     UpdateGlobal();
 
-    ProjectionMatrix = glm::perspective(FOV,
-                                        (float) (*width) / (float) (*height),
-                                        near, far);
+    ProjectionMatrix
+            = glm::perspective(FOV, (float) (*width) / (float) (*height),
+                               near, far);
     auto position = getPosition();
     auto rotation = getRotation();
 
@@ -162,7 +160,7 @@ void Camera::clampRotation() {
     if (rotation.y > 89) {
         rotation.y = 89;
     }
-    MovableObject::rotateTo(rotation);
+    Transformable::rotateTo(rotation);
 }
 
 }

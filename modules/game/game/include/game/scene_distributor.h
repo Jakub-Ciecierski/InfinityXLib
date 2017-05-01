@@ -6,11 +6,11 @@
 namespace ifx {
 
 class SceneRenderer;
-class RenderObject;
+class RenderComponent;
 class LightSource;
-class Camera;
+class CameraComponent;
 class PhysicsSimulation;
-class RigidBody;
+class RigidBodyComponent;
 class GameObject;
 class GameComponent;
 
@@ -31,15 +31,15 @@ public:
     bool Remove(std::shared_ptr<GameComponent> game_component);
 
 private:
-    void Add(std::shared_ptr<RenderObject> render_object);
+    void Add(std::shared_ptr<RenderComponent> render_object);
     void Add(std::shared_ptr<LightSource> light_source);
-    void Add(std::shared_ptr<Camera> camera);
-    void Add(std::shared_ptr<RigidBody> rigid_body);
+    void Add(std::shared_ptr<CameraComponent> camera);
+    void Add(std::shared_ptr<RigidBodyComponent> rigid_body);
 
-    bool Remove(std::shared_ptr<RenderObject> render_object);
+    bool Remove(std::shared_ptr<RenderComponent> render_object);
     bool Remove(std::shared_ptr<LightSource> light_source);
-    bool Remove(std::shared_ptr<Camera> camera);
-    bool Remove(std::shared_ptr<RigidBody> rigid_body);
+    bool Remove(std::shared_ptr<CameraComponent> camera);
+    bool Remove(std::shared_ptr<RigidBodyComponent> rigid_body);
 
 
     std::shared_ptr<SceneRenderer> scene_renderer_;

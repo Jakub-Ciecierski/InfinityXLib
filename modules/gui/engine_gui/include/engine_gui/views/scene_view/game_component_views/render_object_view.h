@@ -5,7 +5,7 @@
 
 namespace ifx {
 
-class RenderObject;
+class RenderComponent;
 
 class RenderObjectView {
 public:
@@ -13,7 +13,7 @@ public:
     RenderObjectView();
     ~RenderObjectView();
 
-    void Render(std::shared_ptr<RenderObject> render_object);
+    void Render(std::shared_ptr<RenderComponent> render_object);
 private:
 };
 }

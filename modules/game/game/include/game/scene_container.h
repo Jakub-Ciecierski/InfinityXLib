@@ -11,6 +11,7 @@ class SceneRenderer;
 class SceneDistributor;
 class PhysicsSimulation;
 class Camera;
+class CameraComponent;
 
 /**
  * Container for GameObjects. Distributes game components to sub systems.
@@ -35,7 +36,7 @@ public:
     std::shared_ptr<GameObject> CreateAndAddEmptyGameObject();
     std::shared_ptr<GameObject> CreateGameObject();
 
-    std::shared_ptr<Camera> GetActiveCamera();
+    std::shared_ptr<CameraComponent> GetActiveCamera();
 
 private:
     void OnAdd(std::shared_ptr<GameObject> game_object);

@@ -1,18 +1,23 @@
 #include "engine_gui/views/scene_view.h"
 
 #include <game/scene_container.h>
-#include <object/render_object.h>
+#include <graphics/rendering/render_object.h>
 
 #include <gui/imgui/imgui.h>
 #include <gui/imgui/imgui_internal.h>
 #include <iostream>
-#include <object/game_component.h>
+#include <game/game_component.h>
 #include <game/game_object.h>
 #include <engine_gui/views/scene_view/game_object_view.h>
 #include <engine_gui/views/scene_view/game_component_view.h>
 #include <engine_gui/views/scene_view/scene_manipulator_view.h>
 #include <engine_gui/scene_manipulator.h>
-#include <graphics/factory/lighting_factory.h>
+#include <game/components/lights/factory/light_component_factory.h>
+
+#include <game/components/lights/light_spotlight_component.h>
+#include <game/components/lights/light_point_component.h>
+#include <game/components/lights/light_directional_component.h>
+#include <game/components/cameras/camera_component.h>
 
 namespace ifx {
 
@@ -83,7 +88,7 @@ void SceneView::RenderSelectedGameComponent(){
 void SceneView::RenderManipulator(){
     auto active_camera = scene_->GetActiveCamera();
     if (selected_game_object_ && active_camera) {
-        scene_manipulator_->movable_object(selected_game_object_);
+        scene_manipulator_->transformable_object(selected_game_object_);
         scene_manipulator_->camera(active_camera);
     }
     if(ImGui::CollapsingHeader("Manipulator")){
@@ -133,14 +138,24 @@ void SceneView::RenderGameObjectContextMenu(
         if (ImGui::BeginMenu("Add")) {
             if (ImGui::BeginMenu("Light")) {
                 if (ImGui::Selectable("Directional")) {
+                    auto light
+                            = LightComponentFactory().CreateDirectionalLight();
+                    /*
                     game_object->
-                            Add(LightingFactory().CreateDirectionalLight());
+                            Add(LightComponentFactory().CreateDirectionalLight());
+                            */
+                    game_object->Add
+                            (std::dynamic_pointer_cast<GameComponent>(light));
                 }
                 if (ImGui::Selectable("Spotlight")) {
-                    game_object->Add(LightingFactory().CreateSpotLight());
+                    auto light = LightComponentFactory().CreateSpotLight();
+                    game_object->Add(
+                            std::dynamic_pointer_cast<GameComponent>(light));
                 }
                 if (ImGui::Selectable("Point")) {
-                    game_object->Add(LightingFactory().CreatePointLight());
+                    auto light = LightComponentFactory().CreatePointLight();
+                    game_object->Add(std::dynamic_pointer_cast<GameComponent>
+                                             (light));
                 }
                 ImGui::EndMenu();
             }

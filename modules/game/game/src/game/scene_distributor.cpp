@@ -3,12 +3,15 @@
 #include <graphics/rendering/scene_renderer.h>
 #include <physics/physics_simulation.h>
 #include <game/game_object.h>
-#include <object/game_component.h>
+#include <game/game_component.h>
 
-#include <object/render_object.h>
+#include <graphics/rendering/render_object.h>
 #include <physics/rigid_body.h>
 #include <graphics/lighting/light_source.h>
 #include <graphics/rendering/camera/camera.h>
+#include <game/components/render/render_component.h>
+#include <game/components/cameras/camera_component.h>
+#include <game/components/physics/rigid_body_component.h>
 
 namespace ifx {
 
@@ -38,16 +41,16 @@ bool SceneDistributor::Remove(std::shared_ptr<GameObject> game_object){
 void SceneDistributor::Add(std::shared_ptr<GameComponent> game_component){
     switch(game_component->type()){
         case GameComponentType::RENDER:
-            Add(std::static_pointer_cast<RenderObject>(game_component));
+            Add(std::dynamic_pointer_cast<RenderComponent>(game_component));
             break;
         case GameComponentType::LIGHT:
-            Add(std::static_pointer_cast<LightSource>(game_component));
+            Add(std::dynamic_pointer_cast<LightSource>(game_component));
             break;
         case GameComponentType::CAMERA:
-            Add(std::static_pointer_cast<Camera>(game_component));
+            Add(std::dynamic_pointer_cast<CameraComponent>(game_component));
             break;
         case GameComponentType::PHYSICS:
-            Add(std::static_pointer_cast<RigidBody>(game_component));
+            Add(std::dynamic_pointer_cast<RigidBodyComponent>(game_component));
             break;
     }
 }
@@ -55,21 +58,23 @@ void SceneDistributor::Add(std::shared_ptr<GameComponent> game_component){
 bool SceneDistributor::Remove(std::shared_ptr<GameComponent> game_component){
     switch(game_component->type()){
         case GameComponentType::RENDER:
-            Remove(std::static_pointer_cast<RenderObject>(game_component));
+            Remove(std::dynamic_pointer_cast<RenderComponent>(game_component));
             break;
         case GameComponentType::LIGHT:
-            Remove(std::static_pointer_cast<LightSource>(game_component));
+            Remove(std::dynamic_pointer_cast<LightSource>(game_component));
             break;
         case GameComponentType::CAMERA:
-            Remove(std::static_pointer_cast<Camera>(game_component));
+            Remove(std::dynamic_pointer_cast<CameraComponent>(game_component));
             break;
         case GameComponentType::PHYSICS:
-            Remove(std::static_pointer_cast<RigidBody>(game_component));
+            Remove(std::dynamic_pointer_cast<RigidBodyComponent>
+                           (game_component));
             break;
     }
+    return false;
 }
 
-void SceneDistributor::Add(std::shared_ptr<RenderObject> render_object){
+void SceneDistributor::Add(std::shared_ptr<RenderComponent> render_object){
     scene_renderer_->Add(render_object);
 }
 
@@ -77,15 +82,15 @@ void SceneDistributor::Add(std::shared_ptr<LightSource> light_source){
     scene_renderer_->Add(light_source);
 }
 
-void SceneDistributor::Add(std::shared_ptr<Camera> camera){
+void SceneDistributor::Add(std::shared_ptr<CameraComponent> camera){
     scene_renderer_->Add(camera);
 }
 
-void SceneDistributor::Add(std::shared_ptr<RigidBody> rigid_body){
+void SceneDistributor::Add(std::shared_ptr<RigidBodyComponent> rigid_body){
     physics_simulation_->Add(rigid_body);
 }
 
-bool SceneDistributor::Remove(std::shared_ptr<RenderObject> render_object){
+bool SceneDistributor::Remove(std::shared_ptr<RenderComponent> render_object){
     return scene_renderer_->Remove(render_object);
 }
 
@@ -93,11 +98,11 @@ bool SceneDistributor::Remove(std::shared_ptr<LightSource> light_source){
     return scene_renderer_->Remove(light_source);
 }
 
-bool SceneDistributor::Remove(std::shared_ptr<Camera> camera){
+bool SceneDistributor::Remove(std::shared_ptr<CameraComponent> camera){
     return scene_renderer_->Remove(camera);
 }
 
-bool SceneDistributor::Remove(std::shared_ptr<RigidBody> rigid_body){
+bool SceneDistributor::Remove(std::shared_ptr<RigidBodyComponent> rigid_body){
     return physics_simulation_->Remove(rigid_body);
 }
 

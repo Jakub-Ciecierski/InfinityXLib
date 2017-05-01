@@ -3,13 +3,13 @@
 
 #include <graphics/shaders/data/shader_data.h>
 
-#include <object/movable_object.h>
-#include <object/game_component.h>
-
 #include <graphics/shaders/data/shader_data.h>
 #include <graphics/shaders/program.h>
 
 #include <math/math_ifx.h>
+#include <math/transform.h>
+
+#include <memory>
 
 namespace ifx {
 
@@ -39,7 +39,7 @@ enum class LightType{
  * Each light has its Attenuation values stored in Light struct.
  * The attenuation can be omitted by the shader itself.
  */
-class LightSource : public GameComponent {
+class LightSource : public Transformable {
 public:
     LightSource(const LightParams& light, LightType type);
     virtual ~LightSource();

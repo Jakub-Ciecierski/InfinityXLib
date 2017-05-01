@@ -10,14 +10,12 @@ namespace ifx{
 
 RigidBody::RigidBody(std::shared_ptr<CollisionShape> collision_shape,
                      float mass) :
-        GameComponent(GameComponentType::PHYSICS),
         collision_shape_(collision_shape),
         mass_(mass){
     Init();
 }
 
 RigidBody::RigidBody() :
-        GameComponent(GameComponentType::PHYSICS),
         collision_shape_(nullptr),
         mass_(0){}
 

@@ -1,7 +1,7 @@
 #include "game/game_object.h"
 
 #include <game/scene_distributor.h>
-#include <object/game_component.h>
+#include <game/game_component.h>
 
 namespace ifx{
 
@@ -11,17 +11,18 @@ GameObject::GameObject(std::shared_ptr<SceneDistributor> scene_distributor) :
 GameObject::~GameObject(){}
 
 void GameObject::update(){
-    MovableObject::update();
+    Transformable::update();
 
+    // TODO dynamic cast is expensive
     for(auto& component : components_)
-        component->update();
+        std::dynamic_pointer_cast<Transformable>(component)->update();
 }
 
 void GameObject::Add(std::shared_ptr<GameComponent> game_component){
     if(Exists(game_component))
         return;
 
-    game_component->SetParent(this);
+    std::dynamic_pointer_cast<Transformable>(game_component)->SetParent(this);
     components_.push_back(game_component);
 
     if(scene_distributor_)
