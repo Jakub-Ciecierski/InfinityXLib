@@ -5,20 +5,19 @@
 #include <vector>
 
 #include <math/math_ifx.h>
+#include <common/updatable.h>
 
 namespace ifx {
 
 class RigidBody;
 
-class PhysicsSimulation {
+class PhysicsSimulation : public Updatable{
 public:
     PhysicsSimulation();
     virtual ~PhysicsSimulation();
 
     bool is_running(){return is_running_;}
     void is_running(bool v){is_running_ = v;}
-
-    virtual void Update(float time_delta) = 0;
 
     virtual void SetGravity(const glm::vec3& g) = 0;
     virtual glm::vec3 GetGravity() = 0;

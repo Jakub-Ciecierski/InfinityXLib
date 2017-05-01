@@ -3,6 +3,7 @@
 
 #include <controls/event_handler.h>
 #include <graphics/rendering/window/window.h>
+#include <common/updatable.h>
 
 #include <memory>
 
@@ -24,7 +25,7 @@ enum class RenderingType{
 /**
  * Takes ownership over ShadowMapping
  */
-class Renderer : public EventHandler{
+class Renderer : public EventHandler, public Updatable{
 public:
     Renderer();
     ~Renderer();
@@ -33,9 +34,10 @@ public:
     RenderingType rendering_type(){return rendering_type_;}
     std::shared_ptr<SceneRenderer> scene_renderer(){return scene_renderer_;}
 
+    virtual void Update(float time_delta) override;
+
     // Overridden from EventHandler.
     void HandleEvents() override;
-    void Render();
 
     void SetGUI(std::shared_ptr<GUI> gui);
     void SetRenderingType(RenderingType type);

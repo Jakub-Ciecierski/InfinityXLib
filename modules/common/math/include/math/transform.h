@@ -2,6 +2,7 @@
 #define PROJECT_TRANSFORM_H
 
 #include <math/math_ifx.h>
+#include <common/updatable.h>
 
 #include <memory>
 
@@ -13,7 +14,7 @@ struct TransformData {
     glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 };
 
-class Transformable {
+class Transformable : public Updatable {
 public:
     Transformable();
 
@@ -34,7 +35,7 @@ public:
     }
     Transformable* movable_parent(){return parent_object_;}
 
-    virtual void update();
+    virtual void Update(float time_delta = 0) override;
 
     /*
      * Moves to position

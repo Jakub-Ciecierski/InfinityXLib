@@ -34,8 +34,4 @@ void LightSource::use(const Program &program, int id) {
     bind(program, id);
 }
 
-void LightSource::render(const Program &program) {
-    return;
-}
-
 } // ifx

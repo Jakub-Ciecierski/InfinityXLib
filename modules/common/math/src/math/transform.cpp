@@ -9,7 +9,7 @@ Transformable::Transformable() :
 
 Transformable::~Transformable() {}
 
-void Transformable::update(){
+void Transformable::Update(float time_delta){
     UpdateGlobal();
 
     auto& global_position = global_transform_.position;

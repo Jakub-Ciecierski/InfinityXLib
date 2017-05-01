@@ -37,11 +37,6 @@ public:
      */
     void use(const Program &program);
 
-    /*
-     * Renders all LightSources
-     */
-    void render(const Program &program);
-
 private:
     /*
     * Binds the number of each light type with the shader

@@ -20,15 +20,19 @@ GameLoop::~GameLoop(){}
 
 void GameLoop::Start(){
     while(!renderer_->window()->shouldClose()) {
-        renderer_->Render();
-
-        if(!UpdateTime())
-            continue;
-
-        physics_simulation_->Update(time_data_.time_delta);
-        scene_->Update();
-        ControlsEvents::GetInstance().Update();
+        RunSingleIteration();
     }
+}
+
+void GameLoop::RunSingleIteration(){
+    renderer_->Update(0);
+
+    if(!UpdateTime())
+        return;
+
+    physics_simulation_->Update(time_data_.time_delta);
+    scene_->Update();
+    ControlsEvents::GetInstance().Update();
 }
 
 bool GameLoop::UpdateTime(){

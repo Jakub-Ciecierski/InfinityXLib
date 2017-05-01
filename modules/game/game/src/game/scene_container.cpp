@@ -16,9 +16,9 @@ SceneContainer::SceneContainer(
 }
 SceneContainer::~SceneContainer(){}
 
-void SceneContainer::Update(){
+void SceneContainer::Update(float time_delta){
     for(auto& object : game_objects_){
-        object->update();
+        object->Update();
     }
 }
 

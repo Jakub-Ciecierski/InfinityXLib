@@ -32,8 +32,9 @@ public:
     physics_simulation(){return physics_simulation_;}
 
     void Start();
-
 private:
+    void RunSingleIteration();
+
     bool UpdateTime();
 
     std::shared_ptr<Renderer> renderer_;

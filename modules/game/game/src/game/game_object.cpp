@@ -10,12 +10,12 @@ GameObject::GameObject(std::shared_ptr<SceneDistributor> scene_distributor) :
 
 GameObject::~GameObject(){}
 
-void GameObject::update(){
-    Transformable::update();
+void GameObject::Update(float time_delta){
+    Transformable::Update();
 
     // TODO dynamic cast is expensive
     for(auto& component : components_)
-        std::dynamic_pointer_cast<Transformable>(component)->update();
+        std::dynamic_pointer_cast<Transformable>(component)->Update();
 }
 
 void GameObject::Add(std::shared_ptr<GameComponent> game_component){

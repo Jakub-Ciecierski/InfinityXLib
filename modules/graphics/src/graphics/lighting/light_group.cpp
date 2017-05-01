@@ -132,8 +132,3 @@ void LightGroup::use(const Program& program){
         }
     }
 }
-
-void LightGroup::render(const Program& program){
-    for(auto& light : lights_)
-        light->render(program);
-}

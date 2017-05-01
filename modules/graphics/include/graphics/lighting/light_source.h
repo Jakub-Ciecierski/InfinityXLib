@@ -58,8 +58,6 @@ public:
      */
     void use(const Program &program, int id = -1);
 
-    void render(const Program &program);
-
 protected:
     /*
      * Derived classes should implement special binding mechanism.

@@ -81,7 +81,7 @@ void Renderer::initGLFWRenderContext(){
 
     int width = 1500;
     int height = 1000;
-    window_ .reset(new Window(width, height, "InfinityX"));
+    window_.reset(new Window(width, height, "InfinityX"));
 
     LimitFPS(false);
 }
@@ -100,7 +100,7 @@ void Renderer::initGLFWCallbacks(){
     glfwSetCharCallback(window_->getHandle(), char_callback);
 }
 
-void Renderer::Render(){
+void Renderer::Update(float){
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

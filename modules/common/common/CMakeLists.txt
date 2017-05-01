@@ -1,10 +1,9 @@
 cmake_minimum_required(VERSION 3.3)
-set(LIB_NAME "graphics_ifx")
+set(LIB_NAME "common_ifx")
 project(${LIB_NAME})
 
 set(INC_DIR include)
 set(SRC_DIR src)
-set(DEPS_DIR dependencies)
 
 #---------------------------------
 # MACROS
@@ -27,41 +26,13 @@ ENDMACRO()
 # COMPILE FLAGS
 #---------------------------------
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall ")
 
 #---------------------------------
 # DEPENDENCIES
 #---------------------------------
 
-include_directories(${IFX_ROOT}/modules/common/resources/${INC_DIR})
-include_directories(${IFX_ROOT}/modules/common/math/${INC_DIR})
-include_directories(${IFX_ROOT}/modules/common/common/${INC_DIR})
-
-include_directories(${IFX_ROOT}/modules/controls/controls/${INC_DIR})
-
-include_directories(${IFX_ROOT}/modules/gui/gui/${INC_DIR})
-
-# LIGHTING
-include_directories(${IFX_ROOT}/modules/object/object/${INC_DIR})
-include_directories(${IFX_ROOT}/modules/common/math/${INC_DIR})
-# LIGHTING::SHADERS
-find_package(OpenGL REQUIRED)
-include_directories(${OPENGL_INCLUDE_DIRS})
-include_directories(${IFX_ROOT}/${DEPS_DIR}/glew-2.0.0/include)
-include_directories(${IFX_ROOT}/modules/common/math/${INC_DIR})
-# LIGHTING::MATH
 include_directories(${IFX_ROOT}/dependencies/glm/${INC_DIR})
-
-# MODEL
-find_package(OpenGL REQUIRED)
-include_directories(${IFX_ROOT}/${DEPS_DIR}/glew-2.0.0/include)
-include_directories(${OPENGL_INCLUDE_DIRS})
-include_directories(${IFX_ROOT}/dependencies/SOIL/src)
-
-# MODEL_LOADER
-include_directories(${IFX_ROOT}/${DEPS_DIR}/assimp-3.1.1/${INC_DIR})
-
-include_directories(${IFX_ROOT}/${DEPS_DIR}/glfw-3.1.2/${INC_DIR})
 
 #---------------------------------
 # PROJECT
@@ -69,7 +40,7 @@ include_directories(${IFX_ROOT}/${DEPS_DIR}/glfw-3.1.2/${INC_DIR})
 
 # INCLUDE AUTOMATIC SEARCH
 FIND_INCLUDE_DIR(INC_DIRS ${INC_DIR}/*.h)
-include_directories(${INC_DIR})
+include_directories(${INC_DIRS} ${INC_DIR})
 
 # SOURCES AUTOMATIC SEARCH
 file(GLOB_RECURSE SRC_FILES ${SRC_DIR}/*.cpp)
@@ -80,4 +51,5 @@ set(SPAM )
 if (NOT TARGET ${LIB_NAME})
     add_library(${LIB_NAME} STATIC ${SRC_FILES} ${SPAM})
 endif()
+
 set_target_properties(${LIB_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY lib)

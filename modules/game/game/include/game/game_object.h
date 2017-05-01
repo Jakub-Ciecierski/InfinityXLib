@@ -26,8 +26,7 @@ public:
 
     ~GameObject();
 
-    // Overridden from MovableObject
-    virtual void update() override;
+    virtual void Update(float time_delta = 0) override;
 
     void Add(std::shared_ptr<GameComponent> game_component);
     bool Remove(std::shared_ptr<GameComponent> game_component);

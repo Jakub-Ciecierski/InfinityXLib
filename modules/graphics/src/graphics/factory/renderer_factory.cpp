@@ -9,7 +9,7 @@ RendererFactory::RendererFactory() { }
 RendererFactory::~RendererFactory() { }
 
 std::shared_ptr<Renderer> RendererFactory::Create() {
-    auto renderer = std::unique_ptr<ifx::Renderer>(new ifx::Renderer());
+    auto renderer = std::shared_ptr<ifx::Renderer>(new ifx::Renderer());
 
     return renderer;
 }

@@ -13,7 +13,7 @@ Camera::Camera(int *width, int *height,
         FOV(FOV), near(near), far(far) {
     WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
     moveTo(glm::vec3(1,1,1));
-    update();
+    Update();
 }
 
 Camera::~Camera() {}
@@ -75,7 +75,7 @@ void Camera::rotateTo(const glm::vec3 &rotation) {
     //clampRotation();
 }
 
-void Camera::update() {
+void Camera::Update(float time_delta) {
     HandleEvents();
     UpdateGlobal();
 

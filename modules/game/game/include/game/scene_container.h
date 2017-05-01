@@ -4,6 +4,8 @@
 #include <memory>
 #include <vector>
 
+#include <common/updatable.h>
+
 namespace ifx {
 
 class GameObject;
@@ -16,7 +18,7 @@ class CameraComponent;
 /**
  * Container for GameObjects. Distributes game components to sub systems.
  */
-class  SceneContainer {
+class  SceneContainer : public Updatable{
 public:
 
     SceneContainer(std::shared_ptr<SceneRenderer> scene_renderer,
@@ -26,7 +28,7 @@ public:
     std::vector<std::shared_ptr<GameObject>>& game_objects(){
         return game_objects_;}
 
-    void Update();
+    virtual void Update(float time_delta = 0) override;
 
     void Add(std::shared_ptr<GameObject> game_object);
     bool Remove(std::shared_ptr<GameObject> game_object);

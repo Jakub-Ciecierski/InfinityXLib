@@ -37,7 +37,7 @@ public:
     /**
      * Override from Transformable.
      */
-    virtual void update() override;
+    virtual void Update(float time_delta = 0) override;
 
     void moveForward(float speedBoost);
     void moveBackward(float speedBoost);

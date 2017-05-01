@@ -31,6 +31,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 
 include_directories(${IFX_ROOT}/modules/vr/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/graphics/${INC_DIR})
+include_directories(${IFX_ROOT}/modules/common/common/${INC_DIR})
 
 include_directories(${IFX_ROOT}/modules/common/math/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/object/object/${INC_DIR})

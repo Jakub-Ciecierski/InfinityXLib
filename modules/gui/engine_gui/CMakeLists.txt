@@ -38,6 +38,7 @@ include_directories(${IFX_ROOT}/modules/object/object/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/controls/controls/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/gui/gui/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/physics/${INC_DIR})
+include_directories(${IFX_ROOT}/modules/common/common/${INC_DIR})
 
 include_directories(${IFX_ROOT}/modules/game/game/${INC_DIR})
 
