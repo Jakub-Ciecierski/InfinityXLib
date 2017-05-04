@@ -7,10 +7,12 @@
 
 namespace ifx {
 
+class ProgramCreator;
+
 class ProgramFactory {
 public:
 
-    ProgramFactory();
+    ProgramFactory(std::shared_ptr<ProgramCreator> program_creator);
 
     ~ProgramFactory();
 
@@ -37,6 +39,9 @@ public:
     std::shared_ptr<Program> loadAnisotropicLightProgram();
     std::shared_ptr<Program> loadBumpMappingProgram();
     std::shared_ptr<Program> loadLampProgram();
+
+private:
+    std::shared_ptr<ProgramCreator> program_creator_;
 };
 }
 

@@ -19,10 +19,14 @@
 #include <game/components/lights/light_directional_component.h>
 #include <game/components/cameras/camera_component.h>
 
+#include <game/resources/resource_context.h>
+
 namespace ifx {
 
-SceneView::SceneView(std::shared_ptr<SceneContainer> scene) :
+SceneView::SceneView(std::shared_ptr<SceneContainer> scene,
+                     std::shared_ptr<ResourceContext> resource_creator) :
         scene_(scene),
+        resource_creator_(resource_creator),
         selected_game_object_(nullptr),
         selected_game_component_(nullptr){
     scene_manipulator_
@@ -131,41 +135,56 @@ void SceneView::RenderGameObjectContextMenu(
         int game_object_id){
     ImGui::PushID(std::to_string(game_object_id).c_str());
     if (ImGui::BeginPopupContextItem("GameObject context menu")) {
-        if (ImGui::Selectable("Remove")) {
-            scene_->Remove(game_object);
-        }
-
-        if (ImGui::BeginMenu("Add")) {
-            if (ImGui::BeginMenu("Light")) {
-                if (ImGui::Selectable("Directional")) {
-                    auto light
-                            = LightComponentFactory().CreateDirectionalLight();
-                    /*
-                    game_object->
-                            Add(LightComponentFactory().CreateDirectionalLight());
-                            */
-                    game_object->Add
-                            (std::dynamic_pointer_cast<GameComponent>(light));
-                }
-                if (ImGui::Selectable("Spotlight")) {
-                    auto light = LightComponentFactory().CreateSpotLight();
-                    game_object->Add(
-                            std::dynamic_pointer_cast<GameComponent>(light));
-                }
-                if (ImGui::Selectable("Point")) {
-                    auto light = LightComponentFactory().CreatePointLight();
-                    game_object->Add(std::dynamic_pointer_cast<GameComponent>
-                                             (light));
-                }
-                ImGui::EndMenu();
-            }
-            ImGui::EndMenu();
-        }
-
+        RenderGameObjectContextMenuRemove(game_object, game_object_id);
+        RenderGameObjectContextMenuAdd(game_object, game_object_id);
 
         ImGui::EndPopup();
     }
     ImGui::PopID();
+}
+
+void SceneView::RenderGameObjectContextMenuRemove(
+        std::shared_ptr<GameObject> game_object,
+        int game_object_id){
+    if (ImGui::Selectable("Remove")) {
+        scene_->Remove(game_object);
+    }
+}
+
+void SceneView::RenderGameObjectContextMenuAdd(
+        std::shared_ptr<GameObject> game_object,
+        int game_object_id){
+    if (ImGui::BeginMenu("Add")) {
+        RenderGameObjectContextMenuAddLight(game_object, game_object_id);
+        ImGui::EndMenu();
+    }
+}
+
+void SceneView::RenderGameObjectContextMenuAddLight(
+        std::shared_ptr<GameObject> game_object,
+        int game_object_id){
+    if (ImGui::BeginMenu("Light")) {
+        if (ImGui::Selectable("Directional")) {
+            auto light = LightComponentFactory().CreateDirectionalLight(
+                    resource_creator_->texture_creator(),
+                    resource_creator_->program_creator());
+            game_object->Add
+                    (std::dynamic_pointer_cast<GameComponent>(light));
+        }
+        if (ImGui::Selectable("Spotlight")) {
+            auto light = LightComponentFactory().CreateSpotLight(
+                    resource_creator_->texture_creator(),
+                    resource_creator_->program_creator());
+            game_object->Add(
+                    std::dynamic_pointer_cast<GameComponent>(light));
+        }
+        if (ImGui::Selectable("Point")) {
+            auto light = LightComponentFactory().CreatePointLight();
+            game_object->Add(std::dynamic_pointer_cast<GameComponent>
+                                     (light));
+        }
+        ImGui::EndMenu();
+    }
 }
 
 void SceneView::RenderGameComponentsList(

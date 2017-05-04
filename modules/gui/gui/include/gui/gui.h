@@ -1,7 +1,7 @@
 #ifndef PROJECT_GUI_H
 #define PROJECT_GUI_H
 
-#include <GLFW/glfw3.h>
+struct GLFWwindow;
 
 namespace ifx {
 

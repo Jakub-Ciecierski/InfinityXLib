@@ -11,16 +11,30 @@
 #include <graphics/shaders/textures/texture_activator.h>
 #include <graphics/shaders/loaders/program_loader.h>
 
+#include <GL/glew.h>
+
+#include <GLFW/glfw3.h>
+
 namespace ifx {
 
-Renderer::Renderer() :
+Renderer::Renderer(std::shared_ptr<Window> window,
+                   std::shared_ptr<RenderingContext> rendering_context) :
     rendering_type_(RenderingType::NORMAL),
-    fbo_renderer_(nullptr){
-    initGLFWRenderContext();
-    initOpenGLContext();
-    initGLFWCallbacks();
-    scene_renderer_ = std::shared_ptr<SceneRenderer>(new SceneRenderer());
+    fbo_renderer_(nullptr),
+    window_(window),
+    rendering_context_(rendering_context){
 
+    // TODO move to controls
+    initGLFWCallbacks();
+
+    // TODO Don't create them here
+    scene_renderer_ = std::shared_ptr<SceneRenderer>(new SceneRenderer());
+    shadow_mapping_renderer_ = std::shared_ptr<ShadowMappingRenderer>
+            (new ShadowMappingRenderer(scene_renderer_,
+                                       window_));
+
+    // TODO fbo
+/*
     fbo_renderer_
             = std::shared_ptr<FBORenderer>(new FBORenderer(window_.get()));
 
@@ -31,28 +45,27 @@ Renderer::Renderer() :
             resources.GetResourcePath("fbo/fbo.fs", ifx::ResourceType::SHADER);
     auto program = ProgramLoader().CreateProgram(vertex_path, fragment_path);
     fbo_renderer_->SetProgram(program);
-
-    shadow_mapping_renderer_ = std::shared_ptr<ShadowMappingRenderer>
-            (new ShadowMappingRenderer(scene_renderer_,
-                                       window_));
+*/
 }
 
 Renderer::~Renderer(){
     // TODO Resources requires GL context
-    ResourceMemoryCache::GetInstance().ClearAll();
+    // TODO
+    //ResourceMemoryCache::GetInstance().ClearAll();
 }
 
 void Renderer::HandleEvents() {
     ControlsEvents& controls = ControlsEvents::GetInstance();
     const Keys& keys = controls.keyboard_keys();
-
+    // TODO
+    /*
     if (keys[GLFW_KEY_R]){
         auto programs = ResourceMemoryCache::GetInstance().GetResources(
                 ResourceType::SHADER);
         for(auto& program : programs){
             std::static_pointer_cast<Program>(program)->Reload();
         }
-    }
+    }*/
 }
 
 void Renderer::SetGUI(std::shared_ptr<GUI> gui){
@@ -63,36 +76,8 @@ void Renderer::SetRenderingType(RenderingType type){
     rendering_type_ = type;
 }
 
-void Renderer::LimitFPS(bool val){
-    if(val)
-        glfwSwapInterval(1);
-    else
-        glfwSwapInterval(0);
-}
-
-void Renderer::initGLFWRenderContext(){
-    glfwInit();
-    // OpenGL version required
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
-    // No legacy functions
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-
-    int width = 1500;
-    int height = 1000;
-    window_.reset(new Window(width, height, "InfinityX"));
-
-    LimitFPS(false);
-}
-
-void Renderer::initOpenGLContext(){
-    glewExperimental = GL_TRUE;
-    if (glewInit() != GLEW_OK)
-        throw new std::invalid_argument("Failed to initialize GLEW");
-}
-
 void Renderer::initGLFWCallbacks(){
+    // TODO move away
     glfwSetKeyCallback(window_->getHandle(), key_callback);
     glfwSetCursorPosCallback(window_->getHandle(), mouse_callback);
     glfwSetMouseButtonCallback(window_->getHandle(), mouse_button_callback);
@@ -118,9 +103,9 @@ void Renderer::Update(float){
 
     if(gui_)
         gui_->Render();
-
+/*
     glfwSwapBuffers(window_->getHandle());
-    window_->update();
+    window_->update();*/
     HandleEvents();
 }
 

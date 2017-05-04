@@ -8,12 +8,12 @@
 
 namespace ifx {
 
-class TextureFactory {
-private:
+class TextureCreator;
 
+class TextureFactory {
 public:
 
-    TextureFactory();
+    TextureFactory(std::shared_ptr<TextureCreator> texture_creator);
 
     ~TextureFactory();
 
@@ -45,6 +45,8 @@ public:
 
     std::shared_ptr<Texture2D> LoadAwesomeFace();
 
+private:
+    std::shared_ptr<TextureCreator> texture_creator_;
 };
 } // ifx
 

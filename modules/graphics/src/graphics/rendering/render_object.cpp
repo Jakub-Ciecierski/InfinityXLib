@@ -2,7 +2,10 @@
 
 #include <graphics/model/model.h>
 
+#include <GL/glew.h>
+
 using namespace glm;
+
 namespace ifx {
 
 RenderObject::RenderObject(std::shared_ptr<Model> model) :

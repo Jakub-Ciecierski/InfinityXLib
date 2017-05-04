@@ -13,6 +13,8 @@ class FBORenderer;
 class GUI;
 class SceneRenderer;
 class ShadowMappingRenderer;
+class Window;
+class RenderingContext;
 
 /**
  * Render to window directly or to texture.
@@ -27,25 +29,22 @@ enum class RenderingType{
  */
 class Renderer : public EventHandler, public Updatable{
 public:
-    Renderer();
+    Renderer(std::shared_ptr<Window> window,
+             std::shared_ptr<RenderingContext> rendering_context);
     ~Renderer();
 
     Window* window()  {return window_.get();}
     RenderingType rendering_type(){return rendering_type_;}
     std::shared_ptr<SceneRenderer> scene_renderer(){return scene_renderer_;}
 
-    virtual void Update(float time_delta) override;
+    virtual void Update(float time_delta = 0) override;
 
     // Overridden from EventHandler.
     void HandleEvents() override;
 
     void SetGUI(std::shared_ptr<GUI> gui);
     void SetRenderingType(RenderingType type);
-
-    void LimitFPS(bool val);
 private:
-    void initGLFWRenderContext();
-    void initOpenGLContext();
     void initGLFWCallbacks();
 
     void RenderToScreen();
@@ -61,6 +60,8 @@ private:
     std::shared_ptr<SceneRenderer> scene_renderer_;
 
     std::shared_ptr<ShadowMappingRenderer> shadow_mapping_renderer_;
+
+    std::shared_ptr<RenderingContext> rendering_context_;
 };
 
 }

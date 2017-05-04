@@ -7,11 +7,12 @@
 #include "graphics/shaders/buffers/vbo.h"
 #include "graphics/shaders/buffers/vao.h"
 
-#include <GL/glew.h>
 #include <memory>
 #include <vector>
 
 #include <iostream>
+
+typedef unsigned int GLenum;
 
 namespace ifx {
 

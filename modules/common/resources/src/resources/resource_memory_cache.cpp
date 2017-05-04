@@ -8,11 +8,6 @@ ResourceMemoryCache::ResourceMemoryCache() {}
 
 ResourceMemoryCache::~ResourceMemoryCache() {}
 
-ResourceMemoryCache& ResourceMemoryCache::GetInstance(){
-    static ResourceMemoryCache instance;
-    return instance;
-}
-
 bool ResourceMemoryCache::Add(std::shared_ptr<Resource> resource){
     if(Exists(resource->filepath()) ||
             resource->filepath().compare(NO_FILEPATH) == 0 )

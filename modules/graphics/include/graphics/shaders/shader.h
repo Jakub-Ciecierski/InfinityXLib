@@ -2,7 +2,8 @@
 #define DUCK_SHADER_H
 
 #include <string>
-#include <GL/glew.h>
+
+typedef unsigned int GLuint;
 
 class Shader {
 public:

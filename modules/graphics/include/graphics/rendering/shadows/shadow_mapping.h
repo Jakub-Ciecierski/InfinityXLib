@@ -7,14 +7,14 @@
 #include <graphics/shaders/data/shader_data.h>
 #include <math/math_ifx.h>
 
-class Program;
-
 namespace ifx {
 
+class Program;
 class FBO;
 class LightDirectional;
 class Scene;
 class SceneRenderer;
+class TextureCreator;
 
 struct ProjectionParameters{
     float near_plane = 0.1f;
@@ -40,7 +40,8 @@ struct ProjectionParameters{
 class ShadowMapping {
 public:
     ShadowMapping(Dimensions dimensions,
-                  std::shared_ptr<Program> program);
+                  std::shared_ptr<Program> program,
+                  std::shared_ptr<TextureCreator> texture_creator);
     ~ShadowMapping();
 
     FBO* fbo(){return fbo_.get();}
@@ -79,6 +80,8 @@ private:
     glm::mat4 light_projection_;
     glm::mat4 light_view_;
     glm::mat4 light_MVP_;
+
+    std::shared_ptr<TextureCreator> texture_creator_;
 };
 }
 

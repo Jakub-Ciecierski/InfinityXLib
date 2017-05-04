@@ -1,5 +1,7 @@
 #include "graphics/shaders/shaders/tess_eval_shader.h"
 
+#include <GL/glew.h>
+
 TessEvalShader::TessEvalShader(std::string shaderSource,
                                std::string file_path) :
         Shader(shaderSource, file_path){

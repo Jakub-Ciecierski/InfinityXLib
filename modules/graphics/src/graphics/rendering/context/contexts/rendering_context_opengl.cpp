@@ -1,0 +1,79 @@
+#include "graphics/rendering/context/contexts/rendering_context_opengl.h"
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
+#include <stdexcept>
+
+namespace ifx {
+
+RenderingContextOpengl::RenderingContextOpengl(){}
+
+RenderingContextOpengl::~RenderingContextOpengl(){}
+
+bool RenderingContextOpengl::Terminate(){
+    if(!IsInit())
+        return true;
+
+    if(!TerminateGLFW())
+        return false;
+    if(!TerminateGLEW())
+        return false;
+    return true;
+}
+
+bool RenderingContextOpengl::InitGLFW(){
+    if(glfwInit() != GL_TRUE)
+        return false;
+
+    // OpenGL version required
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+    // No legacy functions
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    return true;
+}
+
+bool RenderingContextOpengl::InitGLEW(){
+    glewExperimental = GL_TRUE;
+    if (glewInit() != GLEW_OK)
+        return false;
+    return true;
+}
+
+void* RenderingContextOpengl::CreateNativeWindowHandle(std::string name,
+                                                       int* width, int* height){
+    if(!InitGLFW())
+        throw new std::invalid_argument("Failed to initialize GLFW");
+
+    auto glfwWindow = glfwCreateWindow(*width, *height,
+                                       name.c_str(), nullptr, nullptr);
+
+    glfwMakeContextCurrent(glfwWindow);
+    glfwGetFramebufferSize(glfwWindow, width, height);
+    glViewport(0, 0, *width, *height);
+
+    if(!glfwWindow)
+        throw new std::invalid_argument("Failed to initialize glfwWindow");
+    if(!InitGLEW())
+        throw new std::invalid_argument("Failed to initialize GLEW");
+
+    // unlimited fps
+    glfwSwapInterval(0);
+
+    is_init_ = true;
+
+    return (void*)glfwWindow;
+}
+
+bool RenderingContextOpengl::TerminateGLFW(){
+    glfwTerminate();
+    return true;
+}
+
+bool RenderingContextOpengl::TerminateGLEW(){
+    return true;
+}
+
+}

@@ -7,6 +7,8 @@
 #include <graphics/lighting/types/light_directional.h>
 #include <graphics/lighting/light_group.h>
 
+#include <GL/glew.h>
+
 namespace ifx{
 
 ShadowMappingRenderer::ShadowMappingRenderer(

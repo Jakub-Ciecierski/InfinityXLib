@@ -6,9 +6,10 @@
 namespace ifx{
 
 LightDirectionalComponent::LightDirectionalComponent(
-        const LightParams& light_params) :
+        const LightParams& light_params,
+        std::shared_ptr<ShadowMapping> shadow_mapping) :
         GameComponent(GameComponentType::LIGHT),
-        LightDirectional(light_params){}
+        LightDirectional(light_params, shadow_mapping){}
 
 LightDirectionalComponent::~LightDirectionalComponent(){}
 

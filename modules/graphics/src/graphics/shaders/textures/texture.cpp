@@ -2,6 +2,8 @@
 
 #include <resources/resource_memory_cache.h>
 
+#include <GL/glew.h>
+
 #include <SOIL.h>
 
 namespace ifx{
@@ -29,59 +31,6 @@ Texture2D::Texture2D(std::string filepath,
 
 Texture2D::~Texture2D(){
     glDeleteTextures(1, &id_);
-}
-
-// static
-std::shared_ptr<Texture2D> Texture2D::MakeTexture2DFromFile(
-        std::string filepath, TextureTypes type){
-    std::shared_ptr<Texture2D> texture
-            = std::static_pointer_cast<Texture2D>(
-                    ifx::ResourceMemoryCache::GetInstance().Get(filepath));
-    if(!texture) {
-        TextureInternalFormat format = TextureInternalFormat::RGBA;
-        TexturePixelType pixel_type = TexturePixelType::UNSIGNED_BYTE;
-        texture = std::shared_ptr<Texture2D>(
-                new Texture2D(filepath, type, format, pixel_type));
-        int width, height;
-        int c = -1;
-        unsigned char *image = SOIL_load_image(filepath.c_str(),
-                                               &width, &height, &c,
-                                               SOIL_LOAD_RGBA);
-        if (image == NULL) {
-            std::string info = "NULL returned";
-            throw new std::invalid_argument(info);
-        }
-        //texture->InitData((void*)image, width, height);
-        texture->Bind();
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-                     width, height, 0, GL_RGBA,
-                     GL_UNSIGNED_BYTE, image);
-        texture->Unbind();
-        SOIL_free_image_data(image);
-
-        ifx::ResourceMemoryCache::GetInstance().Add(texture);
-    }
-    return texture;
-}
-
-// static
-std::shared_ptr<Texture2D> Texture2D::MakeTexture2DEmpty(
-        std::string filepath,
-        TextureTypes type,
-        TextureInternalFormat format,
-        TexturePixelType pixel_type,
-        int width, int height){
-    std::shared_ptr<Texture2D> texture
-            = std::static_pointer_cast<Texture2D>(
-                    ifx::ResourceMemoryCache::GetInstance().Get(filepath));
-    if(!texture) {
-        texture = std::shared_ptr<Texture2D>(
-                new Texture2D(filepath, type, format, pixel_type,
-                width, height));
-
-        ifx::ResourceMemoryCache::GetInstance().Add(texture);
-    }
-    return texture;
 }
 
 void Texture2D::AddParameter(TextureParameter param){

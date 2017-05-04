@@ -1,6 +1,8 @@
 #include <graphics/lighting/types/light_point.h>
 #include <graphics/lighting/builders/pointlight_shader_builder.h>
 
+#include <GL/glew.h>
+
 namespace ifx {
 
 LightPoint::LightPoint(const LightParams& light_params) :

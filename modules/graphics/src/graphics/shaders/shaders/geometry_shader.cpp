@@ -1,5 +1,7 @@
 #include "graphics/shaders/shaders/geometry_shader.h"
 
+#include <GL/glew.h>
+
 using namespace std;
 
 GeometryShader::GeometryShader(string shaderSource,

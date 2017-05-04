@@ -17,24 +17,6 @@ public:
     RenderObjectFactory();
     ~RenderObjectFactory();
 
-    std::unique_ptr<RenderObject> CreateRoom();
-    std::unique_ptr<RenderObject> CreateSpring();
-    std::unique_ptr<RenderObject> CreateMassSpring();
-
-    RenderObject* CreateAsteroidField();
-    RenderObject* CreateAsteroid();
-    std::unique_ptr<RenderObject> CreateNanosuitObject();
-
-    std::unique_ptr<RenderObject> CreateFloor();
-
-    std::unique_ptr<RenderObject> CreateLampObject();
-    std::shared_ptr<RenderObject> CreateCube();
-
-    std::shared_ptr<RenderObject> CreateLine(const glm::vec3& p1,
-                                             const glm::vec3& p2);
-    std::shared_ptr<RenderObject> CreateLine(const glm::vec3& p1,
-                                             const glm::vec3& p2,
-                                             const glm::vec3& color);
 
     /*
     RenderObject* loadBicubicBezierSurfaceC0Object();

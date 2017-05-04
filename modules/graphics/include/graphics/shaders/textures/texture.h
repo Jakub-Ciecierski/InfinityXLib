@@ -2,11 +2,15 @@
 #define PROJECT_TEXTURE_H
 
 #include <resources/resource.h>
-#include <GL/glew.h>
 
 #include <memory>
 
+typedef unsigned int GLenum;
+typedef unsigned int GLuint;
+
 namespace ifx {
+
+class TextureCreator;
 
 enum class TextureTypes{
     DIFFUSE, SPECULAR, NORMAL, DISPLACEMENT, CUBEMAP, FBO
@@ -25,17 +29,9 @@ struct TextureParameter{
     GLenum value;
 };
 
-class Texture2D : public Resource{
+class Texture2D : public Resource {
 public:
     ~Texture2D();
-    static std::shared_ptr<Texture2D> MakeTexture2DFromFile(
-            std::string filepath, TextureTypes type);
-    static std::shared_ptr<Texture2D> MakeTexture2DEmpty(
-            std::string filepath,
-            TextureTypes type,
-            TextureInternalFormat format,
-            TexturePixelType pixel_type,
-            int width = 0, int height = 0);
 
     GLuint id(){return id_;}
     TextureTypes texture_type(){return type_;}
@@ -49,6 +45,8 @@ public:
 
     void Bind();
     void Unbind();
+
+    friend class TextureCreator;
 private:
     Texture2D(std::string filepath,
               TextureTypes type,

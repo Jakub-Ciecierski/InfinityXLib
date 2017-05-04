@@ -12,6 +12,9 @@
 
 namespace ifx {
 
+class ModelCreator;
+class TextureCreator;
+
 /*
  * Loads Models using Assimp.
  * Loaded Models are stored in cache memory.
@@ -20,16 +23,16 @@ namespace ifx {
 class ModelLoader {
 public:
 
-    ModelLoader(std::string filepath);
+    ModelLoader(
+            std::string filepath,
+            std::shared_ptr<ModelCreator> model_creator,
+            std::shared_ptr<TextureCreator> texture_creator);
 
     ~ModelLoader();
 
     std::shared_ptr<ifx::Model> loadModel();
 
 private:
-    std::string filepath;
-    std::string directory;
-
     void checkError(const aiScene *scene,
                     std::string errorString);
 
@@ -76,6 +79,11 @@ private:
 
     void printInfo(const Model &model);
 
+    std::string filepath;
+    std::string directory;
+
+    std::shared_ptr<ModelCreator> model_creator_;
+    std::shared_ptr<TextureCreator> texture_creator_;
 };
 }
 

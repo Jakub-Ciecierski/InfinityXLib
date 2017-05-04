@@ -7,37 +7,43 @@
 
 namespace ifx {
 
+class ModelCreator;
+class TextureCreator;
+
 class ModelFactory {
 public:
 
-    ModelFactory();
+    ModelFactory(std::shared_ptr<ModelCreator>,
+                 std::shared_ptr<TextureCreator> texture_creator);
     ~ModelFactory();
 
-    static std::shared_ptr<Model> LoadAsteroidModel();
-    static std::shared_ptr<Model> LoadNanoSuitModel();
+    std::shared_ptr<Model> LoadAsteroidModel();
+    std::shared_ptr<Model> LoadNanoSuitModel();
 
-    static std::shared_ptr<Model> CreateQuad(int x, int y);
+    std::shared_ptr<Model> CreateQuad(int x, int y);
 
-    static std::shared_ptr<Model> LoadBicubicBezierSurfaceC0();
-    static std::shared_ptr<Model> LoadBicubicBezierPatch();
-    static std::shared_ptr<Model> LoadBicubicBezierBowlPatch();
-    static std::shared_ptr<Model> LoadBicubicBezierAsymmetricPatch();
+    std::shared_ptr<Model> LoadBicubicBezierSurfaceC0();
+    std::shared_ptr<Model> LoadBicubicBezierPatch();
+    std::shared_ptr<Model> LoadBicubicBezierBowlPatch();
+    std::shared_ptr<Model> LoadBicubicBezierAsymmetricPatch();
 
-    static std::shared_ptr<Model> LoadSquareModel();
-    static std::shared_ptr<Model> LoadCAMMaterial();
-    static std::shared_ptr<Model> LoadCubeModel();
-    static std::shared_ptr<Model> LoadRoomModel();
-    static std::shared_ptr<Model> LoadCubemapModel();
-    static std::shared_ptr<Model> LoadLampModel();
+    std::shared_ptr<Model> LoadSquareModel();
+    std::shared_ptr<Model> LoadCAMMaterial();
+    std::shared_ptr<Model> LoadCubeModel();
+    std::shared_ptr<Model> LoadRoomModel();
+    std::shared_ptr<Model> LoadCubemapModel();
+    std::shared_ptr<Model> LoadLampModel();
 
-    static std::shared_ptr<Model> LoadFloorModel();
+    std::shared_ptr<Model> LoadFloorModel();
 
-    static std::shared_ptr<Model> LoadModel(std::string path);
-    static std::shared_ptr<Model> LoadSphere(float radius = 2.0f);
-    static std::shared_ptr<Model> LoadCircle(float radius = 2.0f);
-    static std::shared_ptr<Model> CreateLine(const glm::vec3& p1,
-                                             const glm::vec3& p2);
-
+    std::shared_ptr<Model> LoadModel(std::string path);
+    std::shared_ptr<Model> LoadSphere(float radius = 2.0f);
+    std::shared_ptr<Model> LoadCircle(float radius = 2.0f);
+    std::shared_ptr<Model> CreateLine(const glm::vec3& p1,
+                                      const glm::vec3& p2);
+private:
+    std::shared_ptr<ModelCreator> model_creator_;
+    std::shared_ptr<TextureCreator> texture_creator_;
 };
 } // ifx
 

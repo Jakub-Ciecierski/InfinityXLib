@@ -11,21 +11,6 @@ Model::Model(std::string filepath,
         ifx::Resource(filepath, ifx::ResourceType::MODEL),
         meshes(std::move(meshes)) { }
 
-// static
-std::shared_ptr<Model> Model::MakeModel(
-        std::string filepath,
-        std::vector<std::unique_ptr<Mesh>> meshes) {
-    std::shared_ptr<Model> model
-            = std::static_pointer_cast<Model>(
-                    ifx::ResourceMemoryCache::GetInstance().Get(filepath));
-    if (!model) {
-        model = std::shared_ptr<Model>(new Model(filepath, std::move(meshes)));
-    }
-    ifx::ResourceMemoryCache::GetInstance().Add(model);
-
-    return model;
-}
-
 Model::~Model() { }
 
 std::vector<Mesh *> Model::getMeshes() {

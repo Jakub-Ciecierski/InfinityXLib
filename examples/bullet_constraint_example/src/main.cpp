@@ -2,51 +2,62 @@
  * Bullet example
  */
 
-#include <game/game_loop.h>
-#include <game/factory/game_loop_factory.h>
-#include <factory/render_object_factory.h>
-#include <graphics/rendering/renderer.h>
-#include <game/factory/game_factory.h>
-#include <game/game.h>
-#include <game/scene_container.h>
-#include <game/game_object.h>
-#include <graphics/factory/scene_factory.h>
-#include <graphics/lighting/light_source.h>
-#include <graphics/lighting/types/light_directional.h>
-#include <graphics/lighting/types/light_spotlight.h>
-
-#include <graphics/rendering/camera/camera.h>
 #include <engine_gui/factory/engine_gui_factory.h>
-#include <graphics/rendering/renderer.h>
 #include <engine_gui/engine_gui.h>
+
 #include <example_gui.h>
+
 #include <physics/rigid_body.h>
 #include <physics/collision/shapes/box_collision_shape.h>
 #include "physics/collision/shapes/static_plane_shape.h"
+#include <physics/simulations/bullet_physics_simulation.h>
 
 #include <LinearMath/btTransform.h>
 #include <BulletDynamics/Dynamics/btRigidBody.h>
 #include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 #include <BulletCollision/CollisionShapes/btCollisionShape.h>
-#include <physics/simulations/bullet_physics_simulation.h>
 #include <BulletDynamics/ConstraintSolver/btGeneric6DofSpringConstraint.h>
 #include <BulletDynamics/ConstraintSolver/btPoint2PointConstraint.h>
 #include <BulletDynamics/ConstraintSolver/btConeTwistConstraint.h>
-#include <factory/texture_factory.h>
-#include <graphics/model/material.h>
-#include <graphics/model/model.h>
 #include <BulletDynamics/ConstraintSolver/btHingeConstraint.h>
-#include <game/components/cameras/factory/camera_factory.h>
+
+#include <factory/texture_factory.h>
 #include <factory/model_factory.h>
-#include <game/components/render/render_component.h>
 #include <factory/program_factory.h>
+#include <factory/render_object_factory.h>
+
+#include <game/components/cameras/factory/camera_factory.h>
+#include <game/components/render/render_component.h>
 #include <game/components/lights/light_spotlight_component.h>
 #include <game/components/lights/light_directional_component.h>
+#include <game/components/lights/light_point_component.h>
 #include <game/components/physics/rigid_body_component.h>
 #include <game/components/cameras/camera_component.h>
+#include <game/components/lights/factory/light_component_factory.h>
+#include <game/resources/resource_context.h>
+#include <game/game_loop.h>
+#include <game/factory/game_loop_factory.h>
+#include <game/factory/game_factory.h>
+#include <game/game.h>
+#include <game/scene_container.h>
+#include <game/game_object.h>
 
-std::shared_ptr<ifx::LightDirectionalComponent> CreateDirectionalLight();
-std::shared_ptr<ifx::LightSpotlightComponent> CreateSpotLight();
+#include <graphics/model/material.h>
+#include <graphics/model/model.h>
+#include <graphics/shaders/textures/texture_creator.h>
+#include <graphics/rendering/renderer.h>
+#include <graphics/factory/scene_factory.h>
+#include <graphics/lighting/light_source.h>
+#include <graphics/lighting/types/light_directional.h>
+#include <graphics/lighting/types/light_spotlight.h>
+#include <graphics/rendering/camera/camera.h>
+#include <graphics/rendering/renderer.h>
+
+#include <resources/resource_manager.h>
+#include <resources/resources.h>
+
+#include <GL/glew.h>
+
 std::shared_ptr<ifx::RigidBodyComponent> CreateRigidBox(glm::vec3 scale);
 std::shared_ptr<ifx::RigidBodyComponent> CreateRigidFloor();
 
@@ -54,14 +65,28 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectCamera(
         std::shared_ptr<ifx::SceneContainer> scene,
         std::shared_ptr<ifx::Game> game);
 std::shared_ptr<ifx::GameObject> CreateGameObjectLight(
-        std::shared_ptr<ifx::SceneContainer> scene);
+        std::shared_ptr<ifx::SceneContainer> scene,
+        std::shared_ptr<ifx::TextureCreator> texture_creator,
+        std::shared_ptr<ifx::ModelCreator> model_creator,
+        std::shared_ptr<ifx::ProgramCreator> program_creato);
+
 std::shared_ptr<ifx::GameObject> CreateGameObjectBox(
         std::shared_ptr<ifx::SceneContainer> scene,
+        std::shared_ptr<ifx::TextureCreator> texture_creator,
+        std::shared_ptr<ifx::ModelCreator> model_creator,
+        std::shared_ptr<ifx::ProgramCreator> program_creator,
         const glm::vec3& scale, int tex_id = 0);
+
 std::shared_ptr<ifx::GameObject> CreateGameObjectFloor(
-        std::shared_ptr<ifx::SceneContainer> scene);
+        std::shared_ptr<ifx::SceneContainer> scene,
+        std::shared_ptr<ifx::ProgramCreator> program_creator,
+        std::shared_ptr<ifx::ModelCreator> model_creator,
+        std::shared_ptr<ifx::TextureCreator> texture_creator);
 std::shared_ptr<ifx::GameObject> CreateGameObjectCeiling(
-        std::shared_ptr<ifx::SceneContainer> scene);
+        std::shared_ptr<ifx::SceneContainer> scene,
+        std::shared_ptr<ifx::ProgramCreator> program_creator,
+        std::shared_ptr<ifx::ModelCreator> model_creator,
+        std::shared_ptr<ifx::TextureCreator> texture_creator);
 
 void AddSpringConstraint(
         std::shared_ptr<ifx::BulletPhysicsSimulation> simulation,
@@ -96,11 +121,19 @@ void AddTorsoFeet2Constraint(
         std::shared_ptr<ifx::RigidBodyComponent> body1,
         std::shared_ptr<ifx::RigidBodyComponent> body2);
 
-std::shared_ptr<ifx::RenderComponent> CreateFloor();
+std::shared_ptr<ifx::RenderComponent> CreateFloor(
+        std::shared_ptr<ifx::ProgramCreator> program_creator,
+        std::shared_ptr<ifx::ModelCreator> model_creator,
+        std::shared_ptr<ifx::TextureCreator> texture_creator);
 
-std::shared_ptr<ifx::RenderComponent> CreateFloor(){
-    std::shared_ptr<Program> program = ifx::ProgramFactory().LoadMainProgram();
-    std::shared_ptr<ifx::Model> model = ifx::ModelFactory::LoadFloorModel();
+std::shared_ptr<ifx::RenderComponent> CreateFloor(
+        std::shared_ptr<ifx::ProgramCreator> program_creator,
+        std::shared_ptr<ifx::ModelCreator> model_creator,
+        std::shared_ptr<ifx::TextureCreator> texture_creator){
+    std::shared_ptr<ifx::Program> program
+            = ifx::ProgramFactory(program_creator).LoadMainProgram();
+    std::shared_ptr<ifx::Model> model = ifx::ModelFactory(
+            model_creator, texture_creator).LoadFloorModel();
 
     auto render_object = std::shared_ptr<ifx::RenderComponent>(
             new ifx::RenderComponent(model));
@@ -110,44 +143,15 @@ std::shared_ptr<ifx::RenderComponent> CreateFloor(){
     render_object->scale(glm::vec3(scaleFactor, scaleFactor, scaleFactor));
     render_object->rotateTo(glm::vec3(90, 0, 0));
 
-    render_object->SetBeforeRender([](const Program* program){
+    render_object->SetBeforeRender([](const ifx::Program* program){
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
     });
-    render_object->SetAfterRender([](const Program* program){
+    render_object->SetAfterRender([](const ifx::Program* program){
         glDisable(GL_CULL_FACE);
     });
 
     return render_object;
-}
-
-std::shared_ptr<ifx::LightDirectionalComponent> CreateDirectionalLight(){
-    ifx::LightParams light;
-
-    light.ambient = glm::vec3(0.5f, 0.5f, 0.5f);
-    light.diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
-    light.specular = glm::vec3(1.0f, 1.0f, 1.0f);
-
-    auto light_source = std::shared_ptr<ifx::LightDirectionalComponent>(
-            new ifx::LightDirectionalComponent(light));
-    light_source->rotateTo(glm::vec3(0, 270, 0));
-    light_source->rotateTo(glm::vec3(322, 295, 0));
-
-    return light_source;
-}
-
-std::shared_ptr<ifx::LightSpotlightComponent> CreateSpotLight(){
-    ifx::LightParams light;
-
-    light.ambient = glm::vec3(0.5f, 0.5f, 0.5f);
-    light.diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
-    light.specular = glm::vec3(1.0f, 1.0f, 1.0f);
-
-    auto light_source = std::shared_ptr<ifx::LightSpotlightComponent>(
-            new ifx::LightSpotlightComponent(light));
-    light_source->rotateTo(glm::vec3(0, 270, 0));
-
-    return light_source;
 }
 
 std::shared_ptr<ifx::RigidBodyComponent> CreateRigidBox(glm::vec3 scale){
@@ -187,11 +191,16 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectCamera(
 }
 
 std::shared_ptr<ifx::GameObject> CreateGameObjectLight(
-        std::shared_ptr<ifx::SceneContainer> scene){
+        std::shared_ptr<ifx::SceneContainer> scene,
+        std::shared_ptr<ifx::TextureCreator> texture_creator,
+        std::shared_ptr<ifx::ModelCreator> model_creator,
+        std::shared_ptr<ifx::ProgramCreator> program_creator){
     auto game_object = scene->CreateAndAddEmptyGameObject();
 
-    std::shared_ptr<Program> program = ifx::ProgramFactory().loadLampProgram();
-    std::shared_ptr<ifx::Model> model = ifx::ModelFactory::LoadLampModel();
+    std::shared_ptr<ifx::Program> program
+            = ifx::ProgramFactory(program_creator).loadLampProgram();
+    std::shared_ptr<ifx::Model> model = ifx::ModelFactory(
+            model_creator, texture_creator).LoadLampModel();
     auto render_object = std::shared_ptr<ifx::RenderComponent>(
             new ifx::RenderComponent(model));
     render_object->addProgram(program);
@@ -199,23 +208,41 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectLight(
     render_object->scale(glm::vec3(scaleFactor, scaleFactor, scaleFactor));
     render_object->moveTo(glm::vec3(0, 0.3, 0));
 
-    game_object->Add(std::dynamic_pointer_cast<ifx::GameComponent>(
-            render_object));
-    game_object->Add(CreateSpotLight());
-    game_object->Add(CreateDirectionalLight());
+    game_object->Add(render_object);
+    game_object->Add(ifx::LightComponentFactory().CreateDirectionalLight(
+            texture_creator, program_creator));
+    game_object->Add(ifx::LightComponentFactory().CreateSpotLight(
+            texture_creator, program_creator));
+    /*
+    game_object->Add(
+            std::dynamic_pointer_cast<ifx::GameComponent>
+                    (ifx::LightComponentFactory()
+            .CreatePointLight()));
+*/
+    ifx::LightParams light;
+    auto light_source = std::shared_ptr<ifx::LightPointComponent>(
+            new ifx::LightPointComponent(light));
+    /*
+    game_object->Add(std::static_pointer_cast<ifx::GameComponent>
+                             (light_source));*/
 
     return game_object;
 }
 
 std::shared_ptr<ifx::GameObject> CreateGameObjectBox(
         std::shared_ptr<ifx::SceneContainer> scene,
+        std::shared_ptr<ifx::TextureCreator> texture_creator,
+        std::shared_ptr<ifx::ModelCreator> model_creator,
+        std::shared_ptr<ifx::ProgramCreator> program_creator,
         const glm::vec3& scale, int tex_id){
     float scale_factor = 0.25;
     glm::vec3 scaled_scale = scale * scale_factor;
     auto game_object = scene->CreateAndAddEmptyGameObject();
 
-    std::shared_ptr<ifx::Model> model = ifx::ModelFactory::LoadCubeModel();
-    std::shared_ptr<Program> program = ifx::ProgramFactory().LoadMainProgram();
+    std::shared_ptr<ifx::Model> model = ifx::ModelFactory(
+            model_creator, texture_creator).LoadCubeModel();
+    std::shared_ptr<ifx::Program> program
+            = ifx::ProgramFactory(program_creator).LoadMainProgram();
     auto render_object = std::shared_ptr<ifx::RenderComponent>(
             new ifx::RenderComponent(model));
     render_object->addProgram(program);
@@ -235,14 +262,13 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectBox(
         str_text_spec = "robot/head_spec.jpg";
     }
 
-    auto texture_diff = ifx::Texture2D::MakeTexture2DFromFile(
-            ifx::Resources::GetInstance()
-                    .GetResourcePath(str_text_diff,
+    auto resource_path = texture_creator->resource_manager()->resource_path();
+    auto texture_diff = texture_creator->MakeTexture2DFromFile(
+            resource_path->GetResourcePath(str_text_diff,
                                      ifx::ResourceType::TEXTURE),
             ifx::TextureTypes::DIFFUSE);
-    auto texture_spec = ifx::Texture2D::MakeTexture2DFromFile(
-            ifx::Resources::GetInstance()
-                    .GetResourcePath(str_text_spec,
+    auto texture_spec = texture_creator->MakeTexture2DFromFile(
+            resource_path->GetResourcePath(str_text_spec,
                                      ifx::ResourceType::TEXTURE),
             ifx::TextureTypes::SPECULAR);
 
@@ -255,19 +281,29 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectBox(
 
 }
 std::shared_ptr<ifx::GameObject> CreateGameObjectFloor(
-        std::shared_ptr<ifx::SceneContainer> scene){
+        std::shared_ptr<ifx::SceneContainer> scene,
+        std::shared_ptr<ifx::ProgramCreator> program_creator,
+        std::shared_ptr<ifx::ModelCreator> model_creator,
+        std::shared_ptr<ifx::TextureCreator> texture_creator){
     auto game_object = scene->CreateAndAddEmptyGameObject();
 
-    game_object->Add(CreateFloor());
+    game_object->Add(CreateFloor(program_creator,
+                                 model_creator,
+                                 texture_creator));
     game_object->Add(CreateRigidFloor());
     return game_object;
 }
 
 std::shared_ptr<ifx::GameObject> CreateGameObjectCeiling(
-        std::shared_ptr<ifx::SceneContainer> scene){
+        std::shared_ptr<ifx::SceneContainer> scene,
+        std::shared_ptr<ifx::ProgramCreator> program_creator,
+        std::shared_ptr<ifx::ModelCreator> model_creator,
+        std::shared_ptr<ifx::TextureCreator> texture_creator){
     auto game_object = scene->CreateAndAddEmptyGameObject();
 
-    game_object->Add(CreateFloor());
+    game_object->Add(CreateFloor(program_creator,
+                                 model_creator,
+                                 texture_creator));
     game_object->Add(CreateRigidFloor());
     game_object->rotateTo(glm::vec3(0,0,180));
     return game_object;
@@ -404,48 +440,95 @@ int main() {
             = std::shared_ptr<ifx::GameFactory>(new ifx::GameFactory());
     auto game = game_factory->Create();
 
-    auto lights = CreateGameObjectLight(game->scene());
+    auto lights = CreateGameObjectLight(
+            game->scene(),
+            game->resource_creator()->texture_creator(),
+            game->resource_creator()->model_creator(),
+            game->resource_creator()->program_creator());
+
     lights->moveTo(glm::vec3(0.0f, 3.0f, 0.0f));
     lights->rotateTo(glm::vec3(0,180,0));
 
     auto camera = CreateGameObjectCamera(game->scene(), game);
     camera->moveTo(glm::vec3(-7, 2, 0));
 
-    auto floor = CreateGameObjectFloor(game->scene());
+    auto floor = CreateGameObjectFloor(
+            game->scene(),
+            game->resource_creator()->program_creator(),
+            game->resource_creator()->model_creator(),
+            game->resource_creator()->texture_creator());
     floor->moveTo(glm::vec3(0.0f, 0.0f, 0.0f));
 
-    auto ceiling = CreateGameObjectCeiling(game->scene());
+    auto ceiling = CreateGameObjectCeiling(
+            game->scene(),
+            game->resource_creator()->program_creator(),
+            game->resource_creator()->model_creator(),
+            game->resource_creator()->texture_creator());
     ceiling->moveTo(glm::vec3(0.0f, 10.0f, 0.0f));
 
     glm::vec3 scale1 = glm::vec3(3,3,3);
-    auto head = CreateGameObjectBox(game->scene(), scale1, 0);
+    auto head = CreateGameObjectBox(
+            game->scene(),
+            game->resource_creator()->texture_creator(),
+            game->resource_creator()->model_creator(),
+            game->resource_creator()->program_creator(),
+            scale1, 0);
     head->moveTo(glm::vec3(0.0f, 7.0f, 0.0f));
 
     glm::vec3 scale2 = glm::vec3(2,5,2);
-    auto torso = CreateGameObjectBox(game->scene(), scale2, 1);
+    auto torso = CreateGameObjectBox(
+            game->scene(),
+            game->resource_creator()->texture_creator(),
+            game->resource_creator()->model_creator(),
+            game->resource_creator()->program_creator(),
+            scale2, 1);
     torso->moveTo(glm::vec3(0.0f, 4.0f, 0.0f));
 
     glm::vec3 scale3 = glm::vec3(0.7,4,0.7);
-    auto arm1 = CreateGameObjectBox(game->scene(), scale3, 1);
+    auto arm1 = CreateGameObjectBox(game->scene(),
+                                    game->resource_creator()->texture_creator(),
+                                    game->resource_creator()->model_creator(),
+                                    game->resource_creator()->program_creator(),
+                                    scale3, 1);
     arm1->moveTo(glm::vec3(0.0f, 3.6f, -1.4f));
     arm1->rotateTo(glm::vec3(218.0f, 0.0f, 0.0f));
 
-    auto arm2 = CreateGameObjectBox(game->scene(), scale3, 1);
+    auto arm2 = CreateGameObjectBox(game->scene(),
+                                    game->resource_creator()->texture_creator(),
+                                    game->resource_creator()->model_creator(),
+                                    game->resource_creator()->program_creator(),
+                                    scale3, 1);
     arm2->moveTo(glm::vec3(0.0f, 3.6f, 1.4f));
     arm2->rotateTo(glm::vec3(140.0f, 0.0f, 0.0f));
 
-    auto leg1 = CreateGameObjectBox(game->scene(), scale3, 1);
+    auto leg1 = CreateGameObjectBox(game->scene(),
+                                    game->resource_creator()->texture_creator(),
+                                    game->resource_creator()->model_creator(),
+                                    game->resource_creator()->program_creator(),
+                                    scale3, 1);
     leg1->moveTo(glm::vec3(-0.32f, 1.7f, -0.32f));
 
-    auto leg2 = CreateGameObjectBox(game->scene(), scale3, 1);
+    auto leg2 = CreateGameObjectBox(game->scene(),
+                                    game->resource_creator()->texture_creator(),
+                                    game->resource_creator()->model_creator(),
+                                    game->resource_creator()->program_creator(),
+                                    scale3, 1);
     leg2->moveTo(glm::vec3(-0.32f, 1.7f, 0.32f));
 
     glm::vec3 scale4 = glm::vec3(1.56, 0.25, 1.03);
-    auto feet1 = CreateGameObjectBox(game->scene(), scale4, 1);
+    auto feet1 = CreateGameObjectBox(game->scene(),
+                                     game->resource_creator()->texture_creator(),
+                                     game->resource_creator()->model_creator(),
+                                     game->resource_creator()->program_creator(),
+                                     scale4, 1);
     feet1->moveTo(glm::vec3(-0.76f, 0.6f, -0.32f));
     //feet1->rotateTo(glm::vec3(180.0f, 0.0f, 0.0f));
 
-    auto feet2 = CreateGameObjectBox(game->scene(), scale4, 1);
+    auto feet2 = CreateGameObjectBox(game->scene(),
+                                     game->resource_creator()->texture_creator(),
+                                     game->resource_creator()->model_creator(),
+                                     game->resource_creator()->program_creator(),
+                                     scale4, 1);
     feet2->moveTo(glm::vec3(-0.76f, 0.6f, 0.32f));
 
     auto ceiling_rigid_bodies = ceiling->GetComponents(
@@ -537,8 +620,10 @@ int main() {
             new ExampleGUI(
                     game->game_loop()->renderer()->window()->getHandle(),
                     game->scene(),
-                    game->game_loop()->physics_simulation()));
+                    game->game_loop()->physics_simulation(),
+                    game->resource_creator()));
     game->game_loop()->renderer()->SetGUI(gui);
 
     game->Start();
 }
+

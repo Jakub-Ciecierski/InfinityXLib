@@ -4,12 +4,15 @@
 #include <engine_gui/engine_gui.h>
 #include <gui/imgui/imgui.h>
 
-ExampleGUI::ExampleGUI(GLFWwindow* window,
-                       std::shared_ptr<ifx::SceneContainer> scene,
-                       std::shared_ptr<ifx::PhysicsSimulation> physics_simulation) :
+ExampleGUI::ExampleGUI(
+        GLFWwindow* window,
+        std::shared_ptr<ifx::SceneContainer> scene,
+        std::shared_ptr<ifx::PhysicsSimulation> physics_simulation,
+        std::shared_ptr<ifx::ResourceContext> resource_creator) :
         ifx::GUI(window){
     engine_gui_ = ifx::EngineGUIFactory().CreateEngineGUI(scene,
-                                                          physics_simulation);
+                                                          physics_simulation,
+                                                          resource_creator);
 }
 ExampleGUI::~ExampleGUI(){}
 

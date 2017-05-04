@@ -1,5 +1,7 @@
 #include "graphics/shaders/shaders/vertex_shader.h"
 
+#include <GL/glew.h>
+
 using namespace std;
 
 VertexShader::VertexShader(string shaderSource,

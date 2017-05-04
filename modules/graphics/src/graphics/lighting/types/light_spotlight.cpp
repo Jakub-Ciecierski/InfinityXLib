@@ -7,8 +7,9 @@
 
 namespace ifx {
 
-LightSpotlight::LightSpotlight(const LightParams& light_params) :
-        LightDirectional(light_params){
+LightSpotlight::LightSpotlight(const LightParams& light_params,
+                               std::shared_ptr<ShadowMapping> shadow_mapping) :
+        LightDirectional(light_params, shadow_mapping){
     light_type_ = LightType::SPOTLIGHT;
 }
 

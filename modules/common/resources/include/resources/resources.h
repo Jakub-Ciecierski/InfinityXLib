@@ -15,13 +15,12 @@ enum class ResourceType{
  */
 class Resources {
 public:
+    Resources();
     ~Resources();
-    static Resources& GetInstance();
+
     std::string GetResourcePath(std::string name, ResourceType type);
 
 private:
-    Resources();
-
     void InitResourcePath();
     std::string ResouceTypePath(ResourceType type);
     std::string ConcatenatePath(std::string path1, std::string path2);

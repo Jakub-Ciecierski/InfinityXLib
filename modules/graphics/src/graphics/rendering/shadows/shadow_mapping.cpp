@@ -4,13 +4,16 @@
 #include <graphics/lighting/types/light_spotlight.h>
 #include <graphics/shaders/buffers/fbo.h>
 #include <graphics/rendering/scene_renderer.h>
+#include <graphics/shaders/textures/texture_creator.h>
 
 namespace ifx {
 
 ShadowMapping::ShadowMapping(Dimensions dimensions,
-                             std::shared_ptr<Program> program) :
+                             std::shared_ptr<Program> program,
+                             std::shared_ptr<TextureCreator> texture_creator) :
         program_(program),
-        dimensions_(dimensions){
+        dimensions_(dimensions),
+        texture_creator_(texture_creator){
     InitFBO(CreateTexture());
 }
 
@@ -33,12 +36,12 @@ void ShadowMapping::Render(const std::shared_ptr<SceneRenderer> scene,
 
 std::shared_ptr<Texture2D> ShadowMapping::CreateTexture(){
     auto texture
-            = Texture2D::MakeTexture2DEmpty(NO_FILEPATH,
-                                            TextureTypes::FBO,
-                                            TextureInternalFormat::DEPTH_COMPONENT,
-                                            TexturePixelType::FLOAT,
-                                            dimensions_.width,
-                                            dimensions_.height);
+            = texture_creator_->MakeTexture2DEmpty(
+                    NO_FILEPATH,
+                    TextureTypes::FBO,
+                    TextureInternalFormat::DEPTH_COMPONENT,
+                    TexturePixelType::FLOAT,
+                    dimensions_.width, dimensions_.height);
 
     texture->AddParameter(TextureParameter{GL_TEXTURE_MIN_FILTER, GL_NEAREST});
     texture->AddParameter(TextureParameter{GL_TEXTURE_MAG_FILTER, GL_NEAREST});

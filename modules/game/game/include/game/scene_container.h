@@ -30,7 +30,6 @@ public:
 
     virtual void Update(float time_delta = 0) override;
 
-    void Add(std::shared_ptr<GameObject> game_object);
     bool Remove(std::shared_ptr<GameObject> game_object);
 
     bool Exists(std::shared_ptr<GameObject> game_object);
@@ -41,6 +40,8 @@ public:
     std::shared_ptr<CameraComponent> GetActiveCamera();
 
 private:
+    void Add(std::shared_ptr<GameObject> game_object);
+
     void OnAdd(std::shared_ptr<GameObject> game_object);
     bool OnRemove(std::shared_ptr<GameObject> game_object);
 

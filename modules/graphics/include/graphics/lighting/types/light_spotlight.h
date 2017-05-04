@@ -5,6 +5,8 @@
 
 namespace ifx{
 
+class ShadowMapping;
+
 /*
  * Represents Flashlight
  * Binds the cutOff angle with the shader
@@ -14,7 +16,8 @@ protected:
     virtual void bind(const Program& program, int id = -1) override;
 
 public:
-    LightSpotlight(const LightParams& light_params);
+    LightSpotlight(const LightParams& light_params,
+                   std::shared_ptr<ShadowMapping> shadow_mapping);
     ~LightSpotlight();
 };
 }

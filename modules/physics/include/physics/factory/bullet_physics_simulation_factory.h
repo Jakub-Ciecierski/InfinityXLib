@@ -3,6 +3,8 @@
 
 #include <memory>
 
+#include "physics/factory/physics_simulation_factory.h"
+
 class btDiscreteDynamicsWorld;
 
 namespace ifx {
@@ -14,13 +16,13 @@ enum class DynamicWorldType {
     DISCRETE, FRACTURE
 };
 
-class BulletPhysicsSimulationFactory {
+class BulletPhysicsSimulationFactory : public PhysicsSimulationFactory{
 public:
 
     BulletPhysicsSimulationFactory();
     ~BulletPhysicsSimulationFactory();
 
-    virtual std::shared_ptr<PhysicsSimulation> Create();
+    virtual std::shared_ptr<PhysicsSimulation> Create() override;
 
     BulletPhysicsSimulationFactory& SetDynamicWorldType(DynamicWorldType type);
 

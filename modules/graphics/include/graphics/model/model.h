@@ -14,14 +14,6 @@ namespace ifx {
  */
 class Model : public ifx::Resource {
 public:
-    /**
-     * Creates Model object and adds it to resource cache.
-     * If object already exists, loads it from cache.
-     */
-    static std::shared_ptr<Model> MakeModel(
-            std::string filepath,
-            std::vector<std::unique_ptr<Mesh>> meshes);
-
     ~Model();
 
     std::vector<Mesh *> getMeshes();
@@ -34,6 +26,7 @@ public:
 
     std::string toString() const;
 
+    friend class ModelCreator;
 private:
     Model(std::string filepath,
           std::vector<std::unique_ptr<Mesh>> meshes);

@@ -25,7 +25,6 @@ GameComponentView::GameComponentView(){
 GameComponentView::~GameComponentView(){}
 
 void GameComponentView::Render(std::shared_ptr<GameComponent> game_component){
-    // TODO
     movable_object_view_->Render(
             std::dynamic_pointer_cast<Transformable>(game_component));
 

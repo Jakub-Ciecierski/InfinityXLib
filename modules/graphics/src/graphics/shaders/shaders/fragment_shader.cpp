@@ -1,5 +1,7 @@
 #include "graphics/shaders/shaders/fragment_shader.h"
 
+#include <GL/glew.h>
+
 using namespace std;
 
 FragmentShader::FragmentShader(string shaderSource,

@@ -1,29 +1,20 @@
 #include "graphics/model_loader/model_loader.h"
 
-#include <stdexcept>
-#include <iostream>
+#include <graphics/model/model_creator.h>
+#include <graphics/shaders/textures/texture_creator.h>
 
 using namespace std;
 
 namespace ifx {
-ModelLoader::ModelLoader(std::string filepath) :
-        filepath(filepath) {
 
-}
+ModelLoader::ModelLoader(std::string filepath,
+                         std::shared_ptr<ModelCreator> model_creator,
+                         std::shared_ptr<TextureCreator> texture_creator) :
+        filepath(filepath),
+        model_creator_(model_creator),
+        texture_creator_(texture_creator){}
 
-ModelLoader::~ModelLoader() {
-
-}
-
-void ModelLoader::checkError(const aiScene *scene,
-                             string errorString) {
-    if (!scene
-        || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-        string info = "ERROR::ASSIMP::" + errorString;
-        cout << info << endl;
-        throw new std::invalid_argument(info);
-    }
-}
+ModelLoader::~ModelLoader() {}
 
 std::shared_ptr<Model> ModelLoader::loadModel() {
     Assimp::Importer importer;
@@ -41,10 +32,20 @@ std::shared_ptr<Model> ModelLoader::loadModel() {
     std::vector<std::unique_ptr<Mesh>> meshes;
     processNode(scene->mRootNode, scene, meshes);
 
-    auto model = Model::MakeModel(filepath, std::move(meshes));
+    auto model = model_creator_->MakeModel(filepath, std::move(meshes));
     printInfo(*model);
 
     return model;
+}
+
+void ModelLoader::checkError(const aiScene *scene,
+                             string errorString) {
+    if (!scene
+        || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+        string info = "ERROR::ASSIMP::" + errorString;
+        cout << info << endl;
+        throw new std::invalid_argument(info);
+    }
 }
 
 void ModelLoader::processNode(aiNode *node, const aiScene *scene,
@@ -228,7 +229,8 @@ std::vector<std::shared_ptr<Texture2D>> ModelLoader::loadMaterialTextures(
         string filename = string(str.C_Str());
 
         std::string filepath = directory + '/' + filename;
-        auto texture = Texture2D::MakeTexture2DFromFile(filepath, texType);
+        auto texture
+                = texture_creator_->MakeTexture2DFromFile(filepath, texType);
         textures.push_back(texture);
     }
     return textures;

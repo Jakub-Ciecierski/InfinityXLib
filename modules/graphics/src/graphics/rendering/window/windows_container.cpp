@@ -14,7 +14,7 @@ WindowsContainer& WindowsContainer::GetInstance(){
     return container;
 }
 
-void WindowsContainer::AdddWindow(Window* window){
+void WindowsContainer::AddWindow(Window* window){
     windows_.push_back(window);
 }
 

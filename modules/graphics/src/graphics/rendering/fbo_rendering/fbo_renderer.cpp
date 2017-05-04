@@ -42,6 +42,8 @@ void FBORenderer::Render(Program* program){
 }
 
 void FBORenderer::initFBO(Window* window){
+    // TODO
+    /*
     auto texture = Texture2D::MakeTexture2DEmpty(
             "fbo",
             TextureTypes::FBO,
@@ -54,6 +56,7 @@ void FBORenderer::initFBO(Window* window){
 
     fbo_ = std::unique_ptr<FBO>(new FBO(texture, FBOType::COLOR_DEPTH));
     fbo_->compile();
+     */
 }
 
 void FBORenderer::initScreenMesh(){

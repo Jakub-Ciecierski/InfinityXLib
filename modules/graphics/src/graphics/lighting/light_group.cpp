@@ -1,5 +1,7 @@
 #include "graphics/lighting/light_group.h"
 
+#include <GL/glew.h>
+
 using namespace ifx;
 
 LightGroup::LightGroup() :

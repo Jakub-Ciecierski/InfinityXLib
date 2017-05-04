@@ -3,6 +3,8 @@
 #include <graphics/model/mesh.h>
 #include <graphics/model/model.h>
 
+#include <GL/glew.h>
+
 namespace ifx {
 
 InstancedRenderObject::InstancedRenderObject(std::shared_ptr<Model> model,

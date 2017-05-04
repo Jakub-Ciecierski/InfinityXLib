@@ -1,24 +1,25 @@
 #include "factory/texture_factory.h"
 
+#include <graphics/shaders/textures/texture_creator.h>
+
+#include <resources/resource_manager.h>
 #include <resources/resources.h>
 
 namespace ifx {
 
 using namespace std;
 
-TextureFactory::TextureFactory() {
+TextureFactory::TextureFactory(
+        std::shared_ptr<TextureCreator> texture_creator) :
+        texture_creator_(texture_creator){}
 
-}
-
-TextureFactory::~TextureFactory() {
-
-}
+TextureFactory::~TextureFactory() {}
 
 std::shared_ptr<Texture2D> TextureFactory::CreateSolidColorTexture(
         const glm::vec3& color,
         TextureTypes texture_type,
         int n, int m){
-    auto texture = Texture2D::MakeTexture2DEmpty(NO_FILEPATH,
+    auto texture = texture_creator_->MakeTexture2DEmpty(NO_FILEPATH,
                                                  texture_type,
                                                  TextureInternalFormat::RGB,
                                                  TexturePixelType::UNSIGNED_BYTE,
@@ -38,73 +39,82 @@ std::shared_ptr<Texture2D> TextureFactory::CreateSolidColorTexture(
 }
 
 std::shared_ptr<Texture2D> TextureFactory::LoadTesselationDiffuse() {
-    return Texture2D::MakeTexture2DFromFile(
-            ifx::Resources::GetInstance()
-                    .GetResourcePath("teselation/diffuse.jpg",
+    auto resource_path = texture_creator_->resource_manager()->resource_path();
+
+    return texture_creator_->MakeTexture2DFromFile(
+            resource_path->GetResourcePath("teselation/diffuse.jpg",
                                      ifx::ResourceType::TEXTURE),
             TextureTypes::DIFFUSE);
 }
 
 std::shared_ptr<Texture2D> TextureFactory::LoadTesselationSpecular() {
-    return Texture2D::MakeTexture2DFromFile(
-            ifx::Resources::GetInstance()
-                    .GetResourcePath("teselation/diffuse.jpg",
+    auto resource_path = texture_creator_->resource_manager()->resource_path();
+
+    return texture_creator_->MakeTexture2DFromFile(
+            resource_path->GetResourcePath("teselation/diffuse.jpg",
                                      ifx::ResourceType::TEXTURE),
             TextureTypes::SPECULAR);
 }
 
 std::shared_ptr<Texture2D> TextureFactory::LoadTesselationNormals() {
-    return Texture2D::MakeTexture2DFromFile(
-            ifx::Resources::GetInstance()
-                    .GetResourcePath("teselation/normals.jpg",
+    auto resource_path = texture_creator_->resource_manager()->resource_path();
+
+    return texture_creator_->MakeTexture2DFromFile(
+            resource_path->GetResourcePath("teselation/normals.jpg",
                                      ifx::ResourceType::TEXTURE),
             TextureTypes::NORMAL);
 }
 
 std::shared_ptr<Texture2D> TextureFactory::LoadTesselationHeight() {
-    return Texture2D::MakeTexture2DFromFile(
-            ifx::Resources::GetInstance()
-                    .GetResourcePath("teselation/height.jpg",
+    auto resource_path = texture_creator_->resource_manager()->resource_path();
+
+    return texture_creator_->MakeTexture2DFromFile(
+            resource_path->GetResourcePath("teselation/height.jpg",
                                      ifx::ResourceType::TEXTURE),
             TextureTypes::DISPLACEMENT);
 }
 
 std::shared_ptr<Texture2D> TextureFactory::LoadContainerDiffuse() {
-    return Texture2D::MakeTexture2DFromFile(
-            ifx::Resources::GetInstance()
-                    .GetResourcePath("container_diff.png",
+    auto resource_path = texture_creator_->resource_manager()->resource_path();
+
+    return texture_creator_->MakeTexture2DFromFile(
+            resource_path->GetResourcePath("container_diff.png",
                                      ifx::ResourceType::TEXTURE),
             TextureTypes::DIFFUSE);
 }
 
 std::shared_ptr<Texture2D> TextureFactory::LoadPortalTextureDiffuse() {
-    return Texture2D::MakeTexture2DFromFile(
-            ifx::Resources::GetInstance()
-                    .GetResourcePath("portal/portal_wall.jpg",
+    auto resource_path = texture_creator_->resource_manager()->resource_path();
+
+    return texture_creator_->MakeTexture2DFromFile(
+            resource_path->GetResourcePath("portal/portal_wall.jpg",
                                      ifx::ResourceType::TEXTURE),
             TextureTypes::DIFFUSE);
 }
 
 std::shared_ptr<Texture2D> TextureFactory::LoadPortalTextureSpecular() {
-    return Texture2D::MakeTexture2DFromFile(
-            ifx::Resources::GetInstance()
-                    .GetResourcePath("portal/portal_wall.jpg",
+    auto resource_path = texture_creator_->resource_manager()->resource_path();
+
+    return texture_creator_->MakeTexture2DFromFile(
+            resource_path->GetResourcePath("portal/portal_wall.jpg",
                                      ifx::ResourceType::TEXTURE),
             TextureTypes::SPECULAR);
 }
 
 std::shared_ptr<Texture2D> TextureFactory::LoadContainerSpecular() {
-    return Texture2D::MakeTexture2DFromFile(
-            ifx::Resources::GetInstance()
-                    .GetResourcePath("container_specular.png",
+    auto resource_path = texture_creator_->resource_manager()->resource_path();
+
+    return texture_creator_->MakeTexture2DFromFile(
+            resource_path->GetResourcePath("container_specular.png",
                                      ifx::ResourceType::TEXTURE),
             TextureTypes::SPECULAR);
 }
 
 std::shared_ptr<Texture2D> TextureFactory::LoadAwesomeFace() {
-    return Texture2D::MakeTexture2DFromFile(
-            ifx::Resources::GetInstance()
-                    .GetResourcePath("awesomeface.png",
+    auto resource_path = texture_creator_->resource_manager()->resource_path();
+
+    return texture_creator_->MakeTexture2DFromFile(
+            resource_path->GetResourcePath("awesomeface.png",
                                      ifx::ResourceType::TEXTURE),
             TextureTypes::DIFFUSE);
 }

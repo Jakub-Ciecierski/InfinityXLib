@@ -1,8 +1,10 @@
 #ifndef DUCK_EBO_H
 #define DUCK_EBO_H
 
-#include <GL/glew.h>
 #include <vector>
+
+typedef unsigned int GLuint;
+typedef unsigned int GLenum;
 
 class EBO {
 private:
@@ -15,7 +17,7 @@ public:
 
     ~EBO();
 
-    void bind(GLenum usage = GL_STATIC_DRAW);
+    void bind(GLenum usage);
     void unbind();
 };
 

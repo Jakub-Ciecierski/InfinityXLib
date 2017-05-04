@@ -2,6 +2,7 @@
 
 #include <controls/controls_events.h>
 #include <graphics/rendering/window/windows_container.h>
+#include <graphics/rendering/context/rendering_context.h>
 
 #include <iostream>
 #include <stdexcept>
@@ -11,25 +12,29 @@
 namespace ifx {
 
 Window::Window(int width, int height, std::string name) :
-        width_(width), height_(height), name(name) {
-    init();
-    setViewport();
-
-    WindowsContainer::GetInstance().AdddWindow(this);
+        width_(width), height_(height), name(name),
+        rendering_context_(nullptr){
+    WindowsContainer::GetInstance().AddWindow(this);
 }
 
-Window::~Window() {
-    Terminate();
+Window::~Window() {}
+
+bool Window::Init(std::shared_ptr<RenderingContext> rendering_context){
+    rendering_context_ = rendering_context;
+
+    glfwWindow = (GLFWwindow*)rendering_context_->CreateNativeWindowHandle(
+            name, &width_, &height_);
+
+    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+    glfwSetFramebufferSizeCallback(glfwWindow, GLFWframebuffersizefun);
+
+    return true;
 }
 
 void Window::Resize(int width, int height){
     width_ = width;
     height_ = height;
     setViewport();
-}
-
-void Window::Terminate(){
-    glfwTerminate();
 }
 
 void Window::HandleEvents() {
@@ -41,16 +46,11 @@ void Window::HandleEvents() {
     }
 }
 
-void Window::init() {
-    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-    glfwWindow = glfwCreateWindow(width_, height_,
-                                  name.c_str(), nullptr, nullptr);
-    glfwSetFramebufferSizeCallback(glfwWindow, GLFWframebuffersizefun);
+void Window::Update(float) {
+    glfwSwapBuffers(getHandle());
+    glfwPollEvents();
 
-    if (glfwWindow == nullptr) {
-        throw new std::invalid_argument("Failed to create GLFW window");
-    }
-    glfwMakeContextCurrent(glfwWindow);
+    HandleEvents();
 }
 
 void Window::setViewport() {
@@ -59,13 +59,8 @@ void Window::setViewport() {
     glViewport(0, 0, width_, height_);
 }
 
-int Window::shouldClose() {
+int Window::ShouldClose() {
     return glfwWindowShouldClose(glfwWindow);
-}
-
-void Window::update() {
-    HandleEvents();
-    glfwPollEvents();
 }
 
 GLFWwindow *Window::getHandle() {

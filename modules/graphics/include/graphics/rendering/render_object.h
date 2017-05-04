@@ -7,11 +7,10 @@
 #include <functional>
 #include <memory>
 
-class Program;
-
 namespace ifx {
 
 class Model;
+class Program;
 
 /*
  * RenderObject is used to render Meshes.

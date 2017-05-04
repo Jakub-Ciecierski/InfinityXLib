@@ -3,6 +3,11 @@
 #include <factory/mesh_factory.h>
 #include <graphics/model_loader/model_loader.h>
 #include <resources/resources.h>
+#include <graphics/model/model_creator.h>
+#include <graphics/shaders/textures/texture_creator.h>
+
+#include <resources/resource_manager.h>
+#include <resources/resources.h>
 
 #include <memory>
 
@@ -11,35 +16,39 @@ namespace ifx {
 using namespace glm;
 using namespace std;
 
-ModelFactory::ModelFactory() {}
+ModelFactory::ModelFactory(std::shared_ptr<ModelCreator> model_creator,
+                           std::shared_ptr<TextureCreator> texture_creator) :
+        model_creator_(model_creator),
+        texture_creator_(texture_creator){}
 
 ModelFactory::~ModelFactory() {}
 
 std::shared_ptr<Model> ModelFactory::LoadAsteroidModel() {
+    auto resource_path = texture_creator_->resource_manager()->resource_path();
     std::string path
-        = Resources::GetInstance().GetResourcePath("asteroid/rock.obj",
-                                                   ResourceType::MODEL);
+        = resource_path->GetResourcePath("asteroid/rock.obj",
+                                          ResourceType::MODEL);
     return LoadModel(path);
 }
 
 std::shared_ptr<Model> ModelFactory::LoadNanoSuitModel() {
+    auto resource_path = texture_creator_->resource_manager()->resource_path();
     std::string path
-        = Resources::GetInstance().GetResourcePath("nanosuit/nanosuit.obj",
+        = resource_path->GetResourcePath("nanosuit/nanosuit.obj",
                                                    ResourceType::MODEL);
     return LoadModel(path);
 }
 
 std::shared_ptr<Model> ModelFactory::CreateQuad(int x, int y){
-    MeshFactory meshLoader;
+    MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(MeshFactory::CreateQuad(x,y)));
+    meshes.push_back(std::move(mesh_factory.CreateQuad(x,y)));
 
-    return Model::MakeModel("Quad", std::move(meshes));
+    return model_creator_->MakeModel("Quad", std::move(meshes));
 }
 
 std::shared_ptr<Model> ModelFactory::LoadBicubicBezierSurfaceC0() {
-    MeshFactory meshLoader;
 /*
     Mesh *mesh1 = meshLoader.LoadBicubicBezierPatch(0, 0, 0.0f, 3, 0);
     Mesh *mesh2 = meshLoader.LoadBicubicBezierPatch(2, 0, 2.0f, 3, 1);
@@ -86,118 +95,125 @@ std::shared_ptr<Model> ModelFactory::LoadBicubicBezierSurfaceC0() {
 }
 
 std::shared_ptr<Model> ModelFactory::LoadBicubicBezierPatch() {
-    MeshFactory meshLoader;
+    MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(meshLoader.LoadBicubicBezierPatch(-1, 1, 1.5f)));
+    meshes.push_back(std::move(mesh_factory.LoadBicubicBezierPatch(-1, 1, 1.5f)));
 
-    return Model::MakeModel("BicubicBezierPatch", std::move(meshes));
+    return model_creator_->MakeModel("BicubicBezierPatch",
+                                     std::move(meshes));
 }
 
 std::shared_ptr<Model> ModelFactory::LoadBicubicBezierBowlPatch() {
-    MeshFactory meshLoader;
+    MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(meshLoader.LoadBicubicBezierPatch(-1, 1, 1.5f)));
+    meshes.push_back(std::move(mesh_factory.LoadBicubicBezierPatch(-1, 1, 1.5f)));
 
-    return Model::MakeModel("BicubicBezierBowlPatch", std::move(meshes));
+    return model_creator_->MakeModel("BicubicBezierBowlPatch", std::move(meshes));
 }
 
 std::shared_ptr<Model> ModelFactory::LoadBicubicBezierAsymmetricPatch() {
-    MeshFactory meshLoader;
+    MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(meshLoader.LoadBicubicBezierAsymmetricPatch()));
+    meshes.push_back(std::move(mesh_factory.LoadBicubicBezierAsymmetricPatch()));
 
-    return Model::MakeModel("BicubicBezierAsymmetricPatch", std::move(meshes));
+    return model_creator_->MakeModel("BicubicBezierAsymmetricPatch", std::move(meshes));
 }
 
 std::shared_ptr<Model> ModelFactory::LoadSquareModel() {
-    MeshFactory meshLoader;
+    MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(meshLoader.LoadPatch()));
+    meshes.push_back(std::move(mesh_factory.LoadPatch()));
 
-    return Model::MakeModel("SquareModel", std::move(meshes));
+    return model_creator_->MakeModel("SquareModel", std::move(meshes));
 }
 
 std::shared_ptr<Model> ModelFactory::LoadCAMMaterial() {
-    MeshFactory meshLoader;
+    MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(meshLoader.LoadCAMMaterial()));
+    meshes.push_back(std::move(mesh_factory.LoadCAMMaterial()));
 
-    return Model::MakeModel("CubeModel", std::move(meshes));
+    return model_creator_->MakeModel("CubeModel", std::move(meshes));
 }
 
 std::shared_ptr<Model> ModelFactory::LoadCubeModel() {
-    MeshFactory meshLoader;
+    MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(meshLoader.LoadCube()));
+    meshes.push_back(std::move(mesh_factory.LoadCube()));
 
-    return Model::MakeModel(ifx::NO_FILEPATH, std::move(meshes));
+    return model_creator_->MakeModel(ifx::NO_FILEPATH, std::move(meshes));
 }
 
 std::shared_ptr<Model> ModelFactory::LoadRoomModel() {
-    MeshFactory meshLoader;
+    MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(meshLoader.LoadRoom()));
+    meshes.push_back(std::move(mesh_factory.LoadRoom()));
 
-    return Model::MakeModel("RoomModel", std::move(meshes));
+    return model_creator_->MakeModel("RoomModel", std::move(meshes));
 }
 
 std::shared_ptr<Model> ModelFactory::LoadCubemapModel() {
-    MeshFactory meshLoader;
+    MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(meshLoader.LoadCubemap()));
+    meshes.push_back(std::move(mesh_factory.LoadCubemap()));
 
-    return Model::MakeModel("CubemapModel", std::move(meshes));
+    return model_creator_->MakeModel("CubemapModel", std::move(meshes));
 }
 
 std::shared_ptr<Model> ModelFactory::LoadLampModel() {
-    MeshFactory meshLoader;
+    MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(meshLoader.LoadLamp()));
+    meshes.push_back(std::move(mesh_factory.LoadLamp()));
 
-    return Model::MakeModel("LampModel", std::move(meshes));
+    return model_creator_->MakeModel("LampModel", std::move(meshes));
 }
 
 std::shared_ptr<Model> ModelFactory::LoadModel(std::string path) {
-    return ModelLoader(path).loadModel();
+    return ModelLoader(path, model_creator_, texture_creator_).loadModel();
 }
 
 std::shared_ptr<Model> ModelFactory::LoadFloorModel(){
-    MeshFactory meshLoader;
+    MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(meshLoader.LoadFloor()));
+    meshes.push_back(std::move(mesh_factory.LoadFloor()));
 
-    return Model::MakeModel(NO_FILEPATH, std::move(meshes));
+    return model_creator_->MakeModel(NO_FILEPATH, std::move(meshes));
 }
 
 std::shared_ptr<Model> ModelFactory::LoadSphere(float radius){
-    std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(MeshFactory::LoadSphere(radius)));
+    MeshFactory mesh_factory(texture_creator_);
 
-    return Model::MakeModel(ifx::NO_FILEPATH, std::move(meshes));
+    std::vector<std::unique_ptr<Mesh>> meshes;
+    meshes.push_back(std::move(mesh_factory.LoadSphere(radius)));
+
+    return model_creator_->MakeModel(ifx::NO_FILEPATH, std::move(meshes));
 }
 
 std::shared_ptr<Model> ModelFactory::LoadCircle(float radius){
-    std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(MeshFactory::LoadCircle(radius)));
+    MeshFactory mesh_factory(texture_creator_);
 
-    return Model::MakeModel(ifx::NO_FILEPATH, std::move(meshes));
+    std::vector<std::unique_ptr<Mesh>> meshes;
+    meshes.push_back(std::move(mesh_factory.LoadCircle(radius)));
+
+    return model_creator_->MakeModel(ifx::NO_FILEPATH, std::move(meshes));
 }
 
 std::shared_ptr<Model> ModelFactory::CreateLine(const glm::vec3& p1,
                                                 const glm::vec3& p2){
-    std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(MeshFactory::CreateLine(p1,p2)));
+    MeshFactory mesh_factory(texture_creator_);
 
-    return Model::MakeModel(ifx::NO_FILEPATH, std::move(meshes));
+    std::vector<std::unique_ptr<Mesh>> meshes;
+    meshes.push_back(std::move(mesh_factory.CreateLine(p1,p2)));
+
+    return model_creator_->MakeModel(ifx::NO_FILEPATH, std::move(meshes));
 }
 } // ifx

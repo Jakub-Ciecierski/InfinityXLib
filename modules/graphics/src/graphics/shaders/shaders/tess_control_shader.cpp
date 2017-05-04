@@ -1,5 +1,7 @@
 #include "graphics/shaders/shaders/tess_control_shader.h"
 
+#include <GL/glew.h>
+
 TessControlShader::TessControlShader(std::string shaderSource,
                                      std::string file_path) :
     Shader(shaderSource, file_path){

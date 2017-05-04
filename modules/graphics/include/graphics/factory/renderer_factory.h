@@ -6,16 +6,17 @@
 namespace ifx {
 
 class Renderer;
-class FBORenderer;
 class Window;
-class ShadowMapping;
+class RenderingContext;
 
 class RendererFactory {
 public:
     RendererFactory();
     ~RendererFactory();
 
-    virtual std::shared_ptr<Renderer> Create();
+    virtual std::shared_ptr<Renderer> Create(
+            std::shared_ptr<Window> window,
+            std::shared_ptr<RenderingContext> rendering_context);
 };
 }
 

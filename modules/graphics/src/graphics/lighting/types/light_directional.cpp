@@ -10,20 +10,11 @@
 
 using namespace ifx;
 
-LightDirectional::LightDirectional(const LightParams& light_params) :
-        LightSource(light_params, LightType::DIRECTIONAL){
-    ifx::Resources& resources = ifx::Resources::GetInstance();
-    std::string vertex_path =
-            resources.GetResourcePath("shadow_mapping/shadow_mapping.vs",
-                                      ifx::ResourceType::SHADER);
-    std::string fragment_path =
-            resources.GetResourcePath("shadow_mapping/shadow_mapping.fs",
-                                      ifx::ResourceType::SHADER);
-    auto program = ProgramLoader().CreateProgram(vertex_path, fragment_path);
-
-    shadow_mapping_ = std::shared_ptr<ShadowMapping>(
-            new ShadowMapping(Dimensions{4024, 4024}, program));
-}
+LightDirectional::LightDirectional(
+        const LightParams& light_params,
+        std::shared_ptr<ShadowMapping> shadow_mapping) :
+        shadow_mapping_(shadow_mapping),
+        LightSource(light_params, LightType::DIRECTIONAL){}
 
 LightDirectional::~LightDirectional() {}
 

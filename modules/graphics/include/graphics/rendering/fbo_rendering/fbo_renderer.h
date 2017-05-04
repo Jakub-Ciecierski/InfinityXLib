@@ -3,13 +3,12 @@
 
 #include <memory>
 
-class Program;
-
 namespace ifx {
 
 class Mesh;
 class Window;
 class FBO;
+class Program;
 
 /**
  * The viewport does not need to be changed since the window's dimensions

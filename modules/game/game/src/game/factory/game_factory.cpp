@@ -5,27 +5,64 @@
 #include <game/factory/scene_container_factory.h>
 #include <game/game.h>
 #include <game/scene_container.h>
-
-#include <physics/factory/bullet_physics_simulation_factory.h>
+#include <game/resources/factory/resource_context_factory.h>
 
 #include <graphics/rendering/renderer.h>
+#include <graphics/rendering/context/rendering_context.h>
 #include <graphics/factory/renderer_factory.h>
+#include <graphics/rendering/window/factory/window_factory.h>
+#include "graphics/rendering/context/factory/rendering_context_opengl_factory.h"
+
+#include <physics/factory/physics_simulation_factory.h>
+#include <physics/factory/bullet_physics_simulation_factory.h>
 
 namespace ifx {
 
 GameFactory::GameFactory(){
-    game_loop_factory_
-            = std::shared_ptr<GameLoopFactory>(new GameLoopFactory());
-    scene_factory_
-            = std::shared_ptr<SceneContainerFactory>(
-            new SceneContainerFactory());
-    renderer_factory_ = std::shared_ptr<RendererFactory>(new RendererFactory());
-    physics_simulation_factory_
-            = std::shared_ptr<BulletPhysicsSimulationFactory>(
-            new BulletPhysicsSimulationFactory());
+    CreateDefaultFactories();
 }
 
 GameFactory::~GameFactory(){}
+
+void GameFactory::CreateDefaultFactories(){
+    window_factory_ = std::shared_ptr<WindowFactory>(new WindowFactory());
+
+    rendering_context_factory_ = std::shared_ptr<RenderingContextOpenglFactory>(
+            new RenderingContextOpenglFactory());
+
+    resource_context_factory_ = std::shared_ptr<ResourceContextFactory>(
+            new ResourceContextFactory());
+
+    game_loop_factory_
+            = std::shared_ptr<GameLoopFactory>(new GameLoopFactory());
+
+    scene_factory_ = std::shared_ptr<SceneContainerFactory>(
+            new SceneContainerFactory());
+
+    renderer_factory_ = std::shared_ptr<RendererFactory>(new RendererFactory());
+
+    physics_simulation_factory_ =
+            std::shared_ptr<BulletPhysicsSimulationFactory>(
+                    new BulletPhysicsSimulationFactory());
+}
+
+GameFactory& GameFactory::SetWindowFactory(
+        std::shared_ptr<WindowFactory> factory){
+    window_factory_ = factory;
+    return *this;
+}
+
+GameFactory& GameFactory::SetRenderingContextFactory(
+        std::shared_ptr<RenderingContextFactory> factory){
+    rendering_context_factory_ = factory;
+    return *this;
+}
+
+GameFactory& GameFactory::SetResourceContextFactory(
+        std::shared_ptr<ResourceContextFactory> factory){
+    resource_context_factory_ = factory;
+    return *this;
+}
 
 GameFactory& GameFactory::SetGameLoopFactory(
         std::shared_ptr<GameLoopFactory> game_loop_factory){
@@ -45,22 +82,37 @@ GameFactory& GameFactory::SetRendererFactory(
     return *this;
 }
 
-GameFactory& GameFactory::SetBulletPhysicsSimulationFactory(
-        std::shared_ptr<BulletPhysicsSimulationFactory> physics_simulation_factory){
+GameFactory& GameFactory::SetPhysicsSimulationFactory(
+        std::shared_ptr<PhysicsSimulationFactory> physics_simulation_factory){
     physics_simulation_factory_ = physics_simulation_factory;
     return *this;
 }
 
 std::shared_ptr<Game> GameFactory::Create(){
-    auto renderer = renderer_factory_->Create();
+    auto rendering_context = rendering_context_factory_->Create();
+
+    auto resource_context = resource_context_factory_->Create();
+
+    auto window = window_factory_->Create();
+    if(!window->Init(rendering_context))
+        throw new std::invalid_argument("window->Init Failed");
+
+    auto renderer = renderer_factory_->Create(window,
+                                              rendering_context);
+
     auto physics_simulation = physics_simulation_factory_->Create();
 
     auto scene = scene_factory_->Create(renderer->scene_renderer(),
                                         physics_simulation);
+
     auto game_loop = game_loop_factory_->Create(renderer,
                                                 physics_simulation,
                                                 scene);
-    auto game = std::shared_ptr<Game>(new Game(game_loop, scene));
+
+    auto game = std::shared_ptr<Game>(new Game(game_loop,
+                                               scene,
+                                               resource_context,
+                                               rendering_context));
     return game;
 }
 

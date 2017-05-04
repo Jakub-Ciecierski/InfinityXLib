@@ -8,6 +8,8 @@
 #include <graphics/shaders/shaders/tess_control_shader.h>
 #include <graphics/shaders/shaders/tess_eval_shader.h>
 
+typedef char GLchar;
+
 /*
  * Logic behind loading Shaders from files
  */

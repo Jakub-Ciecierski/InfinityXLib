@@ -17,11 +17,13 @@ class GameObjectView;
 class GameComponentView;
 class SceneManipulatorView;
 class SceneManipulator;
+class ResourceContext;
 
 class SceneView : public View {
 public:
 
-    SceneView(std::shared_ptr<SceneContainer> scene);
+    SceneView(std::shared_ptr<SceneContainer> scene,
+              std::shared_ptr<ResourceContext> resource_creator);
     ~SceneView();
 
     std::shared_ptr<SceneManipulator> scene_manipulator(){
@@ -46,6 +48,14 @@ private:
             std::vector<std::shared_ptr<GameObject>>& game_objects);
     void RenderGameObjectContextMenu(std::shared_ptr<GameObject> game_object,
                                      int game_object_id);
+    void RenderGameObjectContextMenuRemove(
+            std::shared_ptr<GameObject> game_object,
+            int game_object_id);
+    void RenderGameObjectContextMenuAdd(std::shared_ptr<GameObject> game_object,
+                                        int game_object_id);
+    void RenderGameObjectContextMenuAddLight(
+            std::shared_ptr<GameObject> game_object,
+            int game_object_id);
 
     void RenderGameComponentsList(std::shared_ptr<GameObject> game_object,
                                   int game_object_id);
@@ -68,6 +78,8 @@ private:
     std::unique_ptr<GameObjectView> game_object_view_;
     std::unique_ptr<GameComponentView> game_component_view_;
     std::unique_ptr<SceneManipulatorView> scene_manipulator_view_;
+
+    std::shared_ptr<ResourceContext> resource_creator_;
 };
 }
 

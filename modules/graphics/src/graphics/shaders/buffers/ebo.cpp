@@ -1,5 +1,7 @@
 #include "graphics/shaders/buffers/ebo.h"
 
+#include <GL/glew.h>
+
 EBO::EBO(const std::vector<GLuint>* indices) :
         indices(indices){
     glGenBuffers(1, &id);

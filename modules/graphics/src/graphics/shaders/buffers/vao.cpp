@@ -1,6 +1,6 @@
-#include <GL/glew.h>
-
 #include "graphics/shaders/buffers/vao.h"
+
+#include <GL/glew.h>
 
 VAO::VAO(){
     glGenVertexArrays(1, &id);
@@ -13,8 +13,8 @@ VAO::~VAO() {
 void VAO::bindVertexBuffers(VBO &vbo, EBO &ebo){
     this->bind();
 
-    vbo.bind();
-    ebo.bind();
+    vbo.bind(GL_STATIC_DRAW);
+    ebo.bind(GL_STATIC_DRAW);
 
     const GLuint DATA_PER_POSITION = 3;
     const GLuint DATA_PER_NORMAL = 3;

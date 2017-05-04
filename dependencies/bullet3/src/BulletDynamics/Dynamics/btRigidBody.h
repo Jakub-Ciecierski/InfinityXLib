@@ -174,7 +174,7 @@ public:
 		}
 	};
 
-	///btRigidBody constructor using construction info
+	///btRigistd::dynamic_pointer_cast<ifx::GameComponent>dBody constructor using construction info
 	btRigidBody(	const btRigidBodyConstructionInfo& constructionInfo);
 
 	///btRigidBody constructor for backwards compatibility. 

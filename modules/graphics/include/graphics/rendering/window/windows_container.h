@@ -15,7 +15,7 @@ public:
 
     static WindowsContainer& GetInstance();
 
-    void AdddWindow(Window* window);
+    void AddWindow(Window* window);
     Window* GetWindow(GLFWwindow* glfw_window);
 private:
     std::vector<Window*> windows_;

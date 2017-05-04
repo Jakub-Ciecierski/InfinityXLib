@@ -1,7 +1,7 @@
 #ifndef PROJECT_GLFW_CALLBACKS_H
 #define PROJECT_GLFW_CALLBACKS_H
 
-#include <GLFW/glfw3.h>
+struct GLFWwindow;
 
 namespace ifx {
 

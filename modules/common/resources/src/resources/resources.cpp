@@ -32,12 +32,6 @@ Resources::~Resources(){
 
 }
 
-Resources& Resources::GetInstance(){
-    static Resources resources;
-
-    return resources;
-}
-
 std::string Resources::GetResourcePath(std::string name, ResourceType type){
     std::string resource_type_path = ResouceTypePath(type);
     std::string resource_type_full_path = ConcatenatePath(resource_root_path_,

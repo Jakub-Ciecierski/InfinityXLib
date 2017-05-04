@@ -2,6 +2,8 @@
 #include <graphics/shaders/textures/texture_activator.h>
 #include "graphics/model/mesh.h"
 
+#include <GL/glew.h>
+
 using namespace std;
 
 namespace ifx {

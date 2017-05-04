@@ -2,18 +2,21 @@
 #define DUCK_WINDOW_H
 
 #include <string>
+#include <memory>
 
-//#include <GLFW/glfw3.h>
 #include <controls/event_handler.h>
+#include <common/updatable.h>
 
 struct GLFWwindow;
 
 namespace ifx {
 
+class RenderingContext;
+
 /*
  * Windows Context, encapsulating the GLFW handle
  */
-class Window : public EventHandler {
+class Window : public EventHandler, public Updatable {
 
 public:
     Window(int width, int height, std::string name);
@@ -22,15 +25,17 @@ public:
     int* width() {return &width_;}
     int* height() {return &height_;}
 
-    void Resize(int width, int height);
+    bool Init(std::shared_ptr<RenderingContext> rendering_context);
 
-    void Terminate();
+    void Resize(int width, int height);
 
     // Overridden from EvenHandler
     void HandleEvents() override;
 
-    int shouldClose();
-    void update();
+    // Overridden from Updatable
+    virtual void Update(float time_delta = 0) override;
+
+    int ShouldClose();
 
     GLFWwindow* getHandle();
 
@@ -44,8 +49,9 @@ private:
     int height_;
     std::string name;
 
-    void init();
     void setViewport();
+
+    std::shared_ptr<RenderingContext> rendering_context_;
 };
 
 void GLFWframebuffersizefun(GLFWwindow *, int, int);

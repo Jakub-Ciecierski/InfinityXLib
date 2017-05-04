@@ -3,6 +3,8 @@
 #include <controls/controls_events.h>
 #include "graphics/shaders/data/shader_data.h"
 
+#include <GL/glew.h>
+
 #include <GLFW/glfw3.h>
 
 namespace ifx {

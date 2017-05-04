@@ -2,8 +2,11 @@
 
 #include "factory/texture_factory.h"
 #include <graphics/shaders/textures/texture.h>
+#include <graphics/shaders/textures/texture_creator.h>
 #include <graphics/model/patch/patch.h>
 #include <vector>
+#include <resources/resource_manager.h>
+#include <resources/resources.h>
 
 // For windows
 #ifndef M_PI
@@ -15,7 +18,8 @@ namespace ifx {
 using namespace std;
 using namespace glm;
 
-MeshFactory::MeshFactory(){}
+MeshFactory::MeshFactory(std::shared_ptr<TextureCreator> texture_creator) :
+        texture_creator_(texture_creator){}
 
 MeshFactory::~MeshFactory(){}
 
@@ -164,10 +168,10 @@ std::unique_ptr<Mesh> MeshFactory:: LoadBicubicBezierPatch(float startX,
                                                                   idI, idJ,
                                                                   0, 0}));
     auto material = std::make_shared<Material>();
-    material->AddTexture(TextureFactory().LoadTesselationDiffuse());
-    material->AddTexture(TextureFactory().LoadTesselationSpecular());
-    material->AddTexture(TextureFactory().LoadTesselationHeight());
-    material->AddTexture(TextureFactory().LoadTesselationNormals());
+    material->AddTexture(TextureFactory(texture_creator_).LoadTesselationDiffuse());
+    material->AddTexture(TextureFactory(texture_creator_).LoadTesselationSpecular());
+    material->AddTexture(TextureFactory(texture_creator_).LoadTesselationHeight());
+    material->AddTexture(TextureFactory(texture_creator_).LoadTesselationNormals());
 
     mesh->material(material);
 
@@ -284,10 +288,10 @@ std::unique_ptr<Mesh> MeshFactory::LoadBicubicBezierPolygon(float startX,
                                                         vertices.size(),
                                                         idI, idJ}));
     auto material = std::make_shared<Material>();
-    material->AddTexture(TextureFactory().LoadTesselationDiffuse());
-    material->AddTexture(TextureFactory().LoadTesselationSpecular());
-    material->AddTexture(TextureFactory().LoadTesselationHeight());
-    material->AddTexture(TextureFactory().LoadTesselationNormals());
+    material->AddTexture(TextureFactory(texture_creator_).LoadTesselationDiffuse());
+    material->AddTexture(TextureFactory(texture_creator_).LoadTesselationSpecular());
+    material->AddTexture(TextureFactory(texture_creator_).LoadTesselationHeight());
+    material->AddTexture(TextureFactory(texture_creator_).LoadTesselationNormals());
 
 
     mesh->material(material);
@@ -563,13 +567,15 @@ std::unique_ptr<Mesh> MeshFactory::LoadCAMMaterial() {
 
     std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices));
     auto material = std::make_shared<Material>();
-    material->AddTexture(Texture2D::MakeTexture2DFromFile(
-            ifx::Resources::GetInstance().GetResourcePath(
+
+    auto resource_path = texture_creator_->resource_manager()->resource_path();
+    material->AddTexture(texture_creator_->MakeTexture2DFromFile(
+            resource_path->GetResourcePath(
                     "cam/box1.png", ifx::ResourceType::TEXTURE),
             TextureTypes::DIFFUSE
     ));
-    material->AddTexture(Texture2D::MakeTexture2DFromFile(
-            ifx::Resources::GetInstance().GetResourcePath(
+    material->AddTexture(texture_creator_->MakeTexture2DFromFile(
+            resource_path->GetResourcePath(
                     "cam/box1.png", ifx::ResourceType::TEXTURE),
             TextureTypes::SPECULAR
     ));
@@ -655,8 +661,8 @@ std::unique_ptr<Mesh> MeshFactory::LoadCube() {
 
     std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices));
     auto material = std::make_shared<Material>();
-    material->AddTexture(TextureFactory().LoadContainerDiffuse());
-    material->AddTexture(TextureFactory().LoadContainerSpecular());
+    material->AddTexture(TextureFactory(texture_creator_).LoadContainerDiffuse());
+    material->AddTexture(TextureFactory(texture_creator_).LoadContainerSpecular());
 
     mesh->material(material);
 
@@ -819,8 +825,8 @@ std::unique_ptr<Mesh> MeshFactory::LoadRoom() {
 
     std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices));
     auto material = std::make_shared<Material>();
-    material->AddTexture(TextureFactory().LoadPortalTextureDiffuse());
-    material->AddTexture(TextureFactory().LoadPortalTextureSpecular());
+    material->AddTexture(TextureFactory(texture_creator_).LoadPortalTextureDiffuse());
+    material->AddTexture(TextureFactory(texture_creator_).LoadPortalTextureSpecular());
     mesh->material(material);
 
     return mesh;
@@ -848,13 +854,14 @@ std::unique_ptr<Mesh> MeshFactory::LoadFloor(){
 
     auto material = std::make_shared<Material>();
 
-    material->AddTexture(Texture2D::MakeTexture2DFromFile(
-            ifx::Resources::GetInstance().GetResourcePath(
+    auto resource_path = texture_creator_->resource_manager()->resource_path();
+    material->AddTexture(texture_creator_->MakeTexture2DFromFile(
+            resource_path->GetResourcePath(
                     "wood_diffuse.png", ifx::ResourceType::TEXTURE),
             TextureTypes::DIFFUSE
     ));
-    material->AddTexture(Texture2D::MakeTexture2DFromFile(
-            ifx::Resources::GetInstance().GetResourcePath(
+    material->AddTexture(texture_creator_->MakeTexture2DFromFile(
+            resource_path->GetResourcePath(
                     "wood_specular.png", ifx::ResourceType::TEXTURE),
             TextureTypes::SPECULAR
     ));
@@ -937,7 +944,6 @@ std::unique_ptr<Mesh> MeshFactory::LoadLamp() {
             16, 17, 19, 17, 18, 19,        // bottom
             23, 21, 20, 23, 22, 21,        // top
     };
-    TextureFactory textureLoader;
 
     std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices));
     return mesh;

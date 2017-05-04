@@ -3,6 +3,8 @@
 #include <controls/controls_events.h>
 #include "gui/imgui/impl/imgui_impl_glfw_gl3.h"
 
+#include <GLFW/glfw3.h>
+
 namespace ifx {
 
 void key_callback(GLFWwindow *window, int key,

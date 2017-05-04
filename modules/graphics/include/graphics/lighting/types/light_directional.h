@@ -17,7 +17,8 @@ class SceneRenderer;
 class LightDirectional : public LightSource {
 public:
 
-    LightDirectional(const LightParams& light_params);
+    LightDirectional(const LightParams& light_params,
+                     std::shared_ptr<ShadowMapping> shadow_mapping);
     ~LightDirectional();
 
     std::shared_ptr<ShadowMapping> shadow_mapping(){return shadow_mapping_;}

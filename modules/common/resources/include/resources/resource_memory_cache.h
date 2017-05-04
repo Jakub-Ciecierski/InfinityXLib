@@ -11,10 +11,9 @@ enum class ResourceType;
 
 class ResourceMemoryCache {
 public:
+    ResourceMemoryCache();
     ~ResourceMemoryCache();
     
-    static ResourceMemoryCache& GetInstance();
-
     /**
      * Adds resources to cache.
      * Returns false if resource already exists.
@@ -46,8 +45,6 @@ public:
     std::vector<std::shared_ptr<Resource>> GetResources(ResourceType type);
 
 private:
-    ResourceMemoryCache();
-
     std::vector<std::shared_ptr<Resource>> resources_;
 };
 

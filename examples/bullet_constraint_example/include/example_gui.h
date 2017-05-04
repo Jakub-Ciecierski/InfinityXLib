@@ -9,6 +9,7 @@ namespace ifx{
 class EngineGUI;
 class SceneContainer;
 class PhysicsSimulation;
+class ResourceContext;
 }
 
 class ExampleGUI : public ifx::GUI{
@@ -16,7 +17,8 @@ public:
 
     ExampleGUI(GLFWwindow* window,
                std::shared_ptr<ifx::SceneContainer> scene,
-               std::shared_ptr<ifx::PhysicsSimulation> physics_simulation);
+               std::shared_ptr<ifx::PhysicsSimulation> physics_simulation,
+               std::shared_ptr<ifx::ResourceContext> resource_creator);
     ~ExampleGUI();
 
     virtual void Render() override;

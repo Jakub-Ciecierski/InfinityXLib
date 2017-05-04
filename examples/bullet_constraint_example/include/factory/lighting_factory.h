@@ -20,10 +20,6 @@ public:
     LightingFactory();
     ~LightingFactory();
 
-    std::shared_ptr<ifx::LightPoint> CreatePointLight();
-    std::shared_ptr<ifx::LightDirectional> CreateDirectionalLight();
-    std::shared_ptr<ifx::LightSpotlight> CreateSpotLight();
-
 };
 }
 

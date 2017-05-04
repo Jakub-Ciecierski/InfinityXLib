@@ -10,12 +10,16 @@
 
 #include <memory>
 
-struct Shaders{
-    VertexShader* vertexShader = nullptr;
-    FragmentShader* fragmentShader = nullptr;
-    GeometryShader* geometryShader = nullptr;
-    TessControlShader* tessControlShader = nullptr;
-    TessEvalShader* tessEvalShader = nullptr;
+namespace ifx {
+
+class ProgramCreator;
+
+struct Shaders {
+    VertexShader *vertexShader = nullptr;
+    FragmentShader *fragmentShader = nullptr;
+    GeometryShader *geometryShader = nullptr;
+    TessControlShader *tessControlShader = nullptr;
+    TessEvalShader *tessEvalShader = nullptr;
 };
 
 /*
@@ -23,16 +27,17 @@ struct Shaders{
  */
 class Program : public ifx::Resource {
 public:
-    static std::shared_ptr<Program> MakeProgram(Shaders& shaders);
+    friend class ProgramCreator;
 
     ~Program();
 
     void use() const;
+
     void Reload();
-    
+
     GLuint getID() const;
 
-    static std::string GetProgramPath(Shaders& shaders);
+    static std::string GetProgramPath(Shaders &shaders);
 
 private:
     Program(Shaders shaders);
@@ -46,7 +51,8 @@ private:
     std::unique_ptr<GeometryShader> geometry_shader;
     std::unique_ptr<TessControlShader> tess_control_shader;
     std::unique_ptr<TessEvalShader> tess_eval_shader;
-};
 
+};
+}
 
 #endif //DUCK_PROGRAM_H

@@ -2,6 +2,8 @@
 
 #include <graphics/shaders/program.h>
 
+#include <GL/glew.h>
+
 namespace ifx {
 
 Patch::Patch(std::vector<Vertex> vertices,

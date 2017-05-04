@@ -2,7 +2,7 @@
 #define DUCK_MESH_DATA_H
 
 #include <math/math_ifx.h>
-#include <GL/glew.h>
+
 #include <string>
 #include <vector>
 

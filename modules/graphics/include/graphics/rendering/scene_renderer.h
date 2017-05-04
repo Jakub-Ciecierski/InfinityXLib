@@ -4,10 +4,9 @@
 #include <memory>
 #include <vector>
 
-class Program;
-
 namespace ifx {
 
+class Program;
 class Camera;
 class LightGroup;
 class LightSource;

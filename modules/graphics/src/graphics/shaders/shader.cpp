@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <graphics/shaders/loaders/shader_loader.h>
 
+#include <GL/glew.h>
 
 using namespace std;
 

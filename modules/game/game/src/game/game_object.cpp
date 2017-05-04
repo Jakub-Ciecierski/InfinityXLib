@@ -22,7 +22,9 @@ void GameObject::Add(std::shared_ptr<GameComponent> game_component){
     if(Exists(game_component))
         return;
 
-    std::dynamic_pointer_cast<Transformable>(game_component)->SetParent(this);
+    auto d = std::dynamic_pointer_cast<Transformable>(game_component);
+    d->SetParent(this);
+
     components_.push_back(game_component);
 
     if(scene_distributor_)

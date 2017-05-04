@@ -19,20 +19,25 @@ GameLoop::GameLoop(std::shared_ptr<Renderer> renderer,
 GameLoop::~GameLoop(){}
 
 void GameLoop::Start(){
-    while(!renderer_->window()->shouldClose()) {
+    while(!renderer_->window()->ShouldClose()) {
         RunSingleIteration();
     }
 }
 
 void GameLoop::RunSingleIteration(){
-    renderer_->Update(0);
-
     if(!UpdateTime())
         return;
+    ControlsEvents::GetInstance().Update();
+
+    renderer_->Update();
 
     physics_simulation_->Update(time_data_.time_delta);
+
     scene_->Update();
-    ControlsEvents::GetInstance().Update();
+
+    renderer_->window()->Update();
+
+
 }
 
 bool GameLoop::UpdateTime(){
