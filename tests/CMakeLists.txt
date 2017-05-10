@@ -65,9 +65,9 @@ include_directories(${OPENGL_INCLUDE_DIRS})
 
 include_directories(${IFX_ROOT}/modules/controls/controls/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/graphics/${INC_DIR})
-include_directories(${IFX_ROOT}/modules/object/object/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/common/resources/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/common/math/${INC_DIR})
+include_directories(${IFX_ROOT}/modules/common/common/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/vr/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/game/game/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/physics/physics/${INC_DIR})
@@ -78,10 +78,10 @@ include_directories(${IFX_ROOT}/modules/gui/engine_gui/${INC_DIR})
 # LINK
 #---------------------------------
 
-target_link_libraries(${APP_NAME} object_ifx
+target_link_libraries(${APP_NAME}
         game_ifx graphics_ifx physics_ifx math_ifx
         resources_ifx controls_ifx
-        vr_ifx gui_ifx engine_gui_ifx
+        common_ifx gui_ifx engine_gui_ifx
         BulletDynamics BulletCollision)
 
 target_link_libraries(${APP_NAME} gtest gtest_main)

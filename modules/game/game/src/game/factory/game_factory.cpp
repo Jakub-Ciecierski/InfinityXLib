@@ -16,6 +16,9 @@
 #include <physics/factory/physics_simulation_factory.h>
 #include <physics/factory/bullet_physics_simulation_factory.h>
 
+#include <controls/factory/controls_factory.h>
+#include <controls/context/factory/control_context_glfw_factory.h>
+
 namespace ifx {
 
 GameFactory::GameFactory(){
@@ -44,6 +47,10 @@ void GameFactory::CreateDefaultFactories(){
     physics_simulation_factory_ =
             std::shared_ptr<BulletPhysicsSimulationFactory>(
                     new BulletPhysicsSimulationFactory());
+
+    controls_factory_ = std::make_shared<ControlsFactory>();
+
+    control_context_factory_ = std::make_shared<ControlContextGLFWFactory>();
 }
 
 GameFactory& GameFactory::SetWindowFactory(
@@ -88,25 +95,38 @@ GameFactory& GameFactory::SetPhysicsSimulationFactory(
     return *this;
 }
 
+GameFactory& GameFactory::SetControlsFactory(
+        std::shared_ptr<ControlsFactory> factory){
+    controls_factory_ = factory;
+    return *this;
+}
+
+GameFactory& GameFactory::SetControlContextFactory(
+        std::shared_ptr<ControlContextFactory> factory){
+    control_context_factory_ = factory;
+    return *this;
+}
+
 std::shared_ptr<Game> GameFactory::Create(){
     auto rendering_context = rendering_context_factory_->Create();
-
     auto resource_context = resource_context_factory_->Create();
+    auto control_context = control_context_factory_->Create();
 
     auto window = window_factory_->Create();
-    if(!window->Init(rendering_context))
+    if(!window->Init(rendering_context, control_context))
         throw new std::invalid_argument("window->Init Failed");
 
     auto renderer = renderer_factory_->Create(window,
                                               rendering_context);
-
     auto physics_simulation = physics_simulation_factory_->Create();
+    auto controls = controls_factory_->Create(control_context);
 
     auto scene = scene_factory_->Create(renderer->scene_renderer(),
                                         physics_simulation);
 
     auto game_loop = game_loop_factory_->Create(renderer,
                                                 physics_simulation,
+                                                controls,
                                                 scene);
 
     auto game = std::shared_ptr<Game>(new Game(game_loop,

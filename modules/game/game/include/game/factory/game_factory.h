@@ -13,6 +13,8 @@ class PhysicsSimulationFactory;
 class ResourceContextFactory;
 class RenderingContextFactory;
 class WindowFactory;
+class ControlsFactory;
+class ControlContextFactory;
 
 class GameFactory {
 public:
@@ -35,7 +37,9 @@ public:
     GameFactory& SetPhysicsSimulationFactory(
             std::shared_ptr<PhysicsSimulationFactory>
             physics_simulation_factory);
-
+    GameFactory& SetControlsFactory(std::shared_ptr<ControlsFactory> factory);
+    GameFactory& SetControlContextFactory(
+            std::shared_ptr<ControlContextFactory> factory);
 
     std::shared_ptr<Game> Create();
 private:
@@ -43,11 +47,14 @@ private:
 
     std::shared_ptr<RenderingContextFactory> rendering_context_factory_;
     std::shared_ptr<ResourceContextFactory> resource_context_factory_;
+    std::shared_ptr<ControlContextFactory> control_context_factory_;
 
     std::shared_ptr<WindowFactory> window_factory_;
     std::shared_ptr<RendererFactory> renderer_factory_;
 
     std::shared_ptr<PhysicsSimulationFactory> physics_simulation_factory_;
+
+    std::shared_ptr<ControlsFactory> controls_factory_;
 
     std::shared_ptr<SceneContainerFactory> scene_factory_;
 

@@ -1,9 +1,13 @@
 #include "game/game_loop.h"
 
 #include <graphics/rendering/renderer.h>
+
 #include <physics/physics_simulation.h>
+
 #include <game/scene_container.h>
+
 #include <controls/controls_events.h>
+#include <controls/controls.h>
 
 #include <GLFW/glfw3.h>
 
@@ -11,9 +15,11 @@ namespace ifx {
 
 GameLoop::GameLoop(std::shared_ptr<Renderer> renderer,
                    std::shared_ptr<PhysicsSimulation> physics_simulation,
+                   std::shared_ptr<Controls> controls,
                    std::shared_ptr<SceneContainer> scene) :
         renderer_(renderer),
         physics_simulation_(physics_simulation),
+        controls_(controls),
         scene_(scene){}
 
 GameLoop::~GameLoop(){}
@@ -27,17 +33,16 @@ void GameLoop::Start(){
 void GameLoop::RunSingleIteration(){
     if(!UpdateTime())
         return;
-    ControlsEvents::GetInstance().Update();
 
     renderer_->Update();
 
     physics_simulation_->Update(time_data_.time_delta);
 
+    controls_->Update();
+
     scene_->Update();
 
     renderer_->window()->Update();
-
-
 }
 
 bool GameLoop::UpdateTime(){

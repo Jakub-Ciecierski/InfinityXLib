@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include <controls/controlable.h>
+
 namespace ifx {
 
 enum class GameComponentType{
@@ -14,7 +16,7 @@ enum class GameComponentType{
  * It can be anything that the Engine requires (e.g. Renderable, rigid body,
  * light etc.).
  */
-class GameComponent {
+class GameComponent : public Controlable {
 public:
 
     GameComponent(GameComponentType type);

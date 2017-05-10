@@ -9,6 +9,7 @@ namespace ifx {
 class Renderer;
 class PhysicsSimulation;
 class SceneContainer;
+class Controls;
 
 struct GameTimeData{
     float last_time = 0;
@@ -24,12 +25,14 @@ class GameLoop {
 public:
     GameLoop(std::shared_ptr<Renderer> renderer,
              std::shared_ptr<PhysicsSimulation> physics_simulation,
+             std::shared_ptr<Controls> controls,
              std::shared_ptr<SceneContainer> scene);
     ~GameLoop();
 
     std::shared_ptr<Renderer> renderer(){return renderer_;}
     std::shared_ptr<PhysicsSimulation>
     physics_simulation(){return physics_simulation_;}
+    std::shared_ptr<Controls> controls(){return controls_;};
 
     void Start();
 private:
@@ -39,6 +42,7 @@ private:
 
     std::shared_ptr<Renderer> renderer_;
     std::shared_ptr<PhysicsSimulation> physics_simulation_;
+    std::shared_ptr<Controls> controls_;
 
     std::shared_ptr<SceneContainer> scene_;
 

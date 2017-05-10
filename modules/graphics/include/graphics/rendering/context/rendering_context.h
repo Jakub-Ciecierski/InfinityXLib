@@ -15,8 +15,8 @@ public:
 
     virtual bool Terminate() = 0;
 
-    virtual void* CreateNativeWindowHandle(std::string name,
-                                           int* width, int* height) = 0;
+    virtual void* InitAndCreateNativeWindowHandle(std::string name,
+                                                  int *width, int *height) = 0;
 protected:
     bool is_init_;
 };

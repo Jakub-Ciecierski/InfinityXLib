@@ -12,6 +12,7 @@ struct GLFWwindow;
 namespace ifx {
 
 class RenderingContext;
+class ControlContext;
 
 /*
  * Windows Context, encapsulating the GLFW handle
@@ -25,7 +26,8 @@ public:
     int* width() {return &width_;}
     int* height() {return &height_;}
 
-    bool Init(std::shared_ptr<RenderingContext> rendering_context);
+    bool Init(std::shared_ptr<RenderingContext> rendering_context,
+              std::shared_ptr<ControlContext> control_context);
 
     void Resize(int width, int height);
 
@@ -52,6 +54,7 @@ private:
     void setViewport();
 
     std::shared_ptr<RenderingContext> rendering_context_;
+    std::shared_ptr<ControlContext> control_context_;
 };
 
 void GLFWframebuffersizefun(GLFWwindow *, int, int);

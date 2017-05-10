@@ -1,3 +1,4 @@
+/*
 #include "gtest/gtest.h"
 
 #include <memory>
@@ -33,3 +34,5 @@ TEST(Game, SceneContainer_RemoveNonExistingObject_ReturnedFalse) {
 
     EXPECT_EQ(expected_value, actual_value);
 }
+
+ */

@@ -51,6 +51,8 @@ public:
     const glm::mat4 &getViewMatrix();
     const glm::mat4 &getProjectionMatrix();
 
+    const glm::vec3& GetRight(){return right;}
+    const glm::vec3& GetUp(){return up;}
 private:
     void clampRotation();
 

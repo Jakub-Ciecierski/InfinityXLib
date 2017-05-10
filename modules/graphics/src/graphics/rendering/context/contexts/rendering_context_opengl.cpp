@@ -42,8 +42,9 @@ bool RenderingContextOpengl::InitGLEW(){
     return true;
 }
 
-void* RenderingContextOpengl::CreateNativeWindowHandle(std::string name,
-                                                       int* width, int* height){
+void* RenderingContextOpengl::InitAndCreateNativeWindowHandle(std::string name,
+                                                              int *width,
+                                                              int *height){
     if(!InitGLFW())
         throw new std::invalid_argument("Failed to initialize GLFW");
 

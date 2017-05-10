@@ -25,7 +25,7 @@ Renderer::Renderer(std::shared_ptr<Window> window,
     rendering_context_(rendering_context){
 
     // TODO move to controls
-    initGLFWCallbacks();
+    //initGLFWCallbacks();
 
     // TODO Don't create them here
     scene_renderer_ = std::shared_ptr<SceneRenderer>(new SceneRenderer());
@@ -103,9 +103,7 @@ void Renderer::Update(float){
 
     if(gui_)
         gui_->Render();
-/*
-    glfwSwapBuffers(window_->getHandle());
-    window_->update();*/
+
     HandleEvents();
 }
 

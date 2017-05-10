@@ -14,8 +14,8 @@ public:
 
     virtual bool Terminate() override;
 
-    virtual void* CreateNativeWindowHandle(std::string name,
-                                           int* width, int* height) override;
+    virtual void*InitAndCreateNativeWindowHandle(std::string name,
+                                                 int *width, int *height) override;
 private:
     bool InitGLFW();
     bool InitGLEW();

@@ -1,6 +1,8 @@
 #include "graphics/rendering/window/window.h"
 
 #include <controls/controls_events.h>
+#include <controls/context/control_context.h>
+
 #include <graphics/rendering/window/windows_container.h>
 #include <graphics/rendering/context/rendering_context.h>
 
@@ -19,11 +21,17 @@ Window::Window(int width, int height, std::string name) :
 
 Window::~Window() {}
 
-bool Window::Init(std::shared_ptr<RenderingContext> rendering_context){
+bool Window::Init(std::shared_ptr<RenderingContext> rendering_context,
+                  std::shared_ptr<ControlContext> control_context){
     rendering_context_ = rendering_context;
+    control_context_ = control_context;
 
-    glfwWindow = (GLFWwindow*)rendering_context_->CreateNativeWindowHandle(
+    glfwWindow
+            = (GLFWwindow*) rendering_context_->InitAndCreateNativeWindowHandle(
             name, &width_, &height_);
+
+    control_context_->InitAndSetupNativeCallbacks(
+            static_cast<void *>(glfwWindow));
 
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
     glfwSetFramebufferSizeCallback(glfwWindow, GLFWframebuffersizefun);
