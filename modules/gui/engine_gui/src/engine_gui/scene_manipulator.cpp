@@ -27,7 +27,6 @@ void SceneManipulator::Manipulate(std::shared_ptr<MovableObject> movable_object,
                          GetNativeOperationMode(operation),
                          ImGuizmo::MODE::WORLD,
                          new_model_matrix);
-
     if (ImGuizmo::IsUsing())
         Manipulate(movable_object, new_model_matrix, operation);
 }

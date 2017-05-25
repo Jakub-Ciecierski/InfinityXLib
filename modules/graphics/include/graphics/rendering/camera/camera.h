@@ -22,6 +22,15 @@ public:
 
     ~Camera();
 
+    int GetWidth(){ return *width; }
+
+    int GetHeight(){ return *height; }
+
+    float GetFOV(){ return FOV; }
+
+    float GetNear(){ return near; }
+    float GetFar(){ return far; }
+
     /**
      * Overriden from EventHandler
      */
