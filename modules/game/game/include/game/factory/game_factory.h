@@ -9,7 +9,7 @@ class Game;
 class GameLoopFactory;
 class SceneContainerFactory;
 class RendererFactory;
-class BulletPhysicsSimulationFactory;
+class PhysicsSimulationFactory;
 
 class GameFactory {
 public:
@@ -23,8 +23,8 @@ public:
             std::shared_ptr<SceneContainerFactory> scene_factory);
     GameFactory& SetRendererFactory(
             std::shared_ptr<RendererFactory> renderer_factory);
-    GameFactory& SetBulletPhysicsSimulationFactory(
-            std::shared_ptr<BulletPhysicsSimulationFactory>
+    GameFactory& SetPhysicsSimulationFactory(
+            std::shared_ptr<PhysicsSimulationFactory>
             physics_simulation_factory);
 
 
@@ -33,7 +33,7 @@ private:
     std::shared_ptr<GameLoopFactory> game_loop_factory_;
     std::shared_ptr<SceneContainerFactory> scene_factory_;
     std::shared_ptr<RendererFactory> renderer_factory_;
-    std::shared_ptr<BulletPhysicsSimulationFactory> physics_simulation_factory_;
+    std::shared_ptr<PhysicsSimulationFactory> physics_simulation_factory_;
 
 };
 }

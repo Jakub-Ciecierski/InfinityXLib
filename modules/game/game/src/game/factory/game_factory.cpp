@@ -6,6 +6,7 @@
 #include <game/game.h>
 #include <game/scene_container.h>
 
+#include <physics/factory/physics_simulation_factory.h>
 #include <physics/factory/bullet_physics_simulation_factory.h>
 
 #include <graphics/rendering/renderer.h>
@@ -45,8 +46,8 @@ GameFactory& GameFactory::SetRendererFactory(
     return *this;
 }
 
-GameFactory& GameFactory::SetBulletPhysicsSimulationFactory(
-        std::shared_ptr<BulletPhysicsSimulationFactory> physics_simulation_factory){
+GameFactory& GameFactory::SetPhysicsSimulationFactory(
+        std::shared_ptr<PhysicsSimulationFactory> physics_simulation_factory){
     physics_simulation_factory_ = physics_simulation_factory;
     return *this;
 }
