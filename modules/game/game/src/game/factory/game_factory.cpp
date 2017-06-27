@@ -19,6 +19,13 @@
 #include <controls/factory/controls_factory.h>
 #include <controls/context/factory/control_context_glfw_factory.h>
 
+#include <gui/context/factory/gui_context_factory.h>
+#include <gui/context/factory/glfw/gui_glfw_context_factory.h>
+#include <gui/factory/gui_factory.h>
+#include <gui/gui.h>
+
+//#include <engine_gui/
+
 namespace ifx {
 
 GameFactory::GameFactory(){
@@ -51,6 +58,11 @@ void GameFactory::CreateDefaultFactories(){
     controls_factory_ = std::make_shared<ControlsFactory>();
 
     control_context_factory_ = std::make_shared<ControlContextGLFWFactory>();
+
+    gui_context_factory_ = std::make_shared<GUIGLFWContextFactory>();
+
+
+    gui_factory_ = std::make_shared<GUIFactory>();
 }
 
 GameFactory& GameFactory::SetWindowFactory(
@@ -107,10 +119,22 @@ GameFactory& GameFactory::SetControlContextFactory(
     return *this;
 }
 
+GameFactory &
+GameFactory::SetGUIContextFactory(std::shared_ptr<GUIContextFactory> factory) {
+    gui_context_factory_ = factory;
+    return *this;
+}
+
+GameFactory &GameFactory::SetGUIFactory(std::shared_ptr<GUIFactory> factory) {
+    gui_factory_ = factory;
+    return *this;
+}
+
 std::shared_ptr<Game> GameFactory::Create(){
     auto rendering_context = rendering_context_factory_->Create();
     auto resource_context = resource_context_factory_->Create();
     auto control_context = control_context_factory_->Create();
+    auto gui_context = gui_context_factory_->Create();
 
     auto window = window_factory_->Create();
     if(!window->Init(rendering_context, control_context))
@@ -124,10 +148,16 @@ std::shared_ptr<Game> GameFactory::Create(){
     auto scene = scene_factory_->Create(renderer->scene_renderer(),
                                         physics_simulation);
 
+    //
+    auto gui = gui_factory_->Create(gui_context);
+    gui->Init(window->getHandle());
+    //
+
     auto game_loop = game_loop_factory_->Create(renderer,
                                                 physics_simulation,
                                                 controls,
-                                                scene);
+                                                scene,
+                                                gui);
 
     auto game = std::shared_ptr<Game>(new Game(game_loop,
                                                scene,
@@ -135,5 +165,8 @@ std::shared_ptr<Game> GameFactory::Create(){
                                                rendering_context));
     return game;
 }
+
+
+
 
 }

@@ -12,4 +12,6 @@ CMakeCache.txt
 Makefile
 CMakeFiles
 
+cmake-build-debug
+
 configuration/include

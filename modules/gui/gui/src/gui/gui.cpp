@@ -1,22 +1,35 @@
 #include "gui/gui.h"
 
-#include <gui/imgui/impl/imgui_impl_glfw_gl3.h>
-
-#include <GLFW/glfw3.h>
+#include <gui/context/gui_context.h>
+#include <gui/gui_part.h>
 
 namespace ifx {
 
-GUI::GUI(GLFWwindow* window){
-    ImGui_ImplGlfwGL3_Init(window, false);
+GUI::GUI(std::shared_ptr<GUIContext> context) :
+        context_(context),
+        is_init_(false) {}
+
+GUI::~GUI() {}
+
+void GUI::Update(float time_delta) {
+    context_->NewFrame();
+
+    for(auto& gui_part : gui_parts_)
+        gui_part->Render();
+
+    context_->Render();
 }
 
-GUI::~GUI(){
-    ImGui_ImplGlfwGL3_Shutdown();
+bool GUI::Init(void *native_window) {
+    return context_->Init(native_window);
 }
 
-void GUI::NewFrame(){
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    ImGui_ImplGlfwGL3_NewFrame();
+bool GUI::Terminate() {
+    return context_->Terminate();
+}
+
+void GUI::AddGUIPart(std::shared_ptr<GUIPart> gui_part) {
+    gui_parts_.push_back(gui_part);
 }
 
 }

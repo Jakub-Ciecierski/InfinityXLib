@@ -75,19 +75,12 @@ include_directories(${INC_DIR})
 
 # SOURCES AUTOMATIC SEARCH
 file(GLOB_RECURSE SRC_FILES ${SRC_DIR}/*.cpp)
+file(GLOB_RECURSE INC_FILES ${INC_DIR}/*.h)
 set(SPAM )
 
 #---------------------------------
 
 if (NOT TARGET ${LIB_NAME})
-    add_library(${LIB_NAME} STATIC ${SRC_FILES} ${SPAM})
+    add_library(${LIB_NAME} STATIC ${SRC_FILES} ${INC_FILES} ${SPAM})
 endif()
 set_target_properties(${LIB_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY lib)
-
-#---------------------------------
-# TESTS
-#---------------------------------
-
-#if (${IFX_BUILD_UNITTESTS})
-#    add_subdirectory(test)
-#endif()

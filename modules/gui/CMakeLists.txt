@@ -1,4 +1,4 @@
 cmake_minimum_required(VERSION 3.3)
 
-add_subdirectory(engine_gui)
+add_subdirectory(editor)
 add_subdirectory(gui)

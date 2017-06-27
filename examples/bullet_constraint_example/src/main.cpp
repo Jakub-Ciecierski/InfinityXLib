@@ -2,10 +2,10 @@
  * Bullet example
  */
 
-#include <engine_gui/factory/engine_gui_factory.h>
-#include <engine_gui/engine_gui.h>
+#include <editor/factory/editor_factory.h>
+#include <editor/editor.h>
 
-#include <example_gui.h>
+#include <gui/gui.h>
 
 #include <physics/rigid_body.h>
 #include <physics/collision/shapes/box_collision_shape.h>
@@ -242,7 +242,6 @@ void SetKeybinds(
                 float rotationSpeed = 0.1f;
                 camera->rotate(glm::vec3(xoffset * rotationSpeed,
                                          yoffset * rotationSpeed, 0));
-                std::cout << xoffset << ", " << yoffset << std::endl;
             },
             ifx::MouseControllerEventType {
                     ifx::MouseControllerKeyType::MOUSE_RIGHT,
@@ -799,13 +798,11 @@ int main() {
                     (game->game_loop()->physics_simulation()),
             leg2_rigid_body, feet2_rigid_body);
 
-    auto gui = std::shared_ptr<ExampleGUI>(
-            new ExampleGUI(
-                    game->game_loop()->renderer()->window()->getHandle(),
-                    game->scene(),
-                    game->game_loop()->physics_simulation(),
-                    game->resource_creator()));
-    game->game_loop()->renderer()->SetGUI(gui);
+    auto editor = ifx::EditorFactory().CreateEngineGUI(game->scene(),
+                                                          game->game_loop()->physics_simulation(),
+                                                          game->resource_creator());
+    game->game_loop()->gui()->AddGUIPart(editor);
+
 
     game->Start();
 }

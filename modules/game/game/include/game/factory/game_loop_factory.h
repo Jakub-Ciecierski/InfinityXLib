@@ -10,6 +10,7 @@ class PhysicsSimulation;
 class GameLoop;
 class SceneContainer;
 class Controls;
+class GUI;
 
 class GameLoopFactory {
 public:
@@ -21,7 +22,8 @@ public:
             std::shared_ptr<Renderer> renderer,
             std::shared_ptr<PhysicsSimulation> physics_simulation,
             std::shared_ptr<Controls> controls,
-            std::shared_ptr<SceneContainer> scene);
+            std::shared_ptr<SceneContainer> scene,
+            std::shared_ptr<GUI> gui);
 private:
 };
 }

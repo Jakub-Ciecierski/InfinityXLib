@@ -6,8 +6,9 @@
 
 #include <game/scene_container.h>
 
-#include <controls/controls_events.h>
 #include <controls/controls.h>
+
+#include <gui/gui.h>
 
 #include <GLFW/glfw3.h>
 
@@ -16,11 +17,13 @@ namespace ifx {
 GameLoop::GameLoop(std::shared_ptr<Renderer> renderer,
                    std::shared_ptr<PhysicsSimulation> physics_simulation,
                    std::shared_ptr<Controls> controls,
-                   std::shared_ptr<SceneContainer> scene) :
+                   std::shared_ptr<SceneContainer> scene,
+                   std::shared_ptr<GUI> gui) :
         renderer_(renderer),
         physics_simulation_(physics_simulation),
         controls_(controls),
-        scene_(scene){}
+        scene_(scene),
+        gui_(gui){}
 
 GameLoop::~GameLoop(){}
 
@@ -42,6 +45,9 @@ void GameLoop::RunSingleIteration(){
 
     scene_->Update();
 
+    gui_->Update();
+
+    // Window must be last
     renderer_->window()->Update();
 }
 

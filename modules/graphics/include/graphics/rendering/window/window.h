@@ -4,7 +4,6 @@
 #include <string>
 #include <memory>
 
-#include <controls/event_handler.h>
 #include <common/updatable.h>
 
 struct GLFWwindow;
@@ -17,7 +16,7 @@ class ControlContext;
 /*
  * Windows Context, encapsulating the GLFW handle
  */
-class Window : public EventHandler, public Updatable {
+class Window : public Updatable {
 
 public:
     Window(int width, int height, std::string name);
@@ -30,9 +29,6 @@ public:
               std::shared_ptr<ControlContext> control_context);
 
     void Resize(int width, int height);
-
-    // Overridden from EvenHandler
-    void HandleEvents() override;
 
     // Overridden from Updatable
     virtual void Update(float time_delta = 0) override;

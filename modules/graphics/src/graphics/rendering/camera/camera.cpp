@@ -1,6 +1,5 @@
 #include "graphics/rendering/camera/camera.h"
 
-#include <controls/controls_events.h>
 #include "graphics/shaders/data/shader_data.h"
 
 #include <GL/glew.h>
@@ -20,50 +19,6 @@ Camera::Camera(int *width, int *height,
 
 Camera::~Camera() {}
 
-void Camera::HandleEvents() {
-    ControlsEvents& controls = ControlsEvents::GetInstance();
-    float movementSpeed = 0.01f;
-    float rotationSpeed = 0.1f;
-
-    const Keys& keys = controls.keyboard_keys();
-    MouseEvents& mouse_events = controls.mouse_events();
-
-    float boost = movementSpeed;
-    if (keys[GLFW_KEY_SPACE])
-        boost *= 3.0f;
-    if (keys[GLFW_KEY_W])
-        moveForward(boost);
-    if (keys[GLFW_KEY_S])
-        moveBackward(boost);
-    if (keys[GLFW_KEY_A])
-        moveLeft(boost);
-    if (keys[GLFW_KEY_D])
-        moveRight(boost);
-    if (keys[GLFW_KEY_Q])
-        moveUp(boost);
-    if (keys[GLFW_KEY_E])
-        moveDown(boost);
-
-    MouseEvent* right_mouse = mouse_events.RightMouse;
-    if(right_mouse->is_pressed()){
-        GLfloat xoffset = mouse_events.pos_x - mouse_events.prev_pos_x;
-        GLfloat yoffset = mouse_events.prev_pos_y - mouse_events.pos_y;
-
-        rotate(glm::vec3(xoffset * rotationSpeed,
-                         yoffset * rotationSpeed, 0));
-    }
-
-    MouseEvent* middle_mouse = mouse_events.MiddleMouse;
-    if(middle_mouse->is_pressed()){
-        GLfloat xoffset = mouse_events.pos_x - mouse_events.prev_pos_x;
-        GLfloat yoffset = mouse_events.prev_pos_y - mouse_events.pos_y;
-
-        move(-xoffset * right * movementSpeed * 2.0f * 0.1f);
-        move(yoffset * up * movementSpeed * 2.0f * 0.1f);
-    }
-
-    moveForward(0.2f * mouse_events.GetAndResetScrollOffSet());
-}
 
 void Camera::rotate(const glm::vec3 &rotation) {
     Transformable::rotate(rotation);
@@ -78,7 +33,6 @@ void Camera::rotateTo(const glm::vec3 &rotation) {
 }
 
 void Camera::Update(float time_delta) {
-    HandleEvents();
     UpdateGlobal();
 
     ProjectionMatrix

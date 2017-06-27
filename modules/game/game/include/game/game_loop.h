@@ -10,6 +10,7 @@ class Renderer;
 class PhysicsSimulation;
 class SceneContainer;
 class Controls;
+class GUI;
 
 struct GameTimeData{
     float last_time = 0;
@@ -26,13 +27,16 @@ public:
     GameLoop(std::shared_ptr<Renderer> renderer,
              std::shared_ptr<PhysicsSimulation> physics_simulation,
              std::shared_ptr<Controls> controls,
-             std::shared_ptr<SceneContainer> scene);
+             std::shared_ptr<SceneContainer> scene,
+             std::shared_ptr<GUI> gui);
     ~GameLoop();
 
     std::shared_ptr<Renderer> renderer(){return renderer_;}
     std::shared_ptr<PhysicsSimulation>
     physics_simulation(){return physics_simulation_;}
     std::shared_ptr<Controls> controls(){return controls_;};
+
+    std::shared_ptr<GUI> gui(){return gui_;}
 
     void Start();
 private:
@@ -45,6 +49,8 @@ private:
     std::shared_ptr<Controls> controls_;
 
     std::shared_ptr<SceneContainer> scene_;
+
+    std::shared_ptr<GUI> gui_;
 
     GameTimeData time_data_;
 };

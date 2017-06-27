@@ -36,9 +36,10 @@ include_directories(${INC_DIR} ${INC_DIR})
 
 # SOURCES AUTOMATIC SEARCH
 file(GLOB_RECURSE SRC_FILES src/*.cpp)
+file(GLOB_RECURSE INC_FILES include/*.h)
 set(SOURCE_FILES )
 
-add_executable(${APP_NAME} ${SOURCE_FILES} ${SRC_FILES})
+add_executable(${APP_NAME} ${SOURCE_FILES} ${SRC_FILES} ${INC_FILES})
 
 
 #----------------------------------
@@ -71,14 +72,14 @@ include_directories(${IFX_ROOT}/modules/common/common/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/game/game/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/physics/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/gui/gui/${INC_DIR})
-include_directories(${IFX_ROOT}/modules/gui/engine_gui/${INC_DIR})
+include_directories(${IFX_ROOT}/modules/gui/editor/${INC_DIR})
 
 #---------------------------------
 # LINK
 #---------------------------------
 
 target_link_libraries(${APP_NAME}
-        engine_gui_ifx
+        editor_ifx
         game_ifx graphics_ifx physics_ifx
         resources_ifx controls_ifx
         gui_ifx math_ifx common_ifx

@@ -2,10 +2,9 @@
 
 #include <graphics/shaders/program.h>
 #include <controls/glfw_callbacks.h>
-#include <controls/controls_events.h>
 #include <graphics/rendering/fbo_rendering/fbo_renderer.h>
 #include <graphics/rendering/scene_renderer.h>
-#include <gui/gui.h>
+
 #include <resources/resource_memory_cache.h>
 #include <graphics/rendering/shadows/shadow_mapping_renderer.h>
 #include <graphics/shaders/textures/texture_activator.h>
@@ -24,8 +23,6 @@ Renderer::Renderer(std::shared_ptr<Window> window,
     window_(window),
     rendering_context_(rendering_context){
 
-    // TODO move to controls
-    //initGLFWCallbacks();
 
     // TODO Don't create them here
     scene_renderer_ = std::shared_ptr<SceneRenderer>(new SceneRenderer());
@@ -54,35 +51,8 @@ Renderer::~Renderer(){
     //ResourceMemoryCache::GetInstance().ClearAll();
 }
 
-void Renderer::HandleEvents() {
-    ControlsEvents& controls = ControlsEvents::GetInstance();
-    const Keys& keys = controls.keyboard_keys();
-    // TODO
-    /*
-    if (keys[GLFW_KEY_R]){
-        auto programs = ResourceMemoryCache::GetInstance().GetResources(
-                ResourceType::SHADER);
-        for(auto& program : programs){
-            std::static_pointer_cast<Program>(program)->Reload();
-        }
-    }*/
-}
-
-void Renderer::SetGUI(std::shared_ptr<GUI> gui){
-    gui_ = gui;
-}
-
 void Renderer::SetRenderingType(RenderingType type){
     rendering_type_ = type;
-}
-
-void Renderer::initGLFWCallbacks(){
-    // TODO move away
-    glfwSetKeyCallback(window_->getHandle(), key_callback);
-    glfwSetCursorPosCallback(window_->getHandle(), mouse_callback);
-    glfwSetMouseButtonCallback(window_->getHandle(), mouse_button_callback);
-    glfwSetScrollCallback(window_->getHandle(), mousescroll_callback);
-    glfwSetCharCallback(window_->getHandle(), char_callback);
 }
 
 void Renderer::Update(float){
@@ -100,11 +70,6 @@ void Renderer::Update(float){
             RenderToFBOTexture();
             break;
     }
-
-    if(gui_)
-        gui_->Render();
-
-    HandleEvents();
 }
 
 void Renderer::RenderToScreen(){

@@ -1,29 +1,36 @@
-#ifndef PROJECT_GUI_H
-#define PROJECT_GUI_H
+#ifndef PROJECT_GUI_TMP_H
+#define PROJECT_GUI_TMP_H
 
-struct GLFWwindow;
+#include <common/updatable.h>
+
+#include <memory>
+#include <vector>
 
 namespace ifx {
 
-class GUI {
+class GUIContext;
+class GUIPart;
+
+class GUI : public Updatable {
 public:
 
-    GUI(GLFWwindow* window);
+    GUI(std::shared_ptr<GUIContext> context);
+
     virtual ~GUI();
 
-    /**
-     * Must be called before (at the beginning of) each Render()
-     */
-    void NewFrame();
+    virtual void Update(float time_delta = 0) override;
 
-    virtual void Render() = 0;
+    bool Init(void* native_window);
+    bool Terminate();
 
-    /**
-     * Renders objects to apear in the scene. (e.g. scene manipulator)
-     */
-    virtual void RenderSceneObjects() = 0;
+    void AddGUIPart(std::shared_ptr<GUIPart> gui_part);
+private:
+    std::vector<std::shared_ptr<GUIPart>> gui_parts_;
+    std::shared_ptr<GUIContext> context_;
 
+    bool is_init_;
 };
 }
 
-#endif //PROJECT_GUI_H
+
+#endif //PROJECT_GUI_TMP_H

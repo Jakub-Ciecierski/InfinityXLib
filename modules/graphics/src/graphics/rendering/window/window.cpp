@@ -1,6 +1,5 @@
 #include "graphics/rendering/window/window.h"
 
-#include <controls/controls_events.h>
 #include <controls/context/control_context.h>
 
 #include <graphics/rendering/window/windows_container.h>
@@ -45,20 +44,9 @@ void Window::Resize(int width, int height){
     setViewport();
 }
 
-void Window::HandleEvents() {
-    ControlsEvents& controls = ControlsEvents::GetInstance();
-    const Keys& keys = controls.keyboard_keys();
-
-    if (keys[GLFW_KEY_ESCAPE]){
-        glfwSetWindowShouldClose(glfwWindow, GL_TRUE);
-    }
-}
-
 void Window::Update(float) {
     glfwSwapBuffers(getHandle());
     glfwPollEvents();
-
-    HandleEvents();
 }
 
 void Window::setViewport() {

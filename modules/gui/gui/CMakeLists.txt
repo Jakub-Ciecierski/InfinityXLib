@@ -38,6 +38,8 @@ include_directories(${IFX_ROOT}/${DEPS_DIR}/glew-2.0.0/include)
 
 include_directories(${IFX_ROOT}/${DEPS_DIR}/glfw-3.1.2/${INC_DIR})
 
+include_directories(${IFX_ROOT}/modules/common/common/${INC_DIR})
+
 #---------------------------------
 # PROJECT
 #---------------------------------
@@ -48,11 +50,13 @@ include_directories(${INC_DIRS} ${INC_DIR})
 
 # SOURCES AUTOMATIC SEARCH
 file(GLOB_RECURSE SRC_FILES ${SRC_DIR}/*.cpp)
-set(SPAM )
+file(GLOB_RECURSE INC_FILES ${INC_DIR}/*.h)
+
+set(SPAM)
 
 #---------------------------------
 
 if (NOT TARGET ${LIB_NAME})
-    add_library(${LIB_NAME} STATIC ${SRC_FILES} ${SPAM})
+    add_library(${LIB_NAME} STATIC ${SRC_FILES} ${INC_FILES} ${SPAM})
 endif()
 set_target_properties(${LIB_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY lib)

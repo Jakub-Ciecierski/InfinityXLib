@@ -15,6 +15,8 @@ class RenderingContextFactory;
 class WindowFactory;
 class ControlsFactory;
 class ControlContextFactory;
+class GUIContextFactory;
+class GUIFactory;
 
 class GameFactory {
 public:
@@ -41,6 +43,11 @@ public:
     GameFactory& SetControlContextFactory(
             std::shared_ptr<ControlContextFactory> factory);
 
+    GameFactory& SetGUIContextFactory(
+            std::shared_ptr<GUIContextFactory> factory);
+    GameFactory& SetGUIFactory(
+            std::shared_ptr<GUIFactory> factory);
+
     std::shared_ptr<Game> Create();
 private:
     void CreateDefaultFactories();
@@ -48,6 +55,9 @@ private:
     std::shared_ptr<RenderingContextFactory> rendering_context_factory_;
     std::shared_ptr<ResourceContextFactory> resource_context_factory_;
     std::shared_ptr<ControlContextFactory> control_context_factory_;
+    std::shared_ptr<GUIContextFactory> gui_context_factory_;
+
+    std::shared_ptr<GUIFactory> gui_factory_;
 
     std::shared_ptr<WindowFactory> window_factory_;
     std::shared_ptr<RendererFactory> renderer_factory_;

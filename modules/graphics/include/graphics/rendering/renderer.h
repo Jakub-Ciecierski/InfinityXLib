@@ -1,7 +1,6 @@
 #ifndef PROJECT_RENDERER_H
 #define PROJECT_RENDERER_H
 
-#include <controls/event_handler.h>
 #include <graphics/rendering/window/window.h>
 #include <common/updatable.h>
 
@@ -10,7 +9,6 @@
 namespace ifx {
 
 class FBORenderer;
-class GUI;
 class SceneRenderer;
 class ShadowMappingRenderer;
 class Window;
@@ -27,7 +25,7 @@ enum class RenderingType{
 /**
  * Takes ownership over ShadowMapping
  */
-class Renderer : public EventHandler, public Updatable{
+class Renderer : public Updatable{
 public:
     Renderer(std::shared_ptr<Window> window,
              std::shared_ptr<RenderingContext> rendering_context);
@@ -39,19 +37,12 @@ public:
 
     virtual void Update(float time_delta = 0) override;
 
-    // Overridden from EventHandler.
-    void HandleEvents() override;
-
-    void SetGUI(std::shared_ptr<GUI> gui);
     void SetRenderingType(RenderingType type);
 private:
-    void initGLFWCallbacks();
-
     void RenderToScreen();
     void RenderToFBOTexture();
 
     std::shared_ptr<Window> window_;
-    std::shared_ptr<GUI> gui_;
 
     RenderingType rendering_type_;
 
