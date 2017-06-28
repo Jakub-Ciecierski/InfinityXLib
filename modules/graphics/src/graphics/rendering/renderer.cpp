@@ -1,7 +1,6 @@
 #include "graphics/rendering/renderer.h"
 
 #include <graphics/shaders/program.h>
-#include <controls/glfw_callbacks.h>
 #include <graphics/rendering/fbo_rendering/fbo_renderer.h>
 #include <graphics/rendering/scene_renderer.h>
 

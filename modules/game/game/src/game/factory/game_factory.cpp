@@ -148,10 +148,8 @@ std::shared_ptr<Game> GameFactory::Create(){
     auto scene = scene_factory_->Create(renderer->scene_renderer(),
                                         physics_simulation);
 
-    //
     auto gui = gui_factory_->Create(gui_context);
     gui->Init(window->getHandle());
-    //
 
     auto game_loop = game_loop_factory_->Create(renderer,
                                                 physics_simulation,
