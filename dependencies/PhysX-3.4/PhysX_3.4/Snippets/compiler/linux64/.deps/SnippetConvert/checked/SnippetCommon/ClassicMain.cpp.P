@@ -1,0 +1,3 @@
+build/SnippetConvert_checked/SnippetCommon/ClassicMain.cpp.o: \
+ ../../SnippetCommon/ClassicMain.cpp
+ ../../SnippetCommon/ClassicMain.cpp :

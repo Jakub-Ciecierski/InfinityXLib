@@ -1,0 +1,45 @@
+build/SnippetUtils_checked/SnippetUtils/SnippetUtils.cpp.o: \
+ ../../SnippetUtils/SnippetUtils.cpp ../../SnippetUtils/SnippetUtils.h \
+ ../../../../PxShared/include/foundation/PxSimpleTypes.h \
+ ../../../../PxShared/include/foundation/PxPreprocessor.h \
+ ../../../Source/Common/src/CmPhysXCommon.h \
+ ../../../../PxShared/src/foundation/include/Ps.h \
+ ../../../../PxShared/include/foundation/Px.h \
+ ../../../../PxShared/src/foundation/include/PsAtomic.h \
+ ../../../../PxShared/src/foundation/include/Ps.h \
+ ../../../../PxShared/src/foundation/include/PsString.h \
+ ../../../../PxShared/src/foundation/include/PsSync.h \
+ ../../../../PxShared/src/foundation/include/PsAllocator.h \
+ ../../../../PxShared/include/foundation/PxAllocatorCallback.h \
+ ../../../../PxShared/include/foundation/PxFoundation.h \
+ ../../../../PxShared/include/foundation/PxErrors.h \
+ ../../../../PxShared/include/foundation/PxAssert.h \
+ ../../../../PxShared/src/foundation/include/PsThread.h \
+ ../../../../PxShared/src/foundation/include/PsUserAllocated.h \
+ ../../../../PxShared/src/foundation/include/PsTime.h \
+ ../../../../PxShared/src/foundation/include/PsMutex.h \
+ ../../../../PxShared/src/foundation/include/PsAllocator.h \
+ ../../../Include/extensions/PxDefaultAllocator.h \
+ ../../../Include/common/PxPhysXCommonConfig.h
+ ../../SnippetUtils/SnippetUtils.cpp ../../SnippetUtils/SnippetUtils.h :
+ ../../../../PxShared/include/foundation/PxSimpleTypes.h :
+ ../../../../PxShared/include/foundation/PxPreprocessor.h :
+ ../../../Source/Common/src/CmPhysXCommon.h :
+ ../../../../PxShared/src/foundation/include/Ps.h :
+ ../../../../PxShared/include/foundation/Px.h :
+ ../../../../PxShared/src/foundation/include/PsAtomic.h :
+ ../../../../PxShared/src/foundation/include/Ps.h :
+ ../../../../PxShared/src/foundation/include/PsString.h :
+ ../../../../PxShared/src/foundation/include/PsSync.h :
+ ../../../../PxShared/src/foundation/include/PsAllocator.h :
+ ../../../../PxShared/include/foundation/PxAllocatorCallback.h :
+ ../../../../PxShared/include/foundation/PxFoundation.h :
+ ../../../../PxShared/include/foundation/PxErrors.h :
+ ../../../../PxShared/include/foundation/PxAssert.h :
+ ../../../../PxShared/src/foundation/include/PsThread.h :
+ ../../../../PxShared/src/foundation/include/PsUserAllocated.h :
+ ../../../../PxShared/src/foundation/include/PsTime.h :
+ ../../../../PxShared/src/foundation/include/PsMutex.h :
+ ../../../../PxShared/src/foundation/include/PsAllocator.h :
+ ../../../Include/extensions/PxDefaultAllocator.h :
+ ../../../Include/common/PxPhysXCommonConfig.h :
