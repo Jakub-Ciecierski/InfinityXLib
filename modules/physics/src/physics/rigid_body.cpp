@@ -38,4 +38,13 @@ void RigidBody::Init(){
     rigid_body_bt_ = std::shared_ptr<btRigidBody>(new btRigidBody(bt_info));
 }
 
+void RigidBody::Update(float time_delta) {
+    Transformable::Update(time_delta);
+
+    auto scale = this->getScale();
+
+    collision_shape_->collision_shape_bt()->setLocalScaling(btVector3(
+            scale.x, scale.y, scale.z));
+}
+
 }

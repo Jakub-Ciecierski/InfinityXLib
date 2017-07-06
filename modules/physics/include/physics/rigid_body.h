@@ -19,6 +19,7 @@ public:
 
     std::shared_ptr<btRigidBody> rigid_body_bt(){return rigid_body_bt_;}
 
+    virtual void Update(float time_delta = 0) override;
 protected:
 
     std::shared_ptr<btRigidBody> rigid_body_bt_;
