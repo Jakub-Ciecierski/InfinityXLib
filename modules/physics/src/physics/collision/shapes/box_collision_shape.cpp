@@ -2,13 +2,17 @@
 
 #include <BulletCollision/CollisionShapes/btBoxShape.h>
 
+#include <physics/impl/rigid_body_impl.h>
+
 namespace ifx{
 
-BoxCollisionShape::BoxCollisionShape(const glm::vec3 dim){
-    collision_shape_bt_= std::shared_ptr<btBoxShape>(new btBoxShape(
-            btVector3(dim.x, dim.y, dim.z)));
-}
+BoxCollisionShape::BoxCollisionShape(const glm::vec3& dim) :
+    dimension_(dim){}
 
 BoxCollisionShape::~BoxCollisionShape(){}
+
+void BoxCollisionShape::InitImpl(RigidBodyImpl* rigid_body_impl){
+    rigid_body_impl->InitCollisionShape(this);
+}
 
 }

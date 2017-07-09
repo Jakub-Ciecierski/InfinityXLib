@@ -6,13 +6,20 @@
 
 namespace ifx {
 
-class StaticPlaneShape  : public CollisionShape {
+class StaticPlaneShape : public CollisionShape {
 public:
 
     StaticPlaneShape(const glm::vec3& normal, float plane_constant);
     ~StaticPlaneShape();
 
+    const glm::vec3& normal() const {return normal_;}
+    float plane_constant() const {return plane_constant_;}
+
+    virtual void InitImpl(RigidBodyImpl* rigid_body_impl) override;
+
 private:
+    glm::vec3 normal_;
+    float plane_constant_;
 };
 }
 

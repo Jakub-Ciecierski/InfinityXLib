@@ -1,50 +1,27 @@
 #include "physics/rigid_body.h"
 
-#include <physics/collision/collision_shape.h>
+#include <physics/impl/rigid_body_impl.h>
 
-#include <BulletCollision/CollisionShapes/btBoxShape.h>
-#include <BulletDynamics/Dynamics/btRigidBody.h>
-#include <LinearMath/btDefaultMotionState.h>
+namespace ifx {
 
-namespace ifx{
-
-RigidBody::RigidBody(std::shared_ptr<CollisionShape> collision_shape,
-                     float mass) :
-        collision_shape_(collision_shape),
-        mass_(mass){
-    Init();
+RigidBody::RigidBody(std::unique_ptr<RigidBodyImpl> rigid_body_impl,
+                           const RigidBodyParams&& params) :
+        rigid_body_impl_(std::move(rigid_body_impl)),
+        collision_shape_(params.collision_shape),
+        mass_(params.mass){
+    rigid_body_impl_->InitImpl(collision_shape_, mass_);
 }
-
-RigidBody::RigidBody() :
-        collision_shape_(nullptr),
-        mass_(0){}
 
 RigidBody::~RigidBody(){}
 
-void RigidBody::Init(){
-    motion_state_bt_  = std::shared_ptr<btDefaultMotionState>(
-            new btDefaultMotionState());
-
-    bool isDynamic = (mass_ != 0.f);
-    btVector3 localInertia(0, 0, 0);
-    if (isDynamic){
-        collision_shape_->collision_shape_bt()->
-                calculateLocalInertia(mass_, localInertia);
-    }
-
-    btRigidBody::btRigidBodyConstructionInfo bt_info(
-            mass_, nullptr,
-            collision_shape_->collision_shape_bt().get(), localInertia);
-    rigid_body_bt_ = std::shared_ptr<btRigidBody>(new btRigidBody(bt_info));
+void* RigidBody::GetNativeRigidBody(){
+    return rigid_body_impl_->GetNativeRigidBody();
 }
 
-void RigidBody::Update(float time_delta) {
+void RigidBody::Update(float time_delta){
     Transformable::Update(time_delta);
 
-    auto scale = this->getScale();
-
-    collision_shape_->collision_shape_bt()->setLocalScaling(btVector3(
-            scale.x, scale.y, scale.z));
+    rigid_body_impl_->SetCollisionShapeScale(getScale());
 }
 
 }

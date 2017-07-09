@@ -1,5 +1,7 @@
 #include "physics/simulations/physx_physics_simulation.h"
 
+#include <physics/impl/rigid_body_impl.h>
+
 namespace ifx {
 
 PhysxPhysicsSimulation::PhysxPhysicsSimulation() {}
@@ -22,9 +24,8 @@ void PhysxPhysicsSimulation::AddImpulse() {
 
 }
 
-std::shared_ptr<RigidBodyTMP>
-PhysxPhysicsSimulation::CreatAndAdd(const RigidBodyParams &&params) {
-    return nullptr;
+std::unique_ptr<RigidBodyImpl> PhysxPhysicsSimulation::CreateRigidBodyImpl() {
+    return std::unique_ptr<RigidBodyImpl>();
 }
 
 }

@@ -6,8 +6,13 @@
 #include <memory>
 
 class btRigidBody;
+class btCollisionShape;
 
 namespace ifx {
+
+class CollisionShape;
+class BoxCollisionShape;
+class StaticPlaneShape;
 
 class RigidBodyImplBullet : public RigidBodyImpl{
 public:
@@ -18,11 +23,18 @@ public:
 
     virtual void* GetNativeRigidBody() override;
 
-protected:
     virtual void InitImpl(std::shared_ptr<CollisionShape> collision_shape,
                           float mass) override;
+
+    virtual void InitCollisionShape(const StaticPlaneShape* shape) override;
+    virtual void InitCollisionShape(const BoxCollisionShape* shape) override;
+
+    virtual void SetCollisionShapeScale(const glm::vec3& scale) override;
+
 private:
+    std::shared_ptr<btCollisionShape> collision_shape_bt_;
     std::unique_ptr<btRigidBody> rigid_body_bt_;
+
 
 };
 }

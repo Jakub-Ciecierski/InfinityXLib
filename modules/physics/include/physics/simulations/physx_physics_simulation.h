@@ -18,11 +18,9 @@ public:
 
     glm::vec3 GetGravity() override;
 
-    std::shared_ptr<RigidBodyTMP>
-    CreatAndAdd(const RigidBodyParams &&params) override;
-
     void AddImpulse() override;
 
+    virtual std::unique_ptr<RigidBodyImpl> CreateRigidBodyImpl() override;
 private:
 };
 }

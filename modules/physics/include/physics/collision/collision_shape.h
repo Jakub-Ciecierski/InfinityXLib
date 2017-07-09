@@ -7,18 +7,17 @@ class btCollisionShape;
 
 namespace ifx {
 
+class RigidBodyImpl;
+
 class CollisionShape {
 public:
 
     CollisionShape();
     virtual ~CollisionShape();
 
-    std::shared_ptr<btCollisionShape> collision_shape_bt(){
-        return collision_shape_bt_;}
-protected:
-    std::shared_ptr<btCollisionShape> collision_shape_bt_;
-
+    virtual void InitImpl(RigidBodyImpl* rigid_body_impl) = 0;
 };
+
 }
 
 #endif //PROJECT_COLLISION_SHAPE_H
