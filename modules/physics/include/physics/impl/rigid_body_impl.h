@@ -27,6 +27,8 @@ public:
 
     virtual void SetCollisionShapeScale(const glm::vec3& scale) = 0;
 
+    virtual bool IsDynamic() = 0;
+
 private:
 };
 }

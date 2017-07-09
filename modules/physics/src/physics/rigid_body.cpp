@@ -2,6 +2,7 @@
 
 #include <physics/impl/rigid_body_impl.h>
 
+
 namespace ifx {
 
 RigidBody::RigidBody(std::unique_ptr<RigidBodyImpl> rigid_body_impl,
@@ -22,6 +23,8 @@ void RigidBody::Update(float time_delta){
     Transformable::Update(time_delta);
 
     rigid_body_impl_->SetCollisionShapeScale(getScale());
+
+
 }
 
 }

@@ -4,17 +4,6 @@
 #include <physics/impl/rigid_body_impl.h>
 
 namespace ifx{
-/*
-RigidBodyComponent::RigidBodyComponent(
-        std::shared_ptr<CollisionShape>  collision_shape,
-        float mass) :
-        GameComponent(GameComponentType::PHYSICS),
-        RigidBody(collision_shape, mass) {}
-
-RigidBodyComponent::RigidBodyComponent() :
-        GameComponent(GameComponentType::PHYSICS),
-        RigidBody(){}
-*/
 
 RigidBodyComponent::RigidBodyComponent(
         std::shared_ptr<PhysicsSimulation> physics_simulation,

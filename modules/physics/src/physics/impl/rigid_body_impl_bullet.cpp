@@ -22,6 +22,7 @@ void* RigidBodyImplBullet::GetNativeRigidBody(){
 void RigidBodyImplBullet::InitImpl(
         std::shared_ptr<CollisionShape> collision_shape,
         float mass) {
+    ifx_collision_shape_ = collision_shape;
     collision_shape->InitImpl(this);
     if(!collision_shape_bt_)
         throw std::invalid_argument("collision_shape_bt_ failed to Init");
@@ -56,9 +57,18 @@ void RigidBodyImplBullet::InitCollisionShape(const BoxCollisionShape* shape){
 }
 
 void RigidBodyImplBullet::SetCollisionShapeScale(const glm::vec3& scale){
+    if(ifx_collision_shape_->scale() == scale){
+        return;
+    }
+    ifx_collision_shape_->scale(scale);
+
     collision_shape_bt_->setLocalScaling(btVector3(scale.x,
                                                    scale.y,
                                                    scale.z));
+}
+
+bool RigidBodyImplBullet::IsDynamic(){
+    return rigid_body_bt_->getInvMass() != 0;
 }
 
 }

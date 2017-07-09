@@ -1,7 +1,3 @@
-/**
- * Bullet example
- */
-
 #include <editor/factory/editor_factory.h>
 #include <editor/editor.h>
 
@@ -49,6 +45,7 @@
 #include <controls/controller/controllers/mouse_controller.h>
 
 #include <GL/glew.h>
+#include <physics/factory/physx_physics_simulation_factory.h>
 
 void SetKeybinds(
         std::shared_ptr<ifx::Controls> controls,
@@ -310,8 +307,8 @@ std::shared_ptr<ifx::RigidBodyComponent> CreateRigidBox(
 
 std::shared_ptr<ifx::RigidBodyComponent> CreateRigidFloor(
         std::shared_ptr<ifx::PhysicsSimulation> physics_simulation){
-    auto box_collision = std::shared_ptr<ifx::BoxCollisionShape>(
-            new ifx::BoxCollisionShape(glm::vec3(500,0.01,500)));
+    auto box_collision = std::shared_ptr<ifx::StaticPlaneShape>(
+            new ifx::StaticPlaneShape(glm::vec3(0,1,0), 0));
 
     auto mass = 0.0f;
     auto rigid_body = std::shared_ptr<ifx::RigidBodyComponent>(
@@ -436,6 +433,8 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectCeiling(
 int main() {
     auto game_factory
             = std::shared_ptr<ifx::GameFactory>(new ifx::GameFactory());
+    game_factory->SetPhysicsSimulationFactory(
+            std::make_shared<ifx::PhysxPhysicsSimulationFactory>());
     auto game = game_factory->Create();
 
     auto lights = CreateGameObjectLight(

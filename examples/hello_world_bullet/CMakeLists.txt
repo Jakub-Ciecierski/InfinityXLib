@@ -1,16 +1,18 @@
 cmake_minimum_required(VERSION 3.3)
 
-set(APP_NAME "test_ifx")
+set(APP_NAME "hello_world_bullet")
 project(${APP_NAME})
 
 set(INC_DIR include)
 set(SRC_DIR src)
 set(DEPS_DIR dependencies)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${IFX_UNITTESTS_BIN_BUILD_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${IFX_APP_BUILD_DIR})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 
-add_definitions(-DGLEW_STATIC)
+add_definitions(
+        -DGLEW_STATIC
+)
 
 #---------------------------------
 # PHYSX
@@ -89,20 +91,19 @@ include_directories(${INC_DIR} ${INC_DIR})
 
 # SOURCES AUTOMATIC SEARCH
 file(GLOB_RECURSE SRC_FILES src/*.cpp)
+file(GLOB_RECURSE INC_FILES include/*.h)
 set(SOURCE_FILES )
 
-add_executable(${APP_NAME} ${SOURCE_FILES} ${SRC_FILES})
+add_executable(${APP_NAME} ${SOURCE_FILES} ${SRC_FILES} ${INC_FILES})
+
 
 #----------------------------------
 # EXTERNAL
 #----------------------------------
 
-#add_subdirectory(${IFX_ROOT}/${DEPS_DIR} ${IFX_LIB_DEPS_BUILD_DIR})
+add_subdirectory(${IFX_ROOT}/${DEPS_DIR} ${IFX_LIB_DEPS_BUILD_DIR})
 
 include_directories(${IFX_ROOT}/${DEPS_DIR}/bullet3/src/)
-include_directories(${IFX_ROOT}/${DEPS_DIR}/PhysX-3.4/PhysX_3.4/Include)
-include_directories(${IFX_ROOT}/${DEPS_DIR}/PhysX-3.4/PxShared/include)
-include_directories(${IFX_ROOT}/${DEPS_DIR}/googletest/${INC_DIR})
 include_directories(${IFX_ROOT}/${DEPS_DIR}/glfw-3.1.2/${INC_DIR})
 include_directories(${IFX_ROOT}/${DEPS_DIR}/assimp-3.1.1/${INC_DIR})
 include_directories(${IFX_ROOT}/${DEPS_DIR}/SOIL/src)
@@ -116,7 +117,7 @@ include_directories(${OPENGL_INCLUDE_DIRS})
 # IFX LIBS
 #---------------------------------
 
-#add_subdirectory(${IFX_ROOT} ${IFX_LIB_BUILD_DIR})
+add_subdirectory(${IFX_ROOT} ${IFX_LIB_BUILD_DIR})
 
 include_directories(${IFX_ROOT}/modules/controls/controls/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/graphics/${INC_DIR})
@@ -133,9 +134,10 @@ include_directories(${IFX_ROOT}/modules/gui/editor/${INC_DIR})
 #---------------------------------
 
 target_link_libraries(${APP_NAME}
-        game_ifx graphics_ifx physics_ifx math_ifx
+        editor_ifx
+        game_ifx graphics_ifx physics_ifx
         resources_ifx controls_ifx
-        common_ifx gui_ifx editor_ifx
+        gui_ifx math_ifx common_ifx
         BulletDynamics BulletCollision)
 
 target_link_libraries(${APP_NAME}
@@ -145,7 +147,6 @@ target_link_libraries(${APP_NAME}
         ${PX_FOUNDATION_BIN}
         ${PX_PVD_SDK_BIN})
 
-target_link_libraries(${APP_NAME} gtest gtest_main)
 target_link_libraries(${APP_NAME} SOIL)
 target_link_libraries(${APP_NAME} assimp)
 target_link_libraries(${APP_NAME} glfw ${GLFW_LIBRARIES})

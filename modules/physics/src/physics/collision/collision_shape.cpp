@@ -2,7 +2,7 @@
 
 namespace ifx{
 
-CollisionShape::CollisionShape(){}
+CollisionShape::CollisionShape() : scale_(glm::vec3(1,1,1)){}
 CollisionShape::~CollisionShape(){}
 
 }

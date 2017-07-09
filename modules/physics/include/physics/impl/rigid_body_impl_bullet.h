@@ -14,7 +14,7 @@ class CollisionShape;
 class BoxCollisionShape;
 class StaticPlaneShape;
 
-class RigidBodyImplBullet : public RigidBodyImpl{
+class RigidBodyImplBullet : public RigidBodyImpl {
 public:
 
     RigidBodyImplBullet();
@@ -31,10 +31,13 @@ public:
 
     virtual void SetCollisionShapeScale(const glm::vec3& scale) override;
 
+    virtual bool IsDynamic() override;
+
 private:
     std::shared_ptr<btCollisionShape> collision_shape_bt_;
     std::unique_ptr<btRigidBody> rigid_body_bt_;
 
+    std::shared_ptr<CollisionShape> ifx_collision_shape_;
 
 };
 }

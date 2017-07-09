@@ -2,6 +2,7 @@
 #define PROJECT_COLLISION_SHAPE_H
 
 #include <memory>
+#include <math/math_ifx.h>
 
 class btCollisionShape;
 
@@ -15,7 +16,12 @@ public:
     CollisionShape();
     virtual ~CollisionShape();
 
+    const glm::vec3& scale(){return scale_;}
+    void scale(const glm::vec3& scale){scale_ = scale;}
+
     virtual void InitImpl(RigidBodyImpl* rigid_body_impl) = 0;
+private:
+    glm::vec3 scale_;
 };
 
 }

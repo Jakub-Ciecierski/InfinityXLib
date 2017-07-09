@@ -14,4 +14,5 @@ SET(IFX_UNITTESTS_LIBS_BUILD_DIR "${BUILD_DIR}/InfinityX/unit_tests/libs")
 SET(IFX_BUILD_UNITTESTS ON)
 
 #add_subdirectory(bullet_constraint_example)
-add_subdirectory(hello_world_physics)
+#add_subdirectory(hello_world_bullet)
+add_subdirectory(hello_world_physx)
