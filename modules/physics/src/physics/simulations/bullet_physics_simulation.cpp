@@ -9,6 +9,10 @@
 #include <BulletDynamics/Dynamics/btRigidBody.h>
 #include <iostream>
 
+#include <physics/impl/rigid_body_impl.h>
+#include <physics/impl/rigid_body_impl_bullet.h>
+#include <physics/rigid_body_tmp.h>
+
 namespace ifx {
 
 BulletPhysicsSimulation::BulletPhysicsSimulation(
@@ -26,6 +30,18 @@ BulletPhysicsSimulation::~BulletPhysicsSimulation(){}
 void BulletPhysicsSimulation::Add(std::shared_ptr<RigidBody> rigid_body){
     PhysicsSimulation::Add(rigid_body);
     dynamics_world_->addRigidBody(rigid_body->rigid_body_bt().get());
+}
+
+std::shared_ptr<RigidBodyTMP>
+BulletPhysicsSimulation::CreatAndAdd(const RigidBodyParams&& params) {
+    auto rigid_body_impl = std::unique_ptr<RigidBodyImplBullet>(
+            new RigidBodyImplBullet());
+
+    auto rigid_body = std::make_shared<RigidBodyTMP>(
+            std::move(rigid_body_impl), std::move(params));
+
+    dynamics_world_->addRigidBody(
+            (btRigidBody*)rigid_body->GetNativeRigidBody());
 }
 
 bool BulletPhysicsSimulation::Remove(std::shared_ptr<RigidBody> rigid_body){

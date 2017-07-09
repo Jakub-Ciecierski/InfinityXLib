@@ -11,6 +11,9 @@ namespace ifx {
 
 class RigidBody;
 
+class RigidBodyTMP;
+struct RigidBodyParams;
+
 class PhysicsSimulation : public Updatable{
 public:
     PhysicsSimulation();
@@ -28,6 +31,10 @@ public:
     void Pause();
 
     virtual void Add(std::shared_ptr<RigidBody> rigid_body);
+
+    virtual std::shared_ptr<RigidBodyTMP> CreatAndAdd(
+            const RigidBodyParams&& params) = 0;
+
     virtual bool Remove(std::shared_ptr<RigidBody> rigid_body);
 
 protected:

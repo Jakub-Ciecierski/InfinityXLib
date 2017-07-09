@@ -29,7 +29,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 # DEPENDENCIES
 #---------------------------------
 
-include_directories(${IFX_ROOT}/modules/object/object/${INC_DIR})
+include_directories(${IFX_ROOT}/${DEPS_DIR}/bullet3/src/)
+include_directories(${IFX_ROOT}/${DEPS_DIR}/PhysX-3.4/PhysX_3.4/Include)
+include_directories(${IFX_ROOT}/${DEPS_DIR}/PhysX-3.4/PxShared/include)
+
 include_directories(${IFX_ROOT}/modules/common/math/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/common/common/${INC_DIR})
 

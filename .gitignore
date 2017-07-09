@@ -15,3 +15,9 @@ CMakeFiles
 cmake-build-debug
 
 configuration/include
+
+dependencies/PhysX-3.4/PhysX_3.4/Bin/
+dependencies/PhysX-3.4/PhysX_3.4/Source/compiler/linux64/.
+dependencies/PhysX-3.4/PhysX_3.4/Snippets/compiler/linux64/
+dependencies/PhysX-3.4/PhysX_3.4/Lib/linux64/
+dependencies/PhysX-3.4/PhysX_3.4/Source/compiler/linux64/.deps/
