@@ -20,3 +20,7 @@ configuration/include
 dependencies/PhysX-3.4/PhysX_3.4/Source/compiler/
 dependencies/PhysX-3.4/PhysX_3.4/Snippets/compiler/
 dependencies/PhysX-3.4/PhysX_3.4/Lib/linux64/
+
+# Flex
+!dependencies/FleX/bin/
+!dependencies/FleX/lib/
