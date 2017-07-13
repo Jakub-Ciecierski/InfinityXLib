@@ -23,8 +23,6 @@ void RigidBody::Update(float time_delta){
     Transformable::Update(time_delta);
 
     rigid_body_impl_->SetCollisionShapeScale(getScale());
-
-
 }
 
 }
