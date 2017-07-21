@@ -103,7 +103,7 @@ void mouse_button_callback(GLFWwindow *window,
 void mousescroll_callback(GLFWwindow *window,
                           double xoffset, double yoffset) {
     if(external_callbacks_.mousescroll_callback)
-        if(external_callbacks_.mousescroll_callback(window, xoffset, yoffset))
+        if(!external_callbacks_.mousescroll_callback(window, xoffset, yoffset))
             return;
 
     auto controls = ControlsContainer::GetInstance().controls();
@@ -123,7 +123,7 @@ void mousescroll_callback(GLFWwindow *window,
 
 void char_callback(GLFWwindow *window, unsigned int c) {
     if(external_callbacks_.char_callback)
-        if(external_callbacks_.char_callback(window, c))
+        if(!external_callbacks_.char_callback(window, c))
             return;
 }
 

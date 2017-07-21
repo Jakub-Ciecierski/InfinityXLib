@@ -44,6 +44,7 @@ bool mousescroll_callback(GLFWwindow *window,
 
 bool char_callback(GLFWwindow *window, unsigned int c){
     ImGui_ImplGlfwGL3_CharCallback(window, c);
+    return true;
 }
 
 }
