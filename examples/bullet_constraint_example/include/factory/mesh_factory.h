@@ -4,6 +4,7 @@
 #include <graphics/model/mesh.h>
 
 #include <memory>
+#include <functional>
 
 namespace ifx {
 

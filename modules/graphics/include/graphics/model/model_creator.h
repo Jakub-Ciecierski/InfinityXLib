@@ -24,6 +24,10 @@ public:
             std::string filepath,
             std::vector<std::unique_ptr<Mesh>> meshes);
 
+    std::shared_ptr<Model> MakeModel(
+            std::string filepath,
+            std::unique_ptr<Mesh> meshes);
+
 private:
     std::shared_ptr<ResourceManager> resource_manager_;
 

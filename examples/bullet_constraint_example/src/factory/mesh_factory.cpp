@@ -1040,23 +1040,23 @@ std::unique_ptr<Mesh> MeshFactory::LoadSphere(float radius) {
             vertices.push_back(vs);
         }
 
-        for (int latNumber = 0; latNumber < latitudeBands; latNumber++) {
-            for (int longNumber = 0; longNumber < longitudeBands; longNumber++) {
-                int first = (latNumber * (longitudeBands + 1)) + longNumber;
-                int second = first + longitudeBands + 1;
-
-                indices.push_back(first);
-                indices.push_back(second);
-                indices.push_back(first + 1);
-
-                indices.push_back(second);
-                indices.push_back(second + 1);
-                indices.push_back(first + 1);
-
-            }
-        }
     }
 
+    for (int latNumber = 0; latNumber < latitudeBands; latNumber++) {
+        for (int longNumber = 0; longNumber < longitudeBands; longNumber++) {
+            int first = (latNumber * (longitudeBands + 1)) + longNumber;
+            int second = first + longitudeBands + 1;
+
+            indices.push_back(first);
+            indices.push_back(second);
+            indices.push_back(first + 1);
+
+            indices.push_back(second);
+            indices.push_back(second + 1);
+            indices.push_back(first + 1);
+
+        }
+    }
     auto mesh = std::unique_ptr<Mesh>(new Mesh(vertices, indices));
     //mesh->setPolygonMode(GL_LINE);
 
@@ -1124,7 +1124,6 @@ std::unique_ptr<Mesh> MeshFactory::LoadCircle(float radius) {
 
     return mesh;
 }
-
 
 } // ifx
 

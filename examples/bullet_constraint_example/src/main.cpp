@@ -422,7 +422,8 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectBox(
     auto game_object = scene->CreateAndAddEmptyGameObject();
 
     std::shared_ptr<ifx::Model> model = ifx::ModelFactory(
-            model_creator, texture_creator).LoadCubeModel();
+            model_creator, texture_creator).LoadSphere(2);
+
     std::shared_ptr<ifx::Program> program
             = ifx::ProgramFactory(program_creator).LoadMainProgram();
     auto render_object = std::shared_ptr<ifx::RenderComponent>(

@@ -1,25 +1,24 @@
 #include "editor/views/scene_view.h"
 
-#include <game/scene_container.h>
 #include <graphics/rendering/render_object.h>
 
 #include <gui/imgui/imgui.h>
 #include <gui/imgui/imgui_internal.h>
-#include <iostream>
-#include <game/game_component.h>
-#include <game/game_object.h>
+
 #include <editor/views/scene_view/game_object_view.h>
 #include <editor/views/scene_view/game_component_view.h>
 #include <editor/views/scene_view/scene_manipulator_view.h>
-#include <editor/scene_manipulator.h>
-#include <game/components/lights/factory/light_component_factory.h>
+#include <editor/views/scene_view/context_menus/game_object_context_menu.h>
+#include <editor/views/scene_view/context_menus/game_component_context_menu.h>
+#include <editor/views/scene_view/context_menus/scene_list_context_menu.h>
 
-#include <game/components/lights/light_spotlight_component.h>
-#include <game/components/lights/light_point_component.h>
-#include <game/components/lights/light_directional_component.h>
+#include <game/scene_container.h>
+#include <game/game_component.h>
+#include <game/game_object.h>
 #include <game/components/cameras/camera_component.h>
 
 #include <game/resources/resource_context.h>
+#include <iostream>
 
 namespace ifx {
 
@@ -34,6 +33,10 @@ SceneView::SceneView(std::shared_ptr<SceneContainer> scene,
     game_object_view_.reset(new GameObjectView());
     game_component_view_.reset(new GameComponentView());
     scene_manipulator_view_.reset(new SceneManipulatorView(scene_manipulator_));
+
+    game_object_context_menu_.reset(new GameObjectContextMenu(resource_creator_, scene_));
+    game_component_context_menu_.reset(new GameComponentContextMenu());
+    scene_list_context_menu_.reset(new SceneListContextMenu(scene_));
 }
 
 SceneView::~SceneView(){ }
@@ -55,17 +58,8 @@ void SceneView::RenderWindow(){
 
 void SceneView::RenderGameObjectsList(){
     if (ImGui::CollapsingHeader("Scene Objects")) {
-        RenderGameObjectsListContextMenu();
+        scene_list_context_menu_->Render();
         RenderGameObjectsList(scene_->game_objects());
-    }
-}
-
-void SceneView::RenderGameObjectsListContextMenu(){
-    if (ImGui::BeginPopupContextItem("GameObjects context menu")) {
-        if (ImGui::Selectable("New Game Object")) {
-            scene_->CreateAndAddEmptyGameObject();
-        }
-        ImGui::EndPopup();
     }
 }
 
@@ -122,68 +116,12 @@ void SceneView::RenderGameObjectsList(
             selected_game_object_ = game_objects[i];
         }
 
-        RenderGameObjectContextMenu(game_objects[i], i);
+        game_object_context_menu_->Render(game_objects[i], i);
+
         if (node_open){
             RenderGameComponentsList(game_objects[i], i);
             ImGui::TreePop();
         }
-    }
-}
-
-void SceneView::RenderGameObjectContextMenu(
-        std::shared_ptr<GameObject> game_object,
-        int game_object_id){
-    ImGui::PushID(std::to_string(game_object_id).c_str());
-    if (ImGui::BeginPopupContextItem("GameObject context menu")) {
-        RenderGameObjectContextMenuRemove(game_object, game_object_id);
-        RenderGameObjectContextMenuAdd(game_object, game_object_id);
-
-        ImGui::EndPopup();
-    }
-    ImGui::PopID();
-}
-
-void SceneView::RenderGameObjectContextMenuRemove(
-        std::shared_ptr<GameObject> game_object,
-        int game_object_id){
-    if (ImGui::Selectable("Remove")) {
-        scene_->Remove(game_object);
-    }
-}
-
-void SceneView::RenderGameObjectContextMenuAdd(
-        std::shared_ptr<GameObject> game_object,
-        int game_object_id){
-    if (ImGui::BeginMenu("Add")) {
-        RenderGameObjectContextMenuAddLight(game_object, game_object_id);
-        ImGui::EndMenu();
-    }
-}
-
-void SceneView::RenderGameObjectContextMenuAddLight(
-        std::shared_ptr<GameObject> game_object,
-        int game_object_id){
-    if (ImGui::BeginMenu("Light")) {
-        if (ImGui::Selectable("Directional")) {
-            auto light = LightComponentFactory().CreateDirectionalLight(
-                    resource_creator_->texture_creator(),
-                    resource_creator_->program_creator());
-            game_object->Add
-                    (std::dynamic_pointer_cast<GameComponent>(light));
-        }
-        if (ImGui::Selectable("Spotlight")) {
-            auto light = LightComponentFactory().CreateSpotLight(
-                    resource_creator_->texture_creator(),
-                    resource_creator_->program_creator());
-            game_object->Add(
-                    std::dynamic_pointer_cast<GameComponent>(light));
-        }
-        if (ImGui::Selectable("Point")) {
-            auto light = LightComponentFactory().CreatePointLight();
-            game_object->Add(std::dynamic_pointer_cast<GameComponent>
-                                     (light));
-        }
-        ImGui::EndMenu();
     }
 }
 
@@ -220,22 +158,8 @@ void SceneView::RenderGameComponentsList(
             selection_mask = (1 << node_clicked + id_start);
             selected_game_component_ = game_components[i];
         }
-        RenderGameComponentContextMenu(game_object, game_components[i], i);
+        game_component_context_menu_->Render(game_object, game_components[i], i);
     }
-}
-
-void SceneView::RenderGameComponentContextMenu(
-        std::shared_ptr<GameObject> game_object,
-        std::shared_ptr<GameComponent> component,
-        int component_id){
-    ImGui::PushID(std::to_string(component_id).c_str());
-    if (ImGui::BeginPopupContextItem("GameComponent context menu")) {
-        if (ImGui::Selectable("Remove")) {
-            game_object->Remove(component);
-        }
-        ImGui::EndPopup();
-    }
-    ImGui::PopID();
 }
 
 std::string SceneView::GetComponentName(

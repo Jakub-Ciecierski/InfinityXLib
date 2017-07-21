@@ -216,4 +216,5 @@ std::shared_ptr<Model> ModelFactory::CreateLine(const glm::vec3& p1,
 
     return model_creator_->MakeModel(ifx::NO_FILEPATH, std::move(meshes));
 }
+
 } // ifx
