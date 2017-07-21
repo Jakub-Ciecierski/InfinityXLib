@@ -39,6 +39,7 @@ include_directories(${IFX_ROOT}/${DEPS_DIR}/glew-2.0.0/include)
 include_directories(${IFX_ROOT}/${DEPS_DIR}/glfw-3.1.2/${INC_DIR})
 
 include_directories(${IFX_ROOT}/modules/common/common/${INC_DIR})
+include_directories(${IFX_ROOT}/modules/controls/controls/${INC_DIR})
 
 #---------------------------------
 # PROJECT

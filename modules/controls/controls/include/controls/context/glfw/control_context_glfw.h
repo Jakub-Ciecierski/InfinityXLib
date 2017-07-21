@@ -5,6 +5,10 @@
 
 namespace ifx {
 
+namespace glfw_callbacks{
+struct ExternalCallbacks;
+}
+
 class ControlContextGLFW : public ControlContext {
 public:
 
@@ -14,6 +18,8 @@ public:
 
     virtual bool InitAndSetupNativeCallbacks(void *) override;
     virtual bool Terminate() override;
+
+    void SetExternalCallbacks(const glfw_callbacks::ExternalCallbacks& external_callbacks);
 
 private:
 };

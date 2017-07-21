@@ -1,7 +1,6 @@
 #ifndef PROJECT_CONTROL_CONTEXT_H
 #define PROJECT_CONTROL_CONTEXT_H
 
-
 namespace ifx {
 
 class ControlContext {

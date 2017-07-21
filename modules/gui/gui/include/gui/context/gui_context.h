@@ -1,7 +1,11 @@
 #ifndef PROJECT_GUI_CONTEXT_H
 #define PROJECT_GUI_CONTEXT_H
 
+#include <memory>
+
 namespace ifx {
+
+class ControlContext;
 
 class GUIContext {
 public:
@@ -10,7 +14,7 @@ public:
 
     virtual ~GUIContext();
 
-    virtual bool Init(void* native_window) = 0;
+    virtual bool Init(void* native_window, std::shared_ptr<ControlContext> control_context) = 0;
     virtual bool Terminate() = 0;
 
     virtual void NewFrame() = 0;

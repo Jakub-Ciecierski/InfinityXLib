@@ -10,6 +10,7 @@ namespace ifx {
 
 class GUIContext;
 class GUIPart;
+class ControlContext;
 
 class GUI : public Updatable {
 public:
@@ -20,7 +21,7 @@ public:
 
     virtual void Update(float time_delta = 0) override;
 
-    bool Init(void* native_window);
+    bool Init(void* native_window, std::shared_ptr<ControlContext> control_context);
     bool Terminate();
 
     void AddGUIPart(std::shared_ptr<GUIPart> gui_part);

@@ -18,7 +18,6 @@ bool ControlContextGLFW::InitAndSetupNativeCallbacks(void *native_window){
 
     glfwSetKeyCallback(glfw_window,
                        glfw_callbacks::key_callback);
-
     glfwSetCursorPosCallback(glfw_window,
                              glfw_callbacks::mouse_callback);
     glfwSetMouseButtonCallback(glfw_window,
@@ -29,6 +28,10 @@ bool ControlContextGLFW::InitAndSetupNativeCallbacks(void *native_window){
                         glfw_callbacks::char_callback);
 
     return true;
+}
+
+void ControlContextGLFW::SetExternalCallbacks(const glfw_callbacks::ExternalCallbacks& external_callbacks){
+    glfw_callbacks::external_callbacks_ = external_callbacks;
 }
 
 bool ControlContextGLFW::Terminate(){

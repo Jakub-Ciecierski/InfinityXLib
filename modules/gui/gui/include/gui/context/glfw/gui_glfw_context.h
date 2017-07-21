@@ -12,7 +12,7 @@ public:
 
     virtual ~GUIGLFWContext();
 
-    bool Init(void *native_window) override;
+    bool Init(void *native_window, std::shared_ptr<ControlContext> control_context) override;
     bool Terminate() override;
 
     void NewFrame() override;

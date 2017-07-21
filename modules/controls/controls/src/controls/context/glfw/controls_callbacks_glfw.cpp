@@ -18,8 +18,16 @@ namespace ifx {
 
 namespace glfw_callbacks {
 
+ExternalCallbacks external_callbacks_{nullptr, nullptr,
+                                      nullptr, nullptr,
+                                      nullptr};
+
 void key_callback(GLFWwindow *window, int key,
                   int scancode, int action, int mode) {
+    if(external_callbacks_.key_callback)
+        if(!external_callbacks_.key_callback(window, key, scancode, action, mode))
+            return;
+
     // Map
     auto ifx_key = ifx::KeyGLFW2IFX(key);
     auto ifx_callback = ifx::KeyboardCallbackGLFW2IFX(action);
@@ -49,6 +57,10 @@ void key_callback(GLFWwindow *window, int key,
 
 void mouse_callback(GLFWwindow *window,
                     double xpos, double ypos) {
+    if(external_callbacks_.mouse_callback)
+        if(!external_callbacks_.mouse_callback(window, xpos, ypos))
+            return;
+
     auto controls = ControlsContainer::GetInstance().controls();
     auto mouse_controller = controls->controller_container()
             ->mouse_controller();
@@ -57,6 +69,10 @@ void mouse_callback(GLFWwindow *window,
 
 void mouse_button_callback(GLFWwindow *window,
                            int button, int action, int mods) {
+    if(external_callbacks_.mouse_button_callback)
+        if(!external_callbacks_.mouse_button_callback(window, button, action, mods))
+            return;
+
     auto ifx_key = MouseGLFW2IFX(button);
     auto ifx_callback = MouseCallbackGLFW2IFX(action);
 
@@ -86,6 +102,10 @@ void mouse_button_callback(GLFWwindow *window,
 
 void mousescroll_callback(GLFWwindow *window,
                           double xoffset, double yoffset) {
+    if(external_callbacks_.mousescroll_callback)
+        if(external_callbacks_.mousescroll_callback(window, xoffset, yoffset))
+            return;
+
     auto controls = ControlsContainer::GetInstance().controls();
     auto mouse_controller = controls->controller_container()->
             mouse_controller();
@@ -102,7 +122,9 @@ void mousescroll_callback(GLFWwindow *window,
 }
 
 void char_callback(GLFWwindow *window, unsigned int c) {
-
+    if(external_callbacks_.char_callback)
+        if(external_callbacks_.char_callback(window, c))
+            return;
 }
 
 };

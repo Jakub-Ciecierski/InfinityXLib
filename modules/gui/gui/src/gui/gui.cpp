@@ -2,6 +2,7 @@
 
 #include <gui/context/gui_context.h>
 #include <gui/gui_part.h>
+#include <controls/context/control_context.h>
 
 namespace ifx {
 
@@ -20,8 +21,8 @@ void GUI::Update(float time_delta) {
     context_->Render();
 }
 
-bool GUI::Init(void *native_window) {
-    return context_->Init(native_window);
+bool GUI::Init(void *native_window, std::shared_ptr<ControlContext> control_context) {
+    return context_->Init(native_window, control_context);
 }
 
 bool GUI::Terminate() {

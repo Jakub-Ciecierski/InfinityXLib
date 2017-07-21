@@ -61,7 +61,6 @@ void GameFactory::CreateDefaultFactories(){
 
     gui_context_factory_ = std::make_shared<GUIGLFWContextFactory>();
 
-
     gui_factory_ = std::make_shared<GUIFactory>();
 }
 
@@ -149,7 +148,7 @@ std::shared_ptr<Game> GameFactory::Create(){
                                         physics_simulation);
 
     auto gui = gui_factory_->Create(gui_context);
-    gui->Init(window->getHandle());
+    gui->Init(window->getHandle(), control_context);
 
     auto game_loop = game_loop_factory_->Create(renderer,
                                                 physics_simulation,
