@@ -1,4 +1,4 @@
-#include "editor/views/scene_view/context_menus/game_object_context_menu.h"
+#include "editor/views/scene_views/context_menus/game_object_context_menu.h"
 
 #include <game/game_object.h>
 #include <game/scene_container.h>
@@ -24,8 +24,10 @@ void GameObjectContextMenu::Render(std::shared_ptr<GameObject> game_object,
                                    int game_object_id) {
     ImGui::PushID(std::to_string(game_object_id).c_str());
     if (ImGui::BeginPopupContextItem("GameObject context menu")) {
-        Remove(scene_, game_object, game_object_id);
+
         Add(resource_creator_, game_object, game_object_id);
+        ImGui::Separator();
+        Remove(scene_, game_object, game_object_id);
 
         ImGui::EndPopup();
     }
@@ -83,9 +85,26 @@ void GameObjectContextMenu::AddRenderObject(std::shared_ptr<GameObject> game_obj
         if (ImGui::Button("Parametric Equation")) {
             ImGui::OpenPopup("Parametric Equation");
         }
-        if (ImGui::BeginPopupModal("Parametric Equation", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
-            char x_text[1024];
+        if (ImGui::BeginPopupModal("Parametric Equation", NULL,
+                                   ImGuiWindowFlags_AlwaysAutoResize)) {
+            static char x_text[1024];
             ImGui::InputText("X", x_text, 1024);
+
+            ImGui::SameLine();
+
+            static char xdu_text[1024];
+            ImGui::InputText("X Du", xdu_text, 1024);
+
+            ImGui::SameLine();
+
+            static char xdv_text[1024];
+            ImGui::InputText("X Dv", xdv_text, 1024);
+
+            static char y_text[1024];
+            ImGui::InputText("Y", y_text, 1024);
+
+            static char z_text[1024];
+            ImGui::InputText("Z", z_text, 1024);
 
             ImGui::Separator();
 

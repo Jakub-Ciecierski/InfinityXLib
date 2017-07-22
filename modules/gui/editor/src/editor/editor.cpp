@@ -1,6 +1,6 @@
 #include "editor/editor.h"
 
-#include <editor/views/main_menu.h>
+#include <editor/views/main_menu_view.h>
 #include <editor/docker.h>
 
 #include <gui/theme.h>

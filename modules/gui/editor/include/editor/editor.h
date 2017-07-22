@@ -8,7 +8,7 @@
 
 namespace ifx{
 
-class MainMenu;
+class MainMenuView;
 class SceneView;
 class PhysicsSimulationView;
 class ImGuiDemoView;

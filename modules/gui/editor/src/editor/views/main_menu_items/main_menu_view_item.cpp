@@ -6,8 +6,6 @@
 
 #include <gui/imgui/imgui.h>
 
-#include <graphics/rendering/window/window.h>
-
 namespace ifx {
 
 MainMenuViewItem::MainMenuViewItem() {}

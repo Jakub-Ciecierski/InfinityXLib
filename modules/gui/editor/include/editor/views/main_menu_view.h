@@ -10,10 +10,10 @@ class Editor;
 
 class MainMenuViewItem;
 
-class MainMenu : public View {
+class MainMenuView : public View {
 public:
-    MainMenu();
-    ~MainMenu();
+    MainMenuView();
+    ~MainMenuView();
 
     virtual void Render() override;
 
@@ -26,7 +26,6 @@ protected:
 private:
     void RenderFile();
     void RenderEdit();
-    void RenderView();
     void RenderWindow();
 
     std::shared_ptr<Editor> editor_;

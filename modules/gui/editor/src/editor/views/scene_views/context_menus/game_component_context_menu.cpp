@@ -1,4 +1,4 @@
-#include "editor/views/scene_view/context_menus/game_component_context_menu.h"
+#include "editor/views/scene_views/context_menus/game_component_context_menu.h"
 
 #include <game/game_object.h>
 

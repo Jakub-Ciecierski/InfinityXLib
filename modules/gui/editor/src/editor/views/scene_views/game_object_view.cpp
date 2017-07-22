@@ -1,6 +1,6 @@
-#include "editor/views/scene_view/game_object_view.h"
+#include "editor/views/scene_views/game_object_view.h"
 
-#include <editor/views/scene_view/movable_object_view.h>
+#include <editor/views/scene_views/movable_object_view.h>
 
 #include <game/game_object.h>
 

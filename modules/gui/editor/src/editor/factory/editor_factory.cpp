@@ -2,7 +2,7 @@
 #include "game/scene_container.h"
 
 #include <editor/editor.h>
-#include <editor/views/main_menu.h>
+#include <editor/views/main_menu_view.h>
 #include <editor/views/scene_view.h>
 #include <editor/views/physics_simulation_view.h>
 #include <editor/views/imgui_demo_view.h>
@@ -25,7 +25,7 @@ std::shared_ptr<Editor> EditorFactory::CreateEngineGUI(
     auto physics_simulation_view
             = CreatePhysicsSimulationView(physics_simulation);
     auto imgui_demo_view = std::shared_ptr<ImGuiDemoView>(new ImGuiDemoView());
-    auto main_menu_view = std::make_shared<MainMenu>();
+    auto main_menu_view = std::make_shared<MainMenuView>();
     auto bottom_view = std::make_shared<BottomView>();
 
     auto docker = CreateDefaultDocker(window, scene_view,

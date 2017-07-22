@@ -1,5 +1,5 @@
 #include <gui/imgui/imgui.h>
-#include "editor/views/scene_view/movable_object_view.h"
+#include "editor/views/scene_views/movable_object_view.h"
 
 #include <math/transform.h>
 #include <math/math_ifx.h>

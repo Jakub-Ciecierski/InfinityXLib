@@ -1,4 +1,4 @@
-#include "editor/views/scene_view/game_component_views/light_view.h"
+#include "editor/views/scene_views/game_component_views/light_view.h"
 
 #include <graphics/lighting/light_source.h>
 #include <graphics/rendering/shadows/shadow_mapping.h>

@@ -1,5 +1,6 @@
+#include "editor/views/scene_views/scene_manipulator_view.h"
+
 #include <gui/imgui/imgui.h>
-#include "editor/views/scene_view/scene_manipulator_view.h"
 
 namespace ifx{
 

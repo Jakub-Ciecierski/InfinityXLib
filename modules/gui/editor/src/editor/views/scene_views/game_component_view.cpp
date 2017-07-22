@@ -1,9 +1,9 @@
-#include "editor/views/scene_view/game_component_view.h"
+#include "editor/views/scene_views/game_component_view.h"
 
-#include <editor/views/scene_view/movable_object_view.h>
-#include <editor/views/scene_view/game_component_views/camera_view.h>
-#include <editor/views/scene_view/game_component_views/light_view.h>
-#include <editor/views/scene_view/game_component_views/render_object_view.h>
+#include <editor/views/scene_views/movable_object_view.h>
+#include <editor/views/scene_views/game_component_views/camera_view.h>
+#include <editor/views/scene_views/game_component_views/light_view.h>
+#include <editor/views/scene_views/game_component_views/render_object_view.h>
 
 #include <game/game_component.h>
 

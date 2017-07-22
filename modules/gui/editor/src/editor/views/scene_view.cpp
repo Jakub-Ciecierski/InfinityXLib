@@ -5,12 +5,12 @@
 #include <gui/imgui/imgui.h>
 #include <gui/imgui/imgui_internal.h>
 
-#include <editor/views/scene_view/game_object_view.h>
-#include <editor/views/scene_view/game_component_view.h>
-#include <editor/views/scene_view/scene_manipulator_view.h>
-#include <editor/views/scene_view/context_menus/game_object_context_menu.h>
-#include <editor/views/scene_view/context_menus/game_component_context_menu.h>
-#include <editor/views/scene_view/context_menus/scene_list_context_menu.h>
+#include <editor/views/scene_views/game_object_view.h>
+#include <editor/views/scene_views/game_component_view.h>
+#include <editor/views/scene_views/scene_manipulator_view.h>
+#include <editor/views/scene_views/context_menus/game_object_context_menu.h>
+#include <editor/views/scene_views/context_menus/game_component_context_menu.h>
+#include <editor/views/scene_views/context_menus/scene_list_context_menu.h>
 
 #include <game/scene_container.h>
 #include <game/game_component.h>

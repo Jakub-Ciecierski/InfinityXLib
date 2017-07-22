@@ -6,7 +6,7 @@
 namespace ifx {
 
 class Editor;
-class MainMenu;
+class MainMenuView;
 class Renderer;
 class SceneView;
 class SceneContainer;

@@ -1,4 +1,4 @@
-#include "editor/views/scene_view/game_component_views/render_object_view.h"
+#include "editor/views/scene_views/game_component_views/render_object_view.h"
 
 #include <graphics/rendering/render_object.h>
 #include <game/components/render/render_component.h>
