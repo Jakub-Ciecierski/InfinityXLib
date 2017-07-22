@@ -4,7 +4,7 @@
 
 namespace ifx {
 
-ImGuiDemoView::ImGuiDemoView() {
+ImGuiDemoView::ImGuiDemoView() : View("ImGui Demo"){
     show_ = false;
 }
 
@@ -13,6 +13,10 @@ ImGuiDemoView::~ImGuiDemoView() {}
 void ImGuiDemoView::Render() {
     if(show_)
         ImGui::ShowTestWindow();
+}
+
+void ImGuiDemoView::RenderContent() {
+
 }
 
 };

@@ -10,7 +10,12 @@ public:
     ImGuiDemoView();
     ~ImGuiDemoView();
 
-    void Render() override;
+    virtual void Render() override;
+
+protected:
+
+    virtual void RenderContent() override;
+
 private:
 };
 }

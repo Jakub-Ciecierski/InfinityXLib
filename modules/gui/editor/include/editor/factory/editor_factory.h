@@ -14,6 +14,9 @@ class PhysicsSimulation;
 class PhysicsSimulationView;
 class ImGuiDemoView;
 class ResourceContext;
+class Window;
+class Docker;
+class View;
 
 class EditorFactory {
 public:
@@ -21,6 +24,7 @@ public:
     ~EditorFactory();
 
     std::shared_ptr<Editor> CreateEngineGUI(
+            std::shared_ptr<Window> window,
             std::shared_ptr<SceneContainer> scene,
             std::shared_ptr<PhysicsSimulation> physics_simulation,
             std::shared_ptr<ResourceContext> resource_creator);
@@ -30,10 +34,13 @@ private:
             std::shared_ptr<ResourceContext> resource_creator);
     std::shared_ptr<PhysicsSimulationView> CreatePhysicsSimulationView(
             std::shared_ptr<PhysicsSimulation> physics_simulation);
-    std::shared_ptr<MainMenu> CreateMainMenu(
-            std::shared_ptr<SceneView> scene_view,
-            std::shared_ptr<PhysicsSimulationView> physics_simulation_view,
-            std::shared_ptr<ImGuiDemoView> imgui_demo_view);
+
+    std::shared_ptr<Docker> CreateDefaultDocker(
+            std::shared_ptr<Window> window,
+            std::shared_ptr<View> scene_view,
+            std::shared_ptr<View> physics_view,
+            std::shared_ptr<View>main_menu_view,
+            std::shared_ptr<View> imgui_demo);
 };
 
 }

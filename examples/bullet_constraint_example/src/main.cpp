@@ -363,7 +363,7 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectCamera(
         std::shared_ptr<ifx::Game> game){
     auto game_object = scene->CreateAndAddEmptyGameObject();
     auto camera = ifx::CameraFactory().CreateCamera(
-            game->game_loop()->renderer()->window());
+            game->game_loop()->renderer()->window().get());
 
     SetKeybinds(game->game_loop()->controls(), camera);
 
@@ -799,9 +799,12 @@ int main() {
                     (game->game_loop()->physics_simulation()),
             leg2_rigid_body, feet2_rigid_body);
 
-    auto editor = ifx::EditorFactory().CreateEngineGUI(game->scene(),
-                                                          game->game_loop()->physics_simulation(),
-                                                          game->resource_creator());
+    auto editor = ifx::EditorFactory().CreateEngineGUI(
+            game->game_loop()->renderer()->window(),
+            game->scene(),
+            game->game_loop()->physics_simulation(),
+            game->resource_creator());
+
     game->game_loop()->gui()->AddGUIPart(editor);
 
 

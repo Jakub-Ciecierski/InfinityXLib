@@ -6,19 +6,22 @@
 
 namespace ifx{
 
-class SceneView;
-class PhysicsSimulationView;
-class ImGuiDemoView;
+class Editor;
+
+class MainMenuViewItem;
 
 class MainMenu : public View {
 public:
-    MainMenu(std::shared_ptr<SceneView> scene_view,
-             std::shared_ptr<PhysicsSimulationView> physics_simulation_view,
-             std::shared_ptr<ImGuiDemoView> imgui_demo_view);
+    MainMenu();
     ~MainMenu();
 
+    virtual void Render() override;
+
+    void RegisterEditor(std::shared_ptr<Editor> editor_);
+
+protected:
     // overridden from View
-    void Render() override;
+    virtual void RenderContent() override;
 
 private:
     void RenderFile();
@@ -26,9 +29,9 @@ private:
     void RenderView();
     void RenderWindow();
 
-    std::shared_ptr<SceneView> scene_view_;
-    std::shared_ptr<PhysicsSimulationView> physics_simulation_view_;
-    std::shared_ptr<ImGuiDemoView> imgui_demo_view_;
+    std::shared_ptr<Editor> editor_;
+
+    std::unique_ptr<MainMenuViewItem> view_item_;
 };
 
 }

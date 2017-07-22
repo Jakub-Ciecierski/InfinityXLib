@@ -7,24 +7,17 @@ namespace ifx{
 
 PhysicsSimulationView::PhysicsSimulationView(
                 std::shared_ptr<PhysicsSimulation> physics_simulation) :
+        View("Physics"),
         physics_simulation_(physics_simulation){}
 PhysicsSimulationView::~PhysicsSimulationView(){}
 
-void PhysicsSimulationView::Render(){
-    if(!show_)
-        return;
-
-    ImGui::Begin("Physics");
-
+void PhysicsSimulationView::RenderContent(){
     if(ImGui::TreeNode("Simulation")){
         RenderBasicInfo();
         ImGui::TreePop();
     }
     RenderGravity();
     RenderImpulse();
-
-    ImGui::End();
-
 }
 
 void PhysicsSimulationView::RenderBasicInfo(){

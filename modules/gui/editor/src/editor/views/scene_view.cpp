@@ -24,6 +24,7 @@ namespace ifx {
 
 SceneView::SceneView(std::shared_ptr<SceneContainer> scene,
                      std::shared_ptr<ResourceContext> resource_creator) :
+        View("Scene"),
         scene_(scene),
         resource_creator_(resource_creator),
         selected_game_object_(nullptr),
@@ -41,19 +42,15 @@ SceneView::SceneView(std::shared_ptr<SceneContainer> scene,
 
 SceneView::~SceneView(){ }
 
-void SceneView::Render(){
+void SceneView::RenderContent(){
     RenderWindow();
 }
 
 void SceneView::RenderWindow(){
-    if(!show_)
-        return;
-    ImGui::Begin("Scene");
     RenderGameObjectsList();
     RenderSelectedGameObject();
     RenderSelectedGameComponent();
     RenderManipulator();
-    ImGui::End();
 }
 
 void SceneView::RenderGameObjectsList(){
@@ -84,14 +81,8 @@ void SceneView::RenderSelectedGameComponent(){
 }
 
 void SceneView::RenderManipulator(){
-    auto active_camera = scene_->GetActiveCamera();
-    if (selected_game_object_ && active_camera) {
-        scene_manipulator_->transformable_object(selected_game_object_);
-        scene_manipulator_->camera(active_camera);
-    }
-    if(ImGui::CollapsingHeader("Manipulator")){
-        scene_manipulator_view_->Render();
-    }
+    scene_manipulator_view_->Render(selected_game_object_,
+                                    scene_->GetActiveCamera());
 }
 
 void SceneView::RenderGameObjectsList(

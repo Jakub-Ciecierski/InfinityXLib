@@ -15,7 +15,9 @@ public:
     PhysicsSimulationView(std::shared_ptr<PhysicsSimulation> physics_simulation);
     ~PhysicsSimulationView();
 
-    virtual void Render() override;
+protected:
+    virtual void RenderContent() override;
+
 private:
     void RenderBasicInfo();
     void RenderGravity();

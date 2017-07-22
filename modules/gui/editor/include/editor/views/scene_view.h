@@ -36,7 +36,8 @@ public:
     void SetSelectedGameObject(std::shared_ptr<GameObject> game_object){
         selected_game_object_ = game_object;}
 
-    void Render() override;
+protected:
+    virtual void RenderContent() override;
 
 private:
     void RenderWindow();

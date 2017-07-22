@@ -31,7 +31,8 @@ public:
              std::shared_ptr<RenderingContext> rendering_context);
     ~Renderer();
 
-    Window* window()  {return window_.get();}
+    //Window* window()  {return window_.get();}
+    std::shared_ptr<Window> window()  {return window_;}
     RenderingType rendering_type(){return rendering_type_;}
     std::shared_ptr<SceneRenderer> scene_renderer(){return scene_renderer_;}
 

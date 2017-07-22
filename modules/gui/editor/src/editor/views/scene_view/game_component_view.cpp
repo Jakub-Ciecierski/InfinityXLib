@@ -10,8 +10,6 @@
 #include <game/components/render/render_component.h>
 #include <game/components/cameras/camera_component.h>
 #include <graphics/lighting/light_source.h>
-#include <graphics/rendering/render_object.h>
-#include <graphics/rendering/camera/camera.h>
 
 namespace ifx{
 

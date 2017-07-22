@@ -7,6 +7,9 @@
 
 namespace ifx {
 
+class Transformable;
+class CameraComponent;
+
 /**
  * Responsible for controling the scene manipulator
  */
@@ -16,7 +19,8 @@ public:
     SceneManipulatorView(std::shared_ptr<SceneManipulator> scene_manipulator);
     ~SceneManipulatorView();
 
-    void Render();
+    void Render(std::shared_ptr<Transformable> object,
+                std::shared_ptr<CameraComponent> camera);
 private:
     void RenderConfig();
 
