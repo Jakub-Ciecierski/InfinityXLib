@@ -85,6 +85,10 @@ MACRO(FIND_INCLUDE_DIR return_list regex)
     SET(${return_list} ${dir_list})
 ENDMACRO()
 
+#----------------------------------
+# EXECUTABLE
+#----------------------------------
+
 # INCLUDE AUTOMATIC SEARCH
 FIND_INCLUDE_DIR(INC_DIRS ./include/*.h)
 include_directories(${INC_DIR} ${INC_DIR})

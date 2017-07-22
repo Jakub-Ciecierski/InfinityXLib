@@ -3120,9 +3120,9 @@ int main(int argc, char* argv[])
 	// calling thread. This is an optional call, it is fine to use 
 	// a regular CUDA context, although creating one through this API
 	// is recommended for best performance.
-	bool success = NvFlexDeviceCreateCudaContext(g_device);
-	
-	if (!success)
+	//bool success = NvFlexDeviceCreateCudaContext(g_device);
+    bool success = true;
+    if (!success)
 	{
 		printf("Error creating CUDA context.\n");
 		exit(-1);

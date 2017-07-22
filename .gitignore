@@ -19,8 +19,10 @@ configuration/include
 # PhysX
 dependencies/PhysX-3.4/PhysX_3.4/Source/compiler/
 dependencies/PhysX-3.4/PhysX_3.4/Snippets/compiler/
-dependencies/PhysX-3.4/PhysX_3.4/Lib/linux64/
+!dependencies/PhysX-3.4/PhysX_3.4/Lib/linux64/*
+!dependencies/PhysX-3.4/PhysX_3.4/Bin/linux64/*
 
 # Flex
 !dependencies/FleX/bin/
 !dependencies/FleX/lib/
+dependencies/FleX/demo/compiler/makelinux64/.deps

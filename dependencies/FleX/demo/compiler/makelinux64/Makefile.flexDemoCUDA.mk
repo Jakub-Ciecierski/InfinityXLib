@@ -40,6 +40,7 @@ flexDemoCUDA_release_libraries :=
 flexDemoCUDA_release_libraries += :NvFlexExtReleaseCUDA_x64.a
 flexDemoCUDA_release_libraries += :NvFlexReleaseCUDA_x64.a
 flexDemoCUDA_release_libraries += :NvFlexExtReleaseCUDA_x64.a
+flexDemoCUDA_release_libraries += :NvFlexDeviceRelease_x64.a
 flexDemoCUDA_release_libraries += :libSDL2.a
 flexDemoCUDA_release_libraries += :libSDL2main.a
 flexDemoCUDA_release_common_cflags	:= $(flexDemoCUDA_custom_cflags)
