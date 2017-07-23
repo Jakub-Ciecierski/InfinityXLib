@@ -4,8 +4,6 @@
 #include <string>
 #include <memory>
 
-//#include "exprtk.hpp"
-
 namespace exprtk{
 
 template <typename T>

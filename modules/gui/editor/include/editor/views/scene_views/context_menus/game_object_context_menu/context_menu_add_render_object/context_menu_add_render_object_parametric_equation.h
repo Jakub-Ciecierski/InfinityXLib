@@ -9,6 +9,7 @@ class ResourceContext;
 class GameObject;
 class ParametricEquationExpressions;
 class RenderComponent;
+class ParametricEquation;
 
 class ContextMenuAddRenderObjectParametricEquation {
 public:
@@ -31,14 +32,23 @@ private:
     void RenderFooter(std::shared_ptr<ResourceContext> resource_creator,
                       std::shared_ptr<GameObject> game_object);
 
-    std::shared_ptr<RenderComponent> CreateRenderObject(
+    bool TryCreateRenderComponent(
+            std::shared_ptr<ResourceContext> resource_creator,
+            std::shared_ptr<GameObject> game_object);
+    std::shared_ptr<RenderComponent> CreateRenderComponent(
+            std::unique_ptr<ParametricEquation> parametric_equation,
             std::shared_ptr<ResourceContext> resource_creator);
+    void RenderErrorWindow();
+
+    void RenderExampleEquations();
 
     void RenderInputExpression(
             std::string name, std::string& expression);
 
     std::unique_ptr<ParametricEquationExpressions>
             parametric_equation_expressions_;
+
+    bool render_error_window_;
 };
 }
 

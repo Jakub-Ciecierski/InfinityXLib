@@ -6,6 +6,7 @@
 
 #include <gui/imgui/imgui.h>
 
+#include "graphics/model_loader/parametric_loader/model_parametric_loader.h"
 #include <graphics/model_loader/parametric_loader/parametric_interpreter.h>
 #include <graphics/model_loader/parametric_loader/factory/parametric_equation_expressions_factory.h>
 #include <graphics/model_loader/parametric_loader/model_parametric_loader.h>
@@ -17,7 +18,8 @@
 namespace ifx {
 
 ContextMenuAddRenderObjectParametricEquation
-        ::ContextMenuAddRenderObjectParametricEquation(){
+        ::ContextMenuAddRenderObjectParametricEquation() :
+        render_error_window_(false){
     parametric_equation_expressions_ = std::move
             (CreateDefaultParametricEquationExpression());
 }
@@ -47,6 +49,8 @@ ContextMenuAddRenderObjectParametricEquation::CreateDefaultParametricEquationExp
 void ContextMenuAddRenderObjectParametricEquation::RenderWindow(
         std::shared_ptr<ResourceContext> resource_creator,
         std::shared_ptr<GameObject> game_object){
+    RenderExampleEquations();
+    ImGui::Separator();
     RenderExpressions();
     ImGui::Separator();
     RenderVariables();
@@ -57,7 +61,7 @@ void ContextMenuAddRenderObjectParametricEquation::RenderWindow(
 }
 
 void ContextMenuAddRenderObjectParametricEquation::RenderExpressions(){
-    ImGui::PushItemWidth(150);
+    ImGui::PushItemWidth(200);
 
     RenderInputExpression("X", parametric_equation_expressions_->Px);
     ImGui::SameLine();
@@ -112,22 +116,41 @@ void ContextMenuAddRenderObjectParametricEquation::RenderPrecision(){
 void ContextMenuAddRenderObjectParametricEquation::RenderFooter(
         std::shared_ptr<ResourceContext> resource_creator,
         std::shared_ptr<GameObject> game_object) {
-    if (ImGui::Button("OK", ImVec2(120, 0))) {
-        game_object->Add(CreateRenderObject(resource_creator));
+    if(render_error_window_)
+        RenderErrorWindow();
 
-        ImGui::CloseCurrentPopup();
+    if (ImGui::Button("OK", ImVec2(120, 0))) {
+        TryCreateRenderComponent(resource_creator, game_object);
+        if(!render_error_window_)
+            ImGui::CloseCurrentPopup();
     }
-    ImGui::SameLine();
+    ImGui::SameLine(0, 200);
     if (ImGui::Button("Cancel", ImVec2(120, 0))) {
         ImGui::CloseCurrentPopup();
     }
 }
 
+bool ContextMenuAddRenderObjectParametricEquation::TryCreateRenderComponent(
+        std::shared_ptr<ResourceContext> resource_creator,
+        std::shared_ptr<GameObject> game_object){
+    try {
+        auto parametric_equation = ParametricInterpreter().Interpret(
+                *parametric_equation_expressions_.get());
+
+        game_object->Add(CreateRenderComponent(std::move(parametric_equation),
+                                               resource_creator));
+    }catch(const std::invalid_argument& e){
+        render_error_window_ = true;
+        return false;
+    }
+    return true;
+}
+
 std::shared_ptr<RenderComponent>
-ContextMenuAddRenderObjectParametricEquation::CreateRenderObject(
+ContextMenuAddRenderObjectParametricEquation::CreateRenderComponent(
+        std::unique_ptr<ParametricEquation> parametric_equation,
         std::shared_ptr<ResourceContext> resource_creator){
-    auto parametric_equation = ParametricInterpreter().Interpret(
-                    *parametric_equation_expressions_.get());
+
     auto model = ModelParametricLoader().CreateModel(
             *parametric_equation.get(),
             resource_creator->model_creator());
@@ -149,6 +172,44 @@ ContextMenuAddRenderObjectParametricEquation::CreateRenderObject(
     render_object->addProgram(program);
 
     return render_object;
+}
+
+void ContextMenuAddRenderObjectParametricEquation::RenderErrorWindow(){
+    ImGui::OpenPopup("Compilation Error");
+    if (ImGui::BeginPopupModal("Compilation Error", NULL,
+                               ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::Text("Compilation Error");
+        ImGui::Separator();
+        if (ImGui::Button("OK", ImVec2(120, 0))) {
+            render_error_window_ = false;
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::EndPopup();
+    }
+}
+
+void ContextMenuAddRenderObjectParametricEquation::RenderExampleEquations(){
+    if (ImGui::Button("Example Equations"))
+        ImGui::OpenPopup("Equations");
+    if (ImGui::BeginPopupModal("Equations", NULL,
+                               ImGuiWindowFlags_AlwaysAutoResize)){
+        if (ImGui::Button("Sphere", ImVec2(80, 0))) {
+            parametric_equation_expressions_ =
+                    ParametricEquationExpressionsFactory().CreateSphere();
+            ImGui::CloseCurrentPopup();
+        }
+        if (ImGui::Button("Torus", ImVec2(80, 0))) {
+            parametric_equation_expressions_ =
+                    ParametricEquationExpressionsFactory().CreateTorus();
+            ImGui::CloseCurrentPopup();
+        }
+        ImGui::Separator();
+
+        if (ImGui::Button("Close", ImVec2(80, 0)))
+            ImGui::CloseCurrentPopup();
+
+        ImGui::EndPopup();
+    }
 }
 
 void ContextMenuAddRenderObjectParametricEquation::RenderInputExpression(

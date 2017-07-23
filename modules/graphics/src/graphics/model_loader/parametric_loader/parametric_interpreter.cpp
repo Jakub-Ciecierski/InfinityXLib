@@ -147,7 +147,10 @@ exprtk::expression<double> ParametricInterpreter::CreateExpression(
     exprtk::expression<double> exprtk_expression;
     exprtk_expression.register_symbol_table(exprtk_symbol_table);
     exprtk::parser<double> exprtk_parser;
-    exprtk_parser.compile(expression, exprtk_expression);
+    auto is_compiled = exprtk_parser.compile(expression, exprtk_expression);
+
+    if(!is_compiled)
+        throw std::invalid_argument("exprtk Compilation error");
 
     return exprtk_expression;
 }
