@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <vector>
 
 namespace exprtk{
 
@@ -16,6 +17,11 @@ class symbol_table;
 namespace ifx {
 
 struct ParametricEquation;
+
+struct ParametricEquationConstantExpression{
+    std::string name;
+    float value;
+};
 
 struct ParametricEquationExpressions{
     std::string Px;
@@ -36,6 +42,8 @@ struct ParametricEquationExpressions{
     std::string v_start;
     std::string v_end;
 
+    std::vector<ParametricEquationConstantExpression> constants;
+
     int u_precision;
     int v_precision;
 };
@@ -55,6 +63,7 @@ public:
 
 private:
     exprtk::symbol_table<double> CreateSymbolTable(
+            const ParametricEquationExpressions &expressions,
             ParametricEquation& parametric_equation);
 
     void AddEquation(

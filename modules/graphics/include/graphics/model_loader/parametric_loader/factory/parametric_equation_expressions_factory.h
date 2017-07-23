@@ -16,6 +16,8 @@ public:
 
     std::unique_ptr<ParametricEquationExpressions> CreateSphere();
     std::unique_ptr<ParametricEquationExpressions> CreateTorus();
+    std::unique_ptr<ParametricEquationExpressions> CreateCone();
+    std::unique_ptr<ParametricEquationExpressions> CreateCylinder();
 
 private:
 };

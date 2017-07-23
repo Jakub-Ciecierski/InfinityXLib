@@ -53,6 +53,8 @@ void ContextMenuAddRenderObjectParametricEquation::RenderWindow(
     ImGui::Separator();
     RenderExpressions();
     ImGui::Separator();
+    RenderConstants();
+    ImGui::Separator();
     RenderVariables();
     ImGui::Separator();
     RenderPrecision();
@@ -61,6 +63,8 @@ void ContextMenuAddRenderObjectParametricEquation::RenderWindow(
 }
 
 void ContextMenuAddRenderObjectParametricEquation::RenderExpressions(){
+    ImGui::Text("Equations:");
+
     ImGui::PushItemWidth(200);
 
     RenderInputExpression("X", parametric_equation_expressions_->Px);
@@ -84,7 +88,28 @@ void ContextMenuAddRenderObjectParametricEquation::RenderExpressions(){
     ImGui::PopItemWidth();
 }
 
+void ContextMenuAddRenderObjectParametricEquation::RenderConstants(){
+    ImGui::Text("Constants:");
+    ImGui::SameLine();
+    if(ImGui::Button("Add Constant")){
+        parametric_equation_expressions_->constants.push_back(
+                ParametricEquationConstantExpression{"c", 1});
+    }
+
+    int id = 0;
+    for(auto& constant : parametric_equation_expressions_->constants){
+        ImGui::PushID(id++);
+
+        RenderInputExpression("name", constant.name);
+        ImGui::SameLine();
+        ImGui::SliderFloat("value", &(constant.value), -10, 10);
+
+        ImGui::PopID();
+    }
+}
+
 void ContextMenuAddRenderObjectParametricEquation::RenderVariables(){
+    ImGui::Text("Variables:");
     ImGui::PushItemWidth(50);
 
     RenderInputExpression("u start", parametric_equation_expressions_->u_start);
@@ -100,6 +125,7 @@ void ContextMenuAddRenderObjectParametricEquation::RenderVariables(){
 }
 
 void ContextMenuAddRenderObjectParametricEquation::RenderPrecision(){
+    ImGui::Text("Precision:");
     ImGui::PushItemWidth(50);
 
     ImGui::SliderInt("u precision",
@@ -124,7 +150,7 @@ void ContextMenuAddRenderObjectParametricEquation::RenderFooter(
         if(!render_error_window_)
             ImGui::CloseCurrentPopup();
     }
-    ImGui::SameLine(0, 200);
+    ImGui::SameLine();
     if (ImGui::Button("Cancel", ImVec2(120, 0))) {
         ImGui::CloseCurrentPopup();
     }
@@ -203,6 +229,17 @@ void ContextMenuAddRenderObjectParametricEquation::RenderExampleEquations(){
                     ParametricEquationExpressionsFactory().CreateTorus();
             ImGui::CloseCurrentPopup();
         }
+        if (ImGui::Button("Cone", ImVec2(80, 0))) {
+            parametric_equation_expressions_ =
+                    ParametricEquationExpressionsFactory().CreateCone();
+            ImGui::CloseCurrentPopup();
+        }
+        if (ImGui::Button("Cylinder", ImVec2(80, 0))) {
+            parametric_equation_expressions_ =
+                    ParametricEquationExpressionsFactory().CreateCylinder();
+            ImGui::CloseCurrentPopup();
+        }
+
         ImGui::Separator();
 
         if (ImGui::Button("Close", ImVec2(80, 0)))

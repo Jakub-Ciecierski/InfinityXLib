@@ -15,7 +15,8 @@ std::unique_ptr<ParametricEquation> ParametricInterpreter::Interpret(
     auto parametric_equation = std::unique_ptr<ParametricEquation>(
             new ParametricEquation());
 
-    auto exprtk_symbol_table = CreateSymbolTable(*parametric_equation);
+    auto exprtk_symbol_table = CreateSymbolTable(expressions,
+                                                 *parametric_equation);
 
     AddEquation(expressions, *parametric_equation.get(), exprtk_symbol_table);
     AddEquationDu(expressions, *parametric_equation.get(), exprtk_symbol_table);
@@ -27,8 +28,12 @@ std::unique_ptr<ParametricEquation> ParametricInterpreter::Interpret(
 }
 
 exprtk::symbol_table<double> ParametricInterpreter::CreateSymbolTable(
+        const ParametricEquationExpressions &expressions,
         ParametricEquation& parametric_equation){
     exprtk::symbol_table<double> exprtk_symbol_table;
+    for(auto& constant : expressions.constants){
+        exprtk_symbol_table.add_constant(constant.name, constant.value);
+    }
 
     exprtk_symbol_table.add_constants();
     exprtk_symbol_table.add_variable("u", parametric_equation.u_global);

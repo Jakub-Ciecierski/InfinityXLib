@@ -27,6 +27,7 @@ private:
     void RenderWindow(std::shared_ptr<ResourceContext> resource_creator,
                       std::shared_ptr<GameObject> game_object);
     void RenderExpressions();
+    void RenderConstants();
     void RenderVariables();
     void RenderPrecision();
     void RenderFooter(std::shared_ptr<ResourceContext> resource_creator,
