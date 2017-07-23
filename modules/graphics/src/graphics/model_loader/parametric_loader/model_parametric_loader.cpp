@@ -1,4 +1,4 @@
-#include "graphics/model_loader/model_parametric_loader.h"
+#include "graphics/model_loader/parametric_loader/model_parametric_loader.h"
 
 #include <graphics/model/mesh.h>
 #include <factory/mesh_factory.h>
@@ -26,13 +26,14 @@ std::vector<Vertex> ModelParametricLoader::CreateVertices(const ParametricEquati
     for(double i = 0; i <= parametric_equation.u_precision; i++){
         auto u = ((i / parametric_equation.u_precision) * parametric_equation.u_end) + parametric_equation.u_start;
         for(double j = 0; j <= parametric_equation.v_precision; j++){
-            auto v = ((j / parametric_equation.v_precision) * parametric_equation.v_end) + parametric_equation.v_start;
+            auto v = ((j / (double)parametric_equation.v_precision) *
+                    parametric_equation.v_end) + parametric_equation.v_start;
             Vertex vs;
             vs.Position = parametric_equation.P(u, v);
             vs.Normal = -glm::cross(parametric_equation.Pu(u, v),
                                     parametric_equation.Pv(u, v));
-            vs.TexCoords = glm::vec2(1 - (j / parametric_equation.v_precision),
-                                     1 - (i / parametric_equation.u_precision));
+            vs.TexCoords = glm::vec2(1 - (j / (double)parametric_equation.v_precision),
+                                     1 - (i / (double)parametric_equation.u_precision));
 
             vertices.push_back(vs);
         }
@@ -45,8 +46,8 @@ std::vector<unsigned int> ModelParametricLoader::CreateIndices(const ParametricE
 
     for(double i = 0; i < parametric_equation.u_precision; i++){
         for(double j = 0; j < parametric_equation.v_precision; j++){
-            unsigned int first = (i * (parametric_equation.v_precision + 1)) + j;
-            unsigned int second = first + parametric_equation.v_precision + 1;
+            unsigned int first = (i * ((double)parametric_equation.v_precision + 1)) + j;
+            unsigned int second = first + (double)parametric_equation.v_precision + 1;
 
             indices.push_back(first);
             indices.push_back(second);

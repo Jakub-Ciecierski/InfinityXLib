@@ -24,8 +24,11 @@ struct ParametricEquation{
     double v_start;
     double v_end;
 
-    double u_precision;
-    double v_precision;
+    unsigned int u_precision;
+    unsigned int v_precision;
+
+    double u_global;
+    double v_global;
 };
 
 

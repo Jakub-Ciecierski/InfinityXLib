@@ -33,6 +33,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 # DEPENDENCIES
 #---------------------------------
 
+include_directories(${IFX_ROOT}/dependencies/exprtk/)
+
 include_directories(${IFX_ROOT}/modules/common/resources/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/common/math/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/common/common/${INC_DIR})

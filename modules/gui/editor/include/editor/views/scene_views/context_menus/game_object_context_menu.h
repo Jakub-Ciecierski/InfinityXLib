@@ -8,6 +8,8 @@ namespace ifx {
 class GameObject;
 class SceneContainer;
 class ResourceContext;
+class ContextMenuAddRenderObject;
+class ContextMenuAddLight;
 
 class GameObjectContextMenu {
 public:
@@ -21,19 +23,20 @@ public:
 private:
 
     void Remove(std::shared_ptr<SceneContainer> scene,
-                std::shared_ptr<GameObject> game_object,
-                int game_object_id);
+                std::shared_ptr<GameObject> game_object);
 
     void Add(std::shared_ptr<ResourceContext> resource_creator,
-             std::shared_ptr<GameObject> game_object,
-             int game_object_id);
+             std::shared_ptr<GameObject> game_object);
 
     void AddLight(std::shared_ptr<ResourceContext> resource_creator,
-                  std::shared_ptr<GameObject> game_object,
-                  int game_object_id);
+                  std::shared_ptr<GameObject> game_object);
 
-    void AddRenderObject(std::shared_ptr<GameObject> game_object,
-                         int game_object_id);
+    void AddRenderObject(std::shared_ptr<ResourceContext> resource_creator,
+                         std::shared_ptr<GameObject> game_object);
+
+
+    std::unique_ptr<ContextMenuAddLight> context_menu_add_light_;
+    std::unique_ptr<ContextMenuAddRenderObject> context_menu_add_render_object_;
 
     std::shared_ptr<ResourceContext> resource_creator_;
     std::shared_ptr<SceneContainer> scene_;
