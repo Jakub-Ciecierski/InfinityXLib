@@ -50,6 +50,7 @@ private:
             parametric_equation_expressions_;
 
     bool render_error_window_;
+    std::string error_message_;
 };
 }
 

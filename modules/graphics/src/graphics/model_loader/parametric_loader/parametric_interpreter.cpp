@@ -32,10 +32,14 @@ exprtk::symbol_table<double> ParametricInterpreter::CreateSymbolTable(
         ParametricEquation& parametric_equation){
     exprtk::symbol_table<double> exprtk_symbol_table;
     for(auto& constant : expressions.constants){
-        exprtk_symbol_table.add_constant(constant.name, constant.value);
+        if(!exprtk_symbol_table.add_constant(constant.name, constant.value)){
+            throw std::invalid_argument(
+                    "Multiple constants with the same name. "
+                            "Not Case Sensitive");
+        }
     }
-
     exprtk_symbol_table.add_constants();
+
     exprtk_symbol_table.add_variable("u", parametric_equation.u_global);
     exprtk_symbol_table.add_variable("v", parametric_equation.v_global);
 
@@ -155,7 +159,8 @@ exprtk::expression<double> ParametricInterpreter::CreateExpression(
     auto is_compiled = exprtk_parser.compile(expression, exprtk_expression);
 
     if(!is_compiled)
-        throw std::invalid_argument("exprtk Compilation error");
+        throw std::invalid_argument(
+                "Invalid Syntax. Variables must be named: (u,v)");
 
     return exprtk_expression;
 }

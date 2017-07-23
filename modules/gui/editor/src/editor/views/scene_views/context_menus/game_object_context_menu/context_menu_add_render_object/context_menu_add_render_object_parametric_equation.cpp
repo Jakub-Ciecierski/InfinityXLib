@@ -167,6 +167,7 @@ bool ContextMenuAddRenderObjectParametricEquation::TryCreateRenderComponent(
                                                resource_creator));
     }catch(const std::invalid_argument& e){
         render_error_window_ = true;
+        error_message_ = std::string(e.what());
         return false;
     }
     return true;
@@ -204,7 +205,7 @@ void ContextMenuAddRenderObjectParametricEquation::RenderErrorWindow(){
     ImGui::OpenPopup("Compilation Error");
     if (ImGui::BeginPopupModal("Compilation Error", NULL,
                                ImGuiWindowFlags_AlwaysAutoResize)) {
-        ImGui::Text("Compilation Error");
+        ImGui::Text(error_message_.c_str());
         ImGui::Separator();
         if (ImGui::Button("OK", ImVec2(120, 0))) {
             render_error_window_ = false;

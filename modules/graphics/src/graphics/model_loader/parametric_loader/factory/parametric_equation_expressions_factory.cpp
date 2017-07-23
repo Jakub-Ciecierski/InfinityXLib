@@ -43,21 +43,21 @@ ParametricEquationExpressionsFactory::CreateTorus(){
     auto expression = std::unique_ptr<ParametricEquationExpressions>(
             new ParametricEquationExpressions());
     expression->constants.push_back(
-            ParametricEquationConstantExpression{"R",2});
+            ParametricEquationConstantExpression{"c",2});
     expression->constants.push_back(
-            ParametricEquationConstantExpression{"r",1});
+            ParametricEquationConstantExpression{"a",1});
 
-    expression->Px = "(R + r*cos(v)) * cos(u)";
-    expression->Py = "(R + r*cos(v)) * sin(u)";
-    expression->Pz = "r*sin(v)";
+    expression->Px = "(c + a*cos(v)) * cos(u)";
+    expression->Py = "(c + a*cos(v)) * sin(u)";
+    expression->Pz = "a*sin(v)";
 
-    expression->Px_du = "(R + r*cos(v)) * (-sin(u))";
-    expression->Py_du = "(R + r*cos(v)) * cos(u)";
+    expression->Px_du = "(c + a*cos(v)) * (-sin(u))";
+    expression->Py_du = "(c + a*cos(v)) * cos(u)";
     expression->Pz_du = "0";
 
-    expression->Px_dv = "r*(-sin(v)) * cos(u)";
-    expression->Py_dv = "r*(-sin(v)) * sin(u)";
-    expression->Pz_dv = "r*cos(v)";
+    expression->Px_dv = "a*(-sin(v)) * cos(u)";
+    expression->Py_dv = "a*(-sin(v)) * sin(u)";
+    expression->Pz_dv = "a*cos(v)";
 
     expression->u_start = "0";
     expression->u_end = "2*pi";
@@ -75,21 +75,25 @@ std::unique_ptr<ParametricEquationExpressions>
 ParametricEquationExpressionsFactory::CreateCone(){
     auto expression = std::unique_ptr<ParametricEquationExpressions>(
             new ParametricEquationExpressions());
+    expression->constants.push_back(
+            ParametricEquationConstantExpression{"h",2});
+    expression->constants.push_back(
+            ParametricEquationConstantExpression{"r",1});
 
-    expression->Px = "(1.0 - u) / 1.0 * ";
-    expression->Py = "(2 + 1*cos(v)) * sin(u)";
-    expression->Pz = "1*sin(v)";
+    expression->Px = "((h - u) / h) * r * cos(v)";
+    expression->Py = "((h - u) / h) * r * sin(v)";
+    expression->Pz = "u";
 
-    expression->Px_du = "(2 + 1*cos(v)) * (-sin(u))";
-    expression->Py_du = "(2 + 1*cos(v)) * cos(u)";
-    expression->Pz_du = "0";
+    expression->Px_du = "(-r*cos(v)) / h";
+    expression->Py_du = "((-u + h) * r * sin(v)) / h";
+    expression->Pz_du = "1";
 
-    expression->Px_dv = "1*(-sin(v)) * cos(u)";
-    expression->Py_dv = "1*(-sin(v)) * sin(u)";
-    expression->Pz_dv = "1*cos(v)";
+    expression->Px_dv = "(-r * sin(v)) / h";
+    expression->Py_dv = "((-u+h)*r*cos(v)) / h";
+    expression->Pz_dv = "0";
 
     expression->u_start = "0.0";
-    expression->u_end = "1.0";
+    expression->u_end = "h";
 
     expression->v_start = "0";
     expression->v_end = "2*pi";
@@ -104,24 +108,28 @@ std::unique_ptr<ParametricEquationExpressions>
 ParametricEquationExpressionsFactory::CreateCylinder(){
     auto expression = std::unique_ptr<ParametricEquationExpressions>(
             new ParametricEquationExpressions());
+    expression->constants.push_back(
+            ParametricEquationConstantExpression{"h",2});
+    expression->constants.push_back(
+            ParametricEquationConstantExpression{"r",1});
 
-    expression->Px = "(2 + 1*cos(v)) * cos(u)";
-    expression->Py = "(2 + 1*cos(v)) * sin(u)";
-    expression->Pz = "1*sin(v)";
+    expression->Px = "r*cos(u)";
+    expression->Py = "r*sin(u)";
+    expression->Pz = "v";
 
-    expression->Px_du = "(2 + 1*cos(v)) * (-sin(u))";
-    expression->Py_du = "(2 + 1*cos(v)) * cos(u)";
+    expression->Px_du = "-r*sin(u)";
+    expression->Py_du = "r*cos(u)";
     expression->Pz_du = "0";
 
-    expression->Px_dv = "1*(-sin(v)) * cos(u)";
-    expression->Py_dv = "1*(-sin(v)) * sin(u)";
-    expression->Pz_dv = "1*cos(v)";
+    expression->Px_dv = "0";
+    expression->Py_dv = "0";
+    expression->Pz_dv = "1";
 
     expression->u_start = "0";
     expression->u_end = "2*pi";
 
     expression->v_start = "0";
-    expression->v_end = "2*pi";
+    expression->v_end = "h";
 
     expression->u_precision = 50;
     expression->v_precision = 50;
