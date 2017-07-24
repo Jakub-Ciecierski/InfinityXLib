@@ -1,36 +1,36 @@
-#ifndef PROJECT_RIGID_BODY_H
-#define PROJECT_RIGID_BODY_H
+#ifndef PROJECT_RIGID_BODY_TMP_H
+#define PROJECT_RIGID_BODY_TMP_H
 
+#include <memory>
 #include <math/transform.h>
-
-class btRigidBody;
-class btMotionState;
 
 namespace ifx {
 
 class CollisionShape;
+class RigidBodyImpl;
 
-class RigidBody : public Transformable {
-public:
-
-    RigidBody(std::shared_ptr<CollisionShape> collision_shape, float mass);
-    RigidBody();
-    virtual ~RigidBody();
-
-    std::shared_ptr<btRigidBody> rigid_body_bt(){return rigid_body_bt_;}
-
-protected:
-
-    std::shared_ptr<btRigidBody> rigid_body_bt_;
-    std::shared_ptr<btMotionState> motion_state_bt_;
-
-    std::shared_ptr<CollisionShape> collision_shape_;
-
-    float mass_;
-private:
-    void Init();
+struct RigidBodyParams{
+    std::shared_ptr<CollisionShape> collision_shape;
+    float mass;
 };
 
+class RigidBody : public Transformable{
+public:
+
+    RigidBody(std::unique_ptr<RigidBodyImpl> rigid_body_impl,
+              const RigidBodyParams&& params);
+    ~RigidBody();
+
+    void* GetNativeRigidBody();
+
+    virtual void Update(float time_delta = 0) override;
+private:
+    std::unique_ptr<RigidBodyImpl> rigid_body_impl_;
+
+    std::shared_ptr<CollisionShape> collision_shape_;
+    float mass_;
+};
 }
 
-#endif //PROJECT_RIGID_BODY_H
+
+#endif //PROJECT_RIGID_BODY_TMP_H

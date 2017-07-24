@@ -26,13 +26,7 @@ public:
         UpdateGlobal();
         return global_transform_;
     }
-    void local_transform(TransformData data) {
-        local_transform_ = data;
-        UpdateGlobal();
-    }
-    void global_transform(TransformData data) {
-        global_transform_ = data;
-    }
+
     Transformable* movable_parent(){return parent_object_;}
 
     virtual void Update(float time_delta = 0) override;

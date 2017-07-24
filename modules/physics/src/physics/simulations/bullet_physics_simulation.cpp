@@ -9,6 +9,10 @@
 #include <BulletDynamics/Dynamics/btRigidBody.h>
 #include <iostream>
 
+#include <physics/impl/rigid_body_impl.h>
+#include <physics/impl/rigid_body_impl_bullet.h>
+#include <physics/rigid_body.h>
+
 namespace ifx {
 
 BulletPhysicsSimulation::BulletPhysicsSimulation(
@@ -25,14 +29,22 @@ BulletPhysicsSimulation::~BulletPhysicsSimulation(){}
 
 void BulletPhysicsSimulation::Add(std::shared_ptr<RigidBody> rigid_body){
     PhysicsSimulation::Add(rigid_body);
-    dynamics_world_->addRigidBody(rigid_body->rigid_body_bt().get());
+
+    dynamics_world_->addRigidBody(
+            (btRigidBody*)rigid_body->GetNativeRigidBody());
 }
 
 bool BulletPhysicsSimulation::Remove(std::shared_ptr<RigidBody> rigid_body){
     bool result = PhysicsSimulation::Remove(rigid_body);
-    dynamics_world_->removeRigidBody(rigid_body->rigid_body_bt().get());
+    dynamics_world_->removeRigidBody(
+            (btRigidBody*)rigid_body->GetNativeRigidBody());
 
     return result;
+}
+
+std::unique_ptr<RigidBodyImpl>
+BulletPhysicsSimulation::CreateRigidBodyImpl() {
+    return std::unique_ptr<RigidBodyImplBullet>(new RigidBodyImplBullet());
 }
 
 void BulletPhysicsSimulation::Update(float time_delta){
@@ -57,7 +69,7 @@ glm::vec3 BulletPhysicsSimulation::GetGravity(){
 void BulletPhysicsSimulation::AddImpulse(){
     for(auto& rigid_body : rigid_bodies_){
         btVector3 impulse(0.1, 1.1, 0.1);
-        rigid_body->rigid_body_bt()->applyCentralImpulse(impulse);
+        //rigid_body->rigid_body_bt()->applyCentralImpulse(impulse);
     }
 }
 
@@ -66,8 +78,9 @@ void BulletPhysicsSimulation::SynchronizeRigidBodiesTransform(){
         auto parent = rigid_body->movable_parent();
         if(!parent)
             continue;
+        auto rigid_body_bt = (btRigidBody*)rigid_body->GetNativeRigidBody();
 
-        auto transform = rigid_body->rigid_body_bt()->getWorldTransform();
+        auto transform = rigid_body_bt->getWorldTransform();
         auto& position = rigid_body->getPosition();
         auto& rotation = rigid_body->getRotation();
         glm::quat glm_quat(glm::radians(rotation));
@@ -76,10 +89,10 @@ void BulletPhysicsSimulation::SynchronizeRigidBodiesTransform(){
                 btVector3(position.x, position.y, position.z));
         transform.setRotation(bt_quat);
 
-        rigid_body->rigid_body_bt()->setWorldTransform(transform);
+        rigid_body_bt->setWorldTransform(transform);
 
         // TODO
-        rigid_body->rigid_body_bt()->activate(true);
+        rigid_body_bt->activate(true);
     }
 }
 
@@ -88,8 +101,9 @@ void BulletPhysicsSimulation::SynchronizeGameObjectsTransform(){
         auto parent = rigid_body->movable_parent();
         if(!parent)
             continue;
+        auto rigid_body_bt = (btRigidBody*)rigid_body->GetNativeRigidBody();
 
-        auto transform = rigid_body->rigid_body_bt()->getWorldTransform();
+        auto transform = rigid_body_bt->getWorldTransform();
         auto& origin = transform.getOrigin();
         auto rotation_quat = transform.getRotation();
         glm::quat glm_quat = glm::quat(rotation_quat.w(), rotation_quat.x(),

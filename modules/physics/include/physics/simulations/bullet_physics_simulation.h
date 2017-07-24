@@ -33,6 +33,8 @@ public:
     virtual void Add(std::shared_ptr<RigidBody> rigid_body) override;
     virtual bool Remove(std::shared_ptr<RigidBody> rigid_body) override;
 
+    virtual std::unique_ptr<RigidBodyImpl> CreateRigidBodyImpl() override;
+
     virtual void Update(float time_delta) override;
 
     virtual void SetGravity(const glm::vec3& g) override;

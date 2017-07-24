@@ -10,9 +10,62 @@ set(DEPS_DIR dependencies)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${IFX_UNITTESTS_BIN_BUILD_DIR})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 
-add_definitions(
-        -DGLEW_STATIC
-)
+add_definitions(-DGLEW_STATIC)
+
+#---------------------------------
+# PHYSX
+#---------------------------------
+
+# Set your platform version here (32/64). TODO AUTOMATIC
+set(PLATFORM_VERSION 64)
+
+# DEBUG/CHECKED/PROFILE/RELEASE
+set(PHYSX_COMPILER_TYPE CHECKED)
+
+# OS
+if (MSVC11)
+    set(PHYSX_LOCAL_LINK_DIR "vc11win")
+endif (MSVC11)
+if (MSVC12)
+    set(PHYSX_LOCAL_LINK_DIR "vc12win")
+endif (MSVC12)
+if (MSVC14)
+    set(PHYSX_LOCAL_LINK_DIR "vc14win")
+endif (MSVC14)
+if (UNIX)
+    set(PHYSX_LOCAL_LINK_DIR "linux")
+endif (UNIX)
+
+# PLATFORM VERSION
+IF (PLATFORM_VERSION MATCHES 64)
+    set(PHYSX_PLATFORM_VERSION 64)
+    set(PHYSX_LOCAL_LINK_DIR "${PHYSX_LOCAL_LINK_DIR}64")
+ENDIF()
+IF (PLATFORM_VERSION MATCHES 32)
+    IF (WIN32)
+        set(PHYSX_PLATFORM_VERSION 86)
+        set(PHYSX_LOCAL_LINK_DIR "${PHYSX_LOCAL_LINK_DIR}86")
+    ELSE()
+        set(PHYSX_PLATFORM_VERSION 32)
+        set(PHYSX_LOCAL_LINK_DIR "${PHYSX_LOCAL_LINK_DIR}32")
+    ENDIF()
+ENDIF()
+
+link_directories(
+        "${IFX_ROOT}/${DEPS_DIR}/PhysX-3.4/PhysX_3.4/Lib/${PHYSX_LOCAL_LINK_DIR}"
+        "${IFX_ROOT}/${DEPS_DIR}/PhysX-3.4/PhysX_3.4/Bin/${PHYSX_LOCAL_LINK_DIR}")
+
+# LIB - static, BIN - dynamic
+set(PHYSX3_EXTENSIONS_LIB
+        "PhysX3Extensions${PHYSX_COMPILER_TYPE}")
+set(PHYSX3_BIN
+        "PhysX3${PHYSX_COMPILER_TYPE}_x${PHYSX_PLATFORM_VERSION}")
+set(PHYSX3_COMMON_BIN
+        "PhysX3Common${PHYSX_COMPILER_TYPE}_x${PHYSX_PLATFORM_VERSION}")
+set(PX_FOUNDATION_BIN
+        "PxFoundation${PHYSX_COMPILER_TYPE}_x${PHYSX_PLATFORM_VERSION}")
+set(PX_PVD_SDK_BIN
+        "PxPvdSDK${PHYSX_COMPILER_TYPE}_x${PHYSX_PLATFORM_VERSION}")
 
 #---------------------------------
 # MACROS
@@ -40,13 +93,15 @@ set(SOURCE_FILES )
 
 add_executable(${APP_NAME} ${SOURCE_FILES} ${SRC_FILES})
 
-
 #----------------------------------
 # EXTERNAL
 #----------------------------------
 
 #add_subdirectory(${IFX_ROOT}/${DEPS_DIR} ${IFX_LIB_DEPS_BUILD_DIR})
 
+include_directories(${IFX_ROOT}/${DEPS_DIR}/bullet3/src/)
+include_directories(${IFX_ROOT}/${DEPS_DIR}/PhysX-3.4/PhysX_3.4/Include)
+include_directories(${IFX_ROOT}/${DEPS_DIR}/PhysX-3.4/PxShared/include)
 include_directories(${IFX_ROOT}/${DEPS_DIR}/googletest/${INC_DIR})
 include_directories(${IFX_ROOT}/${DEPS_DIR}/glfw-3.1.2/${INC_DIR})
 include_directories(${IFX_ROOT}/${DEPS_DIR}/assimp-3.1.1/${INC_DIR})
@@ -68,9 +123,8 @@ include_directories(${IFX_ROOT}/modules/graphics/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/common/resources/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/common/math/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/common/common/${INC_DIR})
-include_directories(${IFX_ROOT}/modules/vr/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/game/game/${INC_DIR})
-include_directories(${IFX_ROOT}/modules/physics/physics/${INC_DIR})
+include_directories(${IFX_ROOT}/modules/physics/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/gui/gui/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/gui/editor/${INC_DIR})
 
@@ -83,6 +137,13 @@ target_link_libraries(${APP_NAME}
         resources_ifx controls_ifx
         common_ifx gui_ifx editor_ifx
         BulletDynamics BulletCollision)
+
+target_link_libraries(${APP_NAME}
+        ${PHYSX3_EXTENSIONS_LIB}
+        ${PHYSX3_BIN}
+        ${PHYSX3_COMMON_BIN}
+        ${PX_FOUNDATION_BIN}
+        ${PX_PVD_SDK_BIN})
 
 target_link_libraries(${APP_NAME} gtest gtest_main)
 target_link_libraries(${APP_NAME} SOIL)

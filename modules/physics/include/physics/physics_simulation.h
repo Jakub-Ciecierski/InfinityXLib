@@ -10,6 +10,8 @@
 namespace ifx {
 
 class RigidBody;
+class RigidBodyImpl;
+struct RigidBodyParams;
 
 class PhysicsSimulation : public Updatable{
 public:
@@ -28,7 +30,10 @@ public:
     void Pause();
 
     virtual void Add(std::shared_ptr<RigidBody> rigid_body);
+
     virtual bool Remove(std::shared_ptr<RigidBody> rigid_body);
+
+    virtual std::unique_ptr<RigidBodyImpl> CreateRigidBodyImpl() = 0;
 
 protected:
     std::vector<std::shared_ptr<RigidBody>> rigid_bodies_;
