@@ -37,14 +37,10 @@ void GameLoop::RunSingleIteration(){
     if(!UpdateTime())
         return;
 
-
-
     physics_simulation_->Update(time_data_.time_delta);
     scene_->Update();
     renderer_->Update();
     controls_->Update();
-
-
 
     gui_->Update();
 

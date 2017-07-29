@@ -11,6 +11,7 @@ class Camera;
 class LightGroup;
 class LightSource;
 class RenderObject;
+class RenderingEffect;
 
 /**
  * Renders the scene with lights and camera
@@ -39,6 +40,8 @@ public:
 
 private:
     void Render(std::shared_ptr<RenderObject> render_object) const;
+
+    std::vector<std::shared_ptr<RenderingEffect>> rendering_effects_;
 
     std::vector<std::shared_ptr<RenderObject>> render_objects_;
     std::shared_ptr<LightGroup> light_group_;

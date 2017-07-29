@@ -197,7 +197,23 @@ ContextMenuAddRenderObjectParametricEquation::CreateRenderComponent(
 
     auto render_object = std::make_shared<RenderComponent>(model);
     render_object->addProgram(program);
-
+/*
+    //
+    std::string vertex_path1 =
+            resource_path->GetResourcePath("geo_normal/norm.vs",
+                                           ifx::ResourceType::SHADER);
+    std::string fragment_path1 =
+            resource_path->GetResourcePath("geo_normal/norm.fs",
+                                           ifx::ResourceType::SHADER);
+    std::string geo_path2 =
+            resource_path->GetResourcePath("geo_normal/norm.gs",
+                                           ifx::ResourceType::SHADER);
+    auto program2
+            = ProgramLoader(resource_creator->program_creator()).CreateProgram(
+                    vertex_path1, fragment_path1, geo_path2);
+    render_object->addProgram(program2);
+    //
+*/
     return render_object;
 }
 

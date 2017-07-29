@@ -20,6 +20,7 @@ ShadowMappingRenderer::ShadowMappingRenderer(
 ShadowMappingRenderer::~ShadowMappingRenderer(){}
 
 void ShadowMappingRenderer::Render(std::shared_ptr<FBORenderer> fbo_renderer){
+
     auto lights = scene_renderer_->light_group()->GetDirectionalLights();
     for(auto& light : lights){
         light->RenderToShadowMap(scene_renderer_);
