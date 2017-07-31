@@ -42,7 +42,7 @@ SceneView::SceneView(std::shared_ptr<SceneContainer> scene,
 
 SceneView::~SceneView(){ }
 
-void SceneView::RenderContent(){
+void SceneView::Render(){
     RenderWindow();
 }
 

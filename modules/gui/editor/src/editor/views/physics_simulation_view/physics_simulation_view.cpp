@@ -1,17 +1,17 @@
-#include "editor/views/physics_simulation_view.h"
+#include "editor/views/physics_simulation_view/physics_simulation_view.h"
 
-#include <physics/physics_simulation.h>
 #include <gui/imgui/imgui.h>
 
-namespace ifx{
+#include <physics/physics_simulation.h>
+
+namespace ifx {
 
 PhysicsSimulationView::PhysicsSimulationView(
-                std::shared_ptr<PhysicsSimulation> physics_simulation) :
+        std::shared_ptr<PhysicsSimulation> physics_simulation) :
         View("Physics"),
-        physics_simulation_(physics_simulation){}
-PhysicsSimulationView::~PhysicsSimulationView(){}
+        physics_simulation_(physics_simulation) {}
 
-void PhysicsSimulationView::RenderContent(){
+void PhysicsSimulationView::Render(){
     if(ImGui::TreeNode("Simulation")){
         RenderBasicInfo();
         ImGui::TreePop();
@@ -42,7 +42,7 @@ void PhysicsSimulationView::RenderGravity() {
     gravity.y = raw[1];
     gravity.z = raw[2];
 
-   physics_simulation_->SetGravity(gravity);
+    physics_simulation_->SetGravity(gravity);
 }
 
 void PhysicsSimulationView::RenderImpulse(){

@@ -1,6 +1,6 @@
 #include "editor/docker.h"
 
-#include <editor/view.h>
+#include <editor/window_view.h>
 #include <graphics/rendering/window/window.h>
 
 #include <gui/imgui/imgui.h>
@@ -28,7 +28,7 @@ void Docker::Disable(){
     SetDisabledFlags();
 }
 
-void Docker::RegisterView(std::shared_ptr<View> view,
+void Docker::RegisterView(std::shared_ptr<WindowView> view,
                           const DockPosition &dock_position) {
     switch(dock_position){
         case DockPosition::Left:
@@ -58,6 +58,7 @@ void Docker::SetDisabledFlags(){
 
 void Docker::SetEnabledFlags(){
     SetFlags(ImGuiWindowFlags_NoResize
+             | ImGuiWindowFlags_NoTitleBar
              | ImGuiWindowFlags_NoMove
              | ImGuiWindowFlags_NoCollapse);
 }
@@ -73,7 +74,7 @@ void Docker::SetFlags(ImGuiWindowFlags flags){
         bottom_view_->SetFlags(flags);
 }
 
-void Docker::Dock(std::shared_ptr<View> view){
+void Docker::Dock(std::shared_ptr<WindowView> view){
     if(!is_enabled_)
         return;
 
@@ -144,7 +145,7 @@ void Docker::DockBottom(){
     float view_pos_y = *(window_->height()) - view_height;
 
     ImGui::SetNextWindowPos(ImVec2(view_pos_x, view_pos_y));
-    ImGui::SetNextWindowSize(ImVec2(view_width, view_height));
+    ImGui::SetNextWindowSize(ImVec2(view_width, view_height + epsilon_gap_closer));
 }
 
 }

@@ -1,7 +1,7 @@
 #ifndef PROJECT_MAIN_MENU_H
 #define PROJECT_MAIN_MENU_H
 
-#include <editor/view.h>
+#include <editor/window_view.h>
 #include <memory>
 
 namespace ifx{
@@ -10,10 +10,10 @@ class Editor;
 
 class MainMenuViewItem;
 
-class MainMenuView : public View {
+class MainMenuWindowView : public WindowView {
 public:
-    MainMenuView();
-    ~MainMenuView();
+    MainMenuWindowView();
+    ~MainMenuWindowView();
 
     virtual void Render() override;
 

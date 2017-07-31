@@ -22,6 +22,8 @@ public:
     SceneRenderer();
     ~SceneRenderer();
 
+    const std::vector<std::shared_ptr<RenderingEffect>>& rendering_effects(){
+            return rendering_effects_;}
     const std::vector<std::shared_ptr<RenderObject>>& render_objects() {
         return render_objects_;}
     const std::shared_ptr<LightGroup> light_group() const {return light_group_;}
@@ -30,10 +32,12 @@ public:
     void Render() const;
     void Render(const std::shared_ptr<Program> program) const;
 
+    void Add(std::shared_ptr<RenderingEffect> rendering_effect);
     void Add(std::shared_ptr<RenderObject> render_object);
     void Add(std::shared_ptr<LightSource> light_source);
     void Add(std::shared_ptr<Camera> camera);
 
+    bool Remove(std::shared_ptr<RenderingEffect> rendering_effect);
     bool Remove(std::shared_ptr<RenderObject> render_object);
     bool Remove(std::shared_ptr<LightSource> light_source);
     bool Remove(std::shared_ptr<Camera> camera);

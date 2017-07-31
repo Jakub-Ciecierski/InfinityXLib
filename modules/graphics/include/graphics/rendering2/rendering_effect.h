@@ -20,8 +20,8 @@ public:
 
     ~RenderingEffect();
 
-    void Start(Camera& camera,
-               LightGroup& light_source);
+    void Render(Camera &camera,
+                LightGroup &light_source);
 
     void RegisterRenderObject(std::shared_ptr<RenderObject> render_object);
     bool DeregisterRenderObject(std::shared_ptr<RenderObject> render_object);

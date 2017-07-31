@@ -8,12 +8,12 @@
 
 namespace ifx{
 
-class MainMenuView;
+class MainMenuWindowView;
 class SceneView;
-class PhysicsSimulationView;
-class ImGuiDemoView;
+class RightView;
+class ImGuiDemoWindowView;
 class Docker;
-class View;
+class WindowView;
 
 class Editor : public GUIPart {
 public:
@@ -22,21 +22,21 @@ public:
 
     std::shared_ptr<Docker> docker(){return docker_;}
 
-    const std::vector<std::shared_ptr<View>>& views(){return views_;}
+    const std::vector<std::shared_ptr<WindowView>>& window_views(){return window_views_;}
 
     /**
      * Renders windows and other non scene related stuff.
      */
     virtual void Render() override;
 
-    void AddView(std::shared_ptr<View> view);
+    void AddWindowView(std::shared_ptr<WindowView> view);
 
 private:
     void SetDefaultTheme();
 
     std::shared_ptr<Docker> docker_;
 
-    std::vector<std::shared_ptr<View>> views_;
+    std::vector<std::shared_ptr<WindowView>> window_views_;
 };
 
 }

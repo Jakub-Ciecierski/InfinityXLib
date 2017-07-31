@@ -479,6 +479,7 @@ int main() {
             game->game_loop()->renderer()->window(),
             game->scene(),
             game->game_loop()->physics_simulation(),
+            game->game_loop()->renderer()->scene_renderer(),
             game->resource_creator());
     game->game_loop()->gui()->AddGUIPart(editor);
 

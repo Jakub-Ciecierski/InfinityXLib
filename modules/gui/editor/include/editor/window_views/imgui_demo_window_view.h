@@ -1,19 +1,18 @@
 #ifndef PROJECT_IMGUI_DEMO_VIEW_H
 #define PROJECT_IMGUI_DEMO_VIEW_H
 
-#include <editor/view.h>
+#include <editor/window_view.h>
 
 namespace ifx {
 
-class ImGuiDemoView : public View{
+class ImGuiDemoWindowView : public WindowView{
 public:
-    ImGuiDemoView();
-    ~ImGuiDemoView();
+    ImGuiDemoWindowView();
+    ~ImGuiDemoWindowView();
 
     virtual void Render() override;
 
 protected:
-
     virtual void RenderContent() override;
 
 private:

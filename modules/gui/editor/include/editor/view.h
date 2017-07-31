@@ -3,48 +3,18 @@
 
 #include <string>
 
-typedef int ImGuiWindowFlags;
-
-namespace ifx{
+namespace ifx {
 
 class View {
 public:
-    View(std::string name = "Debug");
-    virtual ~View();
-
-    void show(bool val){show_ = val;}
-    bool* show(){return &show_;}
-
-    float width(){
-        if(!show_)
-            return 0;
-        return width_;
-    }
-    float height(){
-        if(!show_)
-            return 0;
-        return height_;
-    }
+    View(std::string name);
+    virtual ~View() = default;
 
     const std::string& name(){return name_;}
 
-    virtual void Render();
-
-    void SetFlags(ImGuiWindowFlags flags);
-
-protected:
-    virtual void RenderContent() = 0;
-
-    virtual void FetchSize();
-
-    bool show_;
-
-    float width_;
-    float height_;
-
+    virtual void Render() = 0;
+private:
     std::string name_;
-
-    ImGuiWindowFlags flags_;
 };
 
 }

@@ -2,7 +2,7 @@
 #define PROJECT_SCENE_MANIPULATOR_VIEW_H
 
 #include <memory>
-#include <editor/view.h>
+#include <editor/window_view.h>
 #include <editor/scene_manipulator.h>
 
 namespace ifx {

@@ -1,6 +1,6 @@
 #include "editor/editor.h"
 
-#include <editor/views/main_menu_view.h>
+#include <editor/window_view.h>
 #include <editor/docker.h>
 
 #include <gui/theme.h>
@@ -15,7 +15,7 @@ Editor::Editor(std::shared_ptr<Docker> docker) :
 Editor::~Editor(){}
 
 void Editor::Render(){
-    for(auto& view : views_){
+    for(auto& view : window_views_){
         docker_->Dock(view);
         view->Render();
     }
@@ -26,8 +26,8 @@ void Editor::SetDefaultTheme(){
     GUIThemeDracula();
 }
 
-void Editor::AddView(std::shared_ptr<View> view) {
-    views_.push_back(view);
+void Editor::AddWindowView(std::shared_ptr<WindowView> view) {
+    window_views_.push_back(view);
 }
 
 }

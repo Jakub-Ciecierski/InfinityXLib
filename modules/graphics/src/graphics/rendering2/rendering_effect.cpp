@@ -2,6 +2,7 @@
 
 #include "graphics/rendering/camera/camera.h"
 #include "graphics/lighting/light_group.h"
+#include <graphics/rendering/render_object.h>
 
 namespace ifx {
 
@@ -13,11 +14,13 @@ RenderingEffect::RenderingEffect(
 
 RenderingEffect::~RenderingEffect(){}
 
-void RenderingEffect::Start(Camera &camera,
-                            LightGroup &light_group) {
+void RenderingEffect::Render(Camera &camera,
+                             LightGroup &light_group) {
     camera.use(*program_);
     light_group.use(*program_);
 
+    for (auto &render_object : render_objects_)
+        render_object->Render(*program_);
 }
 
 void RenderingEffect::RegisterRenderObject(

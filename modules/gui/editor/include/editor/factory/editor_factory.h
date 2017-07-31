@@ -6,17 +6,20 @@
 namespace ifx {
 
 class Editor;
-class MainMenuView;
+class MainMenuWindowView;
 class Renderer;
 class SceneView;
 class SceneContainer;
 class PhysicsSimulation;
-class PhysicsSimulationView;
-class ImGuiDemoView;
+class RightView;
+class ImGuiDemoWindowView;
 class ResourceContext;
 class Window;
 class Docker;
-class View;
+class WindowView;
+class PhysicsSimulationView;
+class SceneRenderer;
+class RenderingView;
 
 class EditorFactory {
 public:
@@ -27,20 +30,34 @@ public:
             std::shared_ptr<Window> window,
             std::shared_ptr<SceneContainer> scene,
             std::shared_ptr<PhysicsSimulation> physics_simulation,
+            std::shared_ptr<SceneRenderer> scene_renderer,
             std::shared_ptr<ResourceContext> resource_creator);
 private:
+    std::shared_ptr<WindowView> CreateLeftWindowView(
+            std::shared_ptr<SceneContainer> scene,
+            std::shared_ptr<ResourceContext> resource_creator);
+    std::shared_ptr<WindowView> CreateRightWindowView(
+            std::shared_ptr<SceneRenderer> scene_renderer,
+            std::shared_ptr<ResourceContext> resource_creator,
+            std::shared_ptr<PhysicsSimulation> physics_simulation);
+    std::shared_ptr<WindowView> CreateBottomWindowView();
+
     std::shared_ptr<SceneView> CreateSceneView(
             std::shared_ptr<SceneContainer> scene,
             std::shared_ptr<ResourceContext> resource_creator);
     std::shared_ptr<PhysicsSimulationView> CreatePhysicsSimulationView(
             std::shared_ptr<PhysicsSimulation> physics_simulation);
 
+    std::shared_ptr<RenderingView> CreateRenderingView(
+            std::shared_ptr<SceneRenderer> scene_renderer,
+            std::shared_ptr<ResourceContext> resource_creator);
+
     std::shared_ptr<Docker> CreateDefaultDocker(
             std::shared_ptr<Window> window,
-            std::shared_ptr<View> scene_view,
-            std::shared_ptr<View> physics_view,
-            std::shared_ptr<View>main_menu_view,
-            std::shared_ptr<View> imgui_demo);
+            std::shared_ptr<WindowView> scene_view,
+            std::shared_ptr<WindowView> physics_view,
+            std::shared_ptr<WindowView>main_menu_view,
+            std::shared_ptr<WindowView> imgui_demo);
 };
 
 }

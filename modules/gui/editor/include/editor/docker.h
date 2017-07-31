@@ -7,7 +7,7 @@ typedef int ImGuiWindowFlags;
 
 namespace ifx {
 
-class View;
+class WindowView;
 class Window;
 
 enum class DockPosition{
@@ -46,9 +46,9 @@ public:
     void Enable();
     void Disable();
 
-    void RegisterView(std::shared_ptr<View> view,
+    void RegisterView(std::shared_ptr<WindowView> view,
                       const DockPosition &dock_position);
-    void Dock(std::shared_ptr<View> view);
+    void Dock(std::shared_ptr<WindowView> view);
 
 private:
     void SetDisabledFlags();
@@ -65,10 +65,10 @@ private:
 
     std::shared_ptr<Window> window_;
 
-    std::shared_ptr<View> left_view_;
-    std::shared_ptr<View> right_view_;
-    std::shared_ptr<View> top_view_;
-    std::shared_ptr<View> bottom_view_;
+    std::shared_ptr<WindowView> left_view_;
+    std::shared_ptr<WindowView> right_view_;
+    std::shared_ptr<WindowView> top_view_;
+    std::shared_ptr<WindowView> bottom_view_;
 
     bool is_enabled_;
 

@@ -1,4 +1,4 @@
-#include "editor/views/main_menu_view.h"
+#include "editor/window_views/main_menu_window_view.h"
 
 #include <editor/editor.h>
 #include <editor/views/main_menu_items/main_menu_view_item.h>
@@ -8,15 +8,15 @@
 
 namespace ifx{
 
-MainMenuView::MainMenuView() :
-        View("Main Menu"),
+MainMenuWindowView::MainMenuWindowView() :
+        WindowView("Main Menu"),
         editor_(nullptr) {
     view_item_.reset(new MainMenuViewItem());
 }
 
-MainMenuView::~MainMenuView(){}
+MainMenuWindowView::~MainMenuWindowView(){}
 
-void MainMenuView::Render() {
+void MainMenuWindowView::Render() {
     if (ImGui::BeginMainMenuBar()){
         FetchSize();
 
@@ -26,11 +26,11 @@ void MainMenuView::Render() {
     }
 }
 
-void MainMenuView::RegisterEditor(std::shared_ptr<Editor> editor){
+void MainMenuWindowView::RegisterEditor(std::shared_ptr<Editor> editor){
     editor_ = editor;
 }
 
-void MainMenuView::RenderContent(){
+void MainMenuWindowView::RenderContent(){
     if(!editor_)
         return;
     RenderFile();
@@ -39,20 +39,20 @@ void MainMenuView::RenderContent(){
     RenderWindow();
 }
 
-void MainMenuView::RenderFile(){
+void MainMenuWindowView::RenderFile(){
     if (ImGui::BeginMenu("File")){
         ImGui::EndMenu();
     }
 }
 
-void MainMenuView::RenderEdit(){
+void MainMenuWindowView::RenderEdit(){
     if (ImGui::BeginMenu("Edit")){
 
         ImGui::EndMenu();
     }
 }
 
-void MainMenuView::RenderWindow(){
+void MainMenuWindowView::RenderWindow(){
     if (ImGui::BeginMenu("Window")){
         if (ImGui::BeginMenu("Style")){
             if(ImGui::MenuItem("Dracula")){

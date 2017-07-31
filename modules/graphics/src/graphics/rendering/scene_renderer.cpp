@@ -33,6 +33,10 @@ void SceneRenderer::Render(std::shared_ptr<RenderObject> render_object) const{
     }
 }
 
+void SceneRenderer::Add(std::shared_ptr<RenderingEffect> rendering_effect){
+    rendering_effects_.push_back(rendering_effect);
+}
+
 void SceneRenderer::Add(std::shared_ptr<RenderObject> render_object){
     render_objects_.push_back(render_object);
 }
@@ -43,6 +47,16 @@ void SceneRenderer::Add(std::shared_ptr<LightSource> light_source){
 
 void SceneRenderer::Add(std::shared_ptr<Camera> camera){
     camera_ = camera;
+}
+
+bool SceneRenderer::Remove(std::shared_ptr<RenderingEffect> rendering_effect){
+    for(unsigned int i = 0; i < rendering_effects_.size(); i++){
+        if(rendering_effects_[i] == rendering_effect){
+            rendering_effects_.erase(rendering_effects_.begin() + i);
+            return true;
+        }
+    }
+    return false;
 }
 
 bool SceneRenderer::Remove(std::shared_ptr<RenderObject> render_object){

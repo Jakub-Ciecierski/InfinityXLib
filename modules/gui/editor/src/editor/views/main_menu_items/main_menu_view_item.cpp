@@ -1,7 +1,7 @@
 #include "editor/views/main_menu_items/main_menu_view_item.h"
 
 #include <editor/editor.h>
-#include <editor/view.h>
+#include <editor/window_view.h>
 #include <editor/docker.h>
 
 #include <gui/imgui/imgui.h>
@@ -23,7 +23,7 @@ void MainMenuViewItem::Render(std::shared_ptr<Editor> editor){
 
 void MainMenuViewItem::RenderShowWindows(std::shared_ptr<Editor> editor){
     if(ImGui::BeginMenu("Show")) {
-        for (auto &view : editor->views()) {
+        for (auto &view : editor->window_views()) {
             ImGui::MenuItem(view->name().c_str(), NULL, view->show());
         }
 
@@ -31,7 +31,7 @@ void MainMenuViewItem::RenderShowWindows(std::shared_ptr<Editor> editor){
 
         static bool show_all = true;
         if (ImGui::MenuItem("All", NULL, &show_all)) {
-            for (auto &view : editor->views()) {
+            for (auto &view : editor->window_views()) {
                 view->show(show_all);
             }
         }
