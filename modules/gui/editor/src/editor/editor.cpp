@@ -19,7 +19,6 @@ void Editor::Render(){
         docker_->Dock(view);
         view->Render();
     }
-
 }
 
 void Editor::SetDefaultTheme(){

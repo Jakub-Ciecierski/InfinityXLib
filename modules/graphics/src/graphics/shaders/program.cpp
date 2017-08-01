@@ -12,11 +12,11 @@ namespace ifx {
 
 Program::Program(Shaders shaders) :
         Resource(GetProgramPath(shaders), ifx::ResourceType::SHADER) {
-    vertex_shader.reset(shaders.vertexShader);
-    fragment_shader.reset(shaders.fragmentShader);
-    geometry_shader.reset(shaders.geometryShader);
-    tess_control_shader.reset(shaders.tessControlShader);
-    tess_eval_shader.reset(shaders.tessEvalShader);
+    vertex_shader_.reset(shaders.vertexShader);
+    fragment_shader_.reset(shaders.fragmentShader);
+    geometry_shader_.reset(shaders.geometryShader);
+    tess_control_shader_.reset(shaders.tessControlShader);
+    tess_eval_shader_.reset(shaders.tessEvalShader);
 
     linkShaders();
 }
@@ -28,16 +28,16 @@ Program::~Program() {
 void Program::linkShaders() {
     id = glCreateProgram();
 
-    if (vertex_shader)
-        glAttachShader(id, vertex_shader->getKey());
-    if (fragment_shader)
-        glAttachShader(id, fragment_shader->getKey());
-    if (geometry_shader)
-        glAttachShader(id, geometry_shader->getKey());
-    if (tess_control_shader)
-        glAttachShader(id, tess_control_shader->getKey());
-    if (tess_eval_shader)
-        glAttachShader(id, tess_eval_shader->getKey());
+    if (vertex_shader_)
+        glAttachShader(id, vertex_shader_->getKey());
+    if (fragment_shader_)
+        glAttachShader(id, fragment_shader_->getKey());
+    if (geometry_shader_)
+        glAttachShader(id, geometry_shader_->getKey());
+    if (tess_control_shader_)
+        glAttachShader(id, tess_control_shader_->getKey());
+    if (tess_eval_shader_)
+        glAttachShader(id, tess_eval_shader_->getKey());
 
     glLinkProgram(id);
 
@@ -53,16 +53,16 @@ void Program::linkShaders() {
                                         + infoLogStr);
     }
 
-    if (vertex_shader)
-        vertex_shader->deleteShader();
-    if (fragment_shader)
-        fragment_shader->deleteShader();
-    if (geometry_shader)
-        geometry_shader->deleteShader();
-    if (tess_control_shader)
-        tess_control_shader->deleteShader();
-    if (tess_eval_shader)
-        tess_eval_shader->deleteShader();
+    if (vertex_shader_)
+        vertex_shader_->deleteShader();
+    if (fragment_shader_)
+        fragment_shader_->deleteShader();
+    if (geometry_shader_)
+        geometry_shader_->deleteShader();
+    if (tess_control_shader_)
+        tess_control_shader_->deleteShader();
+    if (tess_eval_shader_)
+        tess_eval_shader_->deleteShader();
 }
 
 
@@ -73,16 +73,16 @@ void Program::use() const {
 void Program::Reload() {
     glDeleteProgram(id);
 
-    if (vertex_shader)
-        vertex_shader->Reload();
-    if (fragment_shader)
-        fragment_shader->Reload();
-    if (geometry_shader)
-        geometry_shader->Reload();
-    if (tess_control_shader)
-        tess_control_shader->Reload();
-    if (tess_eval_shader)
-        tess_eval_shader->Reload();
+    if (vertex_shader_)
+        vertex_shader_->Reload();
+    if (fragment_shader_)
+        fragment_shader_->Reload();
+    if (geometry_shader_)
+        geometry_shader_->Reload();
+    if (tess_control_shader_)
+        tess_control_shader_->Reload();
+    if (tess_eval_shader_)
+        tess_eval_shader_->Reload();
 
     linkShaders();
 }

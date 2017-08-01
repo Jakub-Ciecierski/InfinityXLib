@@ -8,6 +8,7 @@
 namespace ifx {
 
 class RenderingEffectProcessor;
+class RenderingEffectView;
 
 class RenderingView : public View {
 public:
@@ -18,6 +19,8 @@ public:
     virtual void Render() override;
 private:
     std::shared_ptr<RenderingEffectProcessor> rendering_effect_processor_;
+
+    std::unique_ptr<RenderingEffectView> rendering_effect_view_;
 };
 }
 

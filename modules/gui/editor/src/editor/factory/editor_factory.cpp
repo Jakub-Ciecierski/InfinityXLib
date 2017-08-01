@@ -8,6 +8,7 @@
 #include <editor/processes/rendering_effect_processor.h>
 #include <editor/views/physics_simulation_view/physics_simulation_view.h>
 #include <editor/views/rendering_view/rendering_view.h>
+#include <editor/views/rendering_view/rendering_effect_view.h>
 
 #include "game/scene_container.h"
 #include <game/resources/resource_context.h>

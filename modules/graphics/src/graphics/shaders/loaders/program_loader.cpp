@@ -9,6 +9,38 @@ ProgramLoader::ProgramLoader(std::shared_ptr<ProgramCreator> program_creator) :
 
 ProgramLoader::~ProgramLoader() { }
 
+std::shared_ptr<Program> ProgramLoader::CreateProgram(const ShaderPaths& shader_paths){
+    Shaders shaders;
+
+    if(shader_paths.vertex_path != ""){
+        shaders.vertexShader =
+                shaderLoader.loadVertexShader(shader_paths.vertex_path.c_str());
+        shaders.vertexShader->compile();
+    }
+    if(shader_paths.fragment_path != ""){
+        shaders.fragmentShader =
+                shaderLoader.loadFragmentShader(shader_paths.fragment_path.c_str());
+        shaders.fragmentShader->compile();
+    }
+    if(shader_paths.geometry_path!= ""){
+        shaders.geometryShader =
+                shaderLoader.loadGeometryShader(shader_paths.geometry_path.c_str());
+        shaders.geometryShader->compile();
+    }
+    if(shader_paths.tcs_path!= ""){
+        shaders.tessControlShader =
+                shaderLoader.loadTessControlShader(shader_paths.tcs_path.c_str());
+        shaders.tessControlShader->compile();
+    }
+    if(shader_paths.tes_path!= ""){
+        shaders.tessEvalShader =
+                shaderLoader.loadTessEvalShader(shader_paths.tes_path.c_str());
+        shaders.tessEvalShader->compile();
+    }
+
+    return program_creator_->MakeProgram(shaders);
+}
+
 std::shared_ptr<Program> ProgramLoader::CreateProgram(std::string vertex_path,
                                                       std::string fragment_path) {
     VertexShader *vertexShader =

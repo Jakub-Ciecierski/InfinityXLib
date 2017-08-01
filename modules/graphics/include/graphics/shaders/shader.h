@@ -5,6 +5,11 @@
 
 typedef unsigned int GLuint;
 
+struct ShaderError{
+    bool error_occured;
+    std::string message;
+};
+
 class Shader {
 public:
 
@@ -15,6 +20,7 @@ public:
     virtual ~Shader();
 
     std::string file_path() const {return file_path_;}
+    const std::string& shader_source() const {return shaderSource;}
 
     /*
      * compile function has to be called before using shader
@@ -26,7 +32,7 @@ public:
      */
     void deleteShader();
 
-    void Reload();
+    ShaderError Reload();
 
     GLuint getKey();
 
@@ -38,8 +44,14 @@ protected:
     virtual GLuint createShader() = 0;
 
 private:
+    ShaderError CompileAndCheckError();
+
+    void Compile(GLuint& id);
+    void Delete(GLuint& id);
+
     GLuint id;
     std::string shaderSource;
+    std::string last_compiled_shader_source_;
     std::string file_path_;
 };
 

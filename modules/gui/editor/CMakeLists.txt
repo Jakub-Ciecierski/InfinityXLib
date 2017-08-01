@@ -32,6 +32,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 # DEPENDENCIES
 #---------------------------------
 
+set(Boost_USE_STATIC_LIBS OFF)
+find_package(Boost COMPONENTS filesystem system REQUIRED)
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+endif()
+
 include_directories(${IFX_ROOT}/modules/common/math/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/graphics/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/object/object/${INC_DIR})

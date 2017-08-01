@@ -8,9 +8,11 @@ namespace ifx {
 
 RenderingEffect::RenderingEffect(
         std::shared_ptr<Program> program,
-        std::shared_ptr<RenderingState> rendering_state) :
+        const RenderingState& rendering_state,
+        std::string name) :
         program_(program),
-        rendering_state_(rendering_state){}
+        rendering_state_(rendering_state),
+        name_(name){}
 
 RenderingEffect::~RenderingEffect(){}
 

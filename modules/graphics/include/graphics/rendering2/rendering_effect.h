@@ -3,11 +3,11 @@
 
 #include <memory>
 #include <vector>
+#include "graphics/rendering2/rendering_state.h"
 
 namespace ifx {
 
 class Program;
-class RenderingState;
 class RenderObject;
 class Camera;
 class LightGroup;
@@ -16,9 +16,14 @@ class RenderingEffect {
 public:
 
     RenderingEffect(std::shared_ptr<Program> program,
-                    std::shared_ptr<RenderingState> rendering_state);
+                    const RenderingState &rendering_state,
+                    std::string name = "Rendering Effect");
 
     ~RenderingEffect();
+
+    std::shared_ptr<Program> program(){return program_;}
+    const RenderingState& rendering_state(){return rendering_state_;}
+    const std::string& name(){return name_;}
 
     void Render(Camera &camera,
                 LightGroup &light_source);
@@ -28,7 +33,8 @@ public:
 
 private:
     std::shared_ptr<Program> program_;
-    std::shared_ptr<RenderingState> rendering_state_;
+    RenderingState rendering_state_;
+    std::string name_;
 
     std::vector<std::shared_ptr<RenderObject>> render_objects_;
 };

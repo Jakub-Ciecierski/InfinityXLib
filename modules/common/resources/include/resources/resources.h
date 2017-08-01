@@ -16,9 +16,10 @@ enum class ResourceType{
 class Resources {
 public:
     Resources();
-    ~Resources();
+    ~Resources() = default;
 
     std::string GetResourcePath(std::string name, ResourceType type);
+    std::string GetResourceRoot(ResourceType type);
 
 private:
     void InitResourcePath();

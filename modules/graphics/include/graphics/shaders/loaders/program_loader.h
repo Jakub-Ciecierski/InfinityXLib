@@ -9,6 +9,13 @@
 namespace ifx {
 class ProgramCreator;
 
+struct ShaderPaths{
+    std::string vertex_path = "";
+    std::string fragment_path = "";
+    std::string geometry_path = "";
+    std::string tcs_path = "";
+    std::string tes_path = "";
+};
 
 /*
  * Loads specific shaders compiled into Programs from resources
@@ -18,6 +25,8 @@ public:
     ProgramLoader(std::shared_ptr<ProgramCreator> program_creator_);
 
     ~ProgramLoader();
+
+    std::shared_ptr<Program> CreateProgram(const ShaderPaths& shader_paths);
 
     std::shared_ptr<Program> CreateProgram(std::string vertex_path,
                                            std::string fragment_path);

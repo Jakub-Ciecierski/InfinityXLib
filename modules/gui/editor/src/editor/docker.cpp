@@ -60,7 +60,8 @@ void Docker::SetEnabledFlags(){
     SetFlags(ImGuiWindowFlags_NoResize
              | ImGuiWindowFlags_NoTitleBar
              | ImGuiWindowFlags_NoMove
-             | ImGuiWindowFlags_NoCollapse);
+             | ImGuiWindowFlags_NoCollapse
+    | ImGuiWindowFlags_AlwaysHorizontalScrollbar);
 }
 
 void Docker::SetFlags(ImGuiWindowFlags flags){

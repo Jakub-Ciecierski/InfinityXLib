@@ -22,6 +22,10 @@ struct Shaders {
     TessEvalShader *tessEvalShader = nullptr;
 };
 
+enum class ShaderType {
+    Vertex, Fragment, Geometry, TessControl, TessEvaluation
+};
+
 /*
  * This class encapsulates all shaders and is used to draw Meshes
  */
@@ -30,6 +34,12 @@ public:
     friend class ProgramCreator;
 
     ~Program();
+
+    VertexShader* vertex_shader(){return vertex_shader_.get();}
+    FragmentShader* fragment_shader(){return fragment_shader_.get();}
+    GeometryShader* geometry_shader(){return geometry_shader_.get();}
+    TessControlShader* tess_control_shader(){return tess_control_shader_.get();}
+    TessEvalShader* tess_eval_shader(){return tess_eval_shader_.get();}
 
     void use() const;
 
@@ -46,11 +56,11 @@ private:
 
     GLuint id;
 
-    std::unique_ptr<VertexShader> vertex_shader;
-    std::unique_ptr<FragmentShader> fragment_shader;
-    std::unique_ptr<GeometryShader> geometry_shader;
-    std::unique_ptr<TessControlShader> tess_control_shader;
-    std::unique_ptr<TessEvalShader> tess_eval_shader;
+    std::unique_ptr<VertexShader> vertex_shader_;
+    std::unique_ptr<FragmentShader> fragment_shader_;
+    std::unique_ptr<GeometryShader> geometry_shader_;
+    std::unique_ptr<TessControlShader> tess_control_shader_;
+    std::unique_ptr<TessEvalShader> tess_eval_shader_;
 
 };
 }

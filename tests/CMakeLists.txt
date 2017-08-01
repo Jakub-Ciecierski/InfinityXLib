@@ -8,6 +8,7 @@ set(SRC_DIR src)
 set(DEPS_DIR dependencies)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${IFX_UNITTESTS_BIN_BUILD_DIR})
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 
 add_definitions(-DGLEW_STATIC)
@@ -111,6 +112,13 @@ include_directories(${IFX_ROOT}/${DEPS_DIR}/glew-2.0.0/include)
 
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS})
+
+set(Boost_USE_STATIC_LIBS OFF)
+find_package(Boost COMPONENTS filesystem system REQUIRED)
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+    target_link_libraries(${APP_NAME} ${Boost_LIBRARIES})
+endif()
 
 #---------------------------------
 # IFX LIBS
