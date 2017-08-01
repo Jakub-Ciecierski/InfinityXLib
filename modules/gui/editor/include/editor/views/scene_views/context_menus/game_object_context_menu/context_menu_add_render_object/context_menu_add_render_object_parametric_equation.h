@@ -10,6 +10,7 @@ class GameObject;
 class ParametricEquationExpressions;
 class RenderComponent;
 class ParametricEquation;
+class SceneRenderer;
 
 class ContextMenuAddRenderObjectParametricEquation {
 public:
@@ -18,25 +19,32 @@ public:
 
     ~ContextMenuAddRenderObjectParametricEquation();
 
-    void Render(std::shared_ptr<ResourceContext> resource_creator,
-                std::shared_ptr<GameObject> game_object);
+    void Render(
+            std::shared_ptr<SceneRenderer> scene_renderer,
+            std::shared_ptr<ResourceContext> resource_creator,
+            std::shared_ptr<GameObject> game_object);
 private:
     std::unique_ptr<ParametricEquationExpressions>
     CreateDefaultParametricEquationExpression();
 
-    void RenderWindow(std::shared_ptr<ResourceContext> resource_creator,
+    void RenderWindow(std::shared_ptr <SceneRenderer> scene_renderer,
+                      std::shared_ptr<ResourceContext> resource_creator,
                       std::shared_ptr<GameObject> game_object);
     void RenderExpressions();
     void RenderConstants();
     void RenderVariables();
     void RenderPrecision();
-    void RenderFooter(std::shared_ptr<ResourceContext> resource_creator,
-                      std::shared_ptr<GameObject> game_object);
+    void RenderFooter(
+            std::shared_ptr<SceneRenderer> scene_renderer,
+            std::shared_ptr<ResourceContext> resource_creator,
+            std::shared_ptr<GameObject> game_object);
 
     bool TryCreateRenderComponent(
+            std::shared_ptr <SceneRenderer> scene_renderer,
             std::shared_ptr<ResourceContext> resource_creator,
             std::shared_ptr<GameObject> game_object);
     std::shared_ptr<RenderComponent> CreateRenderComponent(
+            std::shared_ptr <SceneRenderer> scene_renderer,
             std::unique_ptr<ParametricEquation> parametric_equation,
             std::shared_ptr<ResourceContext> resource_creator);
     void RenderErrorWindow();

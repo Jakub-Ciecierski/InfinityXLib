@@ -11,6 +11,8 @@
 #include <graphics/model_loader/parametric_loader/factory/parametric_equation_expressions_factory.h>
 #include <graphics/model_loader/parametric_loader/model_parametric_loader.h>
 #include <graphics/shaders/loaders/program_loader.h>
+#include <graphics/rendering/scene_renderer.h>
+#include <graphics/rendering/rendering_effect.h>
 #include "graphics/shaders/program_creator.h"
 
 #include "resources/resource_manager.h"
@@ -28,6 +30,7 @@ ContextMenuAddRenderObjectParametricEquation::
 ~ContextMenuAddRenderObjectParametricEquation(){}
 
 void ContextMenuAddRenderObjectParametricEquation::Render(
+        std::shared_ptr <SceneRenderer> scene_renderer,
         std::shared_ptr <ResourceContext> resource_creator,
         std::shared_ptr <GameObject> game_object) {
     if (ImGui::Button("Parametric Equation")) {
@@ -35,7 +38,8 @@ void ContextMenuAddRenderObjectParametricEquation::Render(
     }
     if (ImGui::BeginPopupModal("Parametric Equation", NULL,
                                ImGuiWindowFlags_AlwaysAutoResize)) {
-        RenderWindow(resource_creator, game_object);
+        RenderWindow(scene_renderer,
+                     resource_creator, game_object);
 
         ImGui::EndPopup();
     }
@@ -47,6 +51,7 @@ ContextMenuAddRenderObjectParametricEquation::CreateDefaultParametricEquationExp
 }
 
 void ContextMenuAddRenderObjectParametricEquation::RenderWindow(
+        std::shared_ptr <SceneRenderer> scene_renderer,
         std::shared_ptr<ResourceContext> resource_creator,
         std::shared_ptr<GameObject> game_object){
     RenderExampleEquations();
@@ -59,7 +64,7 @@ void ContextMenuAddRenderObjectParametricEquation::RenderWindow(
     ImGui::Separator();
     RenderPrecision();
     ImGui::Separator();
-    RenderFooter(resource_creator, game_object);
+    RenderFooter(scene_renderer, resource_creator, game_object);
 }
 
 void ContextMenuAddRenderObjectParametricEquation::RenderExpressions(){
@@ -140,13 +145,14 @@ void ContextMenuAddRenderObjectParametricEquation::RenderPrecision(){
 }
 
 void ContextMenuAddRenderObjectParametricEquation::RenderFooter(
+        std::shared_ptr <SceneRenderer> scene_renderer,
         std::shared_ptr<ResourceContext> resource_creator,
         std::shared_ptr<GameObject> game_object) {
     if(render_error_window_)
         RenderErrorWindow();
 
     if (ImGui::Button("OK", ImVec2(120, 0))) {
-        TryCreateRenderComponent(resource_creator, game_object);
+        TryCreateRenderComponent(scene_renderer, resource_creator, game_object);
         if(!render_error_window_)
             ImGui::CloseCurrentPopup();
     }
@@ -157,13 +163,14 @@ void ContextMenuAddRenderObjectParametricEquation::RenderFooter(
 }
 
 bool ContextMenuAddRenderObjectParametricEquation::TryCreateRenderComponent(
+        std::shared_ptr <SceneRenderer> scene_renderer,
         std::shared_ptr<ResourceContext> resource_creator,
         std::shared_ptr<GameObject> game_object){
     try {
         auto parametric_equation = ParametricInterpreter().Interpret(
                 *parametric_equation_expressions_.get());
 
-        game_object->Add(CreateRenderComponent(std::move(parametric_equation),
+        game_object->Add(CreateRenderComponent(scene_renderer, std::move(parametric_equation),
                                                resource_creator));
     }catch(const std::invalid_argument& e){
         render_error_window_ = true;
@@ -175,6 +182,7 @@ bool ContextMenuAddRenderObjectParametricEquation::TryCreateRenderComponent(
 
 std::shared_ptr<RenderComponent>
 ContextMenuAddRenderObjectParametricEquation::CreateRenderComponent(
+        std::shared_ptr <SceneRenderer> scene_renderer,
         std::unique_ptr<ParametricEquation> parametric_equation,
         std::shared_ptr<ResourceContext> resource_creator){
 
@@ -182,38 +190,12 @@ ContextMenuAddRenderObjectParametricEquation::CreateRenderComponent(
             *parametric_equation.get(),
             resource_creator->model_creator());
 
-    auto resource_path =
-            resource_creator->program_creator()->resource_manager()
-                    ->resource_path();
-    std::string vertex_path =
-            resource_path->GetResourcePath("main/main.vs",
-                                           ifx::ResourceType::SHADER);
-    std::string fragment_path =
-            resource_path->GetResourcePath("main/main.fs",
-                                           ifx::ResourceType::SHADER);
-    auto program
-            = ProgramLoader(resource_creator->program_creator()).CreateProgram(
-                    vertex_path, fragment_path);
-
     auto render_object = std::make_shared<RenderComponent>(model);
-    render_object->addProgram(program);
-/*
-    //
-    std::string vertex_path1 =
-            resource_path->GetResourcePath("geo_normal/norm.vs",
-                                           ifx::ResourceType::SHADER);
-    std::string fragment_path1 =
-            resource_path->GetResourcePath("geo_normal/norm.fs",
-                                           ifx::ResourceType::SHADER);
-    std::string geo_path2 =
-            resource_path->GetResourcePath("geo_normal/norm.gs",
-                                           ifx::ResourceType::SHADER);
-    auto program2
-            = ProgramLoader(resource_creator->program_creator()).CreateProgram(
-                    vertex_path1, fragment_path1, geo_path2);
-    render_object->addProgram(program2);
-    //
-*/
+    auto rendering_effects = scene_renderer->rendering_effects();
+    for(auto& rendering_effect : rendering_effects){
+        if(rendering_effect->name() == "main.prog")
+            rendering_effect->RegisterRenderObject(render_object);
+    }
     return render_object;
 }
 

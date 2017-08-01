@@ -15,11 +15,12 @@ ContextMenuAddRenderObject::ContextMenuAddRenderObject(){
 ContextMenuAddRenderObject::~ContextMenuAddRenderObject(){}
 
 void ContextMenuAddRenderObject::Render(
+        std::shared_ptr<SceneRenderer> scene_renderer,
         std::shared_ptr<ResourceContext> resource_creator,
         std::shared_ptr<GameObject> game_object){
     if (ImGui::BeginMenu("Render Object")) {
         context_menu_add_render_object_parametric_equation_->
-                Render(resource_creator,game_object);
+                Render(scene_renderer, resource_creator,game_object);
 
         ImGui::EndMenu();
     }

@@ -1,8 +1,8 @@
 #ifndef PROJECT_RENDERING_STATE_H
 #define PROJECT_RENDERING_STATE_H
 
-#include <graphics/rendering2/states/blend_state.h>
-#include <graphics/rendering2/states/depth_state.h>
+#include <graphics/rendering/states/blend_state.h>
+#include <graphics/rendering/states/depth_state.h>
 
 namespace ifx {
 

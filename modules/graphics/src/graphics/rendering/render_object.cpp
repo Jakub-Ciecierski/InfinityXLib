@@ -53,4 +53,17 @@ void RenderObject::Render(const Program &program) {
     if (after_render_)
         after_render_(&program);
 }
+
+void RenderObject::RegisterRenderingEffect(RenderingEffect* rendering_effect){
+    rendering_effects_.push_back(rendering_effect);
+}
+
+void RenderObject::DeregisterRenderingEffect(RenderingEffect* rendering_effect){
+    for(unsigned int i = 0; i < rendering_effects_.size(); i++){
+        if(rendering_effects_[i] == rendering_effect){
+            rendering_effects_.erase(rendering_effects_.begin() + i);
+        }
+    }
+}
+
 }

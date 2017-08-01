@@ -10,11 +10,12 @@ class MovableObjectView;
 class CameraView;
 class LightView;
 class RenderObjectView;
+class SceneRenderer;
 
 class GameComponentView {
 public:
 
-    GameComponentView();
+    GameComponentView(std::shared_ptr<SceneRenderer> scene_renderer);
     ~GameComponentView();
 
     void Render(std::shared_ptr<GameComponent> game_component);

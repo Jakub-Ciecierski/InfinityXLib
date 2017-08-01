@@ -1,7 +1,7 @@
 #ifndef PROJECT_BLEND_STATE_H
 #define PROJECT_BLEND_STATE_H
 
-#include <graphics/rendering2/states/state.h>
+#include <graphics/rendering/states/state.h>
 
 namespace ifx {
 

@@ -35,7 +35,8 @@ public:
 private:
     std::shared_ptr<WindowView> CreateLeftWindowView(
             std::shared_ptr<SceneContainer> scene,
-            std::shared_ptr<ResourceContext> resource_creator);
+            std::shared_ptr<ResourceContext> resource_creator,
+            std::shared_ptr<SceneRenderer> scene_renderer);
     std::shared_ptr<WindowView> CreateRightWindowView(
             std::shared_ptr<SceneRenderer> scene_renderer,
             std::shared_ptr<ResourceContext> resource_creator,
@@ -44,7 +45,8 @@ private:
 
     std::shared_ptr<SceneView> CreateSceneView(
             std::shared_ptr<SceneContainer> scene,
-            std::shared_ptr<ResourceContext> resource_creator);
+            std::shared_ptr<ResourceContext> resource_creator,
+            std::shared_ptr<SceneRenderer> scene_renderer);
     std::shared_ptr<PhysicsSimulationView> CreatePhysicsSimulationView(
             std::shared_ptr<PhysicsSimulation> physics_simulation);
 

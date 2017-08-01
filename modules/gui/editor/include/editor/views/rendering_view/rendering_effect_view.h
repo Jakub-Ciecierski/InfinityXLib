@@ -11,6 +11,7 @@ namespace ifx {
 
 class RenderingEffect;
 class RenderingEffectProcessor;
+class Program;
 
 class RenderingEffectView {
 public:
@@ -25,8 +26,12 @@ private:
 
     void RenderShaders(std::shared_ptr<RenderingEffect> rendering_effect);
     void RenderShaderReload(std::shared_ptr<RenderingEffect> rendering_effect);
-    void RenderShader(Shader* shader, std::string shader_type_name);
-    void RenderShaderWindow(Shader* shader, bool open);
+    void RenderShader(Shader* shader,
+                      std::shared_ptr<Program> program,
+                      std::string shader_type_name);
+    void RenderShaderWindow(Shader* shader,
+                            std::shared_ptr<Program> program,
+                            bool open);
     void RenderErrorWindow(const ShaderError& shader_error);
 
     void RenderState(std::shared_ptr<RenderingEffect> rendering_effect);

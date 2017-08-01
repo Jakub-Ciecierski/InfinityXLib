@@ -13,12 +13,12 @@
 
 namespace ifx{
 
-GameComponentView::GameComponentView(){
+GameComponentView::GameComponentView(std::shared_ptr<SceneRenderer> scene_renderer){
     movable_object_view_.reset(new MovableObjectView());
 
     camera_view_.reset(new CameraView());
     light_view_.reset(new LightView());
-    render_object_view_.reset(new RenderObjectView());
+    render_object_view_.reset(new RenderObjectView(scene_renderer));
 }
 GameComponentView::~GameComponentView(){}
 

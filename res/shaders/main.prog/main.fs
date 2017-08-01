@@ -1,7 +1,5 @@
 #version 330 core
 
-/* Yolo  */
-
 /**
  * Contains:
  *
@@ -266,5 +264,5 @@ void main() {
         result += computeSpotLight(spotLights[i], norm, FragPos, viewDir);
     }
 
-    color = vec4(result, material.alpha);
+	color = vec4(result, material.alpha);
 }

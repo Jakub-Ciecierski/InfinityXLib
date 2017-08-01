@@ -1,7 +1,7 @@
 #ifndef PROJECT_DEPTH_STATE_H
 #define PROJECT_DEPTH_STATE_H
 
-#include <graphics/rendering2/states/state.h>
+#include <graphics/rendering/states/state.h>
 
 namespace ifx {
 

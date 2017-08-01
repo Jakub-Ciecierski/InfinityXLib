@@ -1,4 +1,4 @@
-#include "graphics/rendering2/rendering_state.h"
+#include "graphics/rendering/rendering_state.h"
 
 namespace ifx {
 

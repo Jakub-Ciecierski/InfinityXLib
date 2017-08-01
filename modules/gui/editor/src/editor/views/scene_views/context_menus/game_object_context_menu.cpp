@@ -12,8 +12,10 @@
 namespace ifx {
 
 GameObjectContextMenu::GameObjectContextMenu(
+        std::shared_ptr<SceneRenderer> scene_renderer,
         std::shared_ptr<ResourceContext> resource_creator,
         std::shared_ptr<SceneContainer> scene) :
+        scene_renderer_(scene_renderer),
         resource_creator_(resource_creator),
         scene_(scene) {
     context_menu_add_light_.reset(new ContextMenuAddLight());
@@ -27,7 +29,7 @@ void GameObjectContextMenu::Render(std::shared_ptr<GameObject> game_object,
     ImGui::PushID(std::to_string(game_object_id).c_str());
     if (ImGui::BeginPopupContextItem("GameObject context menu")) {
 
-        Add(resource_creator_, game_object);
+        Add(scene_renderer_, resource_creator_, game_object);
         ImGui::Separator();
         Remove(scene_, game_object);
 
@@ -43,11 +45,12 @@ void GameObjectContextMenu::Remove(std::shared_ptr<SceneContainer> scene,
     }
 }
 
-void GameObjectContextMenu::Add(std::shared_ptr<ResourceContext> resource_creator,
+void GameObjectContextMenu::Add(std::shared_ptr<SceneRenderer> scene_renderer,
+                                std::shared_ptr<ResourceContext> resource_creator,
                                 std::shared_ptr<GameObject> game_object) {
     if (ImGui::BeginMenu("Add")) {
         AddLight(resource_creator, game_object);
-        AddRenderObject(resource_creator, game_object);
+        AddRenderObject(scene_renderer, resource_creator, game_object);
         ImGui::EndMenu();
     }
 }
@@ -55,13 +58,14 @@ void GameObjectContextMenu::Add(std::shared_ptr<ResourceContext> resource_creato
 void GameObjectContextMenu::AddLight(std::shared_ptr<ResourceContext> resource_creator,
                                      std::shared_ptr<GameObject> game_object) {
     context_menu_add_light_->Render(resource_creator, game_object);
-
 }
 
 void GameObjectContextMenu::AddRenderObject(
+        std::shared_ptr<SceneRenderer> scene_renderer,
         std::shared_ptr<ResourceContext> resource_creator,
         std::shared_ptr<GameObject> game_object) {
-    context_menu_add_render_object_->Render(resource_creator, game_object);
+    context_menu_add_render_object_->Render(
+            scene_renderer,resource_creator, game_object);
 }
 
 }

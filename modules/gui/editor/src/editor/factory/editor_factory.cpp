@@ -25,7 +25,8 @@ std::shared_ptr<Editor> EditorFactory::CreateEngineGUI(
         std::shared_ptr<PhysicsSimulation> physics_simulation,
         std::shared_ptr<SceneRenderer> scene_renderer,
         std::shared_ptr<ResourceContext> resource_creator){
-    auto left_window_view = CreateLeftWindowView(scene, resource_creator);
+    auto left_window_view = CreateLeftWindowView(scene, resource_creator,
+                                                 scene_renderer);
     auto right_window_view = CreateRightWindowView(scene_renderer,
                                                    resource_creator,
                                                    physics_simulation);
@@ -51,8 +52,10 @@ std::shared_ptr<Editor> EditorFactory::CreateEngineGUI(
 
 std::shared_ptr<WindowView> EditorFactory::CreateLeftWindowView(
         std::shared_ptr<SceneContainer> scene,
-        std::shared_ptr<ResourceContext> resource_creator){
-    auto scene_view = CreateSceneView(scene, resource_creator);
+        std::shared_ptr<ResourceContext> resource_creator,
+        std::shared_ptr<SceneRenderer> scene_renderer){
+    auto scene_view = CreateSceneView(scene, resource_creator,
+                                      scene_renderer);
 
     return std::make_shared<WindowView>(scene_view, "Left");
 }
@@ -76,8 +79,10 @@ std::shared_ptr<WindowView> EditorFactory::CreateBottomWindowView(){
 
 std::shared_ptr<SceneView> EditorFactory::CreateSceneView(
         std::shared_ptr<SceneContainer> scene,
-        std::shared_ptr<ResourceContext> resource_creator){
-    return std::shared_ptr<SceneView>(new SceneView(scene, resource_creator));
+        std::shared_ptr<ResourceContext> resource_creator,
+        std::shared_ptr<SceneRenderer> scene_renderer){
+    return std::shared_ptr<SceneView>(new SceneView(scene, resource_creator,
+                                                    scene_renderer));
 }
 
 std::shared_ptr<PhysicsSimulationView>

@@ -24,8 +24,6 @@
 #include <gui/factory/gui_factory.h>
 #include <gui/gui.h>
 
-//#include <engine_gui/
-
 namespace ifx {
 
 GameFactory::GameFactory(){

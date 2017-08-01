@@ -3,7 +3,7 @@
 #include <editor/processes/rendering_effect_processor.h>
 
 #include "graphics/shaders/program.h"
-#include <graphics/rendering2/rendering_effect.h>
+#include <graphics/rendering/rendering_effect.h>
 
 #include <gui/imgui/imgui.h>
 #include <gui/imgui/imgui_internal.h>
@@ -64,6 +64,7 @@ void RenderingEffectView::RenderList(const std::vector<std::shared_ptr<Rendering
             selection_mask = (1 << node_clicked);
             selected_rendering_effect_ = rendering_effects[i];
         }
+
         if (node_open){
             ImGui::TreePop();
         }
@@ -73,33 +74,29 @@ void RenderingEffectView::RenderList(const std::vector<std::shared_ptr<Rendering
 void RenderingEffectView::RenderShaders(std::shared_ptr<RenderingEffect> rendering_effect){
     RenderShaderReload(rendering_effect);
 
-    RenderShader(rendering_effect->program()->vertex_shader(), "Vertex Shader");
-    RenderShader(rendering_effect->program()->fragment_shader(), "Fragment Shader");
-    RenderShader(rendering_effect->program()->geometry_shader(), "Geometry Shader");
-    RenderShader(rendering_effect->program()->tess_control_shader(), "Tessellation Control Shader");
-    RenderShader(rendering_effect->program()->tess_eval_shader(), "Tessellation Evaluation Shader");
+    auto program = rendering_effect->program();
+    RenderShader(program->vertex_shader(), program, "Vertex Shader");
+    RenderShader(program->fragment_shader(), program, "Fragment Shader");
+    RenderShader(program->geometry_shader(), program,"Geometry Shader");
+    RenderShader(program->tess_control_shader(), program,"Tessellation Control Shader");
+    RenderShader(program->tess_eval_shader(), program,"Tessellation Evaluation Shader");
 }
 
 void RenderingEffectView::RenderShaderReload(
         std::shared_ptr<RenderingEffect> rendering_effect){
     if (ImGui::BeginPopupContextItem("Recompile Shaders Context Menu")) {
         if(ImGui::Selectable("Recompile Shaders")){
-            if(rendering_effect->program()->vertex_shader())
-                rendering_effect->program()->vertex_shader()->Reload();
-            if(rendering_effect->program()->fragment_shader())
-                rendering_effect->program()->fragment_shader()->Reload();
-            if(rendering_effect->program()->geometry_shader())
-                rendering_effect->program()->geometry_shader()->Reload();
-            if(rendering_effect->program()->tess_control_shader())
-                rendering_effect->program()->tess_control_shader()->Reload();
-            if(rendering_effect->program()->tess_eval_shader())
-                rendering_effect->program()->tess_eval_shader()->Reload();
+            rendering_effect->program()->Reload();
         }
         ImGui::EndPopup();
     }
 }
 
-void RenderingEffectView::RenderShader(Shader* shader, std::string shader_type_name){
+void RenderingEffectView::RenderShader(Shader* shader,
+                                       std::shared_ptr<Program> program,
+                                       std::string shader_type_name){
+    if(!shader)
+        return;
     ImGui::PushID(shader_type_name.c_str());
 
     ImGui::Selectable(shader_type_name.c_str());
@@ -108,7 +105,7 @@ void RenderingEffectView::RenderShader(Shader* shader, std::string shader_type_n
         shader_opened = ImGui::Selectable("Open");
         ImGui::EndPopup();
     }
-    RenderShaderWindow(shader, shader_opened);
+    RenderShaderWindow(shader, program, shader_opened);
     ImGui::Bullet();
     ImGui::SameLine();
     if(shader){
@@ -121,7 +118,9 @@ void RenderingEffectView::RenderShader(Shader* shader, std::string shader_type_n
     ImGui::PopID();
 }
 
-void RenderingEffectView::RenderShaderWindow(Shader* shader, bool open) {
+void RenderingEffectView::RenderShaderWindow(Shader* shader,
+                                             std::shared_ptr<Program> program,
+                                             bool open) {
     if (!shader)
         return;
     constexpr int raw_size = 10240 * 16;
@@ -149,6 +148,7 @@ void RenderingEffectView::RenderShaderWindow(Shader* shader, bool open) {
                 render_error_window_ = true;
                 shader_error_message_ = shader_error.message;
             } else{
+                program->Reload();
                 ImGui::CloseCurrentPopup();
             }
         }

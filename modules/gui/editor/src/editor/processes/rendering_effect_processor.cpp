@@ -3,7 +3,7 @@
 #include <game/resources/resource_context.h>
 
 #include <graphics/rendering/scene_renderer.h>
-#include <graphics/rendering2/rendering_effect.h>
+#include <graphics/rendering/rendering_effect.h>
 #include <graphics/shaders/program_creator.h>
 
 #include <resources/resource_manager.h>
@@ -131,10 +131,12 @@ std::string RenderingEffectProcessor::GetDifference(const std::string& str1,
         return difference;
 
     for(unsigned int i = 0; i < str1.length(); i++){
-        if(i >= str2.length())
-            difference += str1[i];
-    }
+        if(i >= str2.length()){
+            if(str1[i] != '/')
+                difference += str1[i];
+        }
 
+    }
     return difference;
 }
 

@@ -11,6 +11,7 @@ class ResourceContext;
 class GameObject;
 class ParametricEquationExpressions;
 class ContextMenuAddRenderObjectParametricEquation;
+class SceneRenderer;
 
 class ContextMenuAddRenderObject {
 public:
@@ -20,6 +21,7 @@ public:
     ~ContextMenuAddRenderObject();
 
     void Render(
+            std::shared_ptr<SceneRenderer> scene_renderer,
             std::shared_ptr<ResourceContext> resource_creator,
             std::shared_ptr<GameObject> game_object);
 private:

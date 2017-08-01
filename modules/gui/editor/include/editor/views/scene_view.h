@@ -18,7 +18,7 @@ class GameComponentView;
 class SceneManipulatorView;
 class SceneManipulator;
 class ResourceContext;
-
+class SceneRenderer;
 class GameObjectContextMenu;
 class GameComponentContextMenu;
 class SceneListContextMenu;
@@ -27,7 +27,8 @@ class SceneView : public View {
 public:
 
     SceneView(std::shared_ptr<SceneContainer> scene,
-              std::shared_ptr<ResourceContext> resource_creator);
+              std::shared_ptr<ResourceContext> resource_creator,
+              std::shared_ptr<SceneRenderer> scene_renderer);
     ~SceneView();
 
     std::shared_ptr<SceneManipulator> scene_manipulator(){

@@ -23,19 +23,21 @@
 namespace ifx {
 
 SceneView::SceneView(std::shared_ptr<SceneContainer> scene,
-                     std::shared_ptr<ResourceContext> resource_creator) :
+                     std::shared_ptr<ResourceContext> resource_creator,
+                     std::shared_ptr<SceneRenderer> scene_renderer) :
         View("Scene"),
         scene_(scene),
         resource_creator_(resource_creator),
         selected_game_object_(nullptr),
-        selected_game_component_(nullptr){
+        selected_game_component_(nullptr) {
     scene_manipulator_
             = std::shared_ptr<SceneManipulator>(new SceneManipulator());
     game_object_view_.reset(new GameObjectView());
-    game_component_view_.reset(new GameComponentView());
+    game_component_view_.reset(new GameComponentView(scene_renderer));
     scene_manipulator_view_.reset(new SceneManipulatorView(scene_manipulator_));
 
-    game_object_context_menu_.reset(new GameObjectContextMenu(resource_creator_, scene_));
+    game_object_context_menu_.reset(new GameObjectContextMenu(scene_renderer,
+                                                              resource_creator_, scene_));
     game_component_context_menu_.reset(new GameComponentContextMenu());
     scene_list_context_menu_.reset(new SceneListContextMenu(scene_));
 }

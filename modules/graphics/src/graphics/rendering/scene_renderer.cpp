@@ -3,6 +3,7 @@
 #include <graphics/lighting/light_group.h>
 #include <graphics/rendering/camera/camera.h>
 #include <graphics/rendering/render_object.h>
+#include <graphics/rendering/rendering_effect.h>
 
 namespace ifx {
 
@@ -12,8 +13,8 @@ SceneRenderer::SceneRenderer(){
 SceneRenderer::~SceneRenderer(){}
 
 void SceneRenderer::Render() const{
-    for(auto& render_object : render_objects_)
-        Render(render_object);
+    for(auto& rendering_effect : rendering_effects_)
+        rendering_effect->Render(*camera_, *light_group_);
 }
 
 void SceneRenderer::Render(const std::shared_ptr<Program> program) const{
@@ -60,6 +61,8 @@ bool SceneRenderer::Remove(std::shared_ptr<RenderingEffect> rendering_effect){
 }
 
 bool SceneRenderer::Remove(std::shared_ptr<RenderObject> render_object){
+    for(auto& rendering_effect : rendering_effects_)
+        rendering_effect->DeregisterRenderObject(render_object);
     for(unsigned int i = 0; i < render_objects_.size(); i++){
         if(render_objects_[i] == render_object){
             render_objects_.erase(render_objects_.begin() + i);

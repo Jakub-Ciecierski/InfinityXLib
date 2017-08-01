@@ -33,6 +33,8 @@
 #include <graphics/model/model.h>
 #include <graphics/shaders/textures/texture_creator.h>
 #include <graphics/rendering/renderer.h>
+#include <graphics/rendering/scene_renderer.h>
+#include <graphics/rendering/rendering_effect.h>
 #include <graphics/factory/scene_factory.h>
 
 #include <resources/resource_manager.h>
@@ -483,6 +485,14 @@ int main() {
             game->resource_creator());
     game->game_loop()->gui()->AddGUIPart(editor);
 
+    auto scene_renderer = game->game_loop()->renderer()->scene_renderer();
+    for(auto& rendering_effect : scene_renderer->rendering_effects()){
+        if(rendering_effect->name() == "main.prog"){
+            for(auto& render_object : scene_renderer->render_objects()){
+                rendering_effect->RegisterRenderObject(render_object);
+            }
+        }
+    }
 
     game->Start();
 }

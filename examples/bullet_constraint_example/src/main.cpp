@@ -52,6 +52,8 @@
 #include <graphics/lighting/types/light_spotlight.h>
 #include <graphics/rendering/camera/camera.h>
 #include <graphics/rendering/renderer.h>
+#include <graphics/rendering/scene_renderer.h>
+#include <graphics/rendering/rendering_effect.h>
 
 #include <resources/resource_manager.h>
 #include <resources/resources.h>
@@ -838,6 +840,14 @@ int main() {
 
     game->game_loop()->gui()->AddGUIPart(editor);
 
+    auto scene_renderer = game->game_loop()->renderer()->scene_renderer();
+    for(auto& rendering_effect : scene_renderer->rendering_effects()){
+        if(rendering_effect->name() == "main.prog"){
+            for(auto& render_object : scene_renderer->render_objects()){
+                rendering_effect->RegisterRenderObject(render_object);
+            }
+        }
+    }
 
     game->Start();
 }

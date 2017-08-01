@@ -1,4 +1,4 @@
-#include "graphics/rendering2/rendering_effect.h"
+#include "graphics/rendering/rendering_effect.h"
 
 #include "graphics/rendering/camera/camera.h"
 #include "graphics/lighting/light_group.h"
@@ -28,6 +28,7 @@ void RenderingEffect::Render(Camera &camera,
 void RenderingEffect::RegisterRenderObject(
         std::shared_ptr<RenderObject> render_object){
     render_objects_.push_back(render_object);
+    render_object->RegisterRenderingEffect(this);
 }
 
 bool RenderingEffect::DeregisterRenderObject(
@@ -35,6 +36,7 @@ bool RenderingEffect::DeregisterRenderObject(
     for(unsigned int i = 0; i < render_objects_.size(); i++){
         if(render_objects_[i] == render_object){
             render_objects_.erase(render_objects_.begin() + i);
+            render_object->DeregisterRenderingEffect(this);
             return true;
         }
     }

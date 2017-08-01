@@ -11,6 +11,7 @@ namespace ifx {
 
 class Model;
 class Program;
+class RenderingEffect;
 
 /*
  * RenderObject is used to render Meshes.
@@ -21,6 +22,8 @@ public:
     RenderObject(std::vector<std::shared_ptr<Model>>);
 
     virtual ~RenderObject();
+
+    const std::vector<RenderingEffect*>& rendering_effects(){return rendering_effects_;}
 
     const std::vector<std::shared_ptr<Program>> &programs() { return programs_; }
 
@@ -44,6 +47,9 @@ public:
      */
     virtual void Render(const Program &program);
 
+    void RegisterRenderingEffect(RenderingEffect* rendering_effect);
+    void DeregisterRenderingEffect(RenderingEffect* rendering_effect);
+
 protected:
     std::vector<std::shared_ptr<Model>> models_;
 
@@ -54,6 +60,8 @@ private:
     std::vector<std::shared_ptr<Program>> programs_;
 
     bool do_render_;
+
+    std::vector<RenderingEffect*> rendering_effects_;
 };
 }
 
