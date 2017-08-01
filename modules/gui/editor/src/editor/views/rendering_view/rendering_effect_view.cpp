@@ -1,5 +1,7 @@
 #include "editor/views/rendering_view/rendering_effect_view.h"
 
+#include <editor/processes/rendering_effect_processor.h>
+
 #include "graphics/shaders/program.h"
 #include <graphics/rendering2/rendering_effect.h>
 
@@ -10,10 +12,15 @@
 
 namespace ifx{
 
-RenderingEffectView::RenderingEffectView() : selected_rendering_effect_(nullptr),
-                                             render_error_window_(false){}
+RenderingEffectView::RenderingEffectView(
+        std::shared_ptr<RenderingEffectProcessor> rendering_effect_processor) :
+        rendering_effect_processor_(rendering_effect_processor),
+        selected_rendering_effect_(nullptr),
+        render_error_window_(false) {}
 
 void RenderingEffectView::Render(const std::vector<std::shared_ptr<RenderingEffect>>& rendering_effects ){
+    RenderReloadProject();
+
     RenderList(rendering_effects);
     ImGui::Separator();
 
@@ -27,6 +34,15 @@ void RenderingEffectView::Render(const std::vector<std::shared_ptr<RenderingEffe
             ImGui::TreePop();
         }
 
+    }
+}
+
+void RenderingEffectView::RenderReloadProject(){
+    if (ImGui::BeginPopupContextItem("Reload Project Context Menu")) {
+        if(ImGui::Selectable("Reload Project")){
+            rendering_effect_processor_->CompileAllPrograms();
+        }
+        ImGui::EndPopup();
     }
 }
 
@@ -66,17 +82,20 @@ void RenderingEffectView::RenderShaders(std::shared_ptr<RenderingEffect> renderi
 
 void RenderingEffectView::RenderShaderReload(
         std::shared_ptr<RenderingEffect> rendering_effect){
-    if(ImGui::Button("Recompile Shaders")){
-        if(rendering_effect->program()->vertex_shader())
-            rendering_effect->program()->vertex_shader()->Reload();
-        if(rendering_effect->program()->fragment_shader())
-            rendering_effect->program()->fragment_shader()->Reload();
-        if(rendering_effect->program()->geometry_shader())
-            rendering_effect->program()->geometry_shader()->Reload();
-        if(rendering_effect->program()->tess_control_shader())
-            rendering_effect->program()->tess_control_shader()->Reload();
-        if(rendering_effect->program()->tess_eval_shader())
-            rendering_effect->program()->tess_eval_shader()->Reload();
+    if (ImGui::BeginPopupContextItem("Recompile Shaders Context Menu")) {
+        if(ImGui::Selectable("Recompile Shaders")){
+            if(rendering_effect->program()->vertex_shader())
+                rendering_effect->program()->vertex_shader()->Reload();
+            if(rendering_effect->program()->fragment_shader())
+                rendering_effect->program()->fragment_shader()->Reload();
+            if(rendering_effect->program()->geometry_shader())
+                rendering_effect->program()->geometry_shader()->Reload();
+            if(rendering_effect->program()->tess_control_shader())
+                rendering_effect->program()->tess_control_shader()->Reload();
+            if(rendering_effect->program()->tess_eval_shader())
+                rendering_effect->program()->tess_eval_shader()->Reload();
+        }
+        ImGui::EndPopup();
     }
 }
 

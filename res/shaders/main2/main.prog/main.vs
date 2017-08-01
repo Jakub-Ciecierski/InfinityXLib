@@ -34,3 +34,4 @@ void main()
     Binormal = normalize(NormalMatrix * binormal);
 
     TexCoords = texCoords;
+}

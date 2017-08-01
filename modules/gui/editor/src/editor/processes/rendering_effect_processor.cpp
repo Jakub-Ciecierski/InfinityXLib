@@ -53,9 +53,19 @@ RenderingEffectProcessor::CompileAllRenderingEffects(){
 
 void RenderingEffectProcessor::CompileAllPrograms(){
     auto rendering_effects = CompileAllRenderingEffects();
+    auto current_rendering_effects = scene_renderer_ ->rendering_effects();
+    for(auto& rendering_effect : rendering_effects) {
+        bool exists = false;
+        for (auto &current_rendering_effect: current_rendering_effects) {
+            if (current_rendering_effect== rendering_effect)
+                continue;
+            if (current_rendering_effect->name() == rendering_effect->name())
+                exists = true;
+        }
+        if(!exists)
+            scene_renderer_->Add(rendering_effect);
+    }
 
-    for(auto& rendering_effect : rendering_effects)
-        scene_renderer_->Add(rendering_effect);
 }
 
 bool RenderingEffectProcessor::IsValidProgramDirectory(const std::string dir_name){
