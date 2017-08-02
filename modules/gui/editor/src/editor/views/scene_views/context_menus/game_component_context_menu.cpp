@@ -10,17 +10,22 @@ GameComponentContextMenu::GameComponentContextMenu(){}
 
 GameComponentContextMenu::~GameComponentContextMenu(){}
 
-void GameComponentContextMenu::Render(std::shared_ptr<GameObject> game_object,
-                                      std::shared_ptr<GameComponent> component,
-                                      int component_id) {
+GameComponentContextMenuEvent
+GameComponentContextMenu::Render(std::shared_ptr<GameObject> game_object,
+                                 std::shared_ptr<GameComponent> component,
+                                 int component_id) {
+    GameComponentContextMenuEvent event = GameComponentContextMenuEvent::None;
     ImGui::PushID(std::to_string(component_id).c_str());
     if (ImGui::BeginPopupContextItem("GameComponent context menu")) {
         if (ImGui::Selectable("Remove")) {
             Remove(game_object, component);
+            event = GameComponentContextMenuEvent::Remove;
         }
         ImGui::EndPopup();
     }
     ImGui::PopID();
+
+    return event;
 }
 
 void GameComponentContextMenu::Remove(std::shared_ptr<GameObject> game_object,

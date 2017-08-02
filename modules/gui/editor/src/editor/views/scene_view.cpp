@@ -109,7 +109,9 @@ void SceneView::RenderGameObjectsList(
             selected_game_object_ = game_objects[i];
         }
 
-        game_object_context_menu_->Render(game_objects[i], i);
+        auto event = game_object_context_menu_->Render(game_objects[i], i);
+        if(event == GameObjectContextMenuEvent::Remove)
+            selected_game_object_ = nullptr;
 
         if (node_open){
             RenderGameComponentsList(game_objects[i], i);
@@ -151,7 +153,10 @@ void SceneView::RenderGameComponentsList(
             selection_mask = (1 << node_clicked + id_start);
             selected_game_component_ = game_components[i];
         }
-        game_component_context_menu_->Render(game_object, game_components[i], i);
+        auto event = game_component_context_menu_->Render(game_object,
+                                                          game_components[i], i);
+        if(event == GameComponentContextMenuEvent::Remove)
+            selected_game_component_ = nullptr;
     }
 }
 

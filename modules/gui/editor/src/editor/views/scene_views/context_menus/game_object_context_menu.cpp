@@ -24,25 +24,32 @@ GameObjectContextMenu::GameObjectContextMenu(
 
 GameObjectContextMenu::~GameObjectContextMenu(){}
 
-void GameObjectContextMenu::Render(std::shared_ptr<GameObject> game_object,
-                                   int game_object_id) {
+GameObjectContextMenuEvent GameObjectContextMenu::Render(std::shared_ptr<GameObject> game_object,
+                                                         int game_object_id) {
+    GameObjectContextMenuEvent event = GameObjectContextMenuEvent::None;
     ImGui::PushID(std::to_string(game_object_id).c_str());
     if (ImGui::BeginPopupContextItem("GameObject context menu")) {
 
         Add(scene_renderer_, resource_creator_, game_object);
         ImGui::Separator();
-        Remove(scene_, game_object);
+        if(Remove(scene_, game_object))
+            event = GameObjectContextMenuEvent::Remove;
 
         ImGui::EndPopup();
     }
     ImGui::PopID();
+
+    return event;
 }
 
-void GameObjectContextMenu::Remove(std::shared_ptr<SceneContainer> scene,
+bool GameObjectContextMenu::Remove(std::shared_ptr<SceneContainer> scene,
                                    std::shared_ptr<GameObject> game_object) {
+    bool removed = false;
     if (ImGui::Selectable("Remove")) {
         scene->Remove(game_object);
+        removed = true;
     }
+    return removed;
 }
 
 void GameObjectContextMenu::Add(std::shared_ptr<SceneRenderer> scene_renderer,

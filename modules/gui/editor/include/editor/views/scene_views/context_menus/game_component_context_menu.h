@@ -8,14 +8,18 @@ namespace ifx {
 class GameObject;
 class GameComponent;
 
+enum class GameComponentContextMenuEvent{
+    Remove, None
+};
+
 class GameComponentContextMenu {
 public:
     GameComponentContextMenu();
     ~GameComponentContextMenu();
 
-    void Render(std::shared_ptr <GameObject> game_object,
-                std::shared_ptr <GameComponent> component,
-                int component_id);
+    GameComponentContextMenuEvent Render(std::shared_ptr<GameObject> game_object,
+                                         std::shared_ptr<GameComponent> component,
+                                         int component_id);
 private:
     void Remove(std::shared_ptr<GameObject> game_object,
                 std::shared_ptr<GameComponent> component);

@@ -12,6 +12,10 @@ class ContextMenuAddRenderObject;
 class ContextMenuAddLight;
 class SceneRenderer;
 
+enum class GameObjectContextMenuEvent{
+    Remove, Add, None
+};
+
 class GameObjectContextMenu {
 public:
     GameObjectContextMenu(std::shared_ptr<SceneRenderer> scene_renderer,
@@ -19,12 +23,12 @@ public:
                           std::shared_ptr<SceneContainer> scene);
     ~GameObjectContextMenu();
 
-    void Render(std::shared_ptr<GameObject> game_object,
-                int game_object_id);
+    GameObjectContextMenuEvent Render(std::shared_ptr<GameObject> game_object,
+                                      int game_object_id);
 
 private:
 
-    void Remove(std::shared_ptr<SceneContainer> scene,
+    bool Remove(std::shared_ptr<SceneContainer> scene,
                 std::shared_ptr<GameObject> game_object);
 
     void Add(std::shared_ptr<SceneRenderer> scene_renderer,
