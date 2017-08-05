@@ -15,6 +15,61 @@ add_definitions(
 )
 
 #---------------------------------
+# PHYSX
+#---------------------------------
+
+# Set your platform version here (32/64). TODO AUTOMATIC
+set(PLATFORM_VERSION 64)
+
+# DEBUG/CHECKED/PROFILE/RELEASE
+set(PHYSX_COMPILER_TYPE CHECKED)
+
+# OS
+if (MSVC11)
+    set(PHYSX_LOCAL_LINK_DIR "vc11win")
+endif (MSVC11)
+if (MSVC12)
+    set(PHYSX_LOCAL_LINK_DIR "vc12win")
+endif (MSVC12)
+if (MSVC14)
+    set(PHYSX_LOCAL_LINK_DIR "vc14win")
+endif (MSVC14)
+if (UNIX)
+    set(PHYSX_LOCAL_LINK_DIR "linux")
+endif (UNIX)
+
+# PLATFORM VERSION
+IF (PLATFORM_VERSION MATCHES 64)
+    set(PHYSX_PLATFORM_VERSION 64)
+    set(PHYSX_LOCAL_LINK_DIR "${PHYSX_LOCAL_LINK_DIR}64")
+ENDIF()
+IF (PLATFORM_VERSION MATCHES 32)
+    IF (WIN32)
+        set(PHYSX_PLATFORM_VERSION 86)
+        set(PHYSX_LOCAL_LINK_DIR "${PHYSX_LOCAL_LINK_DIR}86")
+    ELSE()
+        set(PHYSX_PLATFORM_VERSION 32)
+        set(PHYSX_LOCAL_LINK_DIR "${PHYSX_LOCAL_LINK_DIR}32")
+    ENDIF()
+ENDIF()
+
+link_directories(
+        "${IFX_ROOT}/${DEPS_DIR}/PhysX-3.4/PhysX_3.4/Lib/${PHYSX_LOCAL_LINK_DIR}"
+        "${IFX_ROOT}/${DEPS_DIR}/PhysX-3.4/PhysX_3.4/Bin/${PHYSX_LOCAL_LINK_DIR}")
+
+# LIB - static, BIN - dynamic
+set(PHYSX3_EXTENSIONS_LIB
+        "PhysX3Extensions${PHYSX_COMPILER_TYPE}")
+set(PHYSX3_BIN
+        "PhysX3${PHYSX_COMPILER_TYPE}_x${PHYSX_PLATFORM_VERSION}")
+set(PHYSX3_COMMON_BIN
+        "PhysX3Common${PHYSX_COMPILER_TYPE}_x${PHYSX_PLATFORM_VERSION}")
+set(PX_FOUNDATION_BIN
+        "PxFoundation${PHYSX_COMPILER_TYPE}_x${PHYSX_PLATFORM_VERSION}")
+set(PX_PVD_SDK_BIN
+        "PxPvdSDK${PHYSX_COMPILER_TYPE}_x${PHYSX_PLATFORM_VERSION}")
+
+#---------------------------------
 # MACROS
 #---------------------------------
 
@@ -30,6 +85,10 @@ MACRO(FIND_INCLUDE_DIR return_list regex)
     SET(${return_list} ${dir_list})
 ENDMACRO()
 
+#----------------------------------
+# EXECUTABLE
+#----------------------------------
+
 # INCLUDE AUTOMATIC SEARCH
 FIND_INCLUDE_DIR(INC_DIRS ./include/*.h)
 include_directories(${INC_DIR} ${INC_DIR})
@@ -41,14 +100,12 @@ set(SOURCE_FILES )
 
 add_executable(${APP_NAME} ${SOURCE_FILES} ${SRC_FILES} ${INC_FILES})
 
-
 #----------------------------------
 # EXTERNAL
 #----------------------------------
 
 add_subdirectory(${IFX_ROOT}/${DEPS_DIR} ${IFX_LIB_DEPS_BUILD_DIR})
 
-include_directories(${IFX_ROOT}/${DEPS_DIR}/exprtk/)
 include_directories(${IFX_ROOT}/${DEPS_DIR}/bullet3/src/)
 include_directories(${IFX_ROOT}/${DEPS_DIR}/glfw-3.1.2/${INC_DIR})
 include_directories(${IFX_ROOT}/${DEPS_DIR}/assimp-3.1.1/${INC_DIR})
@@ -58,6 +115,12 @@ include_directories(${IFX_ROOT}/${DEPS_DIR}/glew-2.0.0/include)
 
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS})
+
+
+set(Boost_USE_STATIC_LIBS OFF)
+find_package(Boost COMPONENTS filesystem system REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+
 
 #---------------------------------
 # IFX LIBS
@@ -86,8 +149,18 @@ target_link_libraries(${APP_NAME}
         gui_ifx math_ifx common_ifx
         BulletDynamics BulletCollision)
 
+target_link_libraries(${APP_NAME}
+        ${PHYSX3_EXTENSIONS_LIB}
+        ${PHYSX3_BIN}
+        ${PHYSX3_COMMON_BIN}
+        ${PX_FOUNDATION_BIN}
+        ${PX_PVD_SDK_BIN})
+
 target_link_libraries(${APP_NAME} SOIL)
 target_link_libraries(${APP_NAME} assimp)
 target_link_libraries(${APP_NAME} glfw ${GLFW_LIBRARIES})
 target_link_libraries(${APP_NAME} ${OPENGL_LIBRARIES})
 target_link_libraries(${APP_NAME} glew20)
+target_link_libraries(${APP_NAME} glew20)
+
+target_link_libraries(${APP_NAME} ${Boost_LIBRARIES})

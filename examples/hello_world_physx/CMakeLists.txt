@@ -116,12 +116,11 @@ include_directories(${IFX_ROOT}/${DEPS_DIR}/glew-2.0.0/include)
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS})
 
+
 set(Boost_USE_STATIC_LIBS OFF)
 find_package(Boost COMPONENTS filesystem system REQUIRED)
-if(Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIRS})
-    target_link_libraries(${APP_NAME} ${Boost_LIBRARIES})
-endif()
+include_directories(${Boost_INCLUDE_DIRS})
+
 
 #---------------------------------
 # IFX LIBS
@@ -163,3 +162,5 @@ target_link_libraries(${APP_NAME} glfw ${GLFW_LIBRARIES})
 target_link_libraries(${APP_NAME} ${OPENGL_LIBRARIES})
 target_link_libraries(${APP_NAME} glew20)
 target_link_libraries(${APP_NAME} glew20)
+
+target_link_libraries(${APP_NAME} ${Boost_LIBRARIES})

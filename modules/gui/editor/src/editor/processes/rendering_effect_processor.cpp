@@ -5,14 +5,13 @@
 #include <graphics/rendering/scene_renderer.h>
 #include <graphics/rendering/rendering_effect.h>
 #include <graphics/shaders/program_creator.h>
+#include <graphics/shaders/loaders/program_loader.h>
 
 #include <resources/resource_manager.h>
-#include <resources/resources.h>
 
 #include <boost/filesystem.hpp>
 
 #include <iostream>
-#include <graphics/shaders/loaders/program_loader.h>
 
 namespace ifx {
 

@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+
 #include "graphics/rendering/rendering_state.h"
 
 namespace ifx {
