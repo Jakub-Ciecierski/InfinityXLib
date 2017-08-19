@@ -1,4 +1,4 @@
-#include "editor/views/main_menu_items/main_menu_view_item.h"
+#include "editor/window_views/main_menu_items/main_menu_view_item.h"
 
 #include <editor/editor.h>
 #include <editor/window_view.h>
@@ -71,6 +71,9 @@ void MainMenuViewItem::RenderDockerHeader(std::shared_ptr<Docker> docker,
     else
         docker->Disable();
 
+    ImGui::Separator();
+    ImGui::Checkbox("Soft Body Window Full Screen",
+                    &settings.soft_body_window_full);
     ImGui::Separator();
     ImGui::Checkbox("Automatic Scale", &settings.is_automatic_scale);
 }

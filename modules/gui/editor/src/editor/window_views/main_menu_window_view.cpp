@@ -1,7 +1,7 @@
 #include "editor/window_views/main_menu_window_view.h"
 
 #include <editor/editor.h>
-#include <editor/views/main_menu_items/main_menu_view_item.h>
+#include <editor/window_views/main_menu_items/main_menu_view_item.h>
 
 #include <gui/imgui/imgui.h>
 #include <gui/theme.h>

@@ -11,7 +11,7 @@ class WindowView;
 class Window;
 
 enum class DockPosition{
-    Left, Right, Top, Bottom
+    Left, Right, Top, Bottom, SoftBody
 };
 
 struct DockerSettings{
@@ -22,6 +22,8 @@ struct DockerSettings{
     // Scale automatically based on window size and scale coefficient
     bool is_automatic_scale;
     float automatic_scale;
+
+    bool soft_body_window_full;
 };
 
 /**
@@ -62,13 +64,15 @@ private:
     void DockRight();
     void DockTop();
     void DockBottom();
+    void DockSoftBodyWindow();
 
     std::shared_ptr<Window> window_;
 
-    std::shared_ptr<WindowView> left_view_;
-    std::shared_ptr<WindowView> right_view_;
-    std::shared_ptr<WindowView> top_view_;
-    std::shared_ptr<WindowView> bottom_view_;
+    std::shared_ptr<WindowView> left_window_view_;
+    std::shared_ptr<WindowView> right_window_view_;
+    std::shared_ptr<WindowView> top_window_view_;
+    std::shared_ptr<WindowView> bottom_window_view_;
+    std::shared_ptr<WindowView> soft_body_window_view_;
 
     bool is_enabled_;
 

@@ -43,7 +43,6 @@ public:
     void SetFlags(ImGuiWindowFlags flags);
 
 protected:
-    //virtual void RenderContent() = 0;
     virtual void RenderContent();
 
     virtual void FetchSize();

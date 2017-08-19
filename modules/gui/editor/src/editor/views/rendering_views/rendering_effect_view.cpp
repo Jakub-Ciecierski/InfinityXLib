@@ -1,4 +1,4 @@
-#include "editor/views/rendering_view/rendering_effect_view.h"
+#include "editor/views/rendering_views/rendering_effect_view.h"
 
 #include <editor/processes/rendering_effect_processor.h>
 

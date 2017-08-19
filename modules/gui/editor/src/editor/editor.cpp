@@ -16,7 +16,11 @@ Editor::~Editor(){}
 
 void Editor::Render(){
     for(auto& view : window_views_){
-        docker_->Dock(view);
+        if(!view)
+            continue;
+
+        if(docker_)
+            docker_->Dock(view);
         view->Render();
     }
 }

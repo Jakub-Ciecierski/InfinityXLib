@@ -1,4 +1,4 @@
-#include "editor/views/physics_simulation_view/physics_simulation_view.h"
+#include "editor/views/physics_simulation_view.h"
 
 #include <gui/imgui/imgui.h>
 

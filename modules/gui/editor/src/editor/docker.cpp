@@ -9,12 +9,12 @@ namespace ifx {
 
 Docker::Docker(std::shared_ptr<Window> window) :
         window_(window),
-        left_view_(nullptr),
-        right_view_(nullptr),
-        top_view_(nullptr),
-        bottom_view_(nullptr),
+        left_window_view_(nullptr),
+        right_window_view_(nullptr),
+        top_window_view_(nullptr),
+        bottom_window_view_(nullptr),
         is_enabled_(true),
-        docker_settings_{250, 250, 250, true, 0.2}{}
+        docker_settings_{250, 250, 250, true, 0.2, false}{}
 
 Docker::~Docker(){}
 
@@ -32,16 +32,19 @@ void Docker::RegisterView(std::shared_ptr<WindowView> view,
                           const DockPosition &dock_position) {
     switch(dock_position){
         case DockPosition::Left:
-            left_view_ = view;
+            left_window_view_ = view;
             break;
         case DockPosition::Right:
-            right_view_ = view;
+            right_window_view_ = view;
             break;
         case DockPosition::Top:
-            top_view_ = view;
+            top_window_view_ = view;
             break;
         case DockPosition::Bottom:
-            bottom_view_ = view;
+            bottom_window_view_ = view;
+            break;
+        case DockPosition::SoftBody:
+            soft_body_window_view_ = view;
             break;
     }
 
@@ -61,18 +64,20 @@ void Docker::SetEnabledFlags(){
              | ImGuiWindowFlags_NoTitleBar
              | ImGuiWindowFlags_NoMove
              | ImGuiWindowFlags_NoCollapse
-    | ImGuiWindowFlags_AlwaysHorizontalScrollbar);
+             | ImGuiWindowFlags_ShowBorders);
 }
 
 void Docker::SetFlags(ImGuiWindowFlags flags){
-    if(left_view_)
-        left_view_->SetFlags(flags);
-    if(right_view_)
-        right_view_->SetFlags(flags);
-    if(top_view_)
-        top_view_->SetFlags(flags);
-    if(bottom_view_)
-        bottom_view_->SetFlags(flags);
+    if(left_window_view_)
+        left_window_view_->SetFlags(flags);
+    if(right_window_view_)
+        right_window_view_->SetFlags(flags);
+    if(top_window_view_)
+        top_window_view_->SetFlags(flags);
+    if(bottom_window_view_)
+        bottom_window_view_->SetFlags(flags);
+    if(soft_body_window_view_)
+        soft_body_window_view_->SetFlags(flags);
 }
 
 void Docker::Dock(std::shared_ptr<WindowView> view){
@@ -81,18 +86,22 @@ void Docker::Dock(std::shared_ptr<WindowView> view){
 
     UpdateAutomaticSize();
 
-    if(view == left_view_){
+    if(view == left_window_view_){
         DockLeft();
     }
-    else if(view == right_view_){
+    else if(view == right_window_view_){
         DockRight();
     }
-    else if(view == top_view_){
+    else if(view == top_window_view_){
         DockTop();
     }
-    else if(view == bottom_view_){
+    else if(view == bottom_window_view_){
         DockBottom();
     }
+    else if(view == soft_body_window_view_){
+        DockSoftBodyWindow();
+    }
+
 }
 
 void Docker::UpdateAutomaticSize(){
@@ -108,7 +117,7 @@ void Docker::UpdateAutomaticSize(){
 }
 
 void Docker::DockLeft(){
-    float top_view_height = top_view_->height();
+    float top_view_height = top_window_view_->height();
 
     float view_width = docker_settings_.left_view_width;
     float view_height = *(window_->height()) - top_view_height;
@@ -118,7 +127,7 @@ void Docker::DockLeft(){
 }
 
 void Docker::DockRight(){
-    float top_view_height = top_view_->height();
+    float top_view_height = top_window_view_->height();
 
     float view_width = docker_settings_.right_view_width;
     float view_height = *(window_->height()) - top_view_height;
@@ -134,8 +143,8 @@ void Docker::DockTop(){
 }
 
 void Docker::DockBottom(){
-    float left_view_width = left_view_->width();
-    float right_view_width = right_view_->width();
+    float left_view_width = left_window_view_->width();
+    float right_view_width = right_window_view_->width();
 
     const float epsilon_gap_closer = 1.0f;
     float view_width = *(window_->width()) - left_view_width - right_view_width
@@ -147,6 +156,33 @@ void Docker::DockBottom(){
 
     ImGui::SetNextWindowPos(ImVec2(view_pos_x, view_pos_y));
     ImGui::SetNextWindowSize(ImVec2(view_width, view_height + epsilon_gap_closer));
+}
+
+void Docker::DockSoftBodyWindow(){
+    float pos_x, pos_y, view_width, view_height;
+
+    if(docker_settings_.soft_body_window_full){
+        pos_x = 0;
+        pos_y = top_window_view_->height();
+
+        view_width = *(window_->width());
+        view_height = *(window_->height()) - pos_y;
+    }else{
+        pos_x = left_window_view_->width();
+        pos_y = top_window_view_->height();
+
+        const float epsilon_gap_closer = 1.0f;
+        view_width = *(window_->width()) -
+                           right_window_view_->width() -
+                           left_window_view_->width();
+        view_height = *(window_->height()) -
+                      pos_y -
+                      bottom_window_view_->height() +
+                      epsilon_gap_closer;
+    }
+
+    ImGui::SetNextWindowPos(ImVec2(pos_x, pos_y));
+    ImGui::SetNextWindowSize(ImVec2(view_width, view_height));
 }
 
 }

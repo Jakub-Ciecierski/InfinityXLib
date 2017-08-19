@@ -6,9 +6,9 @@
 #include <editor/window_views/imgui_demo_window_view.h>
 #include <editor/docker.h>
 #include <editor/processes/rendering_effect_processor.h>
-#include <editor/views/physics_simulation_view/physics_simulation_view.h>
-#include <editor/views/rendering_view/rendering_view.h>
-#include <editor/views/rendering_view/rendering_effect_view.h>
+#include <editor/views/physics_simulation_view.h>
+#include <editor/views/rendering_view.h>
+#include <editor/views/rendering_views/rendering_effect_view.h>
 
 #include "game/scene_container.h"
 #include <game/resources/resource_context.h>
@@ -33,16 +33,19 @@ std::shared_ptr<Editor> EditorFactory::CreateEngineGUI(
     auto bottom_window_view = CreateBottomWindowView();
     auto top_window_view = std::make_shared<MainMenuWindowView>();
     auto imgui_demo_view = std::shared_ptr<ImGuiDemoWindowView>(new ImGuiDemoWindowView());
+    auto soft_body_window_view = CreateSoftBodyWindowView();
 
     auto docker = CreateDefaultDocker(window,
                                       left_window_view, right_window_view,
-                                      top_window_view, bottom_window_view);
+                                      top_window_view, bottom_window_view,
+                                      soft_body_window_view);
 
     auto editor = std::make_shared<Editor>(docker);
     editor->AddWindowView(left_window_view);
     editor->AddWindowView(right_window_view);
     editor->AddWindowView(top_window_view);
     editor->AddWindowView(bottom_window_view);
+    editor->AddWindowView(soft_body_window_view);
     editor->AddWindowView(imgui_demo_view);
 
     top_window_view->RegisterEditor(editor);
@@ -77,6 +80,12 @@ std::shared_ptr<WindowView> EditorFactory::CreateBottomWindowView(){
     return std::make_shared<WindowView>("Bottom");
 }
 
+std::shared_ptr<WindowView> EditorFactory::CreateSoftBodyWindowView(){
+    auto soft_body_window_view = std::make_shared<WindowView>("Soft Body");
+    soft_body_window_view->show(false);
+    return soft_body_window_view;
+}
+
 std::shared_ptr<SceneView> EditorFactory::CreateSceneView(
         std::shared_ptr<SceneContainer> scene,
         std::shared_ptr<ResourceContext> resource_creator,
@@ -103,16 +112,18 @@ std::shared_ptr<RenderingView> EditorFactory::CreateRenderingView(
 
 std::shared_ptr<Docker> EditorFactory::CreateDefaultDocker(
         std::shared_ptr<Window> window,
-        std::shared_ptr<WindowView> scene_view,
-        std::shared_ptr<WindowView> physics_view,
-        std::shared_ptr<WindowView> main_menu_view,
-        std::shared_ptr<WindowView> imgui_demo) {
+        std::shared_ptr<WindowView> left_window_view,
+        std::shared_ptr<WindowView> right_window_view,
+        std::shared_ptr<WindowView> top_window_view,
+        std::shared_ptr<WindowView> bottom_window_view,
+        std::shared_ptr<WindowView> soft_body_window_view) {
     auto docker = std::make_shared<Docker>(window);
 
-    docker->RegisterView(scene_view, DockPosition::Left);
-    docker->RegisterView(physics_view, DockPosition::Right);
-    docker->RegisterView(main_menu_view, DockPosition::Top);
-    docker->RegisterView(imgui_demo, DockPosition::Bottom);
+    docker->RegisterView(left_window_view, DockPosition::Left);
+    docker->RegisterView(right_window_view, DockPosition::Right);
+    docker->RegisterView(top_window_view, DockPosition::Top);
+    docker->RegisterView(bottom_window_view, DockPosition::Bottom);
+    docker->RegisterView(soft_body_window_view, DockPosition::SoftBody);
 
     return docker;
 }
