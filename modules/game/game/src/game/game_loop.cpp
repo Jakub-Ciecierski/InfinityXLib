@@ -14,21 +14,13 @@
 
 namespace ifx {
 
-GameLoop::GameLoop(std::shared_ptr<Renderer> renderer,
-                   std::shared_ptr<PhysicsSimulation> physics_simulation,
-                   std::shared_ptr<Controls> controls,
-                   std::shared_ptr<SceneContainer> scene,
-                   std::shared_ptr<GUI> gui) :
-        renderer_(renderer),
-        physics_simulation_(physics_simulation),
-        controls_(controls),
-        scene_(scene),
-        gui_(gui){}
+GameLoop::GameLoop(const EngineArchitecture& engine_architecture) :
+        engine_architecture_(engine_architecture){}
 
 GameLoop::~GameLoop(){}
 
 void GameLoop::Start(){
-    while(!renderer_->window()->ShouldClose()) {
+    while(!engine_architecture_.window->ShouldClose()) {
         RunSingleIteration();
     }
 }
@@ -37,15 +29,14 @@ void GameLoop::RunSingleIteration(){
     if(!UpdateTime())
         return;
 
-    physics_simulation_->Update(time_data_.time_delta);
-    scene_->Update();
-    renderer_->Update();
-    controls_->Update();
+    engine_architecture_.engine_systems.physics_simulation->Update(
+            time_data_.time_delta);
+    engine_architecture_.engine_systems.scene_container->Update();
+    engine_architecture_.engine_systems.renderer->Update();
+    engine_architecture_.engine_systems.controls->Update();
+    engine_architecture_.engine_systems.gui->Update();
 
-    gui_->Update();
-
-    // Window must be last
-    renderer_->window()->Update();
+    engine_architecture_.window->Update();
 }
 
 bool GameLoop::UpdateTime(){

@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+#include <game/architecture/engine_architecture.h>
 
 namespace ifx {
 
@@ -11,6 +12,8 @@ class PhysicsSimulation;
 class SceneContainer;
 class Controls;
 class GUI;
+
+struct EngineArchitecture;
 
 struct GameTimeData{
     float last_time = 0;
@@ -24,19 +27,19 @@ struct GameTimeData{
 
 class GameLoop {
 public:
-    GameLoop(std::shared_ptr<Renderer> renderer,
-             std::shared_ptr<PhysicsSimulation> physics_simulation,
-             std::shared_ptr<Controls> controls,
-             std::shared_ptr<SceneContainer> scene,
-             std::shared_ptr<GUI> gui);
+    GameLoop(const EngineArchitecture& engine_architecture);
     ~GameLoop();
 
-    std::shared_ptr<Renderer> renderer(){return renderer_;}
-    std::shared_ptr<PhysicsSimulation>
-    physics_simulation(){return physics_simulation_;}
-    std::shared_ptr<Controls> controls(){return controls_;};
+    const EngineArchitecture& engine_architecture(){return
+                engine_architecture_;}
 
-    std::shared_ptr<GUI> gui(){return gui_;}
+    std::shared_ptr<Renderer> renderer(){return
+                engine_architecture_.engine_systems.renderer;}
+    std::shared_ptr<PhysicsSimulation> physics_simulation(){
+        return engine_architecture_.engine_systems.physics_simulation;}
+    std::shared_ptr<Controls> controls(){return
+                engine_architecture_.engine_systems.controls;};
+    std::shared_ptr<GUI> gui(){return engine_architecture_.engine_systems.gui;}
 
     void Start();
 private:
@@ -44,13 +47,7 @@ private:
 
     bool UpdateTime();
 
-    std::shared_ptr<Renderer> renderer_;
-    std::shared_ptr<PhysicsSimulation> physics_simulation_;
-    std::shared_ptr<Controls> controls_;
-
-    std::shared_ptr<SceneContainer> scene_;
-
-    std::shared_ptr<GUI> gui_;
+    EngineArchitecture engine_architecture_;
 
     GameTimeData time_data_;
 };

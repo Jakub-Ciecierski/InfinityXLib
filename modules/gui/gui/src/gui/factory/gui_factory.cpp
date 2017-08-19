@@ -4,11 +4,11 @@
 
 namespace ifx {
 
-ifx::GUIFactory::GUIFactory() {}
+GUIFactory::GUIFactory() {}
 
-ifx::GUIFactory::~GUIFactory() {}
+GUIFactory::~GUIFactory() {}
 
-std::shared_ptr<ifx::GUI> ifx::GUIFactory::Create(
+std::shared_ptr<GUI> GUIFactory::Create(
         std::shared_ptr<GUIContext> context) {
     return std::make_shared<GUI>(context);
 }

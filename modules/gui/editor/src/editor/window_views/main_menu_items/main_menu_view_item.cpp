@@ -74,7 +74,6 @@ void MainMenuViewItem::RenderDockerHeader(std::shared_ptr<Docker> docker,
     ImGui::Separator();
     ImGui::Checkbox("Soft Body Window Full Screen",
                     &settings.soft_body_window_full);
-    ImGui::Separator();
     ImGui::Checkbox("Automatic Scale", &settings.is_automatic_scale);
 }
 

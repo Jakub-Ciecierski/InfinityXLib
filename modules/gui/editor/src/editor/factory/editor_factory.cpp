@@ -83,6 +83,7 @@ std::shared_ptr<WindowView> EditorFactory::CreateBottomWindowView(){
 std::shared_ptr<WindowView> EditorFactory::CreateSoftBodyWindowView(){
     auto soft_body_window_view = std::make_shared<WindowView>("Soft Body");
     soft_body_window_view->show(false);
+
     return soft_body_window_view;
 }
 

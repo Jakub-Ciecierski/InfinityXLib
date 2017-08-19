@@ -128,40 +128,66 @@ GameFactory &GameFactory::SetGUIFactory(std::shared_ptr<GUIFactory> factory) {
 }
 
 std::shared_ptr<Game> GameFactory::Create(){
-    auto rendering_context = rendering_context_factory_->Create();
-    auto resource_context = resource_context_factory_->Create();
-    auto control_context = control_context_factory_->Create();
-    auto gui_context = gui_context_factory_->Create();
+    EngineArchitecture engine_architecture;
+    engine_architecture.engine_contexts = CreateEngineContexts();
+    engine_architecture.window
+            = CreateWindow(engine_architecture.engine_contexts);
+    engine_architecture.engine_systems = CreateEngineSystems(
+            engine_architecture.window, engine_architecture.engine_contexts);
 
-    auto window = window_factory_->Create();
-    if(!window->Init(rendering_context, control_context))
-        throw new std::invalid_argument("window->Init Failed");
-
-    auto renderer = renderer_factory_->Create(window,
-                                              rendering_context);
-    auto physics_simulation = physics_simulation_factory_->Create();
-    auto controls = controls_factory_->Create(control_context);
-
-    auto scene = scene_factory_->Create(renderer->scene_renderer(),
-                                        physics_simulation);
-
-    auto gui = gui_factory_->Create(gui_context);
-    gui->Init(window->getHandle(), control_context);
-
-    auto game_loop = game_loop_factory_->Create(renderer,
-                                                physics_simulation,
-                                                controls,
-                                                scene,
-                                                gui);
+    auto game_loop = game_loop_factory_->Create(engine_architecture);
 
     auto game = std::shared_ptr<Game>(new Game(game_loop,
-                                               scene,
-                                               resource_context,
-                                               rendering_context));
+                                               engine_architecture));
     return game;
 }
 
+EngineContexts GameFactory::CreateEngineContexts(){
+    EngineContexts engine_contexts;
+    engine_contexts.rendering_context
+            = rendering_context_factory_->Create();
+    engine_contexts.resource_context =
+            resource_context_factory_->Create();
+    engine_contexts.control_context
+            = control_context_factory_->Create();
+    engine_contexts.gui_context
+            = gui_context_factory_->Create();
 
+    return engine_contexts;
+}
 
+std::shared_ptr<Window> GameFactory::CreateWindow(
+        const EngineContexts& engine_contexts){
+    auto window = window_factory_->Create();
+    if(!window->Init(engine_contexts.rendering_context,
+                     engine_contexts.control_context)){
+        throw new std::invalid_argument("window->Init Failed");
+    }
+    return window;
+}
+
+EngineSystems GameFactory::CreateEngineSystems(
+        std::shared_ptr<Window> window,
+        const EngineContexts& engine_contexts){
+    EngineSystems engine_systems;
+    engine_systems.renderer = renderer_factory_->Create(
+            window, engine_contexts.rendering_context);
+
+    engine_systems.physics_simulation = physics_simulation_factory_->Create();
+
+    engine_systems.controls = controls_factory_->Create(
+            engine_contexts.control_context);
+
+    engine_systems.scene_container = scene_factory_->Create(
+            engine_systems.renderer->scene_renderer(),
+            engine_systems.physics_simulation);
+
+    engine_systems.gui = gui_factory_->Create(
+            engine_contexts.gui_context);
+    engine_systems.gui->Init(window->getHandle(),
+                             engine_contexts.control_context);
+
+    return engine_systems;
+}
 
 }

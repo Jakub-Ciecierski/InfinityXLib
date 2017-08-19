@@ -17,6 +17,11 @@ class ControlsFactory;
 class ControlContextFactory;
 class GUIContextFactory;
 class GUIFactory;
+class Window;
+
+struct EngineContexts;
+struct EngineSystems;
+struct EngineArchitecture;
 
 class GameFactory {
 public:
@@ -52,21 +57,23 @@ public:
 private:
     void CreateDefaultFactories();
 
+    EngineContexts CreateEngineContexts();
+    std::shared_ptr<Window> CreateWindow(const EngineContexts& engine_contexts);
+    EngineSystems CreateEngineSystems(std::shared_ptr<Window> window,
+                                      const EngineContexts& engine_contexts);
+
     std::shared_ptr<RenderingContextFactory> rendering_context_factory_;
     std::shared_ptr<ResourceContextFactory> resource_context_factory_;
     std::shared_ptr<ControlContextFactory> control_context_factory_;
     std::shared_ptr<GUIContextFactory> gui_context_factory_;
 
-    std::shared_ptr<GUIFactory> gui_factory_;
-
     std::shared_ptr<WindowFactory> window_factory_;
+
     std::shared_ptr<RendererFactory> renderer_factory_;
-
     std::shared_ptr<PhysicsSimulationFactory> physics_simulation_factory_;
-
     std::shared_ptr<ControlsFactory> controls_factory_;
-
     std::shared_ptr<SceneContainerFactory> scene_factory_;
+    std::shared_ptr<GUIFactory> gui_factory_;
 
     std::shared_ptr<GameLoopFactory> game_loop_factory_;
 

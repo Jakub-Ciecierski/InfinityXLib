@@ -2,18 +2,19 @@
 
 #include <game/game_loop.h>
 #include <game/resources/resource_context.h>
+
 #include <graphics/rendering/context/rendering_context.h>
+
+#include "gui/context/gui_context.h"
+
+#include "controls/context/control_context.h"
 
 namespace ifx{
 
 Game::Game(std::shared_ptr<GameLoop> game_loop,
-           std::shared_ptr<SceneContainer> scene,
-           std::shared_ptr<ResourceContext> resource_creator,
-           std::shared_ptr<RenderingContext> rendering_context) :
+           const EngineArchitecture& engine_architecture) :
         game_loop_(game_loop),
-        scene_(scene),
-        resource_creator_(resource_creator),
-        rendering_context_(rendering_context){}
+        engine_architecture_(engine_architecture){}
 
 Game::~Game(){}
 
@@ -24,9 +25,9 @@ void Game::Start(){
 }
 
 void Game::Terminate(){
-    rendering_context_->Terminate();
-
-    // other context termination
+    engine_architecture_.engine_contexts.rendering_context->Terminate();
+    engine_architecture_.engine_contexts.control_context->Terminate();
+    engine_architecture_.engine_contexts.gui_context->Terminate();
 }
 
 }
