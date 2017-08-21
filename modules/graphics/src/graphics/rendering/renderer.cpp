@@ -37,7 +37,6 @@ void Renderer::RenderScene(){
     glViewport(0, 0, *(window_->width()), *(window_->height()));
     glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_MULTISAMPLE);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);

@@ -6,7 +6,6 @@
 #include <graphics/rendering/scene_renderer.h>
 
 #include <GL/glew.h>
-#include <common/unique_ptr.h>
 
 namespace ifx{
 

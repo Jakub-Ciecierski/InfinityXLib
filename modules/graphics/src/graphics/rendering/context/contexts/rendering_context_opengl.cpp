@@ -31,7 +31,6 @@ bool RenderingContextOpengl::InitGLFW(){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
     // No legacy functions
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_SAMPLES, 4);
 
     return true;
 }
