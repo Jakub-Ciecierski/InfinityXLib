@@ -28,7 +28,8 @@ RenderingEffectProcessor::CompileAllRenderingEffects(){
     std::vector<std::shared_ptr<RenderingEffect>> rendering_effects;
 
     auto root_directory
-            = resource_context_->resource_manager()->resource_path()->GetResourceRoot(ResourceType::SHADER);
+            = resource_context_->resource_manager()->resource_path()->
+                    GetResourceRoot(ResourceType::SHADER);
     boost::filesystem::path root_path(root_directory);
     boost::filesystem::recursive_directory_iterator iterator(root_path);
     for(auto&& dir : iterator){
@@ -130,9 +131,11 @@ std::string RenderingEffectProcessor::GetDifference(const std::string& str1,
         return difference;
 
     for(unsigned int i = 0; i < str1.length(); i++){
-        if(i >= str2.length()){
-            if(str1[i] != '/')
-                difference += str1[i];
+        if(i > str2.length()){
+            if(str1[i] == '/' && i == str1.length()-1){
+                continue;
+            }
+            difference += str1[i];
         }
 
     }

@@ -1,50 +1,34 @@
-#ifndef PROJECT_FBO_RENDERER_H
-#define PROJECT_FBO_RENDERER_H
+#ifndef PROJECT_FBO_RENDERER2_H
+#define PROJECT_FBO_RENDERER2_H
 
-#include <memory>
+#include <graphics/rendering/renderer.h>
 
 namespace ifx {
 
-class Mesh;
-class Window;
 class FBO;
+class Mesh;
 class Program;
 
-/**
- * The viewport does not need to be changed since the window's dimensions
- * are used.
- * Creates FBO with Color and Depth buffers.
- * Allows for post-processing effects.
- */
-class FBORenderer {
+class FBORenderer : public Renderer {
 public:
+    FBORenderer(std::shared_ptr<Window> window,
+                 std::shared_ptr<RenderingContext> rendering_context,
+                 std::unique_ptr<FBO> fbo,
+                 std::unique_ptr<Mesh> screen_mesh,
+                 std::shared_ptr<Program> program);
 
-    FBORenderer(Window* window);
+    ~FBORenderer() = default;
 
-    ~FBORenderer();
-
-    Program* program(){return program_.get();}
-
-    void SetProgram(std::shared_ptr<Program> program);
-
-    void Bind();
-
-    void Render();
-    void Render(Program* program);
+protected:
+    virtual void Render() override;
 
 private:
-    void initFBO(Window* window);
-    void initScreenMesh();
+    void RenderBufferToScreenMesh();
 
     std::unique_ptr<FBO> fbo_;
-
-    /**
-     * The quad mesh which will render the screen.
-     */
-    std::unique_ptr<Mesh> screenMesh_;
-
+    std::unique_ptr<Mesh> screen_mesh_;
     std::shared_ptr<Program> program_;
 };
 }
 
-#endif //PROJECT_FBO_RENDERER_H
+#endif //PROJECT_FBO_RENDERER2_H

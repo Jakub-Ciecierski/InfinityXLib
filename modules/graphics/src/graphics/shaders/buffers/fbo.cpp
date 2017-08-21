@@ -2,12 +2,11 @@
 
 #include <graphics/shaders/textures/texture.h>
 
-#include <stdexcept>
-#include <memory>
+#include <GL/glew.h>
 
 namespace ifx {
 
-FBO::FBO(std::shared_ptr<Texture2D> texture, FBOType type) :
+FBO::FBO(std::shared_ptr<Texture2D> texture, const FBOType& type) :
         type_(type),
         texture_(texture),
         compiled_(false){
@@ -24,9 +23,9 @@ void FBO::compile(){
 
     bind();
 
-    if(type_ == FBOType::COLOR_DEPTH)
+    if(type_.buffer == FBOBuffer::COLOR_DEPTH)
         compileColorDepth();
-    else if(type_ == FBOType::DEPTH)
+    else if(type_.buffer == FBOBuffer::DEPTH)
         compileDepth();
 
     CheckError();
@@ -62,11 +61,13 @@ void FBO::compileTexture(GLenum attachment){
 }
 
 void FBO::compileRBO(){
+    auto multiplier = GetMultiplier(type_.anti_aliasing_multiplier);
     GLuint rbo;
     glGenRenderbuffers(1, &rbo);
     glBindRenderbuffer(GL_RENDERBUFFER, rbo);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,
-                          texture_->width(), texture_->height());
+                          texture_->width() * multiplier,
+                          texture_->height() * multiplier);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
     glFramebufferRenderbuffer(GL_FRAMEBUFFER,
@@ -77,6 +78,21 @@ void FBO::compileRBO(){
 void FBO::CheckError(){
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         throw new std::invalid_argument("Framebuffer is not complete!");
+}
+
+unsigned int FBO::GetMultiplier(FBOAAColorBufferMultiplier& aa){
+    switch(aa){
+        case FBOAAColorBufferMultiplier::NONE:
+            return 1;
+        case FBOAAColorBufferMultiplier::AA2:
+            return 21;
+        case FBOAAColorBufferMultiplier::AA4:
+            return 4;
+        case FBOAAColorBufferMultiplier::AA8:
+            return 8;
+        case FBOAAColorBufferMultiplier::AA16:
+            return 16;
+    }
 }
 
 } // ifx

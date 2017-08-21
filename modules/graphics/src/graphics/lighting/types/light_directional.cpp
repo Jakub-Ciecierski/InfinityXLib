@@ -2,11 +2,12 @@
 
 #include <graphics/lighting/builders/dirlight_shader_builder.h>
 #include <graphics/rendering/shadows/shadow_mapping.h>
-#include <graphics/rendering/fbo_rendering/fbo_renderer.h>
 #include <graphics/shaders/buffers/fbo.h>
 #include <graphics/shaders/textures/texture.h>
 #include <graphics/shaders/textures/texture_activator.h>
 #include <graphics/shaders/loaders/program_loader.h>
+
+#include <GL/glew.h>
 
 using namespace ifx;
 

@@ -4,7 +4,6 @@
 #include <math/math_ifx.h>
 #include <factory/model_factory.h>
 #include <factory/program_factory.h>
-#include <graphics/rendering/fbo_rendering/fbo_renderer.h>
 #include <graphics/rendering/instanced_render_object.h>
 
 #include <GLFW/glfw3.h>

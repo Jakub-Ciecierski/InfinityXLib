@@ -6,7 +6,6 @@
 namespace ifx {
 
 class SceneRenderer;
-class FBORenderer;
 class Window;
 
 class ShadowMappingRenderer {
@@ -16,7 +15,7 @@ public:
             std::shared_ptr<Window> window);
     ~ShadowMappingRenderer();
 
-    void Render(std::shared_ptr<FBORenderer> fbo_renderer);
+    void Render();
 
 private:
     std::shared_ptr<SceneRenderer> scene_renderer_;

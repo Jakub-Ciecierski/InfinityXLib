@@ -5,6 +5,8 @@
 #include <graphics/shaders/textures/texture.h>
 #include <graphics/shaders/textures/texture_activator.h>
 
+#include <GL/glew.h>
+
 namespace ifx {
 
 LightSpotlight::LightSpotlight(const LightParams& light_params,

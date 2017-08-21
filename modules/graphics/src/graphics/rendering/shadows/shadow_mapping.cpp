@@ -6,6 +6,10 @@
 #include <graphics/rendering/scene_renderer.h>
 #include <graphics/shaders/textures/texture_creator.h>
 
+#include <common/unique_ptr.h>
+
+#include <GL/glew.h>
+
 namespace ifx {
 
 ShadowMapping::ShadowMapping(Dimensions dimensions,
@@ -59,7 +63,10 @@ std::shared_ptr<Texture2D> ShadowMapping::CreateTexture(){
 }
 
 void ShadowMapping::InitFBO(std::shared_ptr<Texture2D> texture){
-    fbo_.reset(new FBO(texture, FBOType::DEPTH));
+    fbo_ = ifx::make_unique<FBO>(texture,
+                                 FBOType{FBOBuffer::DEPTH,
+                                         FBOAAColorBufferMultiplier::NONE});
+
     fbo_->compile();
 }
 

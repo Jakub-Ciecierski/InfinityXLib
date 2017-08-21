@@ -63,12 +63,12 @@ std::shared_ptr<ShadowMapping> LightComponentFactory::CreateShadowMapping(
         std::shared_ptr<ProgramCreator> program_creator){
     auto resource_path = texture_creator->resource_manager()->resource_path();
 
-    std::string vertex_path =
-            resource_path->GetResourcePath("shadow_mapping/shadow_mapping.vs",
-                                      ifx::ResourceType::SHADER);
-    std::string fragment_path =
-            resource_path->GetResourcePath("shadow_mapping/shadow_mapping.fs",
-                                      ifx::ResourceType::SHADER);
+    std::string vertex_path = resource_path->GetResourcePath(
+                    "engine/shadow_mapping.prog/shadow_mapping.vs",
+                    ifx::ResourceType::SHADER);
+    std::string fragment_path = resource_path->GetResourcePath(
+                    "engine/shadow_mapping.prog/shadow_mapping.fs",
+                    ifx::ResourceType::SHADER);
     auto program = ProgramLoader(program_creator).CreateProgram(
             vertex_path, fragment_path);
     return std::shared_ptr<ShadowMapping>(

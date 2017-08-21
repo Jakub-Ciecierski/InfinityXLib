@@ -1,10 +1,12 @@
 #ifndef PROJECT_FBO_H
 #define PROJECT_FBO_H
 
-#include <GL/glew.h>
 #include <graphics/shaders/data/shader_data.h>
 
 #include <memory>
+
+typedef unsigned int GLenum;
+typedef unsigned int GLuint;
 
 namespace ifx {
 
@@ -14,8 +16,20 @@ class Texture2D;
  * Determines the type of FBO.
  * What buffers to bind.
  */
-enum class FBOType{
+enum class FBOBuffer {
     COLOR_DEPTH, DEPTH, COLOR
+};
+
+/**
+ * Anti-Aliasing. Increase Color Buffer by AAx
+ */
+enum class FBOAAColorBufferMultiplier{
+    NONE, AA2, AA4, AA8, AA16
+};
+
+struct FBOType{
+    FBOBuffer buffer;
+    FBOAAColorBufferMultiplier anti_aliasing_multiplier;
 };
 
 /**
@@ -25,11 +39,11 @@ enum class FBOType{
 class FBO {
 public:
 
-    FBO(std::shared_ptr<Texture2D> texture, FBOType type);
+    FBO(std::shared_ptr<Texture2D> texture, const FBOType& type);
 
     ~FBO();
 
-    std::shared_ptr<Texture2D> texture(){return texture_;}
+    std::shared_ptr<Texture2D> texture() const {return texture_;}
 
     /**
      * Finishes the creation of FBO.
@@ -60,6 +74,8 @@ private:
     void compileRBO();
 
     void CheckError();
+
+    unsigned int GetMultiplier(FBOAAColorBufferMultiplier& aa);
 
     FBOType type_;
 

@@ -24,16 +24,6 @@ void SceneRenderer::Render(const std::shared_ptr<Program> program) const{
         render_objects_[i]->Render(*(program));
 }
 
-void SceneRenderer::Render(std::shared_ptr<RenderObject> render_object) const{
-    const std::vector<std::shared_ptr<Program>>& programs
-            = render_object->programs();
-    for(unsigned int j = 0; j < programs.size(); j++){
-        camera_->use(*(programs[j]));
-        light_group_->use(*(programs[j]));
-        render_object->Render(*(programs[j]));
-    }
-}
-
 void SceneRenderer::Add(std::shared_ptr<RenderingEffect> rendering_effect){
     rendering_effects_.push_back(rendering_effect);
 }

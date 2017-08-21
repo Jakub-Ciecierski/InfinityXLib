@@ -6,6 +6,7 @@
 #include <game/game.h>
 #include <game/scene_container.h>
 #include <game/resources/factory/resource_context_factory.h>
+#include <game/resources/resource_context.h>
 
 #include <graphics/rendering/renderer.h>
 #include <graphics/rendering/context/rendering_context.h>
@@ -23,6 +24,7 @@
 #include <gui/context/factory/glfw/gui_glfw_context_factory.h>
 #include <gui/factory/gui_factory.h>
 #include <gui/gui.h>
+#include <graphics/factory/fbo_renderer_factory.h>
 
 namespace ifx {
 
@@ -33,25 +35,23 @@ GameFactory::GameFactory(){
 GameFactory::~GameFactory(){}
 
 void GameFactory::CreateDefaultFactories(){
-    window_factory_ = std::shared_ptr<WindowFactory>(new WindowFactory());
+    window_factory_ = std::make_shared<WindowFactory>();
 
-    rendering_context_factory_ = std::shared_ptr<RenderingContextOpenglFactory>(
-            new RenderingContextOpenglFactory());
+    rendering_context_factory_ 
+            = std::make_shared<RenderingContextOpenglFactory>();
 
-    resource_context_factory_ = std::shared_ptr<ResourceContextFactory>(
-            new ResourceContextFactory());
+    resource_context_factory_ = std::make_shared<ResourceContextFactory>();
 
     game_loop_factory_
-            = std::shared_ptr<GameLoopFactory>(new GameLoopFactory());
+            = std::make_shared<GameLoopFactory>();
 
-    scene_factory_ = std::shared_ptr<SceneContainerFactory>(
-            new SceneContainerFactory());
+    scene_factory_ = std::make_shared<SceneContainerFactory>();
 
-    renderer_factory_ = std::shared_ptr<RendererFactory>(new RendererFactory());
+    renderer_factory_ = std::make_shared<FBORendererFactory>();
+    //renderer_factory_ = std::make_shared<RendererFactory>();
 
     physics_simulation_factory_ =
-            std::shared_ptr<BulletPhysicsSimulationFactory>(
-                    new BulletPhysicsSimulationFactory());
+            std::make_shared<BulletPhysicsSimulationFactory>();
 
     controls_factory_ = std::make_shared<ControlsFactory>();
 
@@ -189,7 +189,10 @@ EngineSystems GameFactory::CreateEngineSystems(
     if (renderer_factory_) {
         engine_systems.renderer = renderer_factory_->Create(
                 window,
-                engine_contexts.rendering_context);
+                engine_contexts.rendering_context,
+                engine_contexts.resource_context->texture_creator(),
+                engine_contexts.resource_context->program_creator(),
+                engine_contexts.resource_context->resource_manager());
     }
     if (physics_simulation_factory_) {
         engine_systems.physics_simulation
