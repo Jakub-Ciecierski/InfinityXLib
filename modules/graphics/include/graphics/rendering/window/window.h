@@ -5,6 +5,7 @@
 #include <memory>
 
 #include <common/updatable.h>
+#include "graphics/rendering/window/window_subject.h"
 
 struct GLFWwindow;
 
@@ -12,11 +13,12 @@ namespace ifx {
 
 class RenderingContext;
 class ControlContext;
+class WindowObserver;
 
 /*
  * Windows Context, encapsulating the GLFW handle
  */
-class Window : public Updatable {
+class Window : public Updatable, public WindowSubject {
 
 public:
     Window(int width, int height, std::string name);

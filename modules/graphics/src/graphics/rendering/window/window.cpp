@@ -42,11 +42,13 @@ void Window::Resize(int width, int height){
     width_ = width;
     height_ = height;
     setViewport();
+
+    NotifyResize(width, height);
 }
 
 void Window::Update(float) {
-    glfwSwapBuffers(getHandle());
     glfwPollEvents();
+    glfwSwapBuffers(getHandle());
 }
 
 void Window::setViewport() {

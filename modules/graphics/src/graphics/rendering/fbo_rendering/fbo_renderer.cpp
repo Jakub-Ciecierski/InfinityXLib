@@ -6,6 +6,7 @@
 #include <graphics/rendering/scene_renderer.h>
 
 #include <GL/glew.h>
+#include <common/unique_ptr.h>
 
 namespace ifx{
 
@@ -23,12 +24,17 @@ FBORenderer::FBORenderer(
         throw std::invalid_argument(
                 "FBORenderer2::FBORenderer2 - Invalid arguments");
     }
+    window_->AddObserver(this);
+}
+
+FBORenderer::~FBORenderer(){
+    window_->RemoveObserver(this);
 }
 
 void FBORenderer::Render(){
     shadow_mapping_renderer_->Render();
 
-    fbo_->bind();
+    fbo_->Bind();
 
     RenderScene();
 
@@ -37,12 +43,17 @@ void FBORenderer::Render(){
 
 void FBORenderer::RenderBufferToScreenMesh(){
     glDisable(GL_DEPTH_TEST);
-    fbo_->unbind();
+    fbo_->Unbind();
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     screen_mesh_->draw(*program_);
+}
+
+void FBORenderer::OnResize(int width, int height) {
+    fbo_->texture()->InitData(nullptr, width, height);
+    fbo_->Compile();
 }
 
 }

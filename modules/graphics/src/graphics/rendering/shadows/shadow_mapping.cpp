@@ -30,12 +30,12 @@ void ShadowMapping::Render(const std::shared_ptr<SceneRenderer> scene,
     program_->use();
     BindLightMatrix(program_.get(), light);
 
-    fbo_->bind();
+    fbo_->Bind();
     glClear(GL_DEPTH_BUFFER_BIT);
     glCullFace(GL_FRONT); // peter panning
     scene->Render(program_);
     glCullFace(GL_BACK); // peter panning
-    fbo_->unbind();
+    fbo_->Unbind();
 }
 
 std::shared_ptr<Texture2D> ShadowMapping::CreateTexture(){
@@ -67,7 +67,7 @@ void ShadowMapping::InitFBO(std::shared_ptr<Texture2D> texture){
                                  FBOType{FBOBuffer::DEPTH,
                                          FBOAAColorBufferMultiplier::NONE});
 
-    fbo_->compile();
+    fbo_->Compile();
 }
 
 void ShadowMapping::Reset(Dimensions&& new_dimensions){

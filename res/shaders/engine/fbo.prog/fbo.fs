@@ -50,7 +50,8 @@ vec4 getGrayscale(){
 }
 
 vec4 getConvolutionColor(){
-    float[kernel_size] kernel = getBlurKernel();
+    //float[kernel_size] kernel = getBlurKernel();
+	float[kernel_size] kernel = getEdgeDetectionKernel();
 
     vec3 sampleTex[kernel_size];
     for(int i = 0; i < kernel_size; i++){

@@ -61,8 +61,8 @@ void* RenderingContextOpengl::InitAndCreateNativeWindowHandle(std::string name,
     if(!InitGLEW())
         throw new std::invalid_argument("Failed to initialize GLEW");
 
-    // unlimited fps
-    glfwSwapInterval(0);
+    // VSync
+    glfwSwapInterval(1);
 
     is_init_ = true;
 

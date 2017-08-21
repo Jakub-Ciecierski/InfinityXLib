@@ -14,8 +14,8 @@ using namespace ifx;
 LightDirectional::LightDirectional(
         const LightParams& light_params,
         std::shared_ptr<ShadowMapping> shadow_mapping) :
-        shadow_mapping_(shadow_mapping),
-        LightSource(light_params, LightType::DIRECTIONAL){}
+        LightSource(light_params, LightType::DIRECTIONAL),
+        shadow_mapping_(shadow_mapping){}
 
 LightDirectional::~LightDirectional() {}
 

@@ -2,6 +2,7 @@
 #define PROJECT_FBO_RENDERER2_H
 
 #include <graphics/rendering/renderer.h>
+#include <graphics/rendering/window/window_observer.h>
 
 namespace ifx {
 
@@ -9,7 +10,7 @@ class FBO;
 class Mesh;
 class Program;
 
-class FBORenderer : public Renderer {
+class FBORenderer : public Renderer, public WindowObserver {
 public:
     FBORenderer(std::shared_ptr<Window> window,
                  std::shared_ptr<RenderingContext> rendering_context,
@@ -17,8 +18,9 @@ public:
                  std::unique_ptr<Mesh> screen_mesh,
                  std::shared_ptr<Program> program);
 
-    ~FBORenderer() = default;
+    ~FBORenderer();
 
+    virtual void OnResize(int width, int height) override;
 protected:
     virtual void Render() override;
 

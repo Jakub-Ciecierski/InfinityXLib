@@ -10,57 +10,73 @@ FBO::FBO(std::shared_ptr<Texture2D> texture, const FBOType& type) :
         type_(type),
         texture_(texture),
         compiled_(false){
-    glGenFramebuffers(1, &id_);
+    CreateFBO();
 }
 
 FBO::~FBO() {
-    glDeleteFramebuffers(1, &id_);
+    DeleteFBO();
 }
 
-void FBO::compile(){
-    if(compiled_)
-        return;
+void FBO::Compile(){
+    if(compiled_){
+        DeleteFBO();
+        CreateFBO();
+    }
 
-    bind();
+    Bind();
 
-    if(type_.buffer == FBOBuffer::COLOR_DEPTH)
-        compileColorDepth();
-    else if(type_.buffer == FBOBuffer::DEPTH)
-        compileDepth();
-
+    switch(type_.buffer){
+        case FBOBuffer::COLOR_DEPTH:
+            CompileColorDepth();
+            break;
+        case FBOBuffer::DEPTH:
+            CompileDepth();
+            break;
+        case FBOBuffer::COLOR:
+            break;
+    }
     CheckError();
-    unbind();
+
+    Unbind();
 
     compiled_ = true;
 }
 
-void FBO::bind() {
+void FBO::Bind() {
     glBindFramebuffer(GL_FRAMEBUFFER, id_);
 }
 
-void FBO::unbind(){
+void FBO::Unbind(){
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void FBO::compileColorDepth(){
-    compileTexture(GL_COLOR_ATTACHMENT0);
-    compileRBO();
+void FBO::CreateFBO(){
+    glGenFramebuffers(1, &id_);
 }
 
-void FBO::compileDepth(){
-    compileTexture(GL_DEPTH_ATTACHMENT);
+void FBO::DeleteFBO(){
+    glDeleteFramebuffers(1, &id_);
+}
+
+void FBO::CompileColorDepth(){
+    CompileTexture(GL_COLOR_ATTACHMENT0);
+    CompileRBO();
+}
+
+void FBO::CompileDepth(){
+    CompileTexture(GL_DEPTH_ATTACHMENT);
 
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
 }
 
-void FBO::compileTexture(GLenum attachment){
+void FBO::CompileTexture(GLenum attachment){
     glFramebufferTexture2D(GL_FRAMEBUFFER,
                            attachment,
                            GL_TEXTURE_2D, texture_->id(), 0);
 }
 
-void FBO::compileRBO(){
+void FBO::CompileRBO(){
     auto multiplier = GetMultiplier(type_.anti_aliasing_multiplier);
     GLuint rbo;
     glGenRenderbuffers(1, &rbo);
@@ -77,7 +93,7 @@ void FBO::compileRBO(){
 
 void FBO::CheckError(){
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        throw new std::invalid_argument("Framebuffer is not complete!");
+        throw std::invalid_argument("Framebuffer is not complete!");
 }
 
 unsigned int FBO::GetMultiplier(FBOAAColorBufferMultiplier& aa){
@@ -85,7 +101,7 @@ unsigned int FBO::GetMultiplier(FBOAAColorBufferMultiplier& aa){
         case FBOAAColorBufferMultiplier::NONE:
             return 1;
         case FBOAAColorBufferMultiplier::AA2:
-            return 21;
+            return 2;
         case FBOAAColorBufferMultiplier::AA4:
             return 4;
         case FBOAAColorBufferMultiplier::AA8:
@@ -93,6 +109,7 @@ unsigned int FBO::GetMultiplier(FBOAAColorBufferMultiplier& aa){
         case FBOAAColorBufferMultiplier::AA16:
             return 16;
     }
+    return 0;
 }
 
 } // ifx

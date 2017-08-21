@@ -50,28 +50,30 @@ public:
      * Binds the texture and completes FBO.
      * Throws exception if FBO compilation not was not complete.
      */
-    void compile();
+    void Compile();
 
     /**
      * Binds to this FBO
      */
-    void bind();
+    void Bind();
 
     /**
      * Unbinds from this FBO and binds back to default FBO.
      */
-    void unbind();
+    void Unbind();
 
 private:
+    void CreateFBO();
+    void DeleteFBO();
 
     /**
      * Compile based on the type
      */
-    void compileColorDepth();
-    void compileDepth();
+    void CompileColorDepth();
+    void CompileDepth();
 
-    void compileTexture(GLenum attachment);
-    void compileRBO();
+    void CompileTexture(GLenum attachment);
+    void CompileRBO();
 
     void CheckError();
 

@@ -40,7 +40,7 @@ std::unique_ptr<FBO> FBORendererFactory::CreateFBO(
         std::shared_ptr<Window> window,
         std::shared_ptr<TextureCreator> texture_creator){
     auto texture = texture_creator->MakeTexture2DEmpty(
-            "fbo",
+            ifx::NO_FILEPATH,
             TextureTypes::FBO,
             TextureInternalFormat::RGB,
             TexturePixelType::UNSIGNED_BYTE,
@@ -52,7 +52,7 @@ std::unique_ptr<FBO> FBORendererFactory::CreateFBO(
     auto fbo = ifx::make_unique<FBO>(texture,
                                      FBOType{FBOBuffer::COLOR_DEPTH,
                                              FBOAAColorBufferMultiplier::AA4});
-    fbo->compile();
+    fbo->Compile();
 
     return fbo;
 }
