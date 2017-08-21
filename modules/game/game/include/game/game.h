@@ -2,6 +2,7 @@
 #define PROJECT_GAME_H
 
 #include <memory>
+
 #include <game/architecture/engine_architecture.h>
 
 namespace ifx {
@@ -19,14 +20,14 @@ class Game {
 public:
 
     Game(std::shared_ptr<GameLoop> game_loop,
-         const EngineArchitecture& engine_architecture);
+         std::shared_ptr<EngineArchitecture> engine_architecture);
     ~Game() = default;
 
     std::shared_ptr<GameLoop> game_loop() {return game_loop_;}
     std::shared_ptr<SceneContainer> scene() {
-            return engine_architecture_.engine_systems.scene_container;}
+            return engine_architecture_->engine_systems.scene_container;}
     std::shared_ptr<ResourceContext> resource_creator() {
-        return engine_architecture_.engine_contexts.resource_context;}
+        return engine_architecture_->engine_contexts.resource_context;}
 
     void Start();
 private:
@@ -34,7 +35,7 @@ private:
 
     std::shared_ptr<GameLoop> game_loop_;
 
-    EngineArchitecture engine_architecture_;
+    std::shared_ptr<EngineArchitecture> engine_architecture_;
 
 };
 }

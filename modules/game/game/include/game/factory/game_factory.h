@@ -67,7 +67,7 @@ private:
                                       const EngineContexts& engine_contexts);
 
     std::shared_ptr<GameLoop> CreateGameLoop(
-            const EngineArchitecture& engine_architecture);
+            std::shared_ptr<EngineArchitecture> engine_architecture);
 
     std::shared_ptr<RenderingContextFactory> rendering_context_factory_;
     std::shared_ptr<ResourceContextFactory> resource_context_factory_;

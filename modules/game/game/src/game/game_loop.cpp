@@ -1,26 +1,23 @@
 #include "game/game_loop.h"
 
-#include <graphics/rendering/renderer.h>
+#include <graphics/rendering/window/window.h>
 
-#include <physics/physics_simulation.h>
-
-#include <game/scene_container.h>
-
-#include <controls/controls.h>
-
-#include <gui/gui.h>
+#include <game/architecture/engine_architecture.h>
+#include <game/game_updater.h>
 
 #include <GLFW/glfw3.h>
 
 namespace ifx {
 
-GameLoop::GameLoop(const EngineArchitecture& engine_architecture) :
+GameLoop::GameLoop(std::unique_ptr<GameUpdater> game_updater,
+                   std::shared_ptr<EngineArchitecture> engine_architecture) :
+        game_updater_(std::move(game_updater)),
         engine_architecture_(engine_architecture){}
 
 GameLoop::~GameLoop(){}
 
 void GameLoop::Start(){
-    while(!engine_architecture_.window->ShouldClose()) {
+    while(!engine_architecture_->window->ShouldClose()) {
         RunSingleIteration();
     }
 }
@@ -28,15 +25,7 @@ void GameLoop::Start(){
 void GameLoop::RunSingleIteration(){
     if(!UpdateTime())
         return;
-
-    engine_architecture_.engine_systems.physics_simulation->Update(
-            time_data_.time_delta);
-    engine_architecture_.engine_systems.scene_container->Update();
-    engine_architecture_.engine_systems.renderer->Update();
-    engine_architecture_.engine_systems.controls->Update();
-    engine_architecture_.engine_systems.gui->Update();
-
-    engine_architecture_.window->Update();
+    game_updater_->Update(time_data_.time_delta);
 }
 
 bool GameLoop::UpdateTime(){

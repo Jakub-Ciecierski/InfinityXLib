@@ -128,12 +128,13 @@ GameFactory &GameFactory::SetGUIFactory(std::shared_ptr<GUIFactory> factory) {
 }
 
 std::shared_ptr<Game> GameFactory::Create(){
-    EngineArchitecture engine_architecture;
-    engine_architecture.engine_contexts = CreateEngineContexts();
-    engine_architecture.window
-            = CreateWindow(engine_architecture.engine_contexts);
-    engine_architecture.engine_systems = CreateEngineSystems(
-            engine_architecture.window, engine_architecture.engine_contexts);
+    auto engine_architecture = std::make_shared<EngineArchitecture>();
+
+    engine_architecture->engine_contexts = CreateEngineContexts();
+    engine_architecture->window
+            = CreateWindow(engine_architecture->engine_contexts);
+    engine_architecture->engine_systems = CreateEngineSystems(
+            engine_architecture->window, engine_architecture->engine_contexts);
 
     auto game_loop = CreateGameLoop(engine_architecture);
 
@@ -213,8 +214,8 @@ EngineSystems GameFactory::CreateEngineSystems(
     return engine_systems;
 }
 
-std::shared_ptr<GameLoop> GameFactory::(
-        const EngineArchitecture& engine_architecture){
+std::shared_ptr<GameLoop> GameFactory::CreateGameLoop(
+        std::shared_ptr<EngineArchitecture> engine_architecture){
     if(game_loop_factory_)
         return game_loop_factory_->Create(engine_architecture);
 

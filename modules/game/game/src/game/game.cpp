@@ -11,7 +11,7 @@
 namespace ifx{
 
 Game::Game(std::shared_ptr<GameLoop> game_loop,
-           const EngineArchitecture& engine_architecture) :
+           std::shared_ptr<EngineArchitecture> engine_architecture) :
         game_loop_(game_loop),
         engine_architecture_(engine_architecture){
     if(!game_loop){
@@ -26,9 +26,9 @@ void Game::Start(){
 }
 
 void Game::Terminate(){
-    engine_architecture_.engine_contexts.rendering_context->Terminate();
-    engine_architecture_.engine_contexts.control_context->Terminate();
-    engine_architecture_.engine_contexts.gui_context->Terminate();
+    engine_architecture_->engine_contexts.rendering_context->Terminate();
+    engine_architecture_->engine_contexts.control_context->Terminate();
+    engine_architecture_->engine_contexts.gui_context->Terminate();
 }
 
 }
