@@ -35,9 +35,9 @@ public:
 private:
     std::vector<std::shared_ptr<Command>> commands_;
 
-    std::shared_ptr<ControllerContainer> controller_container_;
-
     std::shared_ptr<ControlContext> control_context_;
+
+    std::shared_ptr<ControllerContainer> controller_container_;
 };
 }
 

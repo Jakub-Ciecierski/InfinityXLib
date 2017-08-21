@@ -1,11 +1,7 @@
 #include "editor/scene_manipulator.h"
 
 #include <game/game_component.h>
-#include <math/transform.h>
 #include <game/components/cameras/camera_component.h>
-
-#include <graphics/rendering/camera/camera.h>
-#include <math/print_math.h>
 
 namespace ifx {
 
@@ -18,26 +14,6 @@ SceneManipulator::SceneManipulator() :
 }
 
 SceneManipulator::~SceneManipulator() { }
-
-void SceneManipulator::Manipulate(std::shared_ptr<Transformable> movable_object,
-                                  std::shared_ptr<CameraComponent> camera,
-                                  SceneManipulatorOperation operation) {
-    ImGuizmo::BeginFrame();
-
-    const float *view = glm::value_ptr(camera->getViewMatrix());
-    const float *projection = glm::value_ptr(camera->getProjectionMatrix());
-
-    auto model = movable_object->GetModelMatrix();
-    float *new_model_matrix = glm::value_ptr(model);
-
-    ImGuizmo::Manipulate(view, projection,
-                         GetNativeOperationMode(operation),
-                         ImGuizmo::MODE::WORLD,
-                         new_model_matrix);
-
-    if (ImGuizmo::IsUsing())
-        Manipulate(movable_object, new_model_matrix, operation);
-}
 
 void SceneManipulator::Manipulate() {
     if(!show_)
@@ -97,5 +73,6 @@ ImGuizmo::OPERATION SceneManipulator::GetNativeOperationMode(
         case SceneManipulatorOperation::SCALE:
             return ImGuizmo::OPERATION::SCALE;
     }
+    return ImGuizmo::OPERATION::TRANSLATE;
 }
 }

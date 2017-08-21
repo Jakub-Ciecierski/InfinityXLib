@@ -3,16 +3,18 @@
 
 #include <memory>
 
+#include <common/updatable.h>
+
 namespace ifx {
 
 struct EngineArchitecture;
 
-class GameUpdater {
+class GameUpdater : public Updatable{
 public:
     GameUpdater(std::shared_ptr<EngineArchitecture> engine_architecture);
     ~GameUpdater() = default;
 
-    void Update(float time_elapsed);
+    virtual void Update(float time_elapsed) override;
 
 private:
     std::shared_ptr<EngineArchitecture> engine_architecture_;

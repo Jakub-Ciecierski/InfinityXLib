@@ -24,6 +24,7 @@ bool MouseCommand::IsConditionSatisfied(){
         case MouseControllerCallbackType::UNKNOWN:
             return false;
     }
+    return false;
 }
 
 }

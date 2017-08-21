@@ -15,7 +15,8 @@ class Program;
 
 class RenderingEffectView {
 public:
-    RenderingEffectView(std::shared_ptr<RenderingEffectProcessor> rendering_effect_processor);
+    RenderingEffectView(
+            std::shared_ptr<RenderingEffectProcessor> rendering_effect_processor);
     ~RenderingEffectView() = default;
 
     void Render(const std::vector<std::shared_ptr<RenderingEffect>>& rendering_effects);
@@ -40,11 +41,10 @@ private:
     std::string GetBaseShaderName(const std::string& name);
 
     std::shared_ptr<RenderingEffectProcessor> rendering_effect_processor_;
+    std::shared_ptr<RenderingEffect> selected_rendering_effect_;
 
     bool render_error_window_;
     std::string shader_error_message_;
-
-    std::shared_ptr<RenderingEffect> selected_rendering_effect_;
 };
 }
 

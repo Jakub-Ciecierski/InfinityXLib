@@ -33,10 +33,8 @@ public:
     bool show(){return show_;}
     void show(bool v){show_ = v;}
 
-    void Manipulate(std::shared_ptr<Transformable> movable_object,
-                    std::shared_ptr<CameraComponent> camera,
-                    SceneManipulatorOperation operation);
     void Manipulate();
+
 private:
     void Manipulate(std::shared_ptr<Transformable> movable_object,
                     const float* new_model_matrix,

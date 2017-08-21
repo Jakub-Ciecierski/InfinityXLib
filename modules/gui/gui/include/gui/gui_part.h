@@ -6,9 +6,8 @@ namespace ifx {
 class GUIPart {
 public:
 
-    GUIPart();
-
-    virtual ~GUIPart();
+    GUIPart() = default;
+    virtual ~GUIPart() = default;
 
     virtual void Render() = 0;
 

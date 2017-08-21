@@ -2,6 +2,7 @@
 
 #include <gui/context/gui_context.h>
 #include <gui/gui_part.h>
+
 #include <controls/context/control_context.h>
 
 namespace ifx {

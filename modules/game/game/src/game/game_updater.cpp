@@ -20,8 +20,9 @@ void GameUpdater::Update(float time_elapsed){
     engine_architecture_->engine_systems.physics_simulation->Update(
             time_elapsed);
     engine_architecture_->engine_systems.scene_container->Update();
-    engine_architecture_->engine_systems.renderer->Update();
     engine_architecture_->engine_systems.controls->Update();
+
+    engine_architecture_->engine_systems.renderer->Update();
     engine_architecture_->engine_systems.gui->Update();
 
     engine_architecture_->window->Update();

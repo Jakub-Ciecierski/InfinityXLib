@@ -22,6 +22,7 @@ std::string LightSource::LightTypeString(LightType type){
         case LightType::SPOTLIGHT:
             return "Spotlight";
     }
+    return "Unknown";
 }
 
 void LightSource::SetLightParams(const LightParams &light_params) {

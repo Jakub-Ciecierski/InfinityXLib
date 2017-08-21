@@ -16,7 +16,8 @@ RenderingEffectView::RenderingEffectView(
         std::shared_ptr<RenderingEffectProcessor> rendering_effect_processor) :
         rendering_effect_processor_(rendering_effect_processor),
         selected_rendering_effect_(nullptr),
-        render_error_window_(false) {}
+        render_error_window_(false),
+        shader_error_message_(""){}
 
 void RenderingEffectView::Render(const std::vector<std::shared_ptr<RenderingEffect>>& rendering_effects ){
     RenderReloadProject();

@@ -1,6 +1,7 @@
 #include <controls/context/glfw/mapping/mouse_mapping_glfw.h>
 
 #include <GLFW/glfw3.h>
+#include <stdexcept>
 
 namespace ifx {
 
@@ -12,7 +13,12 @@ int MouseKeyIFX2GLFW(MouseControllerKeyType ifx_key){
             return GLFW_MOUSE_BUTTON_RIGHT;
         case MouseControllerKeyType::MOUSE_MIDDLE:
             return GLFW_MOUSE_BUTTON_MIDDLE;
+        case MouseControllerKeyType::MOUSE_SCROLL:
+            throw std::invalid_argument("MouseControllerKeyType::MOUSE_SCROLL");
+        case MouseControllerKeyType::UNKNOWN:
+            throw std::invalid_argument("MouseControllerKeyType::UNKNOWN");
     }
+    return -1;
 }
 
 MouseControllerKeyType MouseGLFW2IFX(int glfw_key){
@@ -34,7 +40,13 @@ int MouseCallbackIFX2GLFW(MouseControllerCallbackType ifx_key){
             return GLFW_PRESS;
         case MouseControllerCallbackType::RELEASED:
             return GLFW_RELEASE;
+        case MouseControllerCallbackType::UNKNOWN:
+            throw std::invalid_argument("MouseControllerCallbackType::UNKNOWN");
+        case MouseControllerCallbackType::SCROLL_ACTIVE:
+            throw std::invalid_argument(
+                    "MouseControllerCallbackType::SCROLL_ACTIVE");
     }
+    return -1;
 }
 
 MouseControllerCallbackType MouseCallbackGLFW2IFX(int glfw_key){

@@ -66,12 +66,7 @@ glm::vec3 BulletPhysicsSimulation::GetGravity(){
     return glm::vec3(gravity.x(), gravity.y(), gravity.z());
 }
 
-void BulletPhysicsSimulation::AddImpulse(){
-    for(auto& rigid_body : rigid_bodies_){
-        btVector3 impulse(0.1, 1.1, 0.1);
-        //rigid_body->rigid_body_bt()->applyCentralImpulse(impulse);
-    }
-}
+void BulletPhysicsSimulation::AddImpulse(){}
 
 void BulletPhysicsSimulation::SynchronizeRigidBodiesTransform(){
     for(auto& rigid_body : rigid_bodies_){

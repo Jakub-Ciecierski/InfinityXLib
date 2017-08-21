@@ -34,7 +34,6 @@ void FBORenderer::Render(){
     shadow_mapping_renderer_->Render();
 
     fbo_->Bind();
-
     RenderScene();
 
     RenderBufferToScreenMesh();

@@ -18,6 +18,7 @@ std::string GameComponent::GetTypeString(GameComponentType type){
         case GameComponentType::PHYSICS:
             return "Rigid Body";
     }
+    return "Unknown";
 }
 
 }

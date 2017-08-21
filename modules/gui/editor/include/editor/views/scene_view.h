@@ -59,6 +59,8 @@ private:
                                  int component_id);
 
     std::shared_ptr<SceneContainer> scene_;
+    std::shared_ptr<ResourceContext> resource_creator_;
+
     std::shared_ptr<SceneManipulator> scene_manipulator_;
 
     std::shared_ptr<GameObject> selected_game_object_;
@@ -71,8 +73,6 @@ private:
     std::unique_ptr<GameObjectContextMenu> game_object_context_menu_;
     std::unique_ptr<GameComponentContextMenu> game_component_context_menu_;
     std::unique_ptr<SceneListContextMenu> scene_list_context_menu_;
-
-    std::shared_ptr<ResourceContext> resource_creator_;
 };
 }
 

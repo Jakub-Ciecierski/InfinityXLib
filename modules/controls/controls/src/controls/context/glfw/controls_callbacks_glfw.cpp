@@ -64,7 +64,8 @@ void mouse_callback(GLFWwindow *window,
     auto controls = ControlsContainer::GetInstance().controls();
     auto mouse_controller = controls->controller_container()
             ->mouse_controller();
-    mouse_controller->SetCurrentPosition(MousePosition{xpos, ypos});
+    mouse_controller->SetCurrentPosition(MousePosition{(float)xpos,
+                                                       (float)ypos});
 }
 
 void mouse_button_callback(GLFWwindow *window,
@@ -117,8 +118,8 @@ void mousescroll_callback(GLFWwindow *window,
     std::static_pointer_cast<MouseScrollControllerEvent>(scroll_event)->
             SetActivated(true);
 
-    mouse_controller->SetScrollOffset(MousePosition{xoffset,
-                                                    yoffset});
+    mouse_controller->SetScrollOffset(MousePosition{(float)xoffset,
+                                                    (float)yoffset});
 }
 
 void char_callback(GLFWwindow *window, unsigned int c) {

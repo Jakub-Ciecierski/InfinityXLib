@@ -1,6 +1,7 @@
 #include <controls/context/glfw/mapping/key_mapping_glfw.h>
 
 #include <GLFW/glfw3.h>
+#include <stdexcept>
 
 namespace ifx{
 
@@ -74,7 +75,11 @@ int KeyIFX2GLFW(KeyboardControllerKeyType ifx_key){
             return GLFW_KEY_ENTER;
         case KeyboardControllerKeyType::SPACE:
             return GLFW_KEY_SPACE;
+        case KeyboardControllerKeyType::UNKNOWN:
+            throw std::invalid_argument("KeyboardControllerKeyType::UNKNOWN");
     }
+
+    throw std::invalid_argument("KeyIFX2GLFW Missing Keys");
 }
 
 KeyboardControllerKeyType KeyGLFW2IFX(int glfw_key){
@@ -150,6 +155,7 @@ KeyboardControllerKeyType KeyGLFW2IFX(int glfw_key){
         default:
             return KeyboardControllerKeyType::UNKNOWN;
     }
+    throw std::invalid_argument("KeyGLFW2IFX Missing Keys");
 }
 
 int KeyboardCallbackIFX2GLFW(KeyboardControllerCallbackType ifx_key){
@@ -158,7 +164,10 @@ int KeyboardCallbackIFX2GLFW(KeyboardControllerCallbackType ifx_key){
             return GLFW_PRESS;
         case KeyboardControllerCallbackType::RELEASED:
             return GLFW_RELEASE;
+        case KeyboardControllerCallbackType::UNKNOWN:
+            throw std::invalid_argument("KeyboardControllerCallbackType::UNKNOWN");
     }
+    return -1;
 }
 
 KeyboardControllerCallbackType KeyboardCallbackGLFW2IFX(int glfw_key){

@@ -17,7 +17,10 @@ bool KeyboardCommand::IsConditionSatisfied(){
             return condition_.event_->IsPressed();
         case KeyboardControllerCallbackType::RELEASED:
             return condition_.event_->IsReleased();
+        case KeyboardControllerCallbackType::UNKNOWN:
+            return false;
     }
+    return false;
 }
 
 }

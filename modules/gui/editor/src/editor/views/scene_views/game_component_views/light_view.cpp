@@ -179,7 +179,7 @@ void LightView::RenderShadowMappingResolution(
 
         if(width_changed || height_changed){
             light_source->shadow_mapping()->Reset(
-                    Dimensions{width, height});
+                    Dimensions{(int)width, (int)height});
         }
 
         ImGui::TreePop();

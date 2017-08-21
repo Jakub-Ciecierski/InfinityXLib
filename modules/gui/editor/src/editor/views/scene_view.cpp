@@ -20,6 +20,8 @@
 #include <game/resources/resource_context.h>
 #include <iostream>
 
+#include <common/unique_ptr.h>
+
 namespace ifx {
 
 SceneView::SceneView(std::shared_ptr<SceneContainer> scene,
@@ -30,16 +32,17 @@ SceneView::SceneView(std::shared_ptr<SceneContainer> scene,
         resource_creator_(resource_creator),
         selected_game_object_(nullptr),
         selected_game_component_(nullptr) {
-    scene_manipulator_
-            = std::shared_ptr<SceneManipulator>(new SceneManipulator());
-    game_object_view_.reset(new GameObjectView());
-    game_component_view_.reset(new GameComponentView(scene_renderer));
-    scene_manipulator_view_.reset(new SceneManipulatorView(scene_manipulator_));
+    scene_manipulator_ = std::make_shared<SceneManipulator>();
 
-    game_object_context_menu_.reset(new GameObjectContextMenu(scene_renderer,
-                                                              resource_creator_, scene_));
-    game_component_context_menu_.reset(new GameComponentContextMenu());
-    scene_list_context_menu_.reset(new SceneListContextMenu(scene_));
+    game_object_view_ = ifx::make_unique<GameObjectView>();
+    game_component_view_ = ifx::make_unique<GameComponentView>(scene_renderer);
+    scene_manipulator_view_
+            = ifx::make_unique<SceneManipulatorView>(scene_manipulator_);
+    game_object_context_menu_ = ifx::make_unique<GameObjectContextMenu>(
+            scene_renderer,
+            resource_creator_, scene_);
+    game_component_context_menu_ = ifx::make_unique<GameComponentContextMenu>();
+    scene_list_context_menu_ = ifx::make_unique<SceneListContextMenu>(scene_);
 }
 
 SceneView::~SceneView(){ }
@@ -91,7 +94,7 @@ void SceneView::RenderGameObjectsList(
         std::vector<std::shared_ptr<GameObject>>& game_objects){
     static int selection_mask = (1 << 2);
 
-    for(int i = 0;i < game_objects.size(); i++){
+    for(unsigned int i = 0;i < game_objects.size(); i++){
         int node_clicked = -1;
         ImGuiTreeNodeFlags node_flags
                 = ImGuiTreeNodeFlags_OpenOnArrow |
@@ -150,7 +153,7 @@ void SceneView::RenderGameComponentsList(
             node_clicked = i;
 
         if (node_clicked != -1){
-            selection_mask = (1 << node_clicked + id_start);
+            selection_mask = (1 << (node_clicked + id_start));
             selected_game_component_ = game_components[i];
         }
         auto event = game_component_context_menu_->Render(game_object,
