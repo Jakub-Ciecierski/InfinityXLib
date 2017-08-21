@@ -21,7 +21,12 @@ void GUI::Update(float time_delta) {
     context_->Render();
 }
 
-bool GUI::Init(void *native_window, std::shared_ptr<ControlContext> control_context) {
+bool GUI::Init(void *native_window,
+               std::shared_ptr<ControlContext> control_context) {
+    if(!native_window || !control_context){
+        throw std::invalid_argument(
+                "Creating GUI System: Missing Dependencies");
+    }
     return context_->Init(native_window, control_context);
 }
 

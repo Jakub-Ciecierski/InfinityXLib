@@ -135,59 +135,90 @@ std::shared_ptr<Game> GameFactory::Create(){
     engine_architecture.engine_systems = CreateEngineSystems(
             engine_architecture.window, engine_architecture.engine_contexts);
 
-    auto game_loop = game_loop_factory_->Create(engine_architecture);
+    auto game_loop = CreateGameLoop(engine_architecture);
 
-    auto game = std::shared_ptr<Game>(new Game(game_loop,
-                                               engine_architecture));
+    auto game = std::make_shared<Game>(game_loop,
+                                       engine_architecture);
+
     return game;
 }
 
 EngineContexts GameFactory::CreateEngineContexts(){
     EngineContexts engine_contexts;
-    engine_contexts.rendering_context
-            = rendering_context_factory_->Create();
-    engine_contexts.resource_context =
-            resource_context_factory_->Create();
-    engine_contexts.control_context
-            = control_context_factory_->Create();
-    engine_contexts.gui_context
-            = gui_context_factory_->Create();
+
+    if(rendering_context_factory_) {
+        engine_contexts.rendering_context
+                = rendering_context_factory_->Create();
+    }
+    if(resource_context_factory_) {
+        engine_contexts.resource_context =
+                resource_context_factory_->Create();
+    }
+    if(control_context_factory_) {
+        engine_contexts.control_context
+                = control_context_factory_->Create();
+    }
+    if(gui_context_factory_) {
+        engine_contexts.gui_context
+                = gui_context_factory_->Create();
+    }
 
     return engine_contexts;
 }
 
 std::shared_ptr<Window> GameFactory::CreateWindow(
         const EngineContexts& engine_contexts){
+    if(!window_factory_)
+        return nullptr;
+
     auto window = window_factory_->Create();
     if(!window->Init(engine_contexts.rendering_context,
                      engine_contexts.control_context)){
         throw new std::invalid_argument("window->Init Failed");
     }
+
     return window;
 }
 
 EngineSystems GameFactory::CreateEngineSystems(
         std::shared_ptr<Window> window,
-        const EngineContexts& engine_contexts){
+        const EngineContexts& engine_contexts) {
     EngineSystems engine_systems;
-    engine_systems.renderer = renderer_factory_->Create(
-            window, engine_contexts.rendering_context);
 
-    engine_systems.physics_simulation = physics_simulation_factory_->Create();
-
-    engine_systems.controls = controls_factory_->Create(
-            engine_contexts.control_context);
-
-    engine_systems.scene_container = scene_factory_->Create(
-            engine_systems.renderer->scene_renderer(),
-            engine_systems.physics_simulation);
-
-    engine_systems.gui = gui_factory_->Create(
-            engine_contexts.gui_context);
-    engine_systems.gui->Init(window->getHandle(),
-                             engine_contexts.control_context);
+    if (renderer_factory_) {
+        engine_systems.renderer = renderer_factory_->Create(
+                window,
+                engine_contexts.rendering_context);
+    }
+    if (physics_simulation_factory_) {
+        engine_systems.physics_simulation
+                = physics_simulation_factory_->Create();
+    }
+    if (controls_factory_) {
+        engine_systems.controls = controls_factory_->Create(
+                engine_contexts.control_context);
+    }
+    if(scene_factory_) {
+        engine_systems.scene_container = scene_factory_->Create(
+                engine_systems.renderer->scene_renderer(),
+                engine_systems.physics_simulation);
+    }
+    if(gui_factory_) {
+        engine_systems.gui = gui_factory_->Create(
+                engine_contexts.gui_context);
+        engine_systems.gui->Init(window->getHandle(),
+                                 engine_contexts.control_context);
+    }
 
     return engine_systems;
+}
+
+std::shared_ptr<GameLoop> GameFactory::(
+        const EngineArchitecture& engine_architecture){
+    if(game_loop_factory_)
+        return game_loop_factory_->Create(engine_architecture);
+
+    return nullptr;
 }
 
 }

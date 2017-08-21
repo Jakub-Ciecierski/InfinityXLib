@@ -20,7 +20,7 @@ public:
 
     Game(std::shared_ptr<GameLoop> game_loop,
          const EngineArchitecture& engine_architecture);
-    ~Game();
+    ~Game() = default;
 
     std::shared_ptr<GameLoop> game_loop() {return game_loop_;}
     std::shared_ptr<SceneContainer> scene() {
