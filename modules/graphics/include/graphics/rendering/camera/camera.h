@@ -22,6 +22,9 @@ public:
 
     ~Camera();
 
+    float near_plane(){return near_;}
+    void near_plane(float near){near_ = near;}
+
     /**
      * Override from MovableObject.
      */
@@ -62,11 +65,8 @@ private:
 
     float FOV;
 
-    float near;
-    float far;
-
-    float last_mouse_x;
-    float last_mouse_y;
+    float near_;
+    float far_;
 };
 }
 

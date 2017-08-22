@@ -23,13 +23,13 @@ enum class FBOBuffer {
 /**
  * Anti-Aliasing. Increase Color Buffer by AAx
  */
-enum class FBOAAColorBufferMultiplier{
+enum class FBO_MSAA{
     NONE, AA2, AA4, AA8, AA16
 };
 
 struct FBOType{
     FBOBuffer buffer;
-    FBOAAColorBufferMultiplier anti_aliasing_multiplier;
+    FBO_MSAA msaa;
 };
 
 /**
@@ -42,6 +42,8 @@ public:
     FBO(std::shared_ptr<Texture2D> texture, const FBOType& type);
 
     ~FBO();
+
+    GLuint id(){return id_;}
 
     std::shared_ptr<Texture2D> texture() const {return texture_;}
 
@@ -71,13 +73,14 @@ private:
      */
     void CompileColorDepth();
     void CompileDepth();
+    void CompileColor();
 
     void CompileTexture(GLenum attachment);
     void CompileRBO();
 
     void CheckError();
 
-    unsigned int GetMultiplier(FBOAAColorBufferMultiplier& aa);
+    unsigned int GetMultiplier(FBO_MSAA& aa);
 
     FBOType type_;
 

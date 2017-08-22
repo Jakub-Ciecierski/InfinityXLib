@@ -52,11 +52,16 @@ void Mesh::BindTexture(std::shared_ptr<Texture2D> texture,
 }
 
 void Mesh::unbindTextures(){
-    material_->diffuse->Unbind();
-    material_->specular->Unbind();
-    material_->normal->Unbind();
-    material_->displacement->Unbind();
-    material_->fbo->Unbind();
+    if(material_->diffuse)
+        material_->diffuse->Unbind();
+    if(material_->specular)
+        material_->specular->Unbind();
+    if(material_->normal)
+        material_->normal->Unbind();
+    if(material_->displacement)
+        material_->displacement->Unbind();
+    if(material_->fbo)
+        material_->fbo->Unbind();
 }
 
 void Mesh::bindColor(const Program &program) {

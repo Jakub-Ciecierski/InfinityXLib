@@ -18,15 +18,9 @@ Texture2D::Texture2D(std::string filepath,
         type_(type),
         format_(format),
         pixel_type_(pixel_type),
+        target_(TextureTarget::Normal),
         width_(width), height_(height){
     glGenTextures(1, &id_);
-    InitData(nullptr, width_, height_);
-
-    AddParameter(TextureParameter{GL_TEXTURE_WRAP_S, GL_REPEAT});
-    AddParameter(TextureParameter{GL_TEXTURE_WRAP_T, GL_REPEAT});
-
-    AddParameter(TextureParameter{GL_TEXTURE_MIN_FILTER, GL_LINEAR});
-    AddParameter(TextureParameter{GL_TEXTURE_MAG_FILTER, GL_LINEAR});
 }
 
 Texture2D::~Texture2D(){
@@ -35,8 +29,16 @@ Texture2D::~Texture2D(){
 
 void Texture2D::AddParameter(TextureParameter param){
     Bind();
-    glTexParameteri(GL_TEXTURE_2D, param.param, param.value);
+    glTexParameteri(GetTextureTargetPrimitive(), param.param, param.value);
     Unbind();
+}
+
+void Texture2D::InitData(){
+    InitData(nullptr, width_, height_);
+}
+
+void Texture2D::InitData(int width, int height){
+    InitData(nullptr, width, height);
 }
 
 void Texture2D::InitData(void* data, int width, int height){
@@ -56,13 +58,19 @@ void Texture2D::InitData(void* data, int width, int height){
     glGenerateMipmap(GL_TEXTURE_2D);
 
     Unbind();
+
+    AddParameter(TextureParameter{GL_TEXTURE_WRAP_S, GL_REPEAT});
+    AddParameter(TextureParameter{GL_TEXTURE_WRAP_T, GL_REPEAT});
+
+    AddParameter(TextureParameter{GL_TEXTURE_MIN_FILTER, GL_LINEAR});
+    AddParameter(TextureParameter{GL_TEXTURE_MAG_FILTER, GL_LINEAR});
 }
 
 void Texture2D::Bind(){
-    glBindTexture(GL_TEXTURE_2D, id_);
+    glBindTexture(GetTextureTargetPrimitive(), id_);
 }
 void Texture2D::Unbind(){
-    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTexture(GetTextureTargetPrimitive(), 0);
 }
 
 GLenum Texture2D::GetTextureInternalFormatPrimitive(){
@@ -85,6 +93,16 @@ GLenum Texture2D::GetTexturePixelTypePrimitive(){
         return GL_UNSIGNED_BYTE;
     else
         return GL_ERROR_REGAL;
+}
+
+GLenum Texture2D::GetTextureTargetPrimitive(){
+    switch(target_){
+        case TextureTarget::Normal:
+            return GL_TEXTURE_2D;
+        case TextureTarget::MultiSample:
+            return GL_TEXTURE_2D_MULTISAMPLE;
+    }
+    return GL_TEXTURE_2D;
 }
 
 }

@@ -2,6 +2,7 @@
 
 #include <graphics/shaders/buffers/fbo.h>
 #include <graphics/shaders/textures/texture.h>
+#include <graphics/shaders/textures/texture_multisample.h>
 #include <graphics/model/mesh.h>
 #include "graphics/shaders/textures/texture_creator.h"
 #include <graphics/rendering/window/window.h>
@@ -24,13 +25,16 @@ std::shared_ptr<Renderer> FBORendererFactory::Create(
         std::shared_ptr<ProgramCreator> program_creator,
         std::shared_ptr<ResourceManager> resource_manager){
     auto fbo = CreateFBO(window, texture_creator);
-    auto screen_mesh = CreateScreenMesh(*fbo);
+    auto intermediate_fbo = CreateIntermediateFBO(window, texture_creator);
+    auto screen_mesh = CreateScreenMesh(*intermediate_fbo);
     auto program = CreateProgram(program_creator, resource_manager);
 
     auto fbo_renderer = std::make_shared<FBORenderer>(
             window,
             rendering_context,
-            std::move(fbo), std::move(screen_mesh),
+            std::move(fbo),
+            std::move(intermediate_fbo),
+            std::move(screen_mesh),
             program);
 
     return fbo_renderer;
@@ -39,19 +43,39 @@ std::shared_ptr<Renderer> FBORendererFactory::Create(
 std::unique_ptr<FBO> FBORendererFactory::CreateFBO(
         std::shared_ptr<Window> window,
         std::shared_ptr<TextureCreator> texture_creator){
+    unsigned int sample_count = 4;
+    auto texture = texture_creator->MakeTextureMultisample(
+            TextureTypes::FBO,
+            TextureInternalFormat::RGB,
+            sample_count,
+            *(window->width()), *(window->height()));
+    texture->InitData();
+
+    auto fbo = ifx::make_unique<FBO>(texture,
+                                     FBOType{FBOBuffer::COLOR_DEPTH,
+                                             FBO_MSAA::AA4});
+    fbo->Compile();
+
+    return fbo;
+}
+
+std::unique_ptr<FBO> FBORendererFactory::CreateIntermediateFBO(
+        std::shared_ptr<Window> window,
+        std::shared_ptr<TextureCreator> texture_creator){
     auto texture = texture_creator->MakeTexture2DEmpty(
             ifx::NO_FILEPATH,
             TextureTypes::FBO,
             TextureInternalFormat::RGB,
             TexturePixelType::UNSIGNED_BYTE,
             *(window->width()), *(window->height()));
+    texture->InitData();
 
     texture->AddParameter(TextureParameter{GL_TEXTURE_MIN_FILTER, GL_LINEAR});
     texture->AddParameter(TextureParameter{GL_TEXTURE_MAG_FILTER, GL_LINEAR});
 
     auto fbo = ifx::make_unique<FBO>(texture,
-                                     FBOType{FBOBuffer::COLOR_DEPTH,
-                                             FBOAAColorBufferMultiplier::AA4});
+                                     FBOType{FBOBuffer::COLOR,
+                                             FBO_MSAA::NONE});
     fbo->Compile();
 
     return fbo;

@@ -2,19 +2,20 @@
 #define PROJECT_TEXTURE_CREATOR_H
 
 #include <string>
-
 #include <graphics/shaders/textures/texture.h>
 
 namespace ifx {
 
 class ResourceManager;
+class TextureMultisample;
+class Texture2D;
 
 class TextureCreator {
 public:
 
     TextureCreator(std::shared_ptr<ResourceManager> resource_manager);
 
-    ~TextureCreator();
+    ~TextureCreator() = default;
 
     std::shared_ptr<ResourceManager> resource_manager(){
         return resource_manager_;}
@@ -28,6 +29,13 @@ public:
             TextureInternalFormat format,
             TexturePixelType pixel_type,
             int width, int height);
+
+    std::shared_ptr<Texture2D> MakeTextureMultisample(
+            TextureTypes type,
+            TextureInternalFormat format,
+            unsigned int sample_count,
+            int width, int height
+    );
 private:
     std::shared_ptr<ResourceManager> resource_manager_;
 };

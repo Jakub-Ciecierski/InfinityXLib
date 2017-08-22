@@ -14,10 +14,12 @@ FBORenderer::FBORenderer(
         std::shared_ptr<Window> window,
         std::shared_ptr<RenderingContext> rendering_context,
         std::unique_ptr<FBO> fbo,
+        std::unique_ptr<FBO> intermediate_fbo,
         std::unique_ptr<Mesh> screen_mesh,
         std::shared_ptr<Program> program) :
         Renderer(window, rendering_context),
         fbo_(std::move(fbo)),
+        intermediate_fbo_(std::move(intermediate_fbo)),
         screen_mesh_(std::move(screen_mesh)),
         program_(program){
     if(!fbo_ || !screen_mesh_ || !program_){
@@ -37,15 +39,26 @@ void FBORenderer::Render(){
     fbo_->Bind();
     RenderScene();
 
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo_->id());
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, intermediate_fbo_->id());
+    glBlitFramebuffer(0, 0,
+                      fbo_->texture()->width(),
+                      fbo_->texture()->height(),
+                      0, 0,
+                      fbo_->texture()->width(),
+                      fbo_->texture()->height(),
+                      GL_COLOR_BUFFER_BIT,
+                      GL_NEAREST);
+
     RenderBufferToScreenMesh();
 }
 
 void FBORenderer::RenderBufferToScreenMesh(){
-    glDisable(GL_DEPTH_TEST);
     fbo_->Unbind();
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_DEPTH_TEST);
 
     screen_mesh_->draw(*program_);
 }
@@ -53,6 +66,9 @@ void FBORenderer::RenderBufferToScreenMesh(){
 void FBORenderer::OnResize(int width, int height) {
     fbo_->texture()->InitData(nullptr, width, height);
     fbo_->Compile();
+
+    intermediate_fbo_->texture()->InitData(nullptr, width, height);
+    intermediate_fbo_->Compile();
 }
 
 }

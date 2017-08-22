@@ -13,10 +13,11 @@ class Program;
 class FBORenderer : public Renderer, public WindowObserver {
 public:
     FBORenderer(std::shared_ptr<Window> window,
-                 std::shared_ptr<RenderingContext> rendering_context,
-                 std::unique_ptr<FBO> fbo,
-                 std::unique_ptr<Mesh> screen_mesh,
-                 std::shared_ptr<Program> program);
+                std::shared_ptr<RenderingContext> rendering_context,
+                std::unique_ptr<FBO> fbo,
+                std::unique_ptr<FBO> intermediate_fbo,
+                std::unique_ptr<Mesh> screen_mesh,
+                std::shared_ptr<Program> program);
 
     ~FBORenderer();
 
@@ -28,6 +29,7 @@ private:
     void RenderBufferToScreenMesh();
 
     std::unique_ptr<FBO> fbo_;
+    std::unique_ptr<FBO> intermediate_fbo_;
     std::unique_ptr<Mesh> screen_mesh_;
     std::shared_ptr<Program> program_;
 };

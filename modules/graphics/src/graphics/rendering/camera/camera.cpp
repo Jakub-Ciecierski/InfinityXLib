@@ -11,7 +11,7 @@ namespace ifx {
 Camera::Camera(int *width, int *height,
                float FOV, float near, float far) :
         width(width), height(height),
-        FOV(FOV), near(near), far(far) {
+        FOV(FOV), near_(near), far_(far) {
     WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
     moveTo(glm::vec3(1,1,1));
     Update();
@@ -37,7 +37,7 @@ void Camera::Update(float time_delta) {
 
     ProjectionMatrix
             = glm::perspective(FOV, (float) (*width) / (float) (*height),
-                               near, far);
+                               near_, far_);
     auto position = getPosition();
     auto rotation = getRotation();
 

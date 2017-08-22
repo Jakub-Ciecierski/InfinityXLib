@@ -46,6 +46,7 @@ std::shared_ptr<Texture2D> ShadowMapping::CreateTexture(){
                     TextureInternalFormat::DEPTH_COMPONENT,
                     TexturePixelType::FLOAT,
                     dimensions_.width, dimensions_.height);
+    texture->InitData();
 
     texture->AddParameter(TextureParameter{GL_TEXTURE_MIN_FILTER, GL_NEAREST});
     texture->AddParameter(TextureParameter{GL_TEXTURE_MAG_FILTER, GL_NEAREST});
@@ -65,7 +66,7 @@ std::shared_ptr<Texture2D> ShadowMapping::CreateTexture(){
 void ShadowMapping::InitFBO(std::shared_ptr<Texture2D> texture){
     fbo_ = ifx::make_unique<FBO>(texture,
                                  FBOType{FBOBuffer::DEPTH,
-                                         FBOAAColorBufferMultiplier::NONE});
+                                         FBO_MSAA::NONE});
 
     fbo_->Compile();
 }

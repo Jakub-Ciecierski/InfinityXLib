@@ -3,6 +3,7 @@
 #include <graphics/shaders/textures/texture.h>
 
 #include <GL/glew.h>
+#include <iostream>
 
 namespace ifx {
 
@@ -33,6 +34,7 @@ void FBO::Compile(){
             CompileDepth();
             break;
         case FBOBuffer::COLOR:
+            CompileColor();
             break;
     }
     CheckError();
@@ -59,7 +61,7 @@ void FBO::DeleteFBO(){
 }
 
 void FBO::CompileColorDepth(){
-    CompileTexture(GL_COLOR_ATTACHMENT0);
+    CompileColor();
     CompileRBO();
 }
 
@@ -70,20 +72,36 @@ void FBO::CompileDepth(){
     glReadBuffer(GL_NONE);
 }
 
+void FBO::CompileColor(){
+    CompileTexture(GL_COLOR_ATTACHMENT0);
+}
+
 void FBO::CompileTexture(GLenum attachment){
     glFramebufferTexture2D(GL_FRAMEBUFFER,
                            attachment,
-                           GL_TEXTURE_2D, texture_->id(), 0);
+                           texture_->GetTextureTargetPrimitive(),
+                           texture_->id(),
+                           0);
 }
 
 void FBO::CompileRBO(){
-    auto multiplier = GetMultiplier(type_.anti_aliasing_multiplier);
+    auto multiplier = GetMultiplier(type_.msaa);
     GLuint rbo;
     glGenRenderbuffers(1, &rbo);
+
     glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,
-                          texture_->width() * multiplier,
-                          texture_->height() * multiplier);
+    if(multiplier != 0){
+        glRenderbufferStorageMultisample(GL_RENDERBUFFER,
+                                         multiplier,
+                                         GL_DEPTH24_STENCIL8,
+                                         texture_->width(),
+                                         texture_->height());
+    }else{
+        glRenderbufferStorage(GL_RENDERBUFFER,
+                              GL_DEPTH24_STENCIL8,
+                              texture_->width(),
+                              texture_->height());
+    }
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
     glFramebufferRenderbuffer(GL_FRAMEBUFFER,
@@ -92,21 +110,25 @@ void FBO::CompileRBO(){
 }
 
 void FBO::CheckError(){
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        throw std::invalid_argument("Framebuffer is not complete!");
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
+        std::cout << glCheckFramebufferStatus(GL_FRAMEBUFFER) << std::endl;
+
+        throw std::invalid_argument("Framebuffer is not complete!" +
+                                    glCheckFramebufferStatus(GL_FRAMEBUFFER));
+    }
 }
 
-unsigned int FBO::GetMultiplier(FBOAAColorBufferMultiplier& aa){
+unsigned int FBO::GetMultiplier(FBO_MSAA& aa){
     switch(aa){
-        case FBOAAColorBufferMultiplier::NONE:
+        case FBO_MSAA::NONE:
             return 1;
-        case FBOAAColorBufferMultiplier::AA2:
+        case FBO_MSAA::AA2:
             return 2;
-        case FBOAAColorBufferMultiplier::AA4:
+        case FBO_MSAA::AA4:
             return 4;
-        case FBOAAColorBufferMultiplier::AA8:
+        case FBO_MSAA::AA8:
             return 8;
-        case FBOAAColorBufferMultiplier::AA16:
+        case FBO_MSAA::AA16:
             return 16;
     }
     return 0;

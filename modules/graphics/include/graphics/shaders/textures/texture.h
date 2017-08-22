@@ -24,6 +24,10 @@ enum class TexturePixelType{
     FLOAT, UNSIGNED_BYTE
 };
 
+enum class TextureTarget {
+    Normal, MultiSample
+};
+
 struct TextureParameter{
     GLenum param;
     GLenum value;
@@ -31,7 +35,7 @@ struct TextureParameter{
 
 class Texture2D : public Resource {
 public:
-    ~Texture2D();
+    virtual ~Texture2D();
 
     GLuint id(){return id_;}
     TextureTypes texture_type(){return type_;}
@@ -41,28 +45,36 @@ public:
     int height(){return height_;}
 
     void AddParameter(TextureParameter param);
-    void InitData(void* data, int width, int height);
+
+    virtual void InitData();
+    virtual void InitData(int width, int height);
+    virtual void InitData(void* data, int width, int height);
 
     void Bind();
     void Unbind();
 
+    GLenum GetTextureInternalFormatPrimitive();
+    GLenum GetTexturePixelTypePrimitive();
+    GLenum GetTextureTargetPrimitive();
+
     friend class TextureCreator;
-private:
+
+protected:
     Texture2D(std::string filepath,
               TextureTypes type,
               TextureInternalFormat format,
               TexturePixelType pixel_type,
               int width = 0, int height = 0);
 
-    GLenum GetTextureInternalFormatPrimitive();
-    GLenum GetTexturePixelTypePrimitive();
-
     GLuint id_;
     TextureTypes type_;
     TextureInternalFormat format_;
     TexturePixelType pixel_type_;
+    TextureTarget target_;
+
     int width_;
     int height_;
+
 };
 }
 
