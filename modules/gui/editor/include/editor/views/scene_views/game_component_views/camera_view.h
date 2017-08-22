@@ -10,8 +10,8 @@ class CameraComponent;
 class CameraView {
 public:
 
-    CameraView();
-    ~CameraView();
+    CameraView() = default;
+    ~CameraView() = default;
 
     void Render(std::shared_ptr<CameraComponent> camera);
 private:

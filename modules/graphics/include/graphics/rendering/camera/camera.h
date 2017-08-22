@@ -25,6 +25,9 @@ public:
     float near_plane(){return near_;}
     void near_plane(float near){near_ = near;}
 
+    float far_plane(){return far_;}
+    void far_plane(float far){far_ = far;}
+
     /**
      * Override from MovableObject.
      */
