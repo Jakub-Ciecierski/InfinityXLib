@@ -18,7 +18,7 @@ class Transformable : public Updatable {
 public:
     Transformable();
 
-    ~Transformable();
+    virtual ~Transformable() = default;
 
     const glm::vec3& look_at(){return look_at_;}
     const TransformData& local_transform() {return local_transform_;}

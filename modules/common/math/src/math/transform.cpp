@@ -7,8 +7,6 @@ Transformable::Transformable() :
     initVectors();
 }
 
-Transformable::~Transformable() {}
-
 void Transformable::Update(float time_delta){
     UpdateGlobal();
 

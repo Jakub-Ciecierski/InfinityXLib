@@ -21,7 +21,7 @@ public:
 
     GameComponent(GameComponentType type);
 
-    virtual ~GameComponent();
+    virtual ~GameComponent() = default;
 
     GameComponentType type(){return type_;}
 

@@ -35,8 +35,7 @@ void ContextMenuAddLight::Render(
         }
         if (ImGui::Selectable("Point")) {
             auto light = LightComponentFactory().CreatePointLight();
-            game_object->Add(std::dynamic_pointer_cast<GameComponent>
-                                     (light));
+            game_object->Add(std::dynamic_pointer_cast<GameComponent>(light));
         }
         ImGui::EndMenu();
     }

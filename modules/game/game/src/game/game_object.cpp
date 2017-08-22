@@ -13,17 +13,22 @@ GameObject::~GameObject(){}
 void GameObject::Update(float time_delta){
     Transformable::Update();
 
-    // TODO dynamic cast is expensive
-    for(auto& component : components_)
-        std::dynamic_pointer_cast<Transformable>(component)->Update();
+    for(auto& component : components_){
+        auto game_component_transformable
+                = std::dynamic_pointer_cast<Transformable>(component);
+        if(game_component_transformable)
+            game_component_transformable->Update(time_delta);
+    }
 }
 
 void GameObject::Add(std::shared_ptr<GameComponent> game_component){
     if(Exists(game_component))
         return;
 
-    auto d = std::dynamic_pointer_cast<Transformable>(game_component);
-    d->SetParent(this);
+    auto game_component_transformable
+            = std::dynamic_pointer_cast<Transformable>(game_component);
+    if(game_component_transformable)
+        game_component_transformable->SetParent(this);
 
     components_.push_back(game_component);
 

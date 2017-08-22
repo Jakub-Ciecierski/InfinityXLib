@@ -4,7 +4,6 @@ namespace ifx{
 
 GameComponent::GameComponent(GameComponentType type) :
         type_(type){}
-GameComponent::~GameComponent(){}
 
 // static
 std::string GameComponent::GetTypeString(GameComponentType type){

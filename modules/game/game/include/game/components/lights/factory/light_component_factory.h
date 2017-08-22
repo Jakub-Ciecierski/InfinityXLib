@@ -17,9 +17,8 @@ class ShadowMapping;
 class LightComponentFactory {
 public:
 
-    LightComponentFactory();
-
-    ~LightComponentFactory();
+    LightComponentFactory() = default;
+    ~LightComponentFactory() = default;
 
     std::shared_ptr<LightPointComponent> CreatePointLight();
     std::shared_ptr<LightDirectionalComponent> CreateDirectionalLight(

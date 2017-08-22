@@ -9,19 +9,14 @@
 #include <graphics/shaders/textures/texture_creator.h>
 
 #include <resources/resource_manager.h>
-#include <resources/resources.h>
 
 namespace ifx{
 
-LightComponentFactory::LightComponentFactory(){}
-
-LightComponentFactory::~LightComponentFactory(){}
-
-std::shared_ptr<LightPointComponent> LightComponentFactory::CreatePointLight(){
+std::shared_ptr<LightPointComponent>
+LightComponentFactory::CreatePointLight(){
     LightParams light;
 
-    auto light_source = std::shared_ptr<LightPointComponent>(
-            new LightPointComponent(light));
+    auto light_source = std::make_shared<LightPointComponent>(light);
 
     return light_source;
 }
@@ -32,10 +27,10 @@ LightComponentFactory::CreateDirectionalLight(
         std::shared_ptr<ProgramCreator> program_creator){
     ifx::LightParams light;
 
-    auto light_source = std::shared_ptr<ifx::LightDirectionalComponent>(
-            new ifx::LightDirectionalComponent(
+    auto light_source = std::make_shared<ifx::LightDirectionalComponent>(
                     light,
-                    CreateShadowMapping(texture_creator, program_creator)));
+                    CreateShadowMapping(texture_creator, program_creator));
+
     light_source->rotateTo(glm::vec3(0, 270, 0));
     light_source->LookAt(glm::vec3(0,0,0));
 
@@ -48,10 +43,10 @@ LightComponentFactory::CreateSpotLight(
         std::shared_ptr<ProgramCreator> program_creator){
     ifx::LightParams light;
 
-    auto light_source = std::shared_ptr<ifx::LightSpotlightComponent>(
-            new ifx::LightSpotlightComponent(
+    auto light_source = std::make_shared<ifx::LightSpotlightComponent>(
                     light,
-                    CreateShadowMapping(texture_creator, program_creator)));
+                    CreateShadowMapping(texture_creator, program_creator));
+
     light_source->rotateTo(glm::vec3(0, 270, 0));
     light_source->LookAt(glm::vec3(0,0,0));
 
