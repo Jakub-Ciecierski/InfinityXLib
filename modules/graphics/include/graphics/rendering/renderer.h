@@ -1,7 +1,6 @@
 #ifndef PROJECT_RENDERER_H
 #define PROJECT_RENDERER_H
 
-#include <graphics/rendering/window/window.h>
 #include <common/updatable.h>
 
 #include <memory>
@@ -12,7 +11,6 @@ class SceneRenderer;
 class ShadowMappingRenderer;
 class Window;
 class RenderingContext;
-
 
 /**
  * Takes ownership over ShadowMapping

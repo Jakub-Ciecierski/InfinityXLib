@@ -9,15 +9,17 @@ namespace ifx {
 class GUI;
 class GUIContext;
 class GUIPart;
+class ControlContext;
 
 class GUIFactory {
 public:
 
-    GUIFactory();
+    GUIFactory() = default;
+    ~GUIFactory() = default;
 
-    ~GUIFactory();
-
-    std::shared_ptr<GUI> Create(std::shared_ptr<GUIContext> context);
+    std::shared_ptr<GUI> Create(std::shared_ptr<GUIContext> context,
+                                void *native_window,
+                                std::shared_ptr<ControlContext> control_context);
 private:
 
 };

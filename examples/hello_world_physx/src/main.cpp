@@ -433,10 +433,7 @@ std::shared_ptr<ifx::GameObject> CreateGameObjectCeiling(
 
 
 int main() {
-    auto game_factory
-            = std::shared_ptr<ifx::GameFactory>(new ifx::GameFactory());
-    game_factory->SetPhysicsSimulationFactory(
-            std::make_shared<ifx::PhysxPhysicsSimulationFactory>());
+    auto game_factory = std::make_shared<ifx::GameFactory>();
     auto game = game_factory->Create();
 
     auto lights = CreateGameObjectLight(

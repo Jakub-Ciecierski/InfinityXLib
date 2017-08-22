@@ -1,12 +1,10 @@
 #include "graphics/rendering/renderer.h"
 
-#include <graphics/shaders/program.h>
 #include <graphics/rendering/scene_renderer.h>
-
-#include <resources/resource_memory_cache.h>
 #include <graphics/rendering/shadows/shadow_mapping_renderer.h>
 #include <graphics/shaders/textures/texture_activator.h>
-#include <graphics/shaders/loaders/program_loader.h>
+
+#include <graphics/rendering/window/window.h>
 
 #include <GL/glew.h>
 

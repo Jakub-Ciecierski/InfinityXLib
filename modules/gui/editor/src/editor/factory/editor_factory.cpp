@@ -91,22 +91,22 @@ std::shared_ptr<SceneView> EditorFactory::CreateSceneView(
         std::shared_ptr<SceneContainer> scene,
         std::shared_ptr<ResourceContext> resource_creator,
         std::shared_ptr<SceneRenderer> scene_renderer){
-    return std::shared_ptr<SceneView>(new SceneView(scene, resource_creator,
-                                                    scene_renderer));
+    return std::make_shared<SceneView>(scene, resource_creator,
+                                       scene_renderer);
 }
 
 std::shared_ptr<PhysicsSimulationView>
 EditorFactory::CreatePhysicsSimulationView(
         std::shared_ptr<PhysicsSimulation> physics_simulation){
-    return std::shared_ptr<PhysicsSimulationView>(
-            new PhysicsSimulationView(physics_simulation));
+    return std::make_shared<PhysicsSimulationView>(physics_simulation);
 }
 
 std::shared_ptr<RenderingView> EditorFactory::CreateRenderingView(
         std::shared_ptr<SceneRenderer> scene_renderer,
         std::shared_ptr<ResourceContext> resource_creator){
     auto rendering_effect_processor
-            = std::make_shared<RenderingEffectProcessor>(resource_creator, scene_renderer);
+            = std::make_shared<RenderingEffectProcessor>(resource_creator,
+                                                         scene_renderer);
 
     return std::make_shared<RenderingView>(rendering_effect_processor);
 }

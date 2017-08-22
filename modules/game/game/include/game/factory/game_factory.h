@@ -20,70 +20,34 @@ class GUIFactory;
 class Window;
 class GameLoop;
 
+class GameSystemsFactory;
+class GameContextsFactory;
+
 struct EngineContexts;
 struct EngineSystems;
 struct EngineArchitecture;
 
 class GameFactory {
 public:
-
     GameFactory();
-    ~GameFactory();
+    ~GameFactory() = default;
 
-    GameFactory& SetWindowFactory(
-            std::shared_ptr<WindowFactory> factory);
-
-    GameFactory& SetRenderingContextFactory(
-            std::shared_ptr<RenderingContextFactory> factory);
-    GameFactory& SetResourceContextFactory(
-            std::shared_ptr<ResourceContextFactory> factory);
-    GameFactory& SetControlContextFactory(
-            std::shared_ptr<ControlContextFactory> factory);
-    GameFactory& SetGUIContextFactory(
-            std::shared_ptr<GUIContextFactory> factory);
-
-    GameFactory& SetRendererFactory(
-            std::shared_ptr<RendererFactory> renderer_factory);
-    GameFactory& SetPhysicsSimulationFactory(
-            std::shared_ptr<PhysicsSimulationFactory>
-            physics_simulation_factory);
-    GameFactory& SetControlsFactory(std::shared_ptr<ControlsFactory> factory);
-    GameFactory& SetSceneContainerFactory(
-            std::shared_ptr<SceneContainerFactory> scene_factory);
-    GameFactory& SetGUIFactory(
-            std::shared_ptr<GUIFactory> factory);
-
-    GameFactory& SetGameLoopFactory(
-            std::shared_ptr<GameLoopFactory> game_loop_factory);
+    GameFactory& SetGameContextsFactory(std::shared_ptr<GameContextsFactory>);
+    GameFactory& SetGameSystemsFactory(std::shared_ptr<GameSystemsFactory>);
+    GameFactory& SetWindowFactory(std::shared_ptr<WindowFactory>);
+    GameFactory& SetGameLoopFactory(std::shared_ptr<GameLoopFactory>);
 
     std::shared_ptr<Game> Create();
 
 private:
     void CreateDefaultFactories();
 
-    EngineContexts CreateEngineContexts();
-    std::shared_ptr<Window> CreateWindow(const EngineContexts& engine_contexts);
-    EngineSystems CreateEngineSystems(std::shared_ptr<Window> window,
-                                      const EngineContexts& engine_contexts);
+    std::shared_ptr<EngineArchitecture> CreateEngineArchitecture();
 
-    std::shared_ptr<GameLoop> CreateGameLoop(
-            std::shared_ptr<EngineArchitecture> engine_architecture);
-
-    std::shared_ptr<RenderingContextFactory> rendering_context_factory_;
-    std::shared_ptr<ResourceContextFactory> resource_context_factory_;
-    std::shared_ptr<ControlContextFactory> control_context_factory_;
-    std::shared_ptr<GUIContextFactory> gui_context_factory_;
-
+    std::shared_ptr<GameContextsFactory> game_contexts_factory_;
+    std::shared_ptr<GameSystemsFactory> game_systems_factory_;
     std::shared_ptr<WindowFactory> window_factory_;
-
-    std::shared_ptr<RendererFactory> renderer_factory_;
-    std::shared_ptr<PhysicsSimulationFactory> physics_simulation_factory_;
-    std::shared_ptr<ControlsFactory> controls_factory_;
-    std::shared_ptr<SceneContainerFactory> scene_factory_;
-    std::shared_ptr<GUIFactory> gui_factory_;
-
     std::shared_ptr<GameLoopFactory> game_loop_factory_;
-
 };
 }
 

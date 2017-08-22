@@ -4,6 +4,7 @@
 #include <graphics/model/mesh.h>
 #include <graphics/rendering/shadows/shadow_mapping_renderer.h>
 #include <graphics/rendering/scene_renderer.h>
+#include <graphics/rendering/window/window.h>
 
 #include <GL/glew.h>
 

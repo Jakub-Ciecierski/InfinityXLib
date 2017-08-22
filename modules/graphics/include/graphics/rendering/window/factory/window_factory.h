@@ -6,6 +6,8 @@
 namespace ifx {
 
 class Window;
+class RenderingContext;
+class ControlContext;
 
 class WindowFactory {
 public:
@@ -14,7 +16,9 @@ public:
 
     ~WindowFactory();
 
-    std::shared_ptr<Window> Create();
+    std::shared_ptr<Window> Create(
+            std::shared_ptr<RenderingContext> rendering_context,
+            std::shared_ptr<ControlContext> control_context);
 
 private:
     std::string name_;

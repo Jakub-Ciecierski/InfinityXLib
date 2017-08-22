@@ -10,8 +10,16 @@ WindowFactory::WindowFactory(std::string name,
 
 WindowFactory::~WindowFactory(){}
 
-std::shared_ptr<Window> WindowFactory::Create(){
-    return std::shared_ptr<Window>(new Window(width_, height_, name_));
+std::shared_ptr<Window> WindowFactory::Create(
+        std::shared_ptr<RenderingContext> rendering_context,
+        std::shared_ptr<ControlContext> control_context){
+    auto window = std::make_shared<Window>(width_, height_, name_);
+
+    if(!window->Init(rendering_context, control_context)){
+        throw new std::invalid_argument("window->Init Failed");
+    }
+
+    return window;
 }
 
 }
