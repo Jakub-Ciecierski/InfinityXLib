@@ -13,7 +13,10 @@ public:
     SoftBodyView(std::unique_ptr<GameUpdater> game_updater);
     ~SoftBodyView() = default;
 
+    bool Terminate() override;
+
     virtual void Render() override;
+
 private:
     std::unique_ptr<GameUpdater> game_updater_;
 };

@@ -29,9 +29,14 @@ public:
     std::shared_ptr<ResourceContext> resource_creator() {
         return engine_architecture_->engine_contexts.resource_context;}
 
+    std::shared_ptr<EngineArchitecture> engine_architecture(){
+        return engine_architecture_; }
+
     void Start();
 private:
     void Terminate();
+    void TerminateSystems();
+    void TerminateContexts();
 
     std::shared_ptr<GameLoop> game_loop_;
 

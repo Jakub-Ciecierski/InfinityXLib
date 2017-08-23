@@ -8,9 +8,8 @@ namespace ifx {
 class RenderingContextOpengl : public RenderingContext{
 public:
 
-    RenderingContextOpengl();
-
-    ~RenderingContextOpengl();
+    RenderingContextOpengl() = default;
+    ~RenderingContextOpengl() = default;
 
     virtual bool Terminate() override;
 

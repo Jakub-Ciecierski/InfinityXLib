@@ -475,11 +475,7 @@ int main() {
     head->moveTo(glm::vec3(0.0f, 7.0f, 0.0f));
 
     auto editor = ifx::EditorFactory().CreateEngineGUI(
-            game->game_loop()->renderer()->window(),
-            game->scene(),
-            game->game_loop()->physics_simulation(),
-            game->game_loop()->renderer()->scene_renderer(),
-            game->resource_creator());
+            game->engine_architecture());
     game->game_loop()->gui()->AddGUIPart(editor);
 
     auto scene_renderer = game->game_loop()->renderer()->scene_renderer();
@@ -493,6 +489,3 @@ int main() {
 
     game->Start();
 }
-
-
-

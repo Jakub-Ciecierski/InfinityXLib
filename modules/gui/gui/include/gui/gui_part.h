@@ -9,8 +9,9 @@ public:
     GUIPart() = default;
     virtual ~GUIPart() = default;
 
-    virtual void Render() = 0;
+    virtual bool Terminate() = 0;
 
+    virtual void Render() = 0;
 private:
 };
 }

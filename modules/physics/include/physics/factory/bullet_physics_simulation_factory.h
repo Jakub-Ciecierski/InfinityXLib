@@ -22,7 +22,8 @@ public:
     BulletPhysicsSimulationFactory();
     ~BulletPhysicsSimulationFactory();
 
-    virtual std::shared_ptr<PhysicsSimulation> Create() override;
+    virtual std::shared_ptr<PhysicsSimulation> Create(
+            std::shared_ptr<PhysicsContext> physics_context) override;
 
     BulletPhysicsSimulationFactory& SetDynamicWorldType(DynamicWorldType type);
 

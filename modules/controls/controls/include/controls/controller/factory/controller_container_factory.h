@@ -16,7 +16,7 @@ class ControllerContainerFactory {
 public:
 
     ControllerContainerFactory();
-    ~ControllerContainerFactory();
+    ~ControllerContainerFactory() = default;
 
     ControllerContainerFactory& SetMouseControllerFactory(
             std::shared_ptr<MouseControllerFactory> factory);

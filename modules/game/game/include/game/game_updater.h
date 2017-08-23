@@ -14,6 +14,10 @@ public:
     GameUpdater(std::shared_ptr<EngineArchitecture> engine_architecture);
     ~GameUpdater() = default;
 
+    std::shared_ptr<EngineArchitecture> engine_architecture(){
+        return engine_architecture_;
+    }
+
     virtual void Update(float time_elapsed) override;
 
 private:

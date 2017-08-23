@@ -22,7 +22,7 @@ class Window : public Updatable, public WindowSubject {
 
 public:
     Window(int width, int height, std::string name);
-    ~Window();
+    ~Window() = default;
 
     int* width() {return &width_;}
     int* height() {return &height_;}

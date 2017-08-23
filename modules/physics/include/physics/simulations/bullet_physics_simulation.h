@@ -24,8 +24,12 @@ struct BulletPhysicsSimulationCreateParams{
 
 class BulletPhysicsSimulation : public PhysicsSimulation {
 public:
-    BulletPhysicsSimulation(const BulletPhysicsSimulationCreateParams& params);
-    ~BulletPhysicsSimulation();
+    BulletPhysicsSimulation(
+            std::shared_ptr<PhysicsContext> physics_context,
+            const BulletPhysicsSimulationCreateParams& params);
+    ~BulletPhysicsSimulation() = default;
+
+    virtual bool Terminate() override;
 
     std::shared_ptr<btDynamicsWorld> dynamics_world_bt(){
         return dynamics_world_;}

@@ -12,11 +12,14 @@ namespace ifx {
 class RigidBody;
 class RigidBodyImpl;
 struct RigidBodyParams;
+class PhysicsContext;
 
 class PhysicsSimulation : public Updatable{
 public:
-    PhysicsSimulation();
-    virtual ~PhysicsSimulation();
+    PhysicsSimulation(std::shared_ptr<PhysicsContext> physics_context);
+    virtual ~PhysicsSimulation() = default;
+
+    virtual bool Terminate() = 0;
 
     bool is_running(){return is_running_;}
     void is_running(bool v){is_running_ = v;}
@@ -36,6 +39,8 @@ public:
     virtual std::unique_ptr<RigidBodyImpl> CreateRigidBodyImpl() = 0;
 
 protected:
+    std::shared_ptr<PhysicsContext> physics_context_;
+
     std::vector<std::shared_ptr<RigidBody>> rigid_bodies_;
 
     bool is_running_;

@@ -20,7 +20,9 @@ public:
     WindowView(std::shared_ptr<View> view,
                std::string name = "Debug");
 
-    virtual ~WindowView();
+    virtual ~WindowView() = default;
+
+    bool Terminate();
 
     void show(bool val){show_ = val;}
     bool* show(){return &show_;}

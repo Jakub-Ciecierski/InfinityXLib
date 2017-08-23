@@ -2,9 +2,10 @@
 
 namespace ifx {
 
-PhysicsSimulation::PhysicsSimulation() :
+PhysicsSimulation::PhysicsSimulation(
+        std::shared_ptr<PhysicsContext> physics_context) :
+        physics_context_(physics_context),
         is_running_(true){}
-PhysicsSimulation::~PhysicsSimulation(){}
 
 void PhysicsSimulation::Play(){
     is_running_ = true;

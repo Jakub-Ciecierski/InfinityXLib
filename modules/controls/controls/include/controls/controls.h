@@ -22,7 +22,7 @@ class Controls : public Updatable {
 public:
     Controls(std::shared_ptr<ControlContext>,
              std::shared_ptr<ControllerContainer>);
-    ~Controls();
+    ~Controls() = default;
 
     std::shared_ptr<ControllerContainer> controller_container(){
         return controller_container_;}

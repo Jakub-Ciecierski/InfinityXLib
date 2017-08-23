@@ -8,9 +8,12 @@
 
 #include <graphics/rendering/window/window.h>
 #include <graphics/rendering/renderer.h>
-
 #include <graphics/factory/renderer_factory.h>
 #include <graphics/rendering/window/factory/window_factory.h>
+
+#include <gui/context/gui_context.h>
+
+#include <physics/context/physics_context.h>
 
 namespace ifx {
 
@@ -70,14 +73,32 @@ std::shared_ptr<EngineArchitecture> GameFactory::CreateEngineArchitecture(){
     }
 
     engine_architecture->engine_contexts = game_contexts_factory_->Create();
-    engine_architecture->window = window_factory_->Create(
-            engine_architecture->engine_contexts.rendering_context,
-            engine_architecture->engine_contexts.control_context);
+    engine_architecture->window = window_factory_->Create();
+    InitContexts(engine_architecture->window,
+                 engine_architecture->engine_contexts);
+
     engine_architecture->engine_systems = game_systems_factory_->Create(
             engine_architecture->window,
             engine_architecture->engine_contexts);
 
     return engine_architecture;
 }
+
+void GameFactory::InitContexts(std::shared_ptr<Window> window,
+                               EngineContexts &contexts) {
+    if(!window->Init(contexts.rendering_context, contexts.control_context)){
+        throw new std::invalid_argument("window->Init Failed");
+    }
+
+    if(!contexts.gui_context->Init((void*)window->getHandle(),
+                                   contexts.control_context)){
+        throw std::invalid_argument("gui_context->Init() failed");
+    }
+
+    if(!contexts.physics_context->Init()){
+        throw std::invalid_argument("physics_context->Init() failed");
+    }
+}
+
 
 }

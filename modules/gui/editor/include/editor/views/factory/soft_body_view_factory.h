@@ -9,16 +9,17 @@ namespace ifx {
 
 class SoftBodyView;
 
-struct GameArchitecture;
+struct EngineArchitecture;
 
 class SoftBodyViewFactory : public ViewFactory {
 public:
-    SoftBodyViewFactory(std::shared_ptr<GameArchitecture> game_architecture);
+    SoftBodyViewFactory(
+            std::shared_ptr<EngineArchitecture> engine_architecture);
     ~SoftBodyViewFactory() = default;
 
     virtual std::shared_ptr<View> Create() override;
 private:
-    std::shared_ptr<GameArchitecture> game_architecture_;
+    std::shared_ptr<EngineArchitecture> engine_architecture_;
 };
 }
 

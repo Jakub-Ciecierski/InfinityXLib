@@ -17,11 +17,10 @@ public:
 
     GUI(std::shared_ptr<GUIContext> context);
 
-    virtual ~GUI();
+    virtual ~GUI() = default;
 
     virtual void Update(float time_delta = 0) override;
 
-    bool Init(void* native_window, std::shared_ptr<ControlContext> control_context);
     bool Terminate();
 
     void AddGUIPart(std::shared_ptr<GUIPart> gui_part);

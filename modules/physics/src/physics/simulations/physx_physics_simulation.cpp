@@ -12,30 +12,27 @@
 namespace ifx {
 
 PhysxPhysicsSimulation::PhysxPhysicsSimulation(
+        std::shared_ptr<PhysicsContext> physics_context,
         physx::PxPhysics *px_physics,
         physx::PxPvd *px_pvd,
         physx::PxPvdTransport *px_pvd_transport,
-        physx::PxFoundation *px_foundation,
-        std::unique_ptr<physx::PxAllocatorCallback> px_allocator_callback,
-        std::unique_ptr<physx::PxErrorCallback> px_error_callback,
         physx::PxDefaultCpuDispatcher *px_dispatcher,
         physx::PxScene *px_scene) :
+        PhysicsSimulation(physics_context),
         px_physics_((px_physics)),
         px_pvd_((px_pvd)),
         px_pvd_transport_((px_pvd_transport)),
-        px_foundation_((px_foundation)),
-        px_allocator_callback_(std::move(px_allocator_callback)),
-        px_error_callback_(std::move(px_error_callback)),
         px_dispatcher_((px_dispatcher)),
         px_scene_((px_scene)) {}
 
-PhysxPhysicsSimulation::~PhysxPhysicsSimulation() {
+bool PhysxPhysicsSimulation::Terminate(){
     px_scene_->release();
     px_dispatcher_->release();
     px_physics_->release();
     px_pvd_->release();
     px_pvd_transport_->release();
-    px_foundation_->release();
+
+    return true;
 }
 
 void PhysxPhysicsSimulation::Update(float time_delta) {

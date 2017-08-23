@@ -10,8 +10,6 @@ ControllerContainerFactory::ControllerContainerFactory(){
     CreateDefaultFactories();
 }
 
-ControllerContainerFactory::~ControllerContainerFactory(){}
-
 std::shared_ptr<ControllerContainer> ControllerContainerFactory::Create(){
     auto input_container = std::make_shared<ControllerContainer>(
             CreateMouseController(),

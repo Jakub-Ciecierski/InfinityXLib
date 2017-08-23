@@ -23,7 +23,7 @@ public:
 
     SceneContainer(std::shared_ptr<SceneRenderer> scene_renderer,
                    std::shared_ptr<PhysicsSimulation> physics_simulation);
-    ~SceneContainer();
+    ~SceneContainer() = default;
 
     std::vector<std::shared_ptr<GameObject>>& game_objects(){
         return game_objects_;}

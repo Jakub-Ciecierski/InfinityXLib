@@ -18,8 +18,6 @@ Window::Window(int width, int height, std::string name) :
     WindowsContainer::GetInstance().AddWindow(this);
 }
 
-Window::~Window() {}
-
 bool Window::Init(std::shared_ptr<RenderingContext> rendering_context,
                   std::shared_ptr<ControlContext> control_context){
     rendering_context_ = rendering_context;

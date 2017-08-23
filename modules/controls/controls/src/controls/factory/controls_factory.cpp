@@ -20,8 +20,8 @@ std::shared_ptr<Controls> ControlsFactory::Create(
 
     auto input_container = controller_container_factory_->Create();
 
-    auto controls = std::make_shared<ifx::Controls>(control_context,
-                                                    input_container);
+    auto controls = std::make_shared<Controls>(control_context,
+                                               input_container);
 
     return controls;
 }

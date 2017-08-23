@@ -14,7 +14,6 @@ SceneContainer::SceneContainer(
     scene_distributor_ = std::shared_ptr<SceneDistributor>(
             new SceneDistributor(scene_renderer, physics_simulation));
 }
-SceneContainer::~SceneContainer(){}
 
 void SceneContainer::Update(float time_delta){
     for(auto& object : game_objects_){

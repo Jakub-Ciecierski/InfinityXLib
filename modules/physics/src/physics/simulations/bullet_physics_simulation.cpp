@@ -16,7 +16,9 @@
 namespace ifx {
 
 BulletPhysicsSimulation::BulletPhysicsSimulation(
+        std::shared_ptr<PhysicsContext> physics_context,
         const BulletPhysicsSimulationCreateParams& params) :
+        PhysicsSimulation(physics_context),
         broadphase_(params.broadphase),
         dispatcher_(params.dispatcher),
         solver_(params.solver),
@@ -25,7 +27,9 @@ BulletPhysicsSimulation::BulletPhysicsSimulation(
     SetGravity(glm::vec3(0,-9.81,0));
 }
 
-BulletPhysicsSimulation::~BulletPhysicsSimulation(){}
+bool BulletPhysicsSimulation::Terminate(){
+    return true;
+}
 
 void BulletPhysicsSimulation::Add(std::shared_ptr<RigidBody> rigid_body){
     PhysicsSimulation::Add(rigid_body);

@@ -6,15 +6,16 @@
 namespace ifx {
 
 class PhysicsSimulation;
+class PhysicsContext;
 
 class PhysicsSimulationFactory {
 public:
 
-    PhysicsSimulationFactory();
+    PhysicsSimulationFactory() = default;
+    virtual ~PhysicsSimulationFactory() = default;
 
-    virtual ~PhysicsSimulationFactory();
-
-    virtual std::shared_ptr<PhysicsSimulation> Create() = 0;
+    virtual std::shared_ptr<PhysicsSimulation> Create(
+            std::shared_ptr<PhysicsContext> physics_context) = 0;
 private:
 };
 }

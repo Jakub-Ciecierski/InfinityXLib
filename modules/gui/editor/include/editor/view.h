@@ -10,6 +10,8 @@ public:
     View(std::string name);
     virtual ~View() = default;
 
+    virtual bool Terminate();
+
     const std::string& name(){return name_;}
 
     virtual void Render() = 0;

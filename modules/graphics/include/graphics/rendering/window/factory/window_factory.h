@@ -16,9 +16,7 @@ public:
 
     ~WindowFactory();
 
-    std::shared_ptr<Window> Create(
-            std::shared_ptr<RenderingContext> rendering_context,
-            std::shared_ptr<ControlContext> control_context);
+    std::shared_ptr<Window> Create();
 
 private:
     std::string name_;

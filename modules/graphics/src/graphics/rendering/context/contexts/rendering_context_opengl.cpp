@@ -7,10 +7,6 @@
 
 namespace ifx {
 
-RenderingContextOpengl::RenderingContextOpengl(){}
-
-RenderingContextOpengl::~RenderingContextOpengl(){}
-
 bool RenderingContextOpengl::Terminate(){
     if(!IsInit())
         return true;

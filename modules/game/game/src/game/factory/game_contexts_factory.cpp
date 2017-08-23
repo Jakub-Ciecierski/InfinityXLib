@@ -8,6 +8,8 @@
 
 #include <game/resources/factory/resource_context_factory.h>
 
+#include <physics/context/factory/physx_context_factory.h>
+
 namespace ifx{
 
 GameContextsFactory::GameContextsFactory(){
@@ -22,16 +24,16 @@ EngineContexts GameContextsFactory::Create(){
                 = rendering_context_factory_->Create();
     }
     if(resource_context_factory_) {
-        engine_contexts.resource_context =
-                resource_context_factory_->Create();
+        engine_contexts.resource_context = resource_context_factory_->Create();
     }
     if(control_context_factory_) {
-        engine_contexts.control_context
-                = control_context_factory_->Create();
+        engine_contexts.control_context = control_context_factory_->Create();
     }
     if(gui_context_factory_) {
-        engine_contexts.gui_context
-                = gui_context_factory_->Create();
+        engine_contexts.gui_context = gui_context_factory_->Create();
+    }
+    if(physics_context_factory_){
+        engine_contexts.physics_context = physics_context_factory_->Create();
     }
 
     return engine_contexts;
@@ -46,6 +48,8 @@ void GameContextsFactory::CreateDefaultFactories(){
     control_context_factory_ = std::make_shared<ControlContextGLFWFactory>();
 
     gui_context_factory_ = std::make_shared<GUIGLFWContextFactory>();
+
+    physics_context_factory_ = std::make_shared<PhysxContextFactory>();
 }
 
 GameContextsFactory& GameContextsFactory::SetRenderingContextFactory(
@@ -73,5 +77,10 @@ GameContextsFactory::SetGUIContextFactory(
     return *this;
 }
 
+GameContextsFactory& GameContextsFactory::SetPhysicsContextFactory(
+        std::shared_ptr<PhysicsContextFactory> factory){
+    physics_context_factory_ = factory;
+    return *this;
+}
 
 }

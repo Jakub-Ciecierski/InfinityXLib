@@ -44,6 +44,8 @@ private:
 
     std::shared_ptr<EngineArchitecture> CreateEngineArchitecture();
 
+    void InitContexts(std::shared_ptr<Window> window, EngineContexts &contexts);
+
     std::shared_ptr<GameContextsFactory> game_contexts_factory_;
     std::shared_ptr<GameSystemsFactory> game_systems_factory_;
     std::shared_ptr<WindowFactory> window_factory_;

@@ -12,7 +12,13 @@ Editor::Editor(std::shared_ptr<Docker> docker) :
     SetDefaultTheme();
 }
 
-Editor::~Editor(){}
+bool Editor::Terminate(){
+    for(auto& window_view : window_views_){
+        if(!window_view->Terminate())
+            return false;
+    }
+    return true;
+}
 
 void Editor::Render(){
     for(auto& view : window_views_){

@@ -9,6 +9,7 @@ class RenderingContext;
 class ResourceContext;
 class ControlContext;
 class GUIContext;
+class PhysicsContext;
 
 class Renderer;
 class PhysicsSimulation;
@@ -23,6 +24,7 @@ struct EngineContexts {
     std::shared_ptr<ResourceContext> resource_context = nullptr;
     std::shared_ptr<ControlContext> control_context = nullptr;
     std::shared_ptr<GUIContext> gui_context = nullptr;
+    std::shared_ptr<PhysicsContext> physics_context = nullptr;
 };
 
 struct EngineSystems {
@@ -34,9 +36,9 @@ struct EngineSystems {
 };
 
 struct EngineArchitecture {
-    std::shared_ptr<Window> window = nullptr;
-
     EngineContexts engine_contexts;
+
+    std::shared_ptr<Window> window = nullptr;
 
     EngineSystems engine_systems;
 };

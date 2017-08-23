@@ -33,8 +33,8 @@ EngineSystems GameSystemsFactory::Create(
                 engine_contexts.resource_context->resource_manager());
     }
     if (physics_simulation_factory_) {
-        engine_systems.physics_simulation
-                = physics_simulation_factory_->Create();
+        engine_systems.physics_simulation = physics_simulation_factory_->Create(
+                engine_contexts.physics_context);
     }
     if (controls_factory_) {
         engine_systems.controls = controls_factory_->Create(
@@ -46,10 +46,7 @@ EngineSystems GameSystemsFactory::Create(
                 engine_systems.physics_simulation);
     }
     if(gui_factory_) {
-        engine_systems.gui = gui_factory_->Create(
-                engine_contexts.gui_context,
-                window->getHandle(),
-                engine_contexts.control_context);
+        engine_systems.gui = gui_factory_->Create(engine_contexts.gui_context);
     }
 
     return engine_systems;

@@ -18,8 +18,6 @@ Controls::Controls(
     ControlsContainer::GetInstance().controls(this);
 }
 
-Controls::~Controls(){}
-
 void Controls::Update(float){
     for(auto& command : commands_){
         if(command->IsConditionSatisfied())

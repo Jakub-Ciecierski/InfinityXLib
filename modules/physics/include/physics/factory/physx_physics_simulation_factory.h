@@ -10,11 +10,11 @@ class PhysicsSimulation;
 class PhysxPhysicsSimulationFactory : public PhysicsSimulationFactory {
 public:
 
-    PhysxPhysicsSimulationFactory();
+    PhysxPhysicsSimulationFactory() = default;
+    ~PhysxPhysicsSimulationFactory() = default;
 
-    ~PhysxPhysicsSimulationFactory();
-
-    std::shared_ptr<PhysicsSimulation> Create() override;
+    std::shared_ptr<PhysicsSimulation> Create(
+            std::shared_ptr<PhysicsContext> physics_context) override;
 
 private:
 };

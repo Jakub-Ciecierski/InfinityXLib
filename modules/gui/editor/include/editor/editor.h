@@ -17,7 +17,9 @@ class WindowView;
 class Editor : public GUIPart {
 public:
     Editor(std::shared_ptr<Docker> docker);
-    ~Editor();
+    ~Editor() = default;
+
+    virtual bool Terminate() override;
 
     std::shared_ptr<Docker> docker(){return docker_;}
 

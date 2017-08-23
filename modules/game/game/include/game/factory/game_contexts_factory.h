@@ -11,6 +11,7 @@ class RenderingContextFactory;
 class ResourceContextFactory;
 class ControlContextFactory;
 class GUIContextFactory;
+class PhysicsContextFactory;
 
 class GameContextsFactory {
 public:
@@ -25,6 +26,8 @@ public:
             std::shared_ptr<ControlContextFactory> factory);
     GameContextsFactory& SetGUIContextFactory(
             std::shared_ptr<GUIContextFactory> factory);
+    GameContextsFactory& SetPhysicsContextFactory(
+            std::shared_ptr<PhysicsContextFactory> factory);
 
     EngineContexts Create();
 
@@ -35,6 +38,7 @@ private:
     std::shared_ptr<ResourceContextFactory> resource_context_factory_;
     std::shared_ptr<ControlContextFactory> control_context_factory_;
     std::shared_ptr<GUIContextFactory> gui_context_factory_;
+    std::shared_ptr<PhysicsContextFactory> physics_context_factory_;
 };
 }
 

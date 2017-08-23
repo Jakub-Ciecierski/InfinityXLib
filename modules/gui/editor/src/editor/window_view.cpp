@@ -26,7 +26,13 @@ WindowView::WindowView(std::shared_ptr<View> view,
     views_.push_back(view);
 }
 
-WindowView::~WindowView(){}
+bool WindowView::Terminate(){
+    for(auto& view : views_){
+        if(!view->Terminate())
+            return false;
+    }
+    return true;
+}
 
 void WindowView::Render(){
     if(!show_)

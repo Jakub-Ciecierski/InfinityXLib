@@ -2,6 +2,8 @@
 
 #include <physics/simulations/physx_physics_simulation.h>
 #include <physics/physics_simulation.h>
+#include "physics/context/physx_context.h"
+
 #include <common/unique_ptr.h>
 
 #define _DEBUG // Physx requires that for some reason
@@ -11,21 +13,10 @@
 
 namespace ifx {
 
-PhysxPhysicsSimulationFactory::PhysxPhysicsSimulationFactory() {
-
-}
-
-PhysxPhysicsSimulationFactory::~PhysxPhysicsSimulationFactory() {
-
-}
-
-std::shared_ptr<PhysicsSimulation> PhysxPhysicsSimulationFactory::Create() {
-    auto px_allocator_callback = ifx::make_unique<physx::PxDefaultAllocator>();
-    auto px_error_callback = ifx::make_unique<physx::PxDefaultErrorCallback>();
-
-    auto px_foundation
-            = PxCreateFoundation(PX_FOUNDATION_VERSION,
-                                 *px_allocator_callback, *px_error_callback);
+std::shared_ptr<PhysicsSimulation> PhysxPhysicsSimulationFactory::Create(
+        std::shared_ptr<PhysicsContext> physics_context) {
+    physx::PxFoundation* px_foundation
+            = (physx::PxFoundation*)physics_context->NativeData();
     if(!px_foundation)
         throw std::invalid_argument("PxCreateFoundation Failed");
 
@@ -33,12 +24,12 @@ std::shared_ptr<PhysicsSimulation> PhysxPhysicsSimulationFactory::Create() {
     auto px_pvd = physx::PxCreatePvd(*px_foundation);
 
     auto px_transport = physx::PxDefaultPvdSocketTransportCreate(PVD_HOST,
-                                                              5425, 10);
+                                                                 5425, 10);
     px_pvd->connect(*px_transport, physx::PxPvdInstrumentationFlag::eALL);
 
     auto px_physics = PxCreatePhysics(PX_PHYSICS_VERSION, *px_foundation,
-                                   physx::PxTolerancesScale(),
-                                   true, px_pvd);
+                                      physx::PxTolerancesScale(),
+                                      true, px_pvd);
     if(!px_physics)
         throw std::invalid_argument("PxCreatePhysics Failed");
 
@@ -52,12 +43,10 @@ std::shared_ptr<PhysicsSimulation> PhysxPhysicsSimulationFactory::Create() {
 
     std::shared_ptr<PhysicsSimulation> simulation
             = std::make_shared<PhysxPhysicsSimulation>(
+                    physics_context,
                     px_physics,
                     px_pvd,
                     px_transport,
-                    px_foundation,
-                    std::move(px_allocator_callback),
-                    std::move(px_error_callback),
                     px_dispatcher,
                     px_scene
             );

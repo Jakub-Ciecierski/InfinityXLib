@@ -22,17 +22,17 @@ namespace ifx {
 class PhysxPhysicsSimulation : public PhysicsSimulation {
 public:
     PhysxPhysicsSimulation(
+            std::shared_ptr<PhysicsContext> physics_context,
             physx::PxPhysics *px_physics,
             physx::PxPvd *px_pvd,
             physx::PxPvdTransport *px_pvd_transport,
-            physx::PxFoundation *px_foundation,
-            std::unique_ptr<physx::PxAllocatorCallback> px_allocator_callback,
-            std::unique_ptr<physx::PxErrorCallback> px_error_callback,
             physx::PxDefaultCpuDispatcher *px_dispatcher,
             physx::PxScene *px_scene
     );
 
-    ~PhysxPhysicsSimulation();
+    ~PhysxPhysicsSimulation() = default;
+
+    virtual bool Terminate() override;
 
     virtual void Update(float time_delta) override;
 
@@ -52,10 +52,6 @@ private:
     physx::PxPhysics* px_physics_;
     physx::PxPvd* px_pvd_;
     physx::PxPvdTransport* px_pvd_transport_;
-
-    physx::PxFoundation* px_foundation_;
-    std::unique_ptr<physx::PxAllocatorCallback> px_allocator_callback_;
-    std::unique_ptr<physx::PxErrorCallback> px_error_callback_;
 
     physx::PxDefaultCpuDispatcher* px_dispatcher_;
     physx::PxScene* px_scene_;

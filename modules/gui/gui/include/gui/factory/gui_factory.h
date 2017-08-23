@@ -17,9 +17,8 @@ public:
     GUIFactory() = default;
     ~GUIFactory() = default;
 
-    std::shared_ptr<GUI> Create(std::shared_ptr<GUIContext> context,
-                                void *native_window,
-                                std::shared_ptr<ControlContext> control_context);
+    std::shared_ptr<GUI> Create(std::shared_ptr<GUIContext> context);
+
 private:
 
 };

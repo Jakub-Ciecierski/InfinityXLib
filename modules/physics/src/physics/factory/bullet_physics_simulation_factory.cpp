@@ -15,11 +15,11 @@ BulletPhysicsSimulationFactory::BulletPhysicsSimulationFactory() :
 
 BulletPhysicsSimulationFactory::~BulletPhysicsSimulationFactory(){}
 
-std::shared_ptr<PhysicsSimulation> BulletPhysicsSimulationFactory::Create(){
+std::shared_ptr<PhysicsSimulation> BulletPhysicsSimulationFactory::Create(
+        std::shared_ptr<PhysicsContext> physics_context){
     auto create_params = CreateBulletDynamics();
-    auto physics_simulation
-            = std::shared_ptr<PhysicsSimulation>(
-                    new BulletPhysicsSimulation(*create_params));
+    auto physics_simulation = std::make_shared<BulletPhysicsSimulation>(
+            physics_context, *create_params);
     return physics_simulation;
 }
 
