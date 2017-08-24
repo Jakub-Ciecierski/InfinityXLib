@@ -2,7 +2,6 @@
 
 #include <graphics/lighting/light_source.h>
 
-
 namespace ifx{
 
 LightDirectionalComponent::LightDirectionalComponent(

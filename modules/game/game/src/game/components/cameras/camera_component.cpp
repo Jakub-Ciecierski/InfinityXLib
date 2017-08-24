@@ -7,6 +7,4 @@ CameraComponent::CameraComponent(int *width, int *height,
     GameComponent(GameComponentType::CAMERA),
     Camera(width, height, FOV, near, far){}
 
-CameraComponent::~CameraComponent(){}
-
 }

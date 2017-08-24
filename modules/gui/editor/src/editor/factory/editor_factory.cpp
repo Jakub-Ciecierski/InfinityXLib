@@ -10,6 +10,12 @@
 #include <editor/views/rendering_view.h>
 #include <editor/views/rendering_views/rendering_effect_view.h>
 #include <editor/views/factory/soft_body_view_factory.h>
+#include <editor/views/scene_views/game_object_view.h>
+#include <editor/views/scene_views/game_component_view.h>
+#include <editor/views/scene_views/scene_manipulator_view.h>
+#include <editor/views/scene_views/context_menus/game_object_context_menu.h>
+#include <editor/views/scene_views/context_menus/game_component_context_menu.h>
+#include <editor/views/scene_views/context_menus/scene_list_context_menu.h>
 
 #include "game/scene_container.h"
 #include <game/architecture/engine_architecture.h>

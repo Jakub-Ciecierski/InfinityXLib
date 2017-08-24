@@ -7,6 +7,7 @@
 namespace ifx {
 
 class GameUpdater;
+class GameObject;
 
 class SoftBodyView : public View {
 public:
@@ -17,8 +18,11 @@ public:
 
     virtual void Render() override;
 
+    void SetGameObject(std::shared_ptr<GameObject> current_game_object);
 private:
     std::unique_ptr<GameUpdater> game_updater_;
+
+    std::shared_ptr<GameObject> current_game_object_;
 };
 }
 

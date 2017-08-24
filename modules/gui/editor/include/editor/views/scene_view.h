@@ -29,13 +29,8 @@ public:
     SceneView(std::shared_ptr<SceneContainer> scene,
               std::shared_ptr<ResourceContext> resource_creator,
               std::shared_ptr<SceneRenderer> scene_renderer);
-    ~SceneView();
 
-    std::shared_ptr<SceneManipulator> scene_manipulator(){
-        return scene_manipulator_;}
-
-    void SetSelectedGameObject(std::shared_ptr<GameObject> game_object){
-        selected_game_object_ = game_object;}
+    ~SceneView() = default;
 
     virtual void Render() override;
 
@@ -57,6 +52,9 @@ private:
     std::string GetComponentName(std::shared_ptr<GameComponent> game_component,
                                  int game_object_id,
                                  int component_id);
+
+    void SetSelectedGameObject(
+            std::shared_ptr<GameObject> selected_game_object);
 
     std::shared_ptr<SceneContainer> scene_;
     std::shared_ptr<ResourceContext> resource_creator_;

@@ -20,7 +20,7 @@ public:
            float FOV = 45.0f,
            float near = 0.01f, float far = 100.0f);
 
-    ~Camera();
+    virtual ~Camera();
 
     float near_plane(){return near_;}
     void near_plane(float near){near_ = near;}

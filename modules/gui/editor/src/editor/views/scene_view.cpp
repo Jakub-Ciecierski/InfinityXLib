@@ -31,7 +31,7 @@ SceneView::SceneView(std::shared_ptr<SceneContainer> scene,
         scene_(scene),
         resource_creator_(resource_creator),
         selected_game_object_(nullptr),
-        selected_game_component_(nullptr) {
+        selected_game_component_(nullptr){
     scene_manipulator_ = std::make_shared<SceneManipulator>();
 
     game_object_view_ = ifx::make_unique<GameObjectView>();
@@ -44,8 +44,6 @@ SceneView::SceneView(std::shared_ptr<SceneContainer> scene,
     game_component_context_menu_ = ifx::make_unique<GameComponentContextMenu>();
     scene_list_context_menu_ = ifx::make_unique<SceneListContextMenu>(scene_);
 }
-
-SceneView::~SceneView(){ }
 
 void SceneView::Render(){
     RenderWindow();
@@ -109,12 +107,12 @@ void SceneView::RenderGameObjectsList(
         }
         if (node_clicked != -1){
             selection_mask = (1 << node_clicked);
-            selected_game_object_ = game_objects[i];
+            SetSelectedGameObject(game_objects[i]);
         }
 
         auto event = game_object_context_menu_->Render(game_objects[i], i);
         if(event == GameObjectContextMenuEvent::Remove)
-            selected_game_object_ = nullptr;
+            SetSelectedGameObject(nullptr);
 
         if (node_open){
             RenderGameComponentsList(game_objects[i], i);
@@ -175,6 +173,11 @@ std::string SceneView::GetComponentName(
     str += GameComponent::GetTypeString(game_component->type());
     str += "]";
     return str;
+}
+
+void SceneView::SetSelectedGameObject(
+        std::shared_ptr<GameObject> selected_game_object){
+    selected_game_object_ = selected_game_object;
 }
 
 } // namespace ifx

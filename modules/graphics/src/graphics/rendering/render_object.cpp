@@ -18,8 +18,6 @@ RenderObject::RenderObject(std::vector<std::shared_ptr<Model>> models) :
         do_render_(true){
 }
 
-RenderObject::~RenderObject() { }
-
 void RenderObject::SetBeforeRender(
         std::function<void(const Program *program)> before_render) {
     before_render_ = before_render;

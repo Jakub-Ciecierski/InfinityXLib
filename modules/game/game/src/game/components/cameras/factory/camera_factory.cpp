@@ -5,10 +5,6 @@
 
 namespace ifx{
 
-CameraFactory::CameraFactory(){}
-
-CameraFactory::~CameraFactory(){}
-
 std::shared_ptr<CameraComponent> CameraFactory::CreateCamera(Window* window){
     auto camera = std::shared_ptr<CameraComponent>(
             new ifx::CameraComponent(window->width(), window->height()));

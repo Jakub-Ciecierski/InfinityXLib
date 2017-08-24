@@ -9,8 +9,8 @@ class Window;
 class CameraFactory {
 public:
 
-    CameraFactory();
-    ~CameraFactory();
+    CameraFactory() = default;
+    ~CameraFactory() = default;
 
     std::shared_ptr<CameraComponent> CreateCamera(Window* window);
 private:

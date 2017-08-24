@@ -8,6 +8,9 @@
 namespace ifx {
 
 class SoftBodyView;
+class GameSystemsFactory;
+class SceneContainer;
+class Renderer;
 
 struct EngineArchitecture;
 
@@ -19,6 +22,12 @@ public:
 
     virtual std::shared_ptr<View> Create() override;
 private:
+    std::shared_ptr<EngineArchitecture> CreateEngineArchitecture();
+    std::unique_ptr<GameSystemsFactory> CreateGameSystemsFactory();
+
+    void SetDefaultScene(std::shared_ptr<SceneContainer> scene);
+    void SetRendererSettings(std::shared_ptr<Renderer> renderer);
+
     std::shared_ptr<EngineArchitecture> engine_architecture_;
 };
 }

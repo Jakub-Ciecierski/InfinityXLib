@@ -13,7 +13,7 @@ public:
                     float FOV = 45.0f,
                     float near = 0.01f, float far = 100.0f);
 
-    ~CameraComponent();
+    ~CameraComponent() = default;
 
 private:
 };

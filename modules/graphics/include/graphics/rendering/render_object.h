@@ -21,7 +21,7 @@ public:
     RenderObject(std::shared_ptr<Model>);
     RenderObject(std::vector<std::shared_ptr<Model>>);
 
-    virtual ~RenderObject();
+    virtual ~RenderObject() = default;
 
     const std::vector<RenderingEffect*>& rendering_effects(){return rendering_effects_;}
 

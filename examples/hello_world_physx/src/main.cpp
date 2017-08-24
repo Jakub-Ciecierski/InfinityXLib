@@ -29,8 +29,6 @@
 #include <game/scene_container.h>
 #include <game/game_object.h>
 
-#include <graphics/model/material.h>
-#include <graphics/model/model.h>
 #include <graphics/shaders/textures/texture_creator.h>
 #include <graphics/rendering/renderer.h>
 #include <graphics/rendering/scene_renderer.h>
@@ -38,7 +36,6 @@
 #include <graphics/factory/scene_factory.h>
 
 #include <resources/resource_manager.h>
-#include <resources/resources.h>
 
 #include <controls/controls.h>
 #include <controls/command/factory/command_factory.h>
@@ -46,8 +43,9 @@
 #include <controls/command/commands/mouse_command.h>
 #include <controls/controller/controllers/mouse_controller.h>
 
-#include <GL/glew.h>
 #include <physics/factory/physx_physics_simulation_factory.h>
+
+#include <GL/glew.h>
 
 void SetKeybinds(
         std::shared_ptr<ifx::Controls> controls,
@@ -438,9 +436,9 @@ int main() {
 
     auto lights = CreateGameObjectLight(
             game->scene(),
-            game->resource_creator()->texture_creator(),
-            game->resource_creator()->model_creator(),
-            game->resource_creator()->program_creator());
+            game->resource_context()->texture_creator(),
+            game->resource_context()->model_creator(),
+            game->resource_context()->program_creator());
 
     lights->moveTo(glm::vec3(0.0f, 3.0f, 0.0f));
     lights->rotateTo(glm::vec3(0,180,0));
@@ -451,26 +449,26 @@ int main() {
     auto floor = CreateGameObjectFloor(
             game->game_loop()->physics_simulation(),
             game->scene(),
-            game->resource_creator()->program_creator(),
-            game->resource_creator()->model_creator(),
-            game->resource_creator()->texture_creator());
+            game->resource_context()->program_creator(),
+            game->resource_context()->model_creator(),
+            game->resource_context()->texture_creator());
     floor->moveTo(glm::vec3(0.0f, 0.0f, 0.0f));
 
     auto ceiling = CreateGameObjectCeiling(
             game->game_loop()->physics_simulation(),
             game->scene(),
-            game->resource_creator()->program_creator(),
-            game->resource_creator()->model_creator(),
-            game->resource_creator()->texture_creator());
+            game->resource_context()->program_creator(),
+            game->resource_context()->model_creator(),
+            game->resource_context()->texture_creator());
     ceiling->moveTo(glm::vec3(0.0f, 10.0f, 0.0f));
 
     glm::vec3 scale1 = glm::vec3(3,3,3);
     auto head = CreateGameObjectBox(
             game->game_loop()->physics_simulation(),
             game->scene(),
-            game->resource_creator()->texture_creator(),
-            game->resource_creator()->model_creator(),
-            game->resource_creator()->program_creator(),
+            game->resource_context()->texture_creator(),
+            game->resource_context()->model_creator(),
+            game->resource_context()->program_creator(),
             scale1, 0);
     head->moveTo(glm::vec3(0.0f, 7.0f, 0.0f));
 
