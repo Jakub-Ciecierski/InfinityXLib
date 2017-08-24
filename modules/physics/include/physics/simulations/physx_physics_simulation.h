@@ -23,9 +23,6 @@ class PhysxPhysicsSimulation : public PhysicsSimulation {
 public:
     PhysxPhysicsSimulation(
             std::shared_ptr<PhysicsContext> physics_context,
-            physx::PxPhysics *px_physics,
-            physx::PxPvd *px_pvd,
-            physx::PxPvdTransport *px_pvd_transport,
             physx::PxDefaultCpuDispatcher *px_dispatcher,
             physx::PxScene *px_scene
     );
@@ -49,10 +46,6 @@ public:
     void SynchronizeRigidBodiesTransform();
     void SynchronizeGameObjectsTransform();
 private:
-    physx::PxPhysics* px_physics_;
-    physx::PxPvd* px_pvd_;
-    physx::PxPvdTransport* px_pvd_transport_;
-
     physx::PxDefaultCpuDispatcher* px_dispatcher_;
     physx::PxScene* px_scene_;
 };

@@ -7,30 +7,23 @@
 #include <PxPhysicsAPI.h>
 
 #include <common/unique_ptr.h>
+
 #include <physics/impl/rigid_body_impl_physx.h>
+#include <physics/context/physx_context.h>
 
 namespace ifx {
 
 PhysxPhysicsSimulation::PhysxPhysicsSimulation(
         std::shared_ptr<PhysicsContext> physics_context,
-        physx::PxPhysics *px_physics,
-        physx::PxPvd *px_pvd,
-        physx::PxPvdTransport *px_pvd_transport,
         physx::PxDefaultCpuDispatcher *px_dispatcher,
         physx::PxScene *px_scene) :
         PhysicsSimulation(physics_context),
-        px_physics_((px_physics)),
-        px_pvd_((px_pvd)),
-        px_pvd_transport_((px_pvd_transport)),
         px_dispatcher_((px_dispatcher)),
         px_scene_((px_scene)) {}
 
 bool PhysxPhysicsSimulation::Terminate(){
     px_scene_->release();
     px_dispatcher_->release();
-    px_physics_->release();
-    px_pvd_->release();
-    px_pvd_transport_->release();
 
     return true;
 }
@@ -81,7 +74,9 @@ void PhysxPhysicsSimulation::AddImpulse() {
 }
 
 std::unique_ptr<RigidBodyImpl> PhysxPhysicsSimulation::CreateRigidBodyImpl() {
-    return ifx::make_unique<RigidBodyImplPhysx>(px_physics_);
+    auto physx_context = std::dynamic_pointer_cast<PhysxContext>(
+            physics_context_);
+    return ifx::make_unique<RigidBodyImplPhysx>(physx_context->px_physics());
 }
 
 void PhysxPhysicsSimulation::SynchronizeRigidBodiesTransform(){
