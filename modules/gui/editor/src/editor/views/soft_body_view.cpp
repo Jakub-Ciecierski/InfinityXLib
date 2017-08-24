@@ -5,6 +5,11 @@
 
 #include <physics/physics_simulation.h>
 
+#include <gui/imgui/imgui.h>
+
+#include <graphics/rendering/fbo_rendering/fbo_renderer.h>
+#include <graphics/shaders/textures/texture.h>
+
 namespace ifx{
 
 SoftBodyView::SoftBodyView(std::unique_ptr<GameUpdater> game_updater) :
@@ -19,6 +24,17 @@ bool SoftBodyView::Terminate() {
 
 void SoftBodyView::Render(){
     game_updater_->Update(1.0f/60.0f);
+
+    auto fbo_renderer = std::dynamic_pointer_cast<FBORenderer>(
+            game_updater_->engine_architecture()->engine_systems.renderer);
+    if(fbo_renderer){
+
+    }
+    const auto& texture = fbo_renderer->GetSceneTexture();
+    auto tex_id = texture.id();
+    ImTextureID im_tex_id = (void*)(tex_id);
+
+    ImGui::Image(im_tex_id, ImVec2(-1, -1));
 }
 
 }

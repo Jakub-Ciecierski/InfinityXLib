@@ -9,6 +9,7 @@ namespace ifx {
 class FBO;
 class Mesh;
 class Program;
+class Texture2D;
 
 class FBORenderer : public Renderer, public WindowObserver {
 public:
@@ -21,17 +22,23 @@ public:
 
     ~FBORenderer();
 
+    void EnableRenderToScreen(bool value);
+
+    const Texture2D& GetSceneTexture();
+
     virtual void OnResize(int width, int height) override;
 protected:
     virtual void Render() override;
 
 private:
-    void RenderBufferToScreenMesh();
+    void RenderFBOToScreen();
 
     std::unique_ptr<FBO> fbo_;
     std::unique_ptr<FBO> intermediate_fbo_;
     std::unique_ptr<Mesh> screen_mesh_;
     std::shared_ptr<Program> program_;
+
+    bool render_to_screen_;
 };
 }
 

@@ -37,12 +37,12 @@ class Texture2D : public Resource {
 public:
     virtual ~Texture2D();
 
-    GLuint id(){return id_;}
+    GLuint id() const {return id_;}
     TextureTypes texture_type(){return type_;}
     TextureInternalFormat format(){return format_;}
     TexturePixelType pixel_type(){return pixel_type_;}
-    int width(){return width_;}
-    int height(){return height_;}
+    int width() const {return width_;}
+    int height() const {return height_;}
 
     void AddParameter(TextureParameter param);
 

@@ -58,7 +58,11 @@ protected:
 
     ImGuiWindowFlags flags_;
 private:
+    void RenderViewTabs();
+    void RenderSelectedView();
+
     std::vector<std::shared_ptr<View>> views_;
+    std::vector<int> selected_views_;
 };
 
 }

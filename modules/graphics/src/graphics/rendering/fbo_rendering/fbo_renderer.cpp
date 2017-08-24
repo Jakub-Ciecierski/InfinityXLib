@@ -21,7 +21,8 @@ FBORenderer::FBORenderer(
         fbo_(std::move(fbo)),
         intermediate_fbo_(std::move(intermediate_fbo)),
         screen_mesh_(std::move(screen_mesh)),
-        program_(program){
+        program_(program),
+        render_to_screen_(true){
     if(!fbo_ || !screen_mesh_ || !program_){
         throw std::invalid_argument(
                 "FBORenderer2::FBORenderer2 - Invalid arguments");
@@ -31,6 +32,14 @@ FBORenderer::FBORenderer(
 
 FBORenderer::~FBORenderer(){
     window_->RemoveObserver(this);
+}
+
+void FBORenderer::EnableRenderToScreen(bool value){
+    render_to_screen_ = value;
+}
+
+const Texture2D& FBORenderer::GetSceneTexture(){
+    return *intermediate_fbo_->texture();
 }
 
 void FBORenderer::Render(){
@@ -49,13 +58,13 @@ void FBORenderer::Render(){
                       fbo_->texture()->height(),
                       GL_COLOR_BUFFER_BIT,
                       GL_NEAREST);
-
-    RenderBufferToScreenMesh();
-}
-
-void FBORenderer::RenderBufferToScreenMesh(){
     fbo_->Unbind();
 
+    if(render_to_screen_)
+        RenderFBOToScreen();
+}
+
+void FBORenderer::RenderFBOToScreen(){
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);
