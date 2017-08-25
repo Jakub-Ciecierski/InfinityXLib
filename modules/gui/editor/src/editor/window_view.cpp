@@ -8,12 +8,14 @@ namespace ifx{
 
 WindowView::WindowView(std::string name) :
         show_(true),
+        is_focused_(false),
         name_(name),
         flags_(0){}
 
 WindowView::WindowView(std::vector<std::shared_ptr<View>> views,
                        std::string name) :
         show_(true),
+        is_focused_(false),
         name_(name),
         flags_(0),
         views_(views){
@@ -26,6 +28,7 @@ WindowView::WindowView(std::vector<std::shared_ptr<View>> views,
 WindowView::WindowView(std::shared_ptr<View> view,
                        std::string name) :
         show_(true),
+        is_focused_(false),
         name_(name),
         flags_(0){
     views_.push_back(view);
@@ -45,12 +48,18 @@ void WindowView::Render(){
     if(!show_)
         return;
 
+    ImGuiStyle& style = ImGui::GetStyle();
+    auto old_color = style.Colors[ImGuiCol_Border];
+    if(is_focused_){
+        style.Colors[ImGuiCol_Border] = ImVec4(0.00f, 0.40f, 0.57f, 1.00f);
+    }
+
     ImGui::Begin(name_.c_str(), NULL, flags_);
-
-    FetchSize();
+    FetchWindowInfo();
     RenderContent();
-
     ImGui::End();
+
+    style.Colors[ImGuiCol_Border] = old_color;
 }
 
 void WindowView::RenderContent(){
@@ -88,13 +97,26 @@ void WindowView::RenderSelectedView(){
     views_[view_to_render]->Render();
 }
 
+void WindowView::SetFlags(ImGuiWindowFlags flags){
+    flags_ = flags;
+}
+
+void WindowView::FetchWindowInfo(){
+    FetchSize();
+    FetchFocus();
+}
+
 void WindowView::FetchSize() {
     width_ = ImGui::GetWindowWidth();
     height_ = ImGui::GetWindowHeight();
 }
 
-void WindowView::SetFlags(ImGuiWindowFlags flags){
-    flags_ = flags;
+void WindowView::FetchFocus(){
+    is_focused_ = ImGui::IsWindowFocused();
+
+    for(auto& view : views_){
+        view->is_window_focused(is_focused_);
+    }
 }
 
 }

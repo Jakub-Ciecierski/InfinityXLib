@@ -32,6 +32,10 @@ bool SoftBodyView::Terminate() {
 void SoftBodyView::Render(){
     game_updater_->Update(1.0f/60.0f);
 
+    RenderScreen();
+}
+
+void SoftBodyView::RenderScreen(){
     auto fbo_renderer = std::dynamic_pointer_cast<FBORenderer>(
             game_updater_->engine_architecture()->engine_systems.renderer);
     if(!fbo_renderer)
@@ -40,8 +44,9 @@ void SoftBodyView::Render(){
     const auto& texture = fbo_renderer->GetSceneTexture();
     auto tex_id = texture.id();
     ImTextureID im_tex_id = (ImTextureID)(tex_id);
-    ImGui::Image(im_tex_id, ImVec2(texture.width() / 2.0f,
-                                   texture.height() / 2.0f));
+    auto width_ratio = ImGui::GetWindowWidth() / texture.width();
+    ImGui::Image(im_tex_id, ImVec2(texture.width() * width_ratio,
+                                   texture.height() * width_ratio));
 }
 
 void SoftBodyView::SetGameObject(

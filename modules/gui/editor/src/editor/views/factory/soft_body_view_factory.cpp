@@ -38,11 +38,13 @@ std::shared_ptr<View> SoftBodyViewFactory::Create(){
 
     SetRendererSettings(engine_architecture->engine_systems.renderer,
                         engine_architecture_->engine_systems.renderer);
-    SetDefaultScene(engine_architecture ->engine_systems.scene_container);
 
     auto game_updater = ifx::make_unique<GameUpdater>(engine_architecture);
     auto soft_body_view = std::make_shared<SoftBodyView>(
             std::move(game_updater));
+
+    SetDefaultScene(engine_architecture ->engine_systems.scene_container,
+                    soft_body_view);
 
     return soft_body_view;
 }
@@ -76,7 +78,8 @@ SoftBodyViewFactory::CreateGameSystemsFactory(){
 }
 
 void SoftBodyViewFactory::SetDefaultScene(
-        std::shared_ptr<SceneContainer> scene){
+        std::shared_ptr<SceneContainer> scene,
+        std::shared_ptr<SoftBodyView> soft_body_view){
     // Camera
     auto game_object = scene->CreateAndAddEmptyGameObject();
     auto camera = CameraFactory().CreateCamera(
@@ -87,7 +90,9 @@ void SoftBodyViewFactory::SetDefaultScene(
     camera->scale(5);
 
     game_object->Add(std::dynamic_pointer_cast<GameComponent>(camera));
-    SetKeybinds(engine_architecture_->engine_systems.controls, camera);
+    SetKeybinds(engine_architecture_->engine_systems.controls,
+                camera,
+                soft_body_view);
 
     // Lights
     auto light_game_object = scene->CreateAndAddEmptyGameObject();
@@ -119,97 +124,18 @@ void SoftBodyViewFactory::SetRendererSettings(
 
 void SoftBodyViewFactory::SetKeybinds(
         std::shared_ptr<ifx::Controls> controls,
-        std::shared_ptr<ifx::CameraComponent> camera){
+        std::shared_ptr<ifx::CameraComponent> camera,
+        std::shared_ptr<SoftBodyView> soft_body_view){
     auto command_factory = ifx::CommandFactory(controls);
-
-    auto command_left = command_factory.CreateKeyboardCommand(
-            camera,
-            [](std::shared_ptr<ifx::Controller>,
-               std::shared_ptr<ifx::Controlable> obj){
-                float movementSpeed = 0.1f;
-                std::static_pointer_cast<ifx::CameraComponent>(obj)->
-                        moveLeft(movementSpeed);
-            },
-            ifx::KeyboardControllerEventType {
-                    ifx::KeyboardControllerKeyType::A,
-                    ifx::KeyboardControllerCallbackType::PRESSED
-            }
-    );
-
-    auto command_right = command_factory.CreateKeyboardCommand(
-            camera,
-            [](std::shared_ptr<ifx::Controller>,
-               std::shared_ptr<ifx::Controlable> obj){
-                float movementSpeed = 0.1f;
-                std::static_pointer_cast<ifx::CameraComponent>(obj)->
-                        moveRight(movementSpeed);
-            },
-            ifx::KeyboardControllerEventType {
-                    ifx::KeyboardControllerKeyType::D,
-                    ifx::KeyboardControllerCallbackType::PRESSED
-            }
-    );
-
-    auto command_forward = command_factory.CreateKeyboardCommand(
-            camera,
-            [](std::shared_ptr<ifx::Controller>,
-               std::shared_ptr<ifx::Controlable> obj){
-                float movementSpeed = 0.1f;
-                std::static_pointer_cast<ifx::CameraComponent>(obj)->
-                        moveForward(movementSpeed);
-            },
-            ifx::KeyboardControllerEventType {
-                    ifx::KeyboardControllerKeyType::W,
-                    ifx::KeyboardControllerCallbackType::PRESSED
-            }
-    );
-
-    auto command_backwards = command_factory.CreateKeyboardCommand(
-            camera,
-            [](std::shared_ptr<ifx::Controller>,
-               std::shared_ptr<ifx::Controlable> obj){
-                float movementSpeed = 0.1f;
-                std::static_pointer_cast<ifx::CameraComponent>(obj)->
-                        moveBackward(movementSpeed);
-            },
-            ifx::KeyboardControllerEventType {
-                    ifx::KeyboardControllerKeyType::S,
-                    ifx::KeyboardControllerCallbackType::PRESSED
-            }
-    );
-
-    auto command_down = command_factory.CreateKeyboardCommand(
-            camera,
-            [](std::shared_ptr<ifx::Controller>,
-               std::shared_ptr<ifx::Controlable> obj){
-                float movementSpeed = 0.1f;
-                std::static_pointer_cast<ifx::CameraComponent>(obj)->
-                        moveDown(movementSpeed);
-            },
-            ifx::KeyboardControllerEventType {
-                    ifx::KeyboardControllerKeyType::E,
-                    ifx::KeyboardControllerCallbackType::PRESSED
-            }
-    );
-
-    auto command_up = command_factory.CreateKeyboardCommand(
-            camera,
-            [](std::shared_ptr<ifx::Controller>,
-               std::shared_ptr<ifx::Controlable> obj){
-                float movementSpeed = 0.1f;
-                std::static_pointer_cast<ifx::CameraComponent>(obj)->
-                        moveUp(movementSpeed);
-            },
-            ifx::KeyboardControllerEventType {
-                    ifx::KeyboardControllerKeyType::Q,
-                    ifx::KeyboardControllerCallbackType::PRESSED
-            }
-    );
 
     auto command_rotate_mouse = command_factory.CreateMouseCommand(
             camera,
-            [](std::shared_ptr<ifx::Controller> controller,
-               std::shared_ptr<ifx::Controlable> obj){
+            [soft_body_view](
+                    std::shared_ptr<ifx::Controller> controller,
+                    std::shared_ptr<ifx::Controlable> obj){
+                if(!soft_body_view->is_window_focused())
+                    return;
+
                 auto mouse = std::static_pointer_cast<ifx::MouseController>(
                         controller);
                 auto camera = std::static_pointer_cast<ifx::CameraComponent>
@@ -222,7 +148,8 @@ void SoftBodyViewFactory::SetKeybinds(
 
                 float rotationSpeed = 0.1f;
                 camera->rotate(glm::vec3(xoffset * rotationSpeed,
-                                         yoffset * rotationSpeed, 0));
+                                         -yoffset * rotationSpeed,
+                                         0));
             },
             ifx::MouseControllerEventType {
                     ifx::MouseControllerKeyType::MOUSE_RIGHT,
@@ -232,8 +159,11 @@ void SoftBodyViewFactory::SetKeybinds(
 
     auto command_scroll = command_factory.CreateMouseCommand(
             camera,
-            [](std::shared_ptr<ifx::Controller> controller,
-               std::shared_ptr<ifx::Controlable> obj){
+            [soft_body_view](
+                    std::shared_ptr<ifx::Controller> controller,
+                    std::shared_ptr<ifx::Controlable> obj){
+                if(!soft_body_view->is_window_focused())
+                    return;
                 auto mouse = std::static_pointer_cast<ifx::MouseController>(
                         controller);
                 auto camera = std::static_pointer_cast<ifx::CameraComponent>
@@ -251,8 +181,11 @@ void SoftBodyViewFactory::SetKeybinds(
 
     auto command_middle = command_factory.CreateMouseCommand(
             camera,
-            [](std::shared_ptr<ifx::Controller> controller,
-               std::shared_ptr<ifx::Controlable> obj){
+            [soft_body_view](
+                    std::shared_ptr<ifx::Controller> controller,
+                    std::shared_ptr<ifx::Controlable> obj){
+                if(!soft_body_view->is_window_focused())
+                    return;
                 auto mouse = std::static_pointer_cast<ifx::MouseController>(
                         controller);
                 auto camera = std::static_pointer_cast<ifx::CameraComponent>
@@ -262,14 +195,10 @@ void SoftBodyViewFactory::SetKeybinds(
                 auto current_position = mouse->GetCurrentPosition();
                 auto previous_position = mouse->GetPreviousPosition();
 
-                float xoffset = current_position.x - previous_position.x;
                 float yoffset = previous_position.y - current_position.y;
 
-                camera->move(-xoffset * camera->GetRight() *
-                             movementSpeed *  0.1f);
-                camera->move(yoffset * camera->GetUp() *
-                             movementSpeed *  0.1f);
-
+                auto current_scale = camera->getScale();
+                camera->scale(current_scale + (0.1f * movementSpeed * yoffset));
             },
             ifx::MouseControllerEventType {
                     ifx::MouseControllerKeyType::MOUSE_MIDDLE,
@@ -277,12 +206,6 @@ void SoftBodyViewFactory::SetKeybinds(
             }
     );
 
-    controls->AddCommand(command_left);
-    controls->AddCommand(command_right);
-    controls->AddCommand(command_forward);
-    controls->AddCommand(command_backwards);
-    controls->AddCommand(command_down);
-    controls->AddCommand(command_up);
     controls->AddCommand(command_rotate_mouse);
     controls->AddCommand(command_scroll);
     controls->AddCommand(command_middle);

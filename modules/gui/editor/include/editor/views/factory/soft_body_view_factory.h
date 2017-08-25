@@ -27,13 +27,15 @@ private:
     std::shared_ptr<EngineArchitecture> CreateEngineArchitecture();
     std::unique_ptr<GameSystemsFactory> CreateGameSystemsFactory();
 
-    void SetDefaultScene(std::shared_ptr<SceneContainer> scene);
+    void SetDefaultScene(std::shared_ptr<SceneContainer> scene,
+                         std::shared_ptr<SoftBodyView> soft_body_view);
     void SetRendererSettings(std::shared_ptr<Renderer> renderer,
                              std::shared_ptr<Renderer> old_renderer);
 
     void SetKeybinds(
             std::shared_ptr<Controls> controls,
-            std::shared_ptr<CameraComponent> camera);
+            std::shared_ptr<CameraComponent> camera,
+            std::shared_ptr<SoftBodyView> soft_body_view);
 
     std::shared_ptr<EngineArchitecture> engine_architecture_;
 };

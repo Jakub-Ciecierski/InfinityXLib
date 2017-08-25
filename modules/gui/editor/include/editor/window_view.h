@@ -54,12 +54,17 @@ protected:
     float width_;
     float height_;
 
+    bool is_focused_;
+
     std::string name_;
 
     ImGuiWindowFlags flags_;
 private:
     void RenderViewTabs();
     void RenderSelectedView();
+
+    void FetchWindowInfo();
+    void FetchFocus();
 
     std::vector<std::shared_ptr<View>> views_;
     std::vector<int> selected_views_;
