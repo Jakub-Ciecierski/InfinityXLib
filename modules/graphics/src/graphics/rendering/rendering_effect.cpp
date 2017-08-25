@@ -14,7 +14,10 @@ RenderingEffect::RenderingEffect(
         rendering_state_(rendering_state),
         name_(name){}
 
-RenderingEffect::~RenderingEffect(){}
+RenderingEffect::RenderingEffect(const RenderingEffect& other) :
+        program_(other.program_),
+        rendering_state_(other.rendering_state_),
+        name_(other.name_) {}
 
 void RenderingEffect::Render(Camera &camera,
                              LightGroup &light_group) {

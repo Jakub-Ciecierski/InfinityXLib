@@ -12,6 +12,8 @@
 #include <gui/imgui/imgui.h>
 
 #include <graphics/rendering/fbo_rendering/fbo_renderer.h>
+#include <graphics/rendering/scene_renderer.h>
+#include <graphics/rendering/rendering_effect.h>
 #include <graphics/shaders/textures/texture.h>
 
 namespace ifx{
@@ -38,7 +40,8 @@ void SoftBodyView::Render(){
     const auto& texture = fbo_renderer->GetSceneTexture();
     auto tex_id = texture.id();
     ImTextureID im_tex_id = (ImTextureID)(tex_id);
-    ImGui::Image(im_tex_id, ImVec2(550, 550));
+    ImGui::Image(im_tex_id, ImVec2(texture.width() / 2.0f,
+                                   texture.height() / 2.0f));
 }
 
 void SoftBodyView::SetGameObject(
@@ -49,6 +52,8 @@ void SoftBodyView::SetGameObject(
         scene->Remove(current_game_object_);
     }
     current_game_object_ = scene->CreateAndAddEmptyGameObject();
+    current_game_object_->moveTo(glm::vec3(0,0,0));
+    current_game_object_->rotateTo(glm::vec3(0,0,0));
     auto render_components = selected_game_object->GetComponents(
             std::move(GameComponentType::RENDER));
 
@@ -56,9 +61,25 @@ void SoftBodyView::SetGameObject(
         auto new_render_component = std::make_shared<RenderComponent>(
                 std::dynamic_pointer_cast<RenderComponent>(
                         render_component)->models());
+        new_render_component->moveTo(glm::vec3(0,0,0));
+        new_render_component->rotateTo(glm::vec3(0,0,0));
+
+        auto default_rendering_effect =
+                game_updater_->engine_architecture()->engine_systems.renderer->
+                        scene_renderer()->default_rendering_effect();
+        if(default_rendering_effect){
+            default_rendering_effect->RegisterRenderObject(
+                    new_render_component);
+        }
+
         current_game_object_->Add(new_render_component);
     }
 
+}
+
+void SoftBodyView::OnSetSelectedGameObject(
+        std::shared_ptr<GameObject> selected_game_object) {
+    SetGameObject(selected_game_object);
 }
 
 }

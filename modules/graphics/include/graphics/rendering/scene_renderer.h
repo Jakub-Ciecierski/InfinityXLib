@@ -20,10 +20,13 @@ class SceneRenderer {
 public:
 
     SceneRenderer();
-    ~SceneRenderer();
+    ~SceneRenderer() = default;
 
     const std::vector<std::shared_ptr<RenderingEffect>>& rendering_effects(){
             return rendering_effects_;}
+    const std::shared_ptr<RenderingEffect>& default_rendering_effect(){
+        return default_rendering_effect_;
+    };
     const std::vector<std::shared_ptr<RenderObject>>& render_objects() {
         return render_objects_;}
     const std::shared_ptr<LightGroup> light_group() const {return light_group_;}
@@ -31,6 +34,9 @@ public:
 
     void Render() const;
     void Render(const std::shared_ptr<Program> program) const;
+
+    void SetDefaultRenderingEffect(
+            std::shared_ptr<RenderingEffect> rendering_effect);
 
     void Add(std::shared_ptr<RenderingEffect> rendering_effect);
     void Add(std::shared_ptr<RenderObject> render_object);
@@ -46,6 +52,7 @@ private:
     void Render(std::shared_ptr<RenderObject> render_object) const;
 
     std::vector<std::shared_ptr<RenderingEffect>> rendering_effects_;
+    std::shared_ptr<RenderingEffect> default_rendering_effect_;
 
     std::vector<std::shared_ptr<RenderObject>> render_objects_;
     std::shared_ptr<LightGroup> light_group_;

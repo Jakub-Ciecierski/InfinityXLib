@@ -7,10 +7,10 @@
 
 namespace ifx {
 
-SceneRenderer::SceneRenderer(){
+SceneRenderer::SceneRenderer() :
+        default_rendering_effect_(nullptr){
     light_group_ = std::shared_ptr<LightGroup>(new LightGroup());
 }
-SceneRenderer::~SceneRenderer(){}
 
 void SceneRenderer::Render() const{
     for(auto& rendering_effect : rendering_effects_)
@@ -22,6 +22,11 @@ void SceneRenderer::Render(const std::shared_ptr<Program> program) const{
     light_group_->use(*(program));
     for(unsigned int i = 0; i < render_objects_.size(); i++)
         render_objects_[i]->Render(*(program));
+}
+
+void SceneRenderer::SetDefaultRenderingEffect(
+        std::shared_ptr<RenderingEffect> rendering_effect){
+    default_rendering_effect_ = rendering_effect;
 }
 
 void SceneRenderer::Add(std::shared_ptr<RenderingEffect> rendering_effect){

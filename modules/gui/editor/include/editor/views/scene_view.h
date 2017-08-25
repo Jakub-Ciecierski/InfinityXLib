@@ -2,6 +2,7 @@
 #define PROJECT_SCENE_VIEW_H
 
 #include <editor/view.h>
+#include "editor/views/scene_views/scene_view_subject.h"
 
 #include <memory>
 #include <vector>
@@ -23,7 +24,7 @@ class GameObjectContextMenu;
 class GameComponentContextMenu;
 class SceneListContextMenu;
 
-class SceneView : public View {
+class SceneView : public View, public SceneViewSubject {
 public:
 
     SceneView(std::shared_ptr<SceneContainer> scene,

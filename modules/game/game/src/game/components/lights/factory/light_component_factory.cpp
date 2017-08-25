@@ -31,7 +31,7 @@ LightComponentFactory::CreateDirectionalLight(
                     light,
                     CreateShadowMapping(texture_creator, program_creator));
 
-    light_source->rotateTo(glm::vec3(0, 270, 0));
+    light_source->rotateTo(glm::vec3(0, 0, 0));
     light_source->LookAt(glm::vec3(0,0,0));
 
     return light_source;

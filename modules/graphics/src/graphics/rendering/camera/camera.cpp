@@ -11,25 +11,23 @@ namespace ifx {
 Camera::Camera(int *width, int *height,
                float FOV, float near, float far) :
         width(width), height(height),
-        FOV(FOV), near_(near), far_(far) {
+        FOV(FOV), near_(near), far_(far),
+        camera_style_(CameraStyle::FPS){
     WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
     moveTo(glm::vec3(1,1,1));
     Update();
 }
 
-Camera::~Camera() {}
-
-
 void Camera::rotate(const glm::vec3 &rotation) {
     Transformable::rotate(rotation);
 
-    //clampRotation();
+    clampRotation();
 }
 
 void Camera::rotateTo(const glm::vec3 &rotation) {
     Transformable::rotateTo(rotation);
 
-    //clampRotation();
+    clampRotation();
 }
 
 void Camera::Update(float time_delta) {
@@ -52,7 +50,7 @@ void Camera::Update(float time_delta) {
     right = glm::normalize(glm::cross(direction, this->WorldUp));
     up = glm::normalize(glm::cross(right, direction));
 
-    ViewMatrix = glm::lookAt(position, position + direction, up);
+    ViewMatrix = ComputeViewMatrix(position, direction, up);
 }
 
 void Camera::moveForward(float speedBoost) {
@@ -117,6 +115,20 @@ void Camera::clampRotation() {
         rotation.y = 89;
     }
     Transformable::rotateTo(rotation);
+}
+
+glm::mat4 Camera::ComputeViewMatrix(const glm::vec3 position,
+                                    const glm::vec3 direction,
+                                    const glm::vec3 up){
+    switch(camera_style_){
+        case CameraStyle::FPS:
+            return glm::lookAt(position, position + direction, up);
+        case CameraStyle::ThirdPerson:
+            return glm::lookAt(position - glm::length(getScale())*direction,
+                               position + direction,
+                               up);
+    }
+    return glm::mat4();
 }
 
 }

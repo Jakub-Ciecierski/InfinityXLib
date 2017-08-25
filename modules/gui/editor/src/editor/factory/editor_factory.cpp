@@ -16,6 +16,7 @@
 #include <editor/views/scene_views/context_menus/game_object_context_menu.h>
 #include <editor/views/scene_views/context_menus/game_component_context_menu.h>
 #include <editor/views/scene_views/context_menus/scene_list_context_menu.h>
+#include "editor/views/soft_body_view.h"
 
 #include "game/scene_container.h"
 #include <game/architecture/engine_architecture.h>
@@ -27,21 +28,37 @@ namespace ifx {
 
 std::shared_ptr<Editor> EditorFactory::CreateEngineGUI(
         std::shared_ptr<EngineArchitecture> engine_architecture){
-    auto left_window_view = CreateLeftWindowView(
+    // Create Views
+    auto scene_view = CreateSceneView(
             engine_architecture->engine_systems.scene_container,
             engine_architecture->engine_contexts.resource_context,
             engine_architecture->engine_systems.renderer->scene_renderer());
-    auto right_window_view = CreateRightWindowView(
-            engine_architecture->engine_systems.renderer->scene_renderer(),
-            engine_architecture->engine_contexts.resource_context,
+    auto physics_simulation_view = CreatePhysicsSimulationView(
             engine_architecture->engine_systems.physics_simulation);
+    auto rendering_view = CreateRenderingView(
+            engine_architecture->engine_systems.renderer->scene_renderer(),
+            engine_architecture->engine_contexts.resource_context);
+    auto soft_body_view = CreateSoftBodyView(engine_architecture);
 
-    auto bottom_window_view = CreateBottomWindowView();
+    scene_view->AddObserver(soft_body_view);
+
+    // Create Window views
+    auto left_window_view = std::make_shared<WindowView>(scene_view, "Left");
+
+    std::vector<std::shared_ptr<View>> views{physics_simulation_view, rendering_view};
+    auto right_window_view = std::make_shared<WindowView>(views, "Right");
+
+    auto bottom_window_view = std::make_shared<WindowView>("Bottom");
+
     auto top_window_view = std::make_shared<MainMenuWindowView>();
-    auto imgui_demo_view = std::make_shared<ImGuiDemoWindowView>();
-    auto soft_body_window_view = CreateSoftBodyWindowView(
-            engine_architecture);
 
+    auto imgui_demo_view = std::make_shared<ImGuiDemoWindowView>();
+
+    auto soft_body_window_view = std::make_shared<WindowView>(soft_body_view,
+                                                              "Soft Body");
+    soft_body_window_view->show(false);
+
+    // Docker
     auto docker = CreateDefaultDocker(engine_architecture->window,
                                       left_window_view, right_window_view,
                                       top_window_view, bottom_window_view,
@@ -58,43 +75,6 @@ std::shared_ptr<Editor> EditorFactory::CreateEngineGUI(
     top_window_view->RegisterEditor(editor);
 
     return editor;
-}
-
-std::shared_ptr<WindowView> EditorFactory::CreateLeftWindowView(
-        std::shared_ptr<SceneContainer> scene,
-        std::shared_ptr<ResourceContext> resource_creator,
-        std::shared_ptr<SceneRenderer> scene_renderer){
-    auto scene_view = CreateSceneView(scene, resource_creator,
-                                      scene_renderer);
-
-    return std::make_shared<WindowView>(scene_view, "Left");
-}
-
-std::shared_ptr<WindowView> EditorFactory::CreateRightWindowView(
-        std::shared_ptr<SceneRenderer> scene_renderer,
-        std::shared_ptr<ResourceContext> resource_creator,
-        std::shared_ptr<PhysicsSimulation> physics_simulation){
-    auto physics_simulation_view
-            = CreatePhysicsSimulationView(physics_simulation);
-    auto rendering_view = CreateRenderingView(scene_renderer, resource_creator);
-
-    std::vector<std::shared_ptr<View>> views{physics_simulation_view, rendering_view};
-
-    return std::make_shared<WindowView>(views, "Right");
-}
-
-std::shared_ptr<WindowView> EditorFactory::CreateBottomWindowView(){
-    return std::make_shared<WindowView>("Bottom");
-}
-
-std::shared_ptr<WindowView> EditorFactory::CreateSoftBodyWindowView(
-        std::shared_ptr<EngineArchitecture> engine_architecture){
-    auto soft_body_window_view = std::make_shared<WindowView>(
-            SoftBodyViewFactory(engine_architecture).Create(),
-            "Soft Body");
-    soft_body_window_view->show(false);
-
-    return soft_body_window_view;
 }
 
 std::shared_ptr<SceneView> EditorFactory::CreateSceneView(
@@ -119,6 +99,12 @@ std::shared_ptr<RenderingView> EditorFactory::CreateRenderingView(
                                                          scene_renderer);
 
     return std::make_shared<RenderingView>(rendering_effect_processor);
+}
+
+std::shared_ptr<SoftBodyView> EditorFactory::CreateSoftBodyView(
+        std::shared_ptr<EngineArchitecture> engine_architecture){
+    return std::dynamic_pointer_cast<SoftBodyView>(
+            SoftBodyViewFactory(engine_architecture).Create());
 }
 
 std::shared_ptr<Docker> EditorFactory::CreateDefaultDocker(

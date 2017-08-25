@@ -20,6 +20,7 @@ class WindowView;
 class PhysicsSimulationView;
 class SceneRenderer;
 class RenderingView;
+class SoftBodyView;
 
 struct EngineArchitecture;
 
@@ -31,28 +32,17 @@ public:
     std::shared_ptr<Editor> CreateEngineGUI(
             std::shared_ptr<EngineArchitecture> engine_architecture);
 private:
-    std::shared_ptr<WindowView> CreateLeftWindowView(
-            std::shared_ptr<SceneContainer> scene,
-            std::shared_ptr<ResourceContext> resource_creator,
-            std::shared_ptr<SceneRenderer> scene_renderer);
-    std::shared_ptr<WindowView> CreateRightWindowView(
-            std::shared_ptr<SceneRenderer> scene_renderer,
-            std::shared_ptr<ResourceContext> resource_creator,
-            std::shared_ptr<PhysicsSimulation> physics_simulation);
-    std::shared_ptr<WindowView> CreateBottomWindowView();
-    std::shared_ptr<WindowView> CreateSoftBodyWindowView(
-            std::shared_ptr<EngineArchitecture> engine_architecture);
-
     std::shared_ptr<SceneView> CreateSceneView(
             std::shared_ptr<SceneContainer> scene,
             std::shared_ptr<ResourceContext> resource_creator,
             std::shared_ptr<SceneRenderer> scene_renderer);
     std::shared_ptr<PhysicsSimulationView> CreatePhysicsSimulationView(
             std::shared_ptr<PhysicsSimulation> physics_simulation);
-
     std::shared_ptr<RenderingView> CreateRenderingView(
             std::shared_ptr<SceneRenderer> scene_renderer,
             std::shared_ptr<ResourceContext> resource_creator);
+    std::shared_ptr<SoftBodyView> CreateSoftBodyView(
+            std::shared_ptr<EngineArchitecture> engine_architecture);
 
     std::shared_ptr<Docker> CreateDefaultDocker(
             std::shared_ptr<Window> window,

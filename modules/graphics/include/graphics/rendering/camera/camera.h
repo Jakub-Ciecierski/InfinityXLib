@@ -9,6 +9,9 @@
 
 namespace ifx {
 
+enum class CameraStyle{
+    FPS, ThirdPerson
+};
 
 /*
  * Camera represents the Projection and View Matrices.
@@ -20,13 +23,16 @@ public:
            float FOV = 45.0f,
            float near = 0.01f, float far = 100.0f);
 
-    virtual ~Camera();
+    virtual ~Camera() = default;
 
     float near_plane(){return near_;}
     void near_plane(float near){near_ = near;}
 
     float far_plane(){return far_;}
     void far_plane(float far){far_ = far;}
+
+    CameraStyle camera_style(){return camera_style_;}
+    void camera_style(CameraStyle camera_style){camera_style_ = camera_style;}
 
     /**
      * Override from MovableObject.
@@ -56,6 +62,10 @@ public:
 private:
     void clampRotation();
 
+    glm::mat4 ComputeViewMatrix(const glm::vec3 position,
+                                const glm::vec3 direction,
+                                const glm::vec3 up);
+
     glm::vec3 right;
     glm::vec3 up;
     glm::vec3 WorldUp;
@@ -70,6 +80,8 @@ private:
 
     float near_;
     float far_;
+
+    CameraStyle camera_style_;
 };
 }
 

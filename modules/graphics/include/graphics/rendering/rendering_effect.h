@@ -19,8 +19,9 @@ public:
     RenderingEffect(std::shared_ptr<Program> program,
                     const RenderingState &rendering_state,
                     std::string name = "Rendering Effect");
+    RenderingEffect(const RenderingEffect&);
 
-    ~RenderingEffect();
+    ~RenderingEffect() = default;
 
     std::shared_ptr<Program> program(){return program_;}
     const RenderingState& rendering_state(){return rendering_state_;}

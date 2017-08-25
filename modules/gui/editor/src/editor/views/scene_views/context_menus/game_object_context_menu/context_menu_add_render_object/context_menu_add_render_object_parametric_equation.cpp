@@ -192,10 +192,11 @@ ContextMenuAddRenderObjectParametricEquation::CreateRenderComponent(
 
     auto render_object = std::make_shared<RenderComponent>(model);
     auto rendering_effects = scene_renderer->rendering_effects();
-    for(auto& rendering_effect : rendering_effects){
-        if(rendering_effect->name() == "main.prog")
-            rendering_effect->RegisterRenderObject(render_object);
+    if(scene_renderer->default_rendering_effect()) {
+        scene_renderer->default_rendering_effect()->RegisterRenderObject(
+                render_object);
     }
+
     return render_object;
 }
 

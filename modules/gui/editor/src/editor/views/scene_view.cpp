@@ -178,6 +178,7 @@ std::string SceneView::GetComponentName(
 void SceneView::SetSelectedGameObject(
         std::shared_ptr<GameObject> selected_game_object){
     selected_game_object_ = selected_game_object;
+    NotifySetSelectedGameObject(selected_game_object);
 }
 
 } // namespace ifx

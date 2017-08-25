@@ -11,6 +11,8 @@ class SoftBodyView;
 class GameSystemsFactory;
 class SceneContainer;
 class Renderer;
+class Controls;
+class CameraComponent;
 
 struct EngineArchitecture;
 
@@ -26,7 +28,12 @@ private:
     std::unique_ptr<GameSystemsFactory> CreateGameSystemsFactory();
 
     void SetDefaultScene(std::shared_ptr<SceneContainer> scene);
-    void SetRendererSettings(std::shared_ptr<Renderer> renderer);
+    void SetRendererSettings(std::shared_ptr<Renderer> renderer,
+                             std::shared_ptr<Renderer> old_renderer);
+
+    void SetKeybinds(
+            std::shared_ptr<Controls> controls,
+            std::shared_ptr<CameraComponent> camera);
 
     std::shared_ptr<EngineArchitecture> engine_architecture_;
 };

@@ -15,6 +15,9 @@
 
 namespace ifx {
 
+const std::string DEFAULT_EFFECT_NAME = "main.prog";
+const std::string EFFECT_EXTENSION = ".prog";
+
 RenderingEffectProcessor::RenderingEffectProcessor(
         std::shared_ptr<ResourceContext> resource_context,
         std::shared_ptr<SceneRenderer> scene_renderer) :
@@ -38,10 +41,11 @@ RenderingEffectProcessor::CompileAllRenderingEffects(){
             try{
                 auto shader_paths = GetShaderPaths(dir);
                 auto program = program_loader.CreateProgram(shader_paths);
-                rendering_effects.push_back(std::make_shared<RenderingEffect>(
+                auto rendering_effect = std::make_shared<RenderingEffect>(
                         program,
                         RenderingState{},
-                        GetDifference(dir.path().string(), root_directory)));
+                        GetDifference(dir.path().string(), root_directory));
+                rendering_effects.push_back(rendering_effect);
             }catch(const std::invalid_argument& e){
                 std::cout << e.what() << std::endl;
             }
@@ -62,14 +66,19 @@ void RenderingEffectProcessor::CompileAllPrograms(){
             if (current_rendering_effect->name() == rendering_effect->name())
                 exists = true;
         }
-        if(!exists)
+        if(!exists) {
             scene_renderer_->Add(rendering_effect);
+            if(rendering_effect->name() == DEFAULT_EFFECT_NAME){
+                scene_renderer_->SetDefaultRenderingEffect(rendering_effect);
+            }
+        }
+
     }
 
 }
 
 bool RenderingEffectProcessor::IsValidProgramDirectory(const std::string dir_name){
-    return EndsWith(dir_name, ".prog");
+    return EndsWith(dir_name, EFFECT_EXTENSION);
 }
 
 ShaderPaths RenderingEffectProcessor::GetShaderPaths(boost::filesystem::directory_entry dir){
