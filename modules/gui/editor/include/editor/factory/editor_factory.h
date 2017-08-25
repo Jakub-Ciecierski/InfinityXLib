@@ -8,7 +8,7 @@ namespace ifx {
 class Editor;
 class MainMenuWindowView;
 class Renderer;
-class SceneView;
+class SceneListView;
 class SceneContainer;
 class PhysicsSimulation;
 class RightView;
@@ -32,7 +32,7 @@ public:
     std::shared_ptr<Editor> CreateEngineGUI(
             std::shared_ptr<EngineArchitecture> engine_architecture);
 private:
-    std::shared_ptr<SceneView> CreateSceneView(
+    std::shared_ptr<SceneListView> CreateSceneView(
             std::shared_ptr<SceneContainer> scene,
             std::shared_ptr<ResourceContext> resource_creator,
             std::shared_ptr<SceneRenderer> scene_renderer);

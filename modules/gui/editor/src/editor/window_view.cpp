@@ -10,7 +10,8 @@ WindowView::WindowView(std::string name) :
         show_(true),
         is_focused_(false),
         name_(name),
-        flags_(0){}
+        flags_(0),
+        selected_view_(nullptr){}
 
 WindowView::WindowView(std::vector<std::shared_ptr<View>> views,
                        std::string name) :
@@ -18,6 +19,7 @@ WindowView::WindowView(std::vector<std::shared_ptr<View>> views,
         is_focused_(false),
         name_(name),
         flags_(0),
+        selected_view_(nullptr),
         views_(views){
     for(unsigned int i = 0; i < views.size(); i++){
         selected_views_.push_back(0);
@@ -30,7 +32,8 @@ WindowView::WindowView(std::shared_ptr<View> view,
         show_(true),
         is_focused_(false),
         name_(name),
-        flags_(0){
+        flags_(0),
+        selected_view_(nullptr){
     views_.push_back(view);
 
     selected_views_.push_back(1);
@@ -94,6 +97,7 @@ void WindowView::RenderSelectedView(){
         if(selected_views_[i] == 1)
             view_to_render = i;
     }
+    selected_view_ = views_[view_to_render];
     views_[view_to_render]->Render();
 }
 

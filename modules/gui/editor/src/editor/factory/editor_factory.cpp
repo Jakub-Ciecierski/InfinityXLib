@@ -2,7 +2,7 @@
 
 #include <editor/editor.h>
 #include <editor/window_views/main_menu_window_view.h>
-#include <editor/views/scene_view.h>
+#include <editor/views/scene_list_view.h>
 #include <editor/window_views/imgui_demo_window_view.h>
 #include <editor/docker.h>
 #include <editor/processes/rendering_effect_processor.h>
@@ -17,6 +17,8 @@
 #include <editor/views/scene_views/context_menus/game_component_context_menu.h>
 #include <editor/views/scene_views/context_menus/scene_list_context_menu.h>
 #include "editor/views/soft_body_view.h"
+#include "editor/views/scene_view.h"
+#include <editor/window_views/screen_window_view.h>
 
 #include "game/scene_container.h"
 #include <game/architecture/engine_architecture.h>
@@ -29,7 +31,8 @@ namespace ifx {
 std::shared_ptr<Editor> EditorFactory::CreateEngineGUI(
         std::shared_ptr<EngineArchitecture> engine_architecture){
     // Create Views
-    auto scene_view = CreateSceneView(
+    auto scene_view = std::make_shared<SceneView>();
+    auto scene_list_view = CreateSceneView(
             engine_architecture->engine_systems.scene_container,
             engine_architecture->engine_contexts.resource_context,
             engine_architecture->engine_systems.renderer->scene_renderer());
@@ -39,11 +42,10 @@ std::shared_ptr<Editor> EditorFactory::CreateEngineGUI(
             engine_architecture->engine_systems.renderer->scene_renderer(),
             engine_architecture->engine_contexts.resource_context);
     auto soft_body_view = CreateSoftBodyView(engine_architecture);
-
-    scene_view->AddObserver(soft_body_view);
+    scene_list_view->AddObserver(soft_body_view);
 
     // Create Window views
-    auto left_window_view = std::make_shared<WindowView>(scene_view, "Left");
+    auto left_window_view = std::make_shared<WindowView>(scene_list_view, "Left");
 
     std::vector<std::shared_ptr<View>> views{physics_simulation_view, rendering_view};
     auto right_window_view = std::make_shared<WindowView>(views, "Right");
@@ -54,22 +56,21 @@ std::shared_ptr<Editor> EditorFactory::CreateEngineGUI(
 
     auto imgui_demo_view = std::make_shared<ImGuiDemoWindowView>();
 
-    auto soft_body_window_view = std::make_shared<WindowView>(soft_body_view,
-                                                              "Soft Body");
-    soft_body_window_view->show(false);
+    auto middle_screen_window_view = std::make_shared<ScreenWindowView>(
+            scene_view, soft_body_view);
 
     // Docker
     auto docker = CreateDefaultDocker(engine_architecture->window,
                                       left_window_view, right_window_view,
                                       top_window_view, bottom_window_view,
-                                      soft_body_window_view);
+                                      middle_screen_window_view);
 
     auto editor = std::make_shared<Editor>(docker);
     editor->AddWindowView(left_window_view);
     editor->AddWindowView(right_window_view);
     editor->AddWindowView(top_window_view);
     editor->AddWindowView(bottom_window_view);
-    editor->AddWindowView(soft_body_window_view);
+    editor->AddWindowView(middle_screen_window_view);
     editor->AddWindowView(imgui_demo_view);
 
     top_window_view->RegisterEditor(editor);
@@ -77,11 +78,11 @@ std::shared_ptr<Editor> EditorFactory::CreateEngineGUI(
     return editor;
 }
 
-std::shared_ptr<SceneView> EditorFactory::CreateSceneView(
+std::shared_ptr<SceneListView> EditorFactory::CreateSceneView(
         std::shared_ptr<SceneContainer> scene,
         std::shared_ptr<ResourceContext> resource_creator,
         std::shared_ptr<SceneRenderer> scene_renderer){
-    return std::make_shared<SceneView>(scene, resource_creator,
+    return std::make_shared<SceneListView>(scene, resource_creator,
                                        scene_renderer);
 }
 

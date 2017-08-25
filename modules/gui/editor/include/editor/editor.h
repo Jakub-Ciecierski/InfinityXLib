@@ -9,7 +9,7 @@
 namespace ifx{
 
 class MainMenuWindowView;
-class SceneView;
+class SceneListView;
 class ImGuiDemoWindowView;
 class Docker;
 class WindowView;
