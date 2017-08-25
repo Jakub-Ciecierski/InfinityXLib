@@ -98,7 +98,7 @@ void WindowView::RenderSelectedView(){
             view_to_render = i;
     }
     selected_view_ = views_[view_to_render];
-    views_[view_to_render]->Render();
+    selected_view_->Render();
 }
 
 void WindowView::SetFlags(ImGuiWindowFlags flags){
@@ -119,8 +119,11 @@ void WindowView::FetchFocus(){
     is_focused_ = ImGui::IsWindowFocused();
 
     for(auto& view : views_){
-        view->is_window_focused(is_focused_);
+        view->is_window_focused(false);
     }
+
+    if(selected_view_)
+        selected_view_->is_window_focused(is_focused_);
 }
 
 }

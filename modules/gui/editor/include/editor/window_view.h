@@ -14,7 +14,6 @@ class View;
 class WindowView {
 public:
     WindowView(std::string name = "Debug");
-
     WindowView(std::vector<std::shared_ptr<View>> view,
                std::string name = "Debug");
     WindowView(std::shared_ptr<View> view,
