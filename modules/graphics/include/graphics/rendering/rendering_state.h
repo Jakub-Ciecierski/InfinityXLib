@@ -9,12 +9,14 @@ namespace ifx {
 struct RenderingState {
 public:
 
-    RenderingState();
-
-    ~RenderingState();
+    RenderingState() = default;
+    ~RenderingState() = default;
 
     BlendState blend_state;
     DepthState depth_state;
+
+    // Higher priority will be rendered first
+    unsigned int drawing_priority = 0;
 
 private:
 

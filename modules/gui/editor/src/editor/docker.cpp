@@ -64,7 +64,8 @@ void Docker::SetEnabledFlags(){
              | ImGuiWindowFlags_NoTitleBar
              | ImGuiWindowFlags_NoMove
              | ImGuiWindowFlags_NoCollapse
-             | ImGuiWindowFlags_ShowBorders);
+             | ImGuiWindowFlags_ShowBorders
+             | ImGuiWindowFlags_HorizontalScrollbar);
 }
 
 void Docker::SetFlags(ImGuiWindowFlags flags){

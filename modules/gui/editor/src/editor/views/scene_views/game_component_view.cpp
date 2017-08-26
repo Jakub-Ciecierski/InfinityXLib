@@ -20,7 +20,6 @@ GameComponentView::GameComponentView(std::shared_ptr<SceneRenderer> scene_render
     light_view_.reset(new LightView());
     render_object_view_.reset(new RenderObjectView(scene_renderer));
 }
-GameComponentView::~GameComponentView(){}
 
 void GameComponentView::Render(std::shared_ptr<GameComponent> game_component){
     movable_object_view_->Render(

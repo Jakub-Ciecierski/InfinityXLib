@@ -50,7 +50,7 @@ public:
     Mesh(const Mesh &mesh) = delete;
     Mesh &operator=(const Mesh &other) = delete;
 
-    virtual ~Mesh();
+    virtual ~Mesh() = default;
 
     const std::vector<Vertex> &vertices() { return vertices_; }
 

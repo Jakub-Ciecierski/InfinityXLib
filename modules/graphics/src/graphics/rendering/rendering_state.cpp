@@ -2,8 +2,5 @@
 
 namespace ifx {
 
-RenderingState::RenderingState(){}
-
-RenderingState::~RenderingState(){}
 
 }

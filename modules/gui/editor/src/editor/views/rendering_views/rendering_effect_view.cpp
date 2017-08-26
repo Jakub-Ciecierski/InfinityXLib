@@ -19,23 +19,22 @@ RenderingEffectView::RenderingEffectView(
         render_error_window_(false),
         shader_error_message_(""){}
 
-void RenderingEffectView::Render(const std::vector<std::shared_ptr<RenderingEffect>>& rendering_effects ){
+void RenderingEffectView::Render(
+        const std::vector<std::shared_ptr<RenderingEffect>>& rendering_effects ){
     RenderReloadProject();
 
-    RenderList(rendering_effects);
+    if(ImGui::TreeNodeEx("Rendering Effects", ImGuiTreeNodeFlags_DefaultOpen)) {
+        RenderList(rendering_effects);
+        ImGui::TreePop();
+    }
+
     ImGui::Separator();
 
-    if(selected_rendering_effect_){
-        if(ImGui::TreeNode("Shaders")){
-            RenderShaders(selected_rendering_effect_);
-            ImGui::TreePop();
-        }
-        if(ImGui::TreeNode("Rendering State")){
-            RenderState(selected_rendering_effect_);
-            ImGui::TreePop();
-        }
-
+    if(ImGui::TreeNodeEx("Inspector", ImGuiTreeNodeFlags_DefaultOpen)) {
+        RenderInspector(selected_rendering_effect_);
+        ImGui::TreePop();
     }
+
 }
 
 void RenderingEffectView::RenderReloadProject(){
@@ -72,15 +71,33 @@ void RenderingEffectView::RenderList(const std::vector<std::shared_ptr<Rendering
     }
 }
 
-void RenderingEffectView::RenderShaders(std::shared_ptr<RenderingEffect> rendering_effect){
+void RenderingEffectView::RenderInspector(
+        std::shared_ptr<RenderingEffect> rendering_effect){
+    if(rendering_effect){
+        if(ImGui::TreeNodeEx("Shaders", ImGuiTreeNodeFlags_DefaultOpen)){
+            RenderShaders(rendering_effect);
+            ImGui::TreePop();
+        }
+        if(ImGui::TreeNodeEx("Rendering State",
+                             ImGuiTreeNodeFlags_DefaultOpen)){
+            RenderState(rendering_effect);
+            ImGui::TreePop();
+        }
+    }
+}
+
+void RenderingEffectView::RenderShaders(
+        std::shared_ptr<RenderingEffect> rendering_effect){
     RenderShaderReload(rendering_effect);
 
     auto program = rendering_effect->program();
-    RenderShader(program->vertex_shader(), program, "Vertex Shader");
-    RenderShader(program->fragment_shader(), program, "Fragment Shader");
-    RenderShader(program->geometry_shader(), program,"Geometry Shader");
-    RenderShader(program->tess_control_shader(), program,"Tessellation Control Shader");
-    RenderShader(program->tess_eval_shader(), program,"Tessellation Evaluation Shader");
+    RenderShader(program->vertex_shader(), program, "Vertex");
+    RenderShader(program->tess_control_shader(), program,
+                 "Tessellation Control");
+    RenderShader(program->tess_eval_shader(), program,
+                 "Tessellation Evaluation");
+    RenderShader(program->geometry_shader(), program, "Geometry");
+    RenderShader(program->fragment_shader(), program, "Fragment");
 }
 
 void RenderingEffectView::RenderShaderReload(
@@ -99,22 +116,19 @@ void RenderingEffectView::RenderShader(Shader* shader,
     if(!shader)
         return;
     ImGui::PushID(shader_type_name.c_str());
+    std::string text = shader_type_name + ": "
+                       + GetBaseShaderName(shader->file_path());
 
-    ImGui::Selectable(shader_type_name.c_str());
+    ImGui::Bullet();
+    ImGui::SameLine();
+    ImGui::Selectable(text.c_str());
+
     bool shader_opened = false;
     if (ImGui::BeginPopupContextItem("Shader Context Menu")) {
         shader_opened = ImGui::Selectable("Open");
         ImGui::EndPopup();
     }
     RenderShaderWindow(shader, program, shader_opened);
-    ImGui::Bullet();
-    ImGui::SameLine();
-    if(shader){
-        ImGui::TextWrapped(GetBaseShaderName(shader->file_path()).c_str());
-    }else{
-        ImGui::Text("Empty");
-    }
-    ImGui::Separator();
 
     ImGui::PopID();
 }
@@ -140,7 +154,22 @@ void RenderingEffectView::RenderShaderWindow(Shader* shader,
                                   ImVec2(800, 600),
                                   ImGuiInputTextFlags_AllowTabInput);
         ImGui::Separator();
-        if (ImGui::Button("Save & Compile", ImVec2(120, 0))) {
+
+        ImGui::SameLine();
+        if (ImGui::Button("Save", ImVec2(120, 0))) {
+            boost::filesystem::save_string_file(
+                    boost::filesystem::path(shader->file_path()),
+                    std::string(raw_text));
+            shader_error = shader->Reload();
+            if (shader_error.error_occured) {
+                render_error_window_ = true;
+                shader_error_message_ = shader_error.message;
+            } else{
+                program->Reload();
+            }
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Save & Close", ImVec2(120, 0))) {
             boost::filesystem::save_string_file(
                     boost::filesystem::path(shader->file_path()),
                     std::string(raw_text));
@@ -177,8 +206,13 @@ void RenderingEffectView::RenderErrorWindow(const ShaderError& shader_error){
     }
 }
 
-void RenderingEffectView::RenderState(std::shared_ptr<RenderingEffect> rendering_effect){
-
+void RenderingEffectView::RenderState(
+        std::shared_ptr<RenderingEffect> rendering_effect){
+    ImGui::PushItemWidth(75);
+    ImGui::SliderInt("Drawing Priority",
+                     (int *) &rendering_effect->rendering_state().drawing_priority,
+                     0, 100);
+    ImGui::PopItemWidth();
 }
 
 std::string RenderingEffectView::GetBaseName(const std::string& name){

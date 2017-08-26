@@ -14,7 +14,7 @@ void GUIThemeDracula(){
     style.Colors[ImGuiCol_PopupBg]               = ImVec4(0.05f, 0.05f, 0.10f, 0.90f);
     style.Colors[ImGuiCol_Border]                = ImVec4(0.29f, 0.29f, 0.29f, 1.00f);
     style.Colors[ImGuiCol_BorderShadow]          = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-    style.Colors[ImGuiCol_FrameBg]               = ImVec4(0.80f, 0.80f, 0.80f, 0.30f);
+    style.Colors[ImGuiCol_FrameBg]               = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
     style.Colors[ImGuiCol_FrameBgHovered]        = ImVec4(0.90f, 0.80f, 0.80f, 0.40f);
     style.Colors[ImGuiCol_FrameBgActive]         = ImVec4(0.90f, 0.65f, 0.65f, 0.45f);
     style.Colors[ImGuiCol_TitleBg]               = ImVec4(0.27f, 0.27f, 0.27f, 1.00f);

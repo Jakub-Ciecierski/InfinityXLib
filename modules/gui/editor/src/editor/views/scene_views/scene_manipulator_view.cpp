@@ -17,8 +17,10 @@ void SceneManipulatorView::Render(std::shared_ptr<Transformable> object,
         scene_manipulator_->transformable_object(object);
         scene_manipulator_->camera(camera);
     }
-    if(ImGui::CollapsingHeader("Manipulator")){
+
+    if(ImGui::TreeNodeEx("Manipulator", ImGuiTreeNodeFlags_DefaultOpen)) {
         RenderConfig();
+        ImGui::TreePop();
     }
 
     scene_manipulator_->show(render_);

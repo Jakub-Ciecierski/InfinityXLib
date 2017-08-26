@@ -54,9 +54,8 @@ struct ParametricEquationExpressions{
 class ParametricInterpreter {
 public:
 
-    ParametricInterpreter();
-
-    ~ParametricInterpreter();
+    ParametricInterpreter() = default;
+    ~ParametricInterpreter() = default;
 
     std::unique_ptr<ParametricEquation> Interpret(
             const ParametricEquationExpressions& expression);

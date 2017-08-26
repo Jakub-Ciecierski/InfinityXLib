@@ -11,6 +11,10 @@
 #include <editor/views/scene_views/context_menus/game_object_context_menu.h>
 #include <editor/views/scene_views/context_menus/game_component_context_menu.h>
 #include <editor/views/scene_views/context_menus/scene_list_context_menu.h>
+#include "editor/views/scene_views/movable_object_view.h"
+#include "editor/views/scene_views/game_component_views/camera_view.h"
+#include "editor/views/scene_views/game_component_views/light_view.h"
+#include "editor/views/scene_views/game_component_views/render_object_view.h"
 
 #include <game/scene_container.h>
 #include <game/game_component.h>
@@ -51,34 +55,48 @@ void SceneListView::Render(){
 
 void SceneListView::RenderWindow(){
     RenderGameObjectsList();
-    RenderSelectedGameObject();
-    RenderSelectedGameComponent();
+    ImGui::Separator();
+    RenderInspector();
+    ImGui::Separator();
     RenderManipulator();
 }
 
 void SceneListView::RenderGameObjectsList(){
-    if (ImGui::CollapsingHeader("Scene Objects")) {
+    if(ImGui::TreeNodeEx("Scene Objects", ImGuiTreeNodeFlags_DefaultOpen)) {
         scene_list_context_menu_->Render();
         RenderGameObjectsList(scene_->game_objects());
+        ImGui::TreePop();
+    }
+}
+
+void SceneListView::RenderInspector(){
+    if(ImGui::TreeNodeEx("Inspector", ImGuiTreeNodeFlags_DefaultOpen)) {
+        RenderSelectedGameObject();
+        RenderSelectedGameComponent();
+        ImGui::TreePop();
     }
 }
 
 void SceneListView::RenderSelectedGameObject(){
     if (selected_game_object_) {
-        if (ImGui::CollapsingHeader("Selected Game Object")) {
+        if(ImGui::TreeNodeEx("Game Object", ImGuiTreeNodeFlags_DefaultOpen)) {
             ImGui::PushID("0");
             game_object_view_->Render(selected_game_object_);
             ImGui::PopID();
+            ImGui::TreePop();
         }
     }
 }
 
 void SceneListView::RenderSelectedGameComponent(){
     if (selected_game_component_) {
-        if (ImGui::CollapsingHeader("Selected Game Component")) {
+
+        if(ImGui::TreeNodeEx("Game Component", ImGuiTreeNodeFlags_DefaultOpen)) {
             ImGui::PushID("1");
             game_component_view_->Render(selected_game_component_);
             ImGui::PopID();
+
+            ImGui::TreePop();
         }
     }
 }

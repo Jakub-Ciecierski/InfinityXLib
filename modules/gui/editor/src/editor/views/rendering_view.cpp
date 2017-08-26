@@ -19,13 +19,9 @@ RenderingView::RenderingView(
 }
 
 void RenderingView::Render(){
-    if(ImGui::TreeNode("Rendering Effect")) {
-        rendering_effect_view_->Render(
-                rendering_effect_processor_->scene_renderer()->rendering_effects()
-        );
-        ImGui::TreePop();
-    }
-
+    rendering_effect_view_->Render(
+            rendering_effect_processor_->scene_renderer()->rendering_effects()
+    );
 }
 
 }

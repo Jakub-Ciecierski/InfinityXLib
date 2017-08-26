@@ -116,7 +116,7 @@ void WindowView::FetchSize() {
 }
 
 void WindowView::FetchFocus(){
-    is_focused_ = ImGui::IsWindowFocused();
+    is_focused_ = ImGui::IsRootWindowOrAnyChildFocused();
 
     for(auto& view : views_){
         view->is_window_focused(false);

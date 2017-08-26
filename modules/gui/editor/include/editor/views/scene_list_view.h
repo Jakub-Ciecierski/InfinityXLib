@@ -40,8 +40,10 @@ private:
 
     void RenderGameObjectsList();
 
+    void RenderInspector();
     void RenderSelectedGameObject();
     void RenderSelectedGameComponent();
+
     void RenderManipulator();
 
     void RenderGameObjectsList(

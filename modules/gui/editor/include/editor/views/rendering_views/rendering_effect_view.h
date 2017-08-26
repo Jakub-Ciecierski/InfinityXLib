@@ -25,6 +25,8 @@ private:
 
     void RenderList(const std::vector<std::shared_ptr<RenderingEffect>>& rendering_effects);
 
+    void RenderInspector(std::shared_ptr<RenderingEffect> rendering_effect);
+
     void RenderShaders(std::shared_ptr<RenderingEffect> rendering_effect);
     void RenderShaderReload(std::shared_ptr<RenderingEffect> rendering_effect);
     void RenderShader(Shader* shader,

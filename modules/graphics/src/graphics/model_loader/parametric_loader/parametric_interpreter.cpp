@@ -6,10 +6,6 @@
 
 namespace ifx {
 
-ParametricInterpreter::ParametricInterpreter(){}
-
-ParametricInterpreter::~ParametricInterpreter(){}
-
 std::unique_ptr<ParametricEquation> ParametricInterpreter::Interpret(
         const ParametricEquationExpressions &expressions) {
     auto parametric_equation = std::unique_ptr<ParametricEquation>(

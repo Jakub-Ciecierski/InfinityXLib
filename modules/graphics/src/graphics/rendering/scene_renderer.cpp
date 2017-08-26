@@ -5,6 +5,8 @@
 #include <graphics/rendering/render_object.h>
 #include <graphics/rendering/rendering_effect.h>
 
+#include <algorithm>
+
 namespace ifx {
 
 SceneRenderer::SceneRenderer() :
@@ -12,8 +14,10 @@ SceneRenderer::SceneRenderer() :
     light_group_ = std::shared_ptr<LightGroup>(new LightGroup());
 }
 
-void SceneRenderer::Render() const{
-    for(auto& rendering_effect : rendering_effects_)
+void SceneRenderer::Render() const {
+    auto sorted_rendering_effects = SortRenderingEffects();
+
+    for(auto& rendering_effect : sorted_rendering_effects)
         rendering_effect->Render(*camera_, *light_group_);
 }
 
@@ -66,11 +70,28 @@ bool SceneRenderer::Remove(std::shared_ptr<RenderObject> render_object){
     }
     return false;
 }
+
 bool SceneRenderer::Remove(std::shared_ptr<LightSource> light_source){
     return light_group_->Remove(light_source);
 }
+
 bool SceneRenderer::Remove(std::shared_ptr<Camera> camera){
     return false;
+}
+
+std::vector<std::shared_ptr<RenderingEffect>>
+SceneRenderer::SortRenderingEffects() const {
+    auto sorted_rendering_effects = rendering_effects_;
+
+    std::sort(sorted_rendering_effects.begin(),
+              sorted_rendering_effects.end(),
+              [](std::shared_ptr<RenderingEffect> a,
+                 std::shared_ptr<RenderingEffect> b) -> bool {
+                  return a->rendering_state().drawing_priority >
+                         b->rendering_state().drawing_priority;
+              });
+
+    return sorted_rendering_effects;
 }
 
 }

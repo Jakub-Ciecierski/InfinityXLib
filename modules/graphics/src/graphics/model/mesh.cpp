@@ -18,8 +18,6 @@ Mesh::Mesh(std::vector<Vertex> vertices,
     initBuffers();
 }
 
-Mesh::~Mesh() {}
-
 void Mesh::initBuffers() {
     vao_.reset(new VAO());
 

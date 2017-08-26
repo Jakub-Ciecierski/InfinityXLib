@@ -51,6 +51,8 @@ public:
 private:
     void Render(std::shared_ptr<RenderObject> render_object) const;
 
+    std::vector<std::shared_ptr<RenderingEffect>> SortRenderingEffects() const;
+
     std::vector<std::shared_ptr<RenderingEffect>> rendering_effects_;
     std::shared_ptr<RenderingEffect> default_rendering_effect_;
 

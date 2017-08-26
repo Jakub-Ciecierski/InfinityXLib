@@ -16,6 +16,10 @@
 #include <editor/views/scene_views/context_menus/game_object_context_menu.h>
 #include <editor/views/scene_views/context_menus/game_component_context_menu.h>
 #include <editor/views/scene_views/context_menus/scene_list_context_menu.h>
+#include "editor/views/scene_views/movable_object_view.h"
+#include "editor/views/scene_views/game_component_views/camera_view.h"
+#include "editor/views/scene_views/game_component_views/light_view.h"
+#include "editor/views/scene_views/game_component_views/render_object_view.h"
 #include "editor/views/soft_body_view.h"
 #include "editor/views/scene_view.h"
 #include <editor/window_views/screen_window_view.h>
