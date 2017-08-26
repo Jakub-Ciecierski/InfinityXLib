@@ -21,7 +21,7 @@ public:
     GameObjectContextMenu(std::shared_ptr<SceneRenderer> scene_renderer,
                           std::shared_ptr<ResourceContext> resource_creator,
                           std::shared_ptr<SceneContainer> scene);
-    ~GameObjectContextMenu();
+    ~GameObjectContextMenu() = default;
 
     GameObjectContextMenuEvent Render(std::shared_ptr<GameObject> game_object,
                                       int game_object_id);

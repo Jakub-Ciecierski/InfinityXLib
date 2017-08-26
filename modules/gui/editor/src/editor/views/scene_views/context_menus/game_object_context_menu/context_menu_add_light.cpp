@@ -11,10 +11,6 @@
 
 namespace ifx {
 
-ContextMenuAddLight::ContextMenuAddLight(){}
-
-ContextMenuAddLight::~ContextMenuAddLight(){}
-
 void ContextMenuAddLight::Render(
         std::shared_ptr<ResourceContext> resource_creator,
         std::shared_ptr<GameObject> game_object) {

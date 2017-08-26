@@ -1,6 +1,7 @@
 #include "editor/views/scene_list_view.h"
 
 #include <graphics/rendering/render_object.h>
+#include "graphics/model_loader/parametric_loader/parametric_interpreter.h"
 
 #include <gui/imgui/imgui.h>
 #include <gui/imgui/imgui_internal.h>
@@ -15,13 +16,17 @@
 #include "editor/views/scene_views/game_component_views/camera_view.h"
 #include "editor/views/scene_views/game_component_views/light_view.h"
 #include "editor/views/scene_views/game_component_views/render_object_view.h"
+#include <editor/views/scene_views/context_menus/game_object_context_menu/context_menu_add_light.h>
+#include "editor/views/scene_views/context_menus/game_object_context_menu/context_menu_add_render_object.h"
+#include <editor/views/scene_views/context_menus/game_object_context_menu/context_menu_add_render_object/context_menu_add_render_object_parametric_equation.h>
+#include <editor/views/scene_views/context_menus/game_object_context_menu/context_menu_add_render_object/context_menu_add_render_object_asset.h>
 
 #include <game/scene_container.h>
 #include <game/game_component.h>
 #include <game/game_object.h>
 #include <game/components/cameras/camera_component.h>
-
 #include <game/resources/resource_context.h>
+
 #include <iostream>
 
 #include <common/unique_ptr.h>

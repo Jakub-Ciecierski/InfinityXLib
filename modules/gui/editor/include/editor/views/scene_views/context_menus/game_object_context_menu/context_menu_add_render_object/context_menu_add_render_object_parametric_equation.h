@@ -17,7 +17,7 @@ public:
 
     ContextMenuAddRenderObjectParametricEquation();
 
-    ~ContextMenuAddRenderObjectParametricEquation();
+    ~ContextMenuAddRenderObjectParametricEquation() = default;
 
     void Render(
             std::shared_ptr<SceneRenderer> scene_renderer,

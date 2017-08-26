@@ -11,9 +11,9 @@ class GameObject;
 class ContextMenuAddLight {
 public:
 
-    ContextMenuAddLight();
+    ContextMenuAddLight() = default;
 
-    ~ContextMenuAddLight();
+    ~ContextMenuAddLight() = default;
 
     void Render(std::shared_ptr<ResourceContext> resource_creator,
                 std::shared_ptr<GameObject> game_object);

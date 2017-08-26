@@ -7,7 +7,14 @@
 #include <game/scene_container.h>
 #include <game/resources/resource_context.h>
 
+#include <editor/views/scene_views/context_menus/game_object_context_menu/context_menu_add_render_object/context_menu_add_render_object_parametric_equation.h>
+#include <editor/views/scene_views/context_menus/game_object_context_menu/context_menu_add_render_object/context_menu_add_render_object_asset.h>
+
+#include "graphics/model_loader/parametric_loader/parametric_interpreter.h"
+
 #include <gui/imgui/imgui.h>
+
+#include <common/unique_ptr.h>
 
 namespace ifx {
 
@@ -18,11 +25,10 @@ GameObjectContextMenu::GameObjectContextMenu(
         scene_renderer_(scene_renderer),
         resource_creator_(resource_creator),
         scene_(scene) {
-    context_menu_add_light_.reset(new ContextMenuAddLight());
-    context_menu_add_render_object_.reset(new ContextMenuAddRenderObject());
+    context_menu_add_light_ = ifx::make_unique<ContextMenuAddLight>();
+    context_menu_add_render_object_
+            = ifx::make_unique<ContextMenuAddRenderObject>();
 }
-
-GameObjectContextMenu::~GameObjectContextMenu(){}
 
 GameObjectContextMenuEvent GameObjectContextMenu::Render(std::shared_ptr<GameObject> game_object,
                                                          int game_object_id) {

@@ -11,6 +11,7 @@ class ResourceContext;
 class GameObject;
 class ParametricEquationExpressions;
 class ContextMenuAddRenderObjectParametricEquation;
+class ContextMenuAddRenderObjectAsset;
 class SceneRenderer;
 
 class ContextMenuAddRenderObject {
@@ -18,7 +19,7 @@ public:
 
     ContextMenuAddRenderObject();
 
-    ~ContextMenuAddRenderObject();
+    ~ContextMenuAddRenderObject() = default;
 
     void Render(
             std::shared_ptr<SceneRenderer> scene_renderer,
@@ -27,6 +28,8 @@ public:
 private:
     std::unique_ptr<ContextMenuAddRenderObjectParametricEquation>
             context_menu_add_render_object_parametric_equation_;
+    std::unique_ptr<ContextMenuAddRenderObjectAsset>
+            context_menu_add_render_object_asset_;
 };
 }
 

@@ -16,10 +16,14 @@
 #include <editor/views/scene_views/context_menus/game_object_context_menu.h>
 #include <editor/views/scene_views/context_menus/game_component_context_menu.h>
 #include <editor/views/scene_views/context_menus/scene_list_context_menu.h>
+#include "editor/views/scene_views/context_menus/game_object_context_menu/context_menu_add_render_object.h"
+#include <editor/views/scene_views/context_menus/game_object_context_menu/context_menu_add_render_object/context_menu_add_render_object_parametric_equation.h>
+#include <editor/views/scene_views/context_menus/game_object_context_menu/context_menu_add_render_object/context_menu_add_render_object_asset.h>
 #include "editor/views/scene_views/movable_object_view.h"
 #include "editor/views/scene_views/game_component_views/camera_view.h"
 #include "editor/views/scene_views/game_component_views/light_view.h"
 #include "editor/views/scene_views/game_component_views/render_object_view.h"
+#include <editor/views/scene_views/context_menus/game_object_context_menu/context_menu_add_light.h>
 #include "editor/views/soft_body_view.h"
 #include "editor/views/scene_view.h"
 #include <editor/window_views/screen_window_view.h>
@@ -28,6 +32,7 @@
 #include <game/architecture/engine_architecture.h>
 #include <game/resources/resource_context.h>
 
+#include "graphics/model_loader/parametric_loader/parametric_interpreter.h"
 #include <graphics/rendering/renderer.h>
 
 namespace ifx {

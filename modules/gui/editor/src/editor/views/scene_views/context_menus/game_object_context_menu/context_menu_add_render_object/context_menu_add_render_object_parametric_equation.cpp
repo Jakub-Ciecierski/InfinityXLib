@@ -26,9 +26,6 @@ ContextMenuAddRenderObjectParametricEquation
             (CreateDefaultParametricEquationExpression());
 }
 
-ContextMenuAddRenderObjectParametricEquation::
-~ContextMenuAddRenderObjectParametricEquation(){}
-
 void ContextMenuAddRenderObjectParametricEquation::Render(
         std::shared_ptr <SceneRenderer> scene_renderer,
         std::shared_ptr <ResourceContext> resource_creator,
