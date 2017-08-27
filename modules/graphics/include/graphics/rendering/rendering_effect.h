@@ -23,8 +23,11 @@ public:
 
     ~RenderingEffect() = default;
 
+    bool enabled(){return enabled_;}
+    void enabled(bool value){enabled_ = value;}
+
     std::shared_ptr<Program> program(){return program_;}
-    const RenderingState& rendering_state(){return rendering_state_;}
+    RenderingState& rendering_state(){return rendering_state_;}
     const std::string& name(){return name_;}
 
     void Render(Camera &camera,
@@ -37,6 +40,7 @@ private:
     std::shared_ptr<Program> program_;
     RenderingState rendering_state_;
     std::string name_;
+    bool enabled_;
 
     std::vector<std::shared_ptr<RenderObject>> render_objects_;
 };

@@ -16,8 +16,6 @@ Docker::Docker(std::shared_ptr<Window> window) :
         is_enabled_(true),
         docker_settings_{250, 250, 250, true, 0.2, false}{}
 
-Docker::~Docker(){}
-
 void Docker::Enable(){
     is_enabled_ = true;
     SetEnabledFlags();

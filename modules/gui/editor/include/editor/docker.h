@@ -35,7 +35,7 @@ public:
 
     Docker(std::shared_ptr<Window> window);
 
-    ~Docker();
+    ~Docker() = default;
     std::shared_ptr<Window> window(){return window_;}
 
     const DockerSettings& docker_settings(){return docker_settings_;}

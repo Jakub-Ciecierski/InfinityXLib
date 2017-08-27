@@ -12,15 +12,19 @@ RenderingEffect::RenderingEffect(
         std::string name) :
         program_(program),
         rendering_state_(rendering_state),
-        name_(name){}
+        name_(name),
+        enabled_(true){}
 
 RenderingEffect::RenderingEffect(const RenderingEffect& other) :
         program_(other.program_),
         rendering_state_(other.rendering_state_),
-        name_(other.name_) {}
+        name_(other.name_),
+        enabled_(other.enabled_){}
 
 void RenderingEffect::Render(Camera &camera,
                              LightGroup &light_group) {
+    if(!enabled_)
+        return;
     camera.use(*program_);
     light_group.use(*program_);
 

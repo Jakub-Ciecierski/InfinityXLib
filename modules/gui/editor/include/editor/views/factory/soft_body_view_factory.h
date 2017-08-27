@@ -15,6 +15,11 @@ class Controls;
 class CameraComponent;
 
 struct EngineArchitecture;
+struct SoftBodyRenderingEffects;
+
+extern const std::string NODE_RENDERING_EFFECT_NAME;
+extern const std::string EDGES_RENDERING_EFFECT_NAME;
+extern const std::string FACES_RENDERING_EFFECT_NAME;
 
 class SoftBodyViewFactory : public ViewFactory {
 public:
@@ -27,10 +32,14 @@ private:
     std::shared_ptr<EngineArchitecture> CreateEngineArchitecture();
     std::unique_ptr<GameSystemsFactory> CreateGameSystemsFactory();
 
+    SoftBodyRenderingEffects SetRendererSettings(
+            std::shared_ptr<Renderer> renderer,
+            std::shared_ptr<Renderer> old_renderer);
+    SoftBodyRenderingEffects CreateRenderingEffects(
+            std::shared_ptr<Renderer> old_renderer);
+
     void SetDefaultScene(std::shared_ptr<SceneContainer> scene,
                          std::shared_ptr<SoftBodyView> soft_body_view);
-    void SetRendererSettings(std::shared_ptr<Renderer> renderer,
-                             std::shared_ptr<Renderer> old_renderer);
 
     void SetKeybinds(
             std::shared_ptr<Controls> controls,

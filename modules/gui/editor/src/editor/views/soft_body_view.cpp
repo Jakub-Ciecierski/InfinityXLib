@@ -18,10 +18,13 @@
 
 namespace ifx{
 
-SoftBodyView::SoftBodyView(std::unique_ptr<GameUpdater> game_updater) :
+SoftBodyView::SoftBodyView(std::unique_ptr<GameUpdater> game_updater,
+                           const SoftBodyRenderingEffects& rendering_effects) :
         View("Soft Body"),
         game_updater_(std::move(game_updater)),
-        current_game_object_(nullptr){}
+        current_game_object_(nullptr),
+        rendering_effects_(rendering_effects),
+        first_render_(true){}
 
 bool SoftBodyView::Terminate() {
     game_updater_->engine_architecture()->engine_systems
@@ -32,10 +35,44 @@ bool SoftBodyView::Terminate() {
 void SoftBodyView::Render(){
     game_updater_->Update(1.0f/60.0f);
 
+    ImGui::Columns(2, "Soft");
+    RenderSettings();
+
+    ImGui::NextColumn();
     RenderScreen();
+/*
+    ImGui::NextColumn();
+    if(first_render_){
+        ImGui::SetColumnOffset(-1, ImGui::GetWindowWidth() - 100);
+    }
+*/
+    ImGui::Columns(1);
+
+    first_render_ = false;
+}
+
+void SoftBodyView::RenderSettings(){
+    if(ImGui::TreeNodeEx("Show", ImGuiTreeNodeFlags_DefaultOpen)) {
+        RenderShowCheckbox("Nodes", *rendering_effects_.nodes);
+        RenderShowCheckbox("Edges", *rendering_effects_.edges);
+        RenderShowCheckbox("Faces", *rendering_effects_.faces);
+        RenderShowCheckbox("Main", *rendering_effects_.main);
+        ImGui::TreePop();
+    }
+}
+
+void SoftBodyView::RenderShowCheckbox(std::string name,
+                                      RenderingEffect& rendering_effect){
+    static bool enabled;
+    enabled = rendering_effect.enabled();
+    ImGui::Checkbox(name.c_str(), &enabled);
+    rendering_effect.enabled(enabled);
 }
 
 void SoftBodyView::RenderScreen(){
+    if(first_render_)
+        ImGui::SetColumnOffset(-1, 100);
+
     auto fbo_renderer = std::dynamic_pointer_cast<FBORenderer>(
             game_updater_->engine_architecture()->engine_systems.renderer);
     if(!fbo_renderer)
@@ -44,7 +81,9 @@ void SoftBodyView::RenderScreen(){
     const auto& texture = fbo_renderer->GetSceneTexture();
     auto tex_id = texture.id();
     ImTextureID im_tex_id = (ImTextureID)(tex_id);
-    auto width_ratio = ImGui::GetWindowWidth() / texture.width();
+    //auto width_ratio = ImGui::GetWindowWidth() / texture.width();
+    auto width_ratio = ImGui::GetColumnWidth() / texture.width();
+
     ImGui::Image(im_tex_id, ImVec2(texture.width() * width_ratio,
                                    texture.height() * width_ratio));
 }
@@ -68,18 +107,19 @@ void SoftBodyView::SetGameObject(
                         render_component)->models());
         new_render_component->moveTo(glm::vec3(0,0,0));
         new_render_component->rotateTo(glm::vec3(0,0,0));
-
-        auto default_rendering_effect =
-                game_updater_->engine_architecture()->engine_systems.renderer->
-                        scene_renderer()->default_rendering_effect();
-        if(default_rendering_effect){
-            default_rendering_effect->RegisterRenderObject(
-                    new_render_component);
-        }
+        RegisterGameObjectToRenderingEffects(new_render_component);
 
         current_game_object_->Add(new_render_component);
     }
 
+}
+
+void SoftBodyView::RegisterGameObjectToRenderingEffects(
+        std::shared_ptr<RenderComponent> render_component){
+    rendering_effects_.main->RegisterRenderObject(render_component);
+    rendering_effects_.edges->RegisterRenderObject(render_component);
+    rendering_effects_.nodes->RegisterRenderObject(render_component);
+    rendering_effects_.faces->RegisterRenderObject(render_component);
 }
 
 void SoftBodyView::OnSetSelectedGameObject(

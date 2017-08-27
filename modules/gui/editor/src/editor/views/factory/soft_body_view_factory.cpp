@@ -26,8 +26,13 @@
 #include <controls/controls.h>
 #include <controls/controller/controllers/mouse_controller.h>
 #include <math/print_math.h>
+#include <iostream>
 
 namespace ifx{
+
+const std::string NODE_RENDERING_EFFECT_NAME = "soft_body_editor/nodes.prog";
+const std::string EDGES_RENDERING_EFFECT_NAME = "soft_body_editor/edges.prog";
+const std::string FACES_RENDERING_EFFECT_NAME = "soft_body_editor/faces.prog";
 
 SoftBodyViewFactory::SoftBodyViewFactory(
         std::shared_ptr<EngineArchitecture> engine_architecture) :
@@ -36,12 +41,14 @@ SoftBodyViewFactory::SoftBodyViewFactory(
 std::shared_ptr<View> SoftBodyViewFactory::Create(){
     auto engine_architecture = CreateEngineArchitecture();
 
-    SetRendererSettings(engine_architecture->engine_systems.renderer,
-                        engine_architecture_->engine_systems.renderer);
+    auto soft_body_rendering_effects =
+            SetRendererSettings(engine_architecture->engine_systems.renderer,
+                                engine_architecture_->engine_systems.renderer);
 
     auto game_updater = ifx::make_unique<GameUpdater>(engine_architecture);
     auto soft_body_view = std::make_shared<SoftBodyView>(
-            std::move(game_updater));
+            std::move(game_updater),
+            soft_body_rendering_effects);
 
     SetDefaultScene(engine_architecture ->engine_systems.scene_container,
                     soft_body_view);
@@ -77,6 +84,62 @@ SoftBodyViewFactory::CreateGameSystemsFactory(){
     return game_systems_factory;
 }
 
+SoftBodyRenderingEffects SoftBodyViewFactory::SetRendererSettings(
+        std::shared_ptr<Renderer> renderer,
+        std::shared_ptr<Renderer> old_renderer){
+    auto fbo_renderer = std::dynamic_pointer_cast<FBORenderer>(renderer);
+    fbo_renderer->EnableRenderToScreen(false);
+
+    auto soft_body_rendering_effects = CreateRenderingEffects(old_renderer);
+    soft_body_rendering_effects.main->rendering_state().drawing_priority = 2;
+    soft_body_rendering_effects.main->enabled(false);
+    soft_body_rendering_effects.faces->rendering_state().drawing_priority = 1;
+    soft_body_rendering_effects.edges->rendering_state().drawing_priority = 3;
+    soft_body_rendering_effects.nodes->rendering_state().drawing_priority = 4;
+
+    renderer->scene_renderer()->Add(soft_body_rendering_effects.main);
+    renderer->scene_renderer()->Add(soft_body_rendering_effects.nodes);
+    renderer->scene_renderer()->Add(soft_body_rendering_effects.edges);
+    renderer->scene_renderer()->Add(soft_body_rendering_effects.faces);
+
+    return soft_body_rendering_effects;
+}
+
+SoftBodyRenderingEffects SoftBodyViewFactory::CreateRenderingEffects(
+        std::shared_ptr<Renderer> old_renderer){
+    SoftBodyRenderingEffects soft_body_rendering_effects;
+    soft_body_rendering_effects.main =
+            std::make_shared<RenderingEffect>(
+                    *old_renderer->scene_renderer()->
+                            default_rendering_effect());
+
+    auto& rendering_effects =
+            old_renderer->scene_renderer()->rendering_effects();
+    for(auto& rendering_effect : rendering_effects){
+        if(rendering_effect->name() == NODE_RENDERING_EFFECT_NAME){
+            soft_body_rendering_effects.nodes =
+                    std::make_shared<RenderingEffect>(*rendering_effect);
+        }
+        else if(rendering_effect->name() == EDGES_RENDERING_EFFECT_NAME){
+            soft_body_rendering_effects.edges =
+                    std::make_shared<RenderingEffect>(*rendering_effect);
+        }
+        else if(rendering_effect->name() == FACES_RENDERING_EFFECT_NAME){
+            soft_body_rendering_effects.faces =
+                    std::make_shared<RenderingEffect>(*rendering_effect);
+        }
+    }
+
+    if(!soft_body_rendering_effects.main
+       || !soft_body_rendering_effects.nodes
+       || !soft_body_rendering_effects.edges
+       || !soft_body_rendering_effects.faces){
+        throw std::invalid_argument("SoftBodyRenderingEffects not found");
+    }
+
+    return soft_body_rendering_effects;
+}
+
 void SoftBodyViewFactory::SetDefaultScene(
         std::shared_ptr<SceneContainer> scene,
         std::shared_ptr<SoftBodyView> soft_body_view){
@@ -104,22 +167,6 @@ void SoftBodyViewFactory::SetDefaultScene(
                             program_creator()));
     light_game_object->rotateTo(glm::vec3(50, -50, 0));
     light_game_object->moveTo(glm::vec3(0,10,0));
-}
-
-void SoftBodyViewFactory::SetRendererSettings(
-        std::shared_ptr<Renderer> renderer,
-        std::shared_ptr<Renderer> old_renderer){
-    auto fbo_renderer = std::dynamic_pointer_cast<FBORenderer>(renderer);
-    fbo_renderer->EnableRenderToScreen(false);
-
-    auto old_default_rendering_effect
-            = old_renderer->scene_renderer()->default_rendering_effect();
-    auto new_default_rendering_effect = std::make_shared<RenderingEffect>(
-            *old_default_rendering_effect);
-
-    renderer->scene_renderer()->Add(new_default_rendering_effect);
-    renderer->scene_renderer()->SetDefaultRenderingEffect(
-            new_default_rendering_effect);
 }
 
 void SoftBodyViewFactory::SetKeybinds(
@@ -170,8 +217,10 @@ void SoftBodyViewFactory::SetKeybinds(
                         (obj);
 
                 auto current_scale = camera->getScale();
-                camera->scale(current_scale
-                              + (0.5f * mouse->GetScrollOffset().y));
+                auto offset = (0.5f * mouse->GetScrollOffset().y);
+                if(current_scale.x < 0 && offset < 0)
+                    offset = 0;
+                camera->scale(current_scale + offset);
             },
             ifx::MouseControllerEventType {
                     ifx::MouseControllerKeyType::MOUSE_SCROLL,
