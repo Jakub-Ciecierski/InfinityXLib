@@ -107,15 +107,19 @@ add_executable(${APP_NAME} ${SOURCE_FILES} ${SRC_FILES} ${INC_FILES})
 add_subdirectory(${IFX_ROOT}/${DEPS_DIR} ${IFX_LIB_DEPS_BUILD_DIR})
 
 include_directories(${IFX_ROOT}/${DEPS_DIR}/bullet3/src/)
+include_directories(${IFX_ROOT}/${DEPS_DIR}/PhysX-3.4/PhysX_3.4/Include)
+include_directories(${IFX_ROOT}/${DEPS_DIR}/PhysX-3.4/PxShared/include)
 include_directories(${IFX_ROOT}/${DEPS_DIR}/glfw-3.1.2/${INC_DIR})
 include_directories(${IFX_ROOT}/${DEPS_DIR}/assimp-3.1.1/${INC_DIR})
 include_directories(${IFX_ROOT}/${DEPS_DIR}/SOIL/src)
 include_directories(${IFX_ROOT}/${DEPS_DIR}/glm/${INC_DIR})
 include_directories(${IFX_ROOT}/${DEPS_DIR}/glew-2.0.0/include)
+include_directories(${IFX_ROOT}/${DEPS_DIR}/RT-FEM/sources/include)
+include_directories(${IFX_ROOT}/${DEPS_DIR}/RT-FEM/external/tetgen1.5.0)
+include_directories(${IFX_ROOT}/${DEPS_DIR}/RT-FEM/external/eigen)
 
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS})
-
 
 set(Boost_USE_STATIC_LIBS OFF)
 find_package(Boost COMPONENTS filesystem system REQUIRED)

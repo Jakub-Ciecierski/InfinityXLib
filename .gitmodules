@@ -1,0 +1,3 @@
+[submodule "dependencies/RT-FEM"]
+	path = dependencies/RT-FEM
+	url = https://github.com/Jakub-Ciecierski/RT-FEM

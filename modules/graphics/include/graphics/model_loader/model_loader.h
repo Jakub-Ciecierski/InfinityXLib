@@ -28,7 +28,7 @@ public:
             std::shared_ptr<ModelCreator> model_creator,
             std::shared_ptr<TextureCreator> texture_creator);
 
-    ~ModelLoader();
+    ~ModelLoader() = default;
 
     std::shared_ptr<ifx::Model> loadModel();
 

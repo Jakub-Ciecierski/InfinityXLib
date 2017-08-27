@@ -14,8 +14,6 @@ ModelLoader::ModelLoader(std::string filepath,
         model_creator_(model_creator),
         texture_creator_(texture_creator){}
 
-ModelLoader::~ModelLoader() {}
-
 std::shared_ptr<Model> ModelLoader::loadModel() {
     Assimp::Importer importer;
     const aiScene *scene =
