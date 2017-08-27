@@ -21,9 +21,8 @@ RenderingEffectView::RenderingEffectView(
 
 void RenderingEffectView::Render(
         const std::vector<std::shared_ptr<RenderingEffect>>& rendering_effects ){
-    RenderReloadProject();
-
     if(ImGui::TreeNodeEx("Rendering Effects", ImGuiTreeNodeFlags_DefaultOpen)) {
+        RenderReloadProject();
         RenderList(rendering_effects);
         ImGui::TreePop();
     }
