@@ -10,8 +10,6 @@ namespace ifx {
 ModelCreator::ModelCreator(std::shared_ptr<ResourceManager> resource_manager)
         : resource_manager_(resource_manager){}
 
-ModelCreator::~ModelCreator(){}
-
 std::shared_ptr<Model> ModelCreator::MakeModel(
         std::string filepath,
         std::vector<std::unique_ptr<Mesh>> meshes) {

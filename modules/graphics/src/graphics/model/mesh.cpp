@@ -2,6 +2,8 @@
 #include <graphics/shaders/textures/texture_activator.h>
 #include "graphics/model/mesh.h"
 
+#include <common/unique_ptr.h>
+
 #include <GL/glew.h>
 
 using namespace std;
@@ -11,7 +13,7 @@ namespace ifx {
 Mesh::Mesh(std::vector<Vertex> vertices,
            vector<GLuint> &indices) :
         vertices_(vertices),
-        indices(indices),
+        indices_(indices),
         material_(std::make_shared<Material>()),
         primitive_draw_mode_(PrimitiveDrawMode::TRIANGLES),
         polygon_mode_(PolygonMode::FILL){
@@ -19,10 +21,9 @@ Mesh::Mesh(std::vector<Vertex> vertices,
 }
 
 void Mesh::initBuffers() {
-    vao_.reset(new VAO());
-
-    vbo_.reset(new VBO(&vertices_));
-    ebo_.reset(new EBO(&indices));
+    vao_ = ifx::make_unique<VAO>();
+    vbo_ = ifx::make_unique<VBO>(&vertices_);
+    ebo_ = ifx::make_unique<EBO>(&indices_);
 
     vao_->bindVertexBuffers(*vbo_, *ebo_);
 }
@@ -85,7 +86,7 @@ void Mesh::draw(const Program &program) {
     vao_->bind();
 
     glDrawElements(PrimitiveDrawModeToNative(primitive_draw_mode_),
-                   indices.size(), GL_UNSIGNED_INT, 0);
+                   indices_.size(), GL_UNSIGNED_INT, 0);
 
     vao_->unbind();
     this->unbindTextures();
@@ -103,7 +104,7 @@ void Mesh::drawInstanced(const Program &program, int count) {
     vao_->bind();
 
     glDrawElementsInstanced(PrimitiveDrawModeToNative(primitive_draw_mode_),
-                            indices.size(),
+                            indices_.size(),
                             GL_UNSIGNED_INT, 0, count);
 
     vao_->unbind();

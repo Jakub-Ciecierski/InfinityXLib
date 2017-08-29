@@ -11,8 +11,6 @@ Model::Model(std::string filepath,
         ifx::Resource(filepath, ifx::ResourceType::MODEL),
         meshes(std::move(meshes)) { }
 
-Model::~Model() { }
-
 std::vector<Mesh *> Model::getMeshes() {
     std::vector<Mesh *> meshes_raw(meshes.size());
     for (unsigned int i = 0; i < meshes.size(); i++)

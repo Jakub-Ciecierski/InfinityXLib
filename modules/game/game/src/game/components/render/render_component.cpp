@@ -9,6 +9,4 @@ RenderComponent::RenderComponent(std::vector<std::shared_ptr<Model>> models) :
         GameComponent(GameComponentType::RENDER),
         RenderObject(models){}
 
-RenderComponent::~RenderComponent(){}
-
 }

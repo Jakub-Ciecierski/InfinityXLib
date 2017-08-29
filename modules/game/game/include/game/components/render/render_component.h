@@ -11,7 +11,7 @@ public:
     RenderComponent(std::shared_ptr<Model>);
     RenderComponent(std::vector<std::shared_ptr<Model>>);
 
-    ~RenderComponent();
+    ~RenderComponent() = default;
 
 private:
 };

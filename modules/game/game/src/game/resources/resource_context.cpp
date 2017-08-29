@@ -16,6 +16,4 @@ ResourceContext::ResourceContext(
     texture_creator_.reset(new TextureCreator(resource_manager_));
 }
 
-ResourceContext::~ResourceContext(){}
-
 }

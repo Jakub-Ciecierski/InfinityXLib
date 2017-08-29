@@ -15,7 +15,7 @@ public:
 
     ModelCreator(std::shared_ptr<ResourceManager> resource_manager);
 
-    ~ModelCreator();
+    ~ModelCreator() = default;
 
     std::shared_ptr<ResourceManager> resource_manager(){
         return resource_manager_;}

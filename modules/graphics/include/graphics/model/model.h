@@ -14,7 +14,7 @@ namespace ifx {
  */
 class Model : public ifx::Resource {
 public:
-    ~Model();
+    ~Model() = default;
 
     std::vector<Mesh *> getMeshes();
 

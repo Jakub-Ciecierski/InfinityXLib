@@ -45,6 +45,10 @@ include_directories(${IFX_ROOT}/modules/common/common/${INC_DIR})
 
 include_directories(${IFX_ROOT}/modules/game/game/${INC_DIR})
 
+include_directories(${IFX_ROOT}/dependencies/RT-FEM/sources/include)
+include_directories(${IFX_ROOT}/dependencies/RT-FEM/external/tetgen1.5.0)
+include_directories(${IFX_ROOT}/dependencies/RT-FEM/external/eigen)
+
 # MATH
 include_directories(${IFX_ROOT}/dependencies/glm/${INC_DIR})
 

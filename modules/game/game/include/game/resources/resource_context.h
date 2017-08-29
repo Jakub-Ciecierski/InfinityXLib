@@ -15,7 +15,7 @@ class ResourceContext {
 public:
     ResourceContext(std::shared_ptr<ResourceManager>);
 
-    ~ResourceContext();
+    ~ResourceContext() = default;
 
     std::shared_ptr<ProgramCreator> program_creator(){return program_creator_;}
     std::shared_ptr<ModelCreator> model_creator(){return model_creator_;}

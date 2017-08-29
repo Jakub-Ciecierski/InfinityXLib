@@ -53,6 +53,7 @@ public:
     virtual ~Mesh() = default;
 
     const std::vector<Vertex> &vertices() { return vertices_; }
+    const std::vector<unsigned int>& indices() {return indices_;}
 
     VAO *vao() { return vao_.get(); };
     VBO *vbo() { return vbo_.get(); };
@@ -89,7 +90,7 @@ protected:
     GLenum PolygonModeToNative(PolygonMode mode);
 
     std::vector<Vertex> vertices_;
-    std::vector<GLuint> indices;
+    std::vector<GLuint> indices_;
     std::shared_ptr<Material> material_;
 
     PrimitiveDrawMode primitive_draw_mode_;

@@ -166,5 +166,7 @@ target_link_libraries(${APP_NAME} glfw ${GLFW_LIBRARIES})
 target_link_libraries(${APP_NAME} ${OPENGL_LIBRARIES})
 target_link_libraries(${APP_NAME} glew20)
 target_link_libraries(${APP_NAME} glew20)
+target_link_libraries(${APP_NAME} rtfem)
+target_link_libraries(${APP_NAME} tet)
 
 target_link_libraries(${APP_NAME} ${Boost_LIBRARIES})
