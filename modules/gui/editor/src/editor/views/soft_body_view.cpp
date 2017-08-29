@@ -95,6 +95,10 @@ void SoftBodyView::SetGameObject(
     if(current_game_object_){
         scene->Remove(current_game_object_);
     }
+    if(!selected_game_object){
+        return;
+    }
+
     current_game_object_ = scene->CreateAndAddEmptyGameObject();
     current_game_object_->moveTo(glm::vec3(0,0,0));
     current_game_object_->rotateTo(glm::vec3(0,0,0));

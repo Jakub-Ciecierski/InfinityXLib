@@ -7,7 +7,7 @@ in vec3 vColor[];
 out vec3 fColor;
 
 void draw_node(vec4 position){
-	float a = 0.015 * position.z;
+	float a = 0.015*0.5 * position.z;
 	float b = a * 0.75;
 	float max = 0.2;
 	if(a > max){
