@@ -1,6 +1,10 @@
 #include "editor/views/factory/soft_body_view_factory.h"
 
 #include "editor/views/soft_body_view.h"
+#include "editor/views/soft_body_views/soft_body_screen_view.h"
+#include "editor/views/soft_body_views/soft_body_settings_view.h"
+#include "editor/views/soft_body_views/soft_body_creator_view.h"
+#include "editor/views/soft_body_views/soft_body_selector.h"
 
 #include <game/factory/game_systems_factory.h>
 #include <game/game_updater.h>
@@ -25,7 +29,9 @@
 #include <controls/command/commands/mouse_command.h>
 #include <controls/controls.h>
 #include <controls/controller/controllers/mouse_controller.h>
+
 #include <math/print_math.h>
+
 #include <iostream>
 
 namespace ifx{
@@ -199,7 +205,7 @@ void SoftBodyViewFactory::SetKeybinds(
                                          0));
             },
             ifx::MouseControllerEventType {
-                    ifx::MouseControllerKeyType::MOUSE_RIGHT,
+                    ifx::MouseControllerKeyType::MOUSE_LEFT,
                     ifx::MouseControllerCallbackType::PRESSED
             }
     );
@@ -227,8 +233,34 @@ void SoftBodyViewFactory::SetKeybinds(
                     ifx::MouseControllerCallbackType::SCROLL_ACTIVE
             }
     );
-
     auto command_middle = command_factory.CreateMouseCommand(
+            camera,
+            [](std::shared_ptr<ifx::Controller> controller,
+               std::shared_ptr<ifx::Controlable> obj){
+                auto mouse = std::static_pointer_cast<ifx::MouseController>(
+                        controller);
+                auto camera = std::static_pointer_cast<ifx::CameraComponent>
+                        (obj);
+                float movementSpeed = 0.1f;
+
+                auto current_position = mouse->GetCurrentPosition();
+                auto previous_position = mouse->GetPreviousPosition();
+
+                float xoffset = current_position.x - previous_position.x;
+                float yoffset = previous_position.y - current_position.y;
+
+                camera->move(-xoffset * camera->GetRight() *
+                             movementSpeed *  0.1f);
+                camera->move(yoffset * camera->GetUp() *
+                             movementSpeed *  0.1f);
+
+            },
+            ifx::MouseControllerEventType {
+                    ifx::MouseControllerKeyType::MOUSE_MIDDLE,
+                    ifx::MouseControllerCallbackType::PRESSED
+            }
+    );
+    auto command_zoom = command_factory.CreateMouseCommand(
             camera,
             [soft_body_view](
                     std::shared_ptr<ifx::Controller> controller,
@@ -250,14 +282,14 @@ void SoftBodyViewFactory::SetKeybinds(
                 camera->scale(current_scale + (0.1f * movementSpeed * yoffset));
             },
             ifx::MouseControllerEventType {
-                    ifx::MouseControllerKeyType::MOUSE_MIDDLE,
+                    ifx::MouseControllerKeyType::MOUSE_RIGHT,
                     ifx::MouseControllerCallbackType::PRESSED
             }
     );
-
+    controls->AddCommand(command_middle);
     controls->AddCommand(command_rotate_mouse);
     controls->AddCommand(command_scroll);
-    controls->AddCommand(command_middle);
+    controls->AddCommand(command_zoom);
 }
 
 }

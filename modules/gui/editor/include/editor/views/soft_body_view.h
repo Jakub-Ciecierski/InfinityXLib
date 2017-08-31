@@ -5,6 +5,9 @@
 
 #include <editor/view.h>
 #include <editor/views/scene_views/scene_view_observer.h>
+#include <editor/views/soft_body_views/soft_body_structers.h>
+
+#include <RTFEM/FEM/Meshing/Tetrahedralization.h>
 
 namespace ifx {
 
@@ -13,18 +16,10 @@ class GameObject;
 class RenderingEffect;
 class RenderComponent;
 
-struct SoftBodyRenderingEffects{
-    std::shared_ptr<RenderingEffect> nodes = nullptr;
-    std::shared_ptr<RenderingEffect> edges = nullptr;
-    std::shared_ptr<RenderingEffect> faces = nullptr;
-    std::shared_ptr<RenderingEffect> main = nullptr;
-};
-
-struct SoftBodyObjects{
-    std::shared_ptr<GameObject> current_game_object;
-    std::shared_ptr<RenderComponent> triangle_mesh;
-    std::shared_ptr<RenderComponent> fem_geometry;
-};
+class SoftBodyScreenView;
+class SoftBodySettingsView;
+class SoftBodyCreatorView;
+class SoftBodySelector;
 
 class SoftBodyView : public View, public SceneViewObserver {
 public:
@@ -36,31 +31,12 @@ public:
 
     virtual void Render() override;
 
-    void SetGameObject(std::shared_ptr<GameObject> current_game_object);
-
     void OnSetSelectedGameObject(
             std::shared_ptr<GameObject> selected_game_object) override;
 
 private:
-    void RenderSettings();
-    void RenderShow();
-    void RenderShowRenderingEffects();
-    void RenderShowRenderingEffectCheckbox(std::string name,
-                                           RenderingEffect &rendering_effect);
-    void RenderShowObjects();
-    void RenderShowObjectCheckbox(std::string name,
-                                  RenderComponent& render_component);
-    void RenderMeshingButton();
-
-    void RenderScreen();
-
-    void RemoveCurrentGameObject();
-    bool CheckSelectedGameObjectCorrectness(
-            std::shared_ptr<GameObject> selected_game_object);
-    SoftBodyObjects CreateNewGameObject(
-            std::shared_ptr<GameObject> selected_game_object);
-    void RegisterGameObjectToRenderingEffects(
-            std::shared_ptr<RenderComponent> current_game_object_);
+    void RenderLeftColumn();
+    void RenderRightColumn();
 
     std::unique_ptr<GameUpdater> game_updater_;
 
@@ -68,6 +44,11 @@ private:
     SoftBodyObjects soft_body_objects_;
 
     bool first_render_;
+
+    std::unique_ptr<SoftBodyScreenView> screen_view_;
+    std::unique_ptr<SoftBodySettingsView> settings_view_;
+    std::unique_ptr<SoftBodyCreatorView> creator_view_;
+    std::unique_ptr<SoftBodySelector> selector_;
 };
 }
 

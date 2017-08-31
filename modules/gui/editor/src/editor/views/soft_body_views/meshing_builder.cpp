@@ -61,7 +61,7 @@ rtfem::TriangleMeshIndexed<double> MeshingBuilder::CreateTriangleMesh(
 
     return triangle_mesh;
 }
-
+/*
 std::shared_ptr<RenderComponent> MeshingBuilder::CreateRenderComponent(
         const rtfem::FEMGeometry<double>& fem_geometry,
         std::shared_ptr<ResourceManager> resource_manager){
@@ -81,6 +81,46 @@ std::shared_ptr<RenderComponent> MeshingBuilder::CreateRenderComponent(
         indices[i*3 + 0] = fem_geometry.finite_element_faces[i].v1;
         indices[i*3 + 1] = fem_geometry.finite_element_faces[i].v2;
         indices[i*3 + 2] = fem_geometry.finite_element_faces[i].v3;
+    }
+
+    auto mesh = ifx::make_unique<Mesh>(vertices, indices);
+    auto model = ModelCreator(resource_manager).MakeModel(ifx::NO_FILEPATH,
+                                                          std::move(mesh));
+    return std::make_shared<RenderComponent>(model);
+}
+*/
+
+std::shared_ptr<RenderComponent> MeshingBuilder::CreateRenderComponent(
+        const rtfem::FEMGeometry<double>& fem_geometry,
+        std::shared_ptr<ResourceManager> resource_manager){
+    unsigned int point_count= fem_geometry.vertices.size();
+    unsigned int element_count = fem_geometry.finite_element_indices.size();
+
+    std::vector<Vertex> vertices(point_count);
+    std::vector<unsigned int> indices;
+
+    for(unsigned int i = 0; i < vertices.size(); i++){
+        vertices[i].Position.x = fem_geometry.vertices[i]->x();
+        vertices[i].Position.y = fem_geometry.vertices[i]->y();
+        vertices[i].Position.z = fem_geometry.vertices[i]->z();
+    }
+
+    for(unsigned int i = 0; i < element_count; i++){
+        indices.push_back(fem_geometry.finite_element_indices[i].v1);
+        indices.push_back(fem_geometry.finite_element_indices[i].v2);
+        indices.push_back(fem_geometry.finite_element_indices[i].v4);
+
+        indices.push_back(fem_geometry.finite_element_indices[i].v1);
+        indices.push_back(fem_geometry.finite_element_indices[i].v4);
+        indices.push_back(fem_geometry.finite_element_indices[i].v3);
+
+        indices.push_back(fem_geometry.finite_element_indices[i].v1);
+        indices.push_back(fem_geometry.finite_element_indices[i].v2);
+        indices.push_back(fem_geometry.finite_element_indices[i].v3);
+
+        indices.push_back(fem_geometry.finite_element_indices[i].v3);
+        indices.push_back(fem_geometry.finite_element_indices[i].v4);
+        indices.push_back(fem_geometry.finite_element_indices[i].v2);
     }
 
     auto mesh = ifx::make_unique<Mesh>(vertices, indices);
