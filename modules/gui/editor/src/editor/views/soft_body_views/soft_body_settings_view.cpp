@@ -7,6 +7,7 @@
 #include <graphics/rendering/rendering_effect.h>
 
 #include <game/components/render/render_component.h>
+#include <editor/views/soft_body_views/meshing_builder.h>
 
 namespace ifx {
 

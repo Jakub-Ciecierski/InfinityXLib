@@ -40,6 +40,10 @@ private:
             SoftBodyObjects &soft_body_objects,
             SoftBodyRenderingEffects &rendering_effects);
 
+    bool DebugCreator(const rtfem::TetrahedralizationOptions& rtfem_options,
+                      SoftBodyObjects& soft_body_objects,
+                      SoftBodyRenderingEffects& rendering_effects);
+
     std::shared_ptr<ResourceManager> resource_manager_;
 };
 

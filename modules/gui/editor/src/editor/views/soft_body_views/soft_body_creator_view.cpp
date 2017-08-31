@@ -11,6 +11,8 @@
 
 #include <gui/imgui/imgui.h>
 
+#include <RTFEM/FEM/Vertex.h>
+
 namespace ifx {
 
 SoftBodyCreatorView::SoftBodyCreatorView(
@@ -23,6 +25,9 @@ bool SoftBodyCreatorView::Render(
         SoftBodyRenderingEffects& rendering_effects){
     if(ImGui::Button("Compute 3D Mesh")){
         return BuildMesh(rtfem_options, soft_body_objects, rendering_effects);
+    }
+    if(DebugCreator(rtfem_options, soft_body_objects, rendering_effects)){
+        return true;
     }
     return false;
 }
@@ -92,6 +97,70 @@ void SoftBodyCreatorView::RegisterRenderComponent(
 
     soft_body_objects.current_game_object->Add(
             soft_body_objects.fem_geometry);
+}
+
+bool SoftBodyCreatorView::DebugCreator(
+        const rtfem::TetrahedralizationOptions& rtfem_options,
+        SoftBodyObjects& soft_body_objects,
+        SoftBodyRenderingEffects& rendering_effects){
+    static float limit = 1;
+    if(ImGui::SliderFloat("Tet%", &limit, 0, 1)){
+        if(!soft_body_objects.current_game_object){
+            return false;
+        }
+        soft_body_objects.current_game_object->Remove(
+                soft_body_objects.fem_geometry);
+
+        rtfem::TriangleMeshIndexed<double> triangle_mesh;
+        try {
+            triangle_mesh = CreateTriangleMesh(soft_body_objects);
+        }catch(const std::invalid_argument&){
+            return false;
+        }
+
+
+        auto fem_geometry = CreateFEMGeometry(rtfem_options, triangle_mesh);
+
+        // <limit>
+        std::vector<rtfem::FiniteElementIndices> finite_element_indices;
+        std::sort(fem_geometry.finite_element_indices.begin(),
+                  fem_geometry.finite_element_indices.end(),
+                  [&fem_geometry](rtfem::FiniteElementIndices& a,
+                     rtfem::FiniteElementIndices& b) -> bool {
+                      auto a_avg_x =
+                              (fem_geometry.vertices[a.v1]->x()
+                              + fem_geometry.vertices[a.v2]->x()
+                              + fem_geometry.vertices[a.v3]->x()
+                              + fem_geometry.vertices[a.v4]->x()) / 4.0;
+
+                      auto b_avg_x =
+                              (fem_geometry.vertices[b.v1]->x()
+                               + fem_geometry.vertices[b.v2]->x()
+                               + fem_geometry.vertices[b.v3]->x()
+                               + fem_geometry.vertices[b.v4]->x()) / 4.0;
+
+                      return a_avg_x < b_avg_x;
+                  });
+
+        unsigned int new_size
+                = limit * fem_geometry.finite_element_indices.size();
+        for(unsigned int i = 0; i < new_size; i++){
+            finite_element_indices.push_back(
+                    fem_geometry.finite_element_indices[i]);
+        }
+        fem_geometry.finite_element_indices = finite_element_indices;
+        // </limit>
+
+        soft_body_objects.fem_geometry = CreateRenderComponent(fem_geometry);
+        RegisterRenderComponent(soft_body_objects.fem_geometry,
+                                soft_body_objects,
+                                rendering_effects);
+
+        return true;
+    }
+
+    return false;
+
 }
 
 }

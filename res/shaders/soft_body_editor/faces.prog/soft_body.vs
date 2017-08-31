@@ -11,6 +11,7 @@ out vec3 Tangent;
 out vec3 Binormal;
 out vec3 FragPos;
 out vec2 TexCoords;
+out float VertexID;
 
 uniform mat4 ModelMatrix;
 uniform mat4 ViewMatrix;
@@ -34,4 +35,6 @@ void main()
     Binormal = normalize(NormalMatrix * binormal);
 
     TexCoords = texCoords;
+
+	VertexID = gl_VertexID;
 }
