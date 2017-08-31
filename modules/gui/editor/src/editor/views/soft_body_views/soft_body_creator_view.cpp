@@ -17,21 +17,22 @@ SoftBodyCreatorView::SoftBodyCreatorView(
         std::shared_ptr<ResourceManager> resource_manager) :
         resource_manager_(resource_manager){}
 
-void SoftBodyCreatorView::Render(
+bool SoftBodyCreatorView::Render(
         const rtfem::TetrahedralizationOptions& rtfem_options,
         SoftBodyObjects& soft_body_objects,
         SoftBodyRenderingEffects& rendering_effects){
     if(ImGui::Button("Compute 3D Mesh")){
-        BuildMesh(rtfem_options, soft_body_objects, rendering_effects);
+        return BuildMesh(rtfem_options, soft_body_objects, rendering_effects);
     }
+    return false;
 }
 
-void SoftBodyCreatorView::BuildMesh(
+bool SoftBodyCreatorView::BuildMesh(
         const rtfem::TetrahedralizationOptions &rtfem_options,
         SoftBodyObjects &soft_body_objects,
         SoftBodyRenderingEffects &rendering_effects) {
     if(!soft_body_objects.current_game_object){
-        return;
+        return false;
     }
     soft_body_objects.current_game_object->Remove(
             soft_body_objects.fem_geometry);
@@ -40,7 +41,7 @@ void SoftBodyCreatorView::BuildMesh(
     try {
         triangle_mesh = CreateTriangleMesh(soft_body_objects);
     }catch(const std::invalid_argument&){
-        return;
+        return false;
     }
 
     auto fem_geometry = CreateFEMGeometry(rtfem_options, triangle_mesh);
@@ -48,6 +49,8 @@ void SoftBodyCreatorView::BuildMesh(
     RegisterRenderComponent(soft_body_objects.fem_geometry,
                             soft_body_objects,
                             rendering_effects);
+
+    return true;
 }
 
 rtfem::TriangleMeshIndexed<double>

@@ -18,12 +18,12 @@ public:
     SoftBodyCreatorView(std::shared_ptr<ResourceManager> resource_manager);
     ~SoftBodyCreatorView() = default;
 
-    void Render(const rtfem::TetrahedralizationOptions& rtfem_options,
+    bool Render(const rtfem::TetrahedralizationOptions& rtfem_options,
                 SoftBodyObjects& soft_body_objects,
                 SoftBodyRenderingEffects& rendering_effects);
 
 private:
-    void BuildMesh(const rtfem::TetrahedralizationOptions& rtfem_options,
+    bool BuildMesh(const rtfem::TetrahedralizationOptions& rtfem_options,
                    SoftBodyObjects& soft_body_objects,
                    SoftBodyRenderingEffects& rendering_effects);
 

@@ -68,9 +68,11 @@ void SoftBodyView::Render(){
 void SoftBodyView::RenderLeftColumn(){
     settings_view_->Render(soft_body_objects_,
                            rendering_effects_);
-    creator_view_->Render(settings_view_->rtfem_options(),
+    if(creator_view_->Render(settings_view_->rtfem_options(),
                           soft_body_objects_,
-                          rendering_effects_);
+                          rendering_effects_)){
+        settings_view_->SetRenderObjectMode(RenderObjectMode::Output);
+    }
 }
 
 void SoftBodyView::RenderRightColumn(){

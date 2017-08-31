@@ -10,9 +10,11 @@
 
 namespace ifx {
 
+SoftBodySettingsView::SoftBodySettingsView() :
+        render_object_settings_(RenderObjectSettings()){}
+
 void SoftBodySettingsView::Render(SoftBodyObjects& soft_body_objects,
-                                  SoftBodyRenderingEffects& rendering_effects
-                                  ){
+                                  SoftBodyRenderingEffects& rendering_effects){
     RenderShow(rendering_effects, soft_body_objects);
     RenderMeshingSettings();
 }
@@ -54,26 +56,27 @@ void SoftBodySettingsView::RenderShowObjects(
         SoftBodyObjects& soft_body_objects){
     if(ImGui::TreeNodeEx("Objects",
                          ImGuiTreeNodeFlags_DefaultOpen)){
+        ImGui::Checkbox("Input", &render_object_settings_.show_input);
+        if(render_object_settings_.show_input){
+            SetRenderObjectMode(RenderObjectMode::Input);
+        }
+
+        ImGui::Checkbox("Output", &render_object_settings_.show_output);
+        if(render_object_settings_.show_output){
+            SetRenderObjectMode(RenderObjectMode::Output);
+        }
+
         if(soft_body_objects.triangle_mesh){
-            RenderShowObjectCheckbox("Input",
-                                     *soft_body_objects.triangle_mesh);
+            soft_body_objects.triangle_mesh->do_render(
+                    render_object_settings_.show_input);
         }
         if(soft_body_objects.fem_geometry){
-            RenderShowObjectCheckbox("Output",
-                                     *soft_body_objects.fem_geometry);
+            soft_body_objects.fem_geometry->do_render(
+                    render_object_settings_.show_output);
         }
 
         ImGui::TreePop();
     }
-}
-
-void SoftBodySettingsView::RenderShowObjectCheckbox(
-        std::string name,
-        RenderComponent& render_component){
-    static bool do_render;
-    do_render = render_component.do_render();
-    ImGui::Checkbox(name.c_str(), &do_render);
-    render_component.do_render(do_render);
 }
 
 void SoftBodySettingsView::RenderMeshingSettings(){
@@ -81,6 +84,20 @@ void SoftBodySettingsView::RenderMeshingSettings(){
     ImGui::SliderFloat("Maximum Volume", &rtfem_options_.maximum_volume,
                        0, 10);
     ImGui::PopItemWidth();
+}
+
+void SoftBodySettingsView::SetRenderObjectMode(RenderObjectMode mode){
+    render_object_settings_.mode = mode;
+    switch(render_object_settings_.mode){
+        case RenderObjectMode::Input:
+            render_object_settings_.show_input = true;
+            render_object_settings_.show_output = false;
+            break;
+        case RenderObjectMode::Output:
+            render_object_settings_.show_input = false;
+            render_object_settings_.show_output = true;
+            break;
+    }
 }
 
 }
