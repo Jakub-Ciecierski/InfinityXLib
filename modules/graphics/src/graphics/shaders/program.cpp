@@ -25,7 +25,9 @@ Program::~Program() {
     glDeleteProgram(id);
 }
 
-void Program::linkShaders() {
+ShaderError Program::linkShaders() {
+    ShaderError shader_error{false, ""};
+
     id = glCreateProgram();
 
     if (vertex_shader_)
@@ -42,15 +44,13 @@ void Program::linkShaders() {
     glLinkProgram(id);
 
     GLint success;
-    GLchar infoLog[512];
     glGetProgramiv(id, GL_LINK_STATUS, &success);
     if (!success) {
+        GLchar infoLog[512];
         glGetProgramInfoLog(id, 512, NULL, infoLog);
         std::string infoLogStr = infoLog;
         std::cout << infoLogStr << std::endl;
-
-        throw new std::invalid_argument("ERROR::PROGRAM::COMPILATION_FAILED\n"
-                                        + infoLogStr);
+        shader_error = ShaderError{true, infoLogStr};
     }
 
     if (vertex_shader_)
@@ -63,6 +63,8 @@ void Program::linkShaders() {
         tess_control_shader_->deleteShader();
     if (tess_eval_shader_)
         tess_eval_shader_->deleteShader();
+
+    return shader_error;
 }
 
 
@@ -70,21 +72,36 @@ void Program::use() const {
     glUseProgram(id);
 }
 
-void Program::Reload() {
+ShaderError Program::Reload() {
+    if (vertex_shader_){
+        auto shader_error = vertex_shader_->Reload();
+        if(shader_error.error_occured)
+            return shader_error;
+    }
+    if (fragment_shader_){
+        auto shader_error = fragment_shader_->Reload();
+        if(shader_error.error_occured)
+            return shader_error;
+    }
+    if (geometry_shader_){
+        auto shader_error = geometry_shader_->Reload();
+        if(shader_error.error_occured)
+            return shader_error;
+    }
+    if (tess_control_shader_) {
+        auto shader_error = tess_control_shader_->Reload();
+        if (shader_error.error_occured)
+            return shader_error;
+    }
+    if (tess_eval_shader_){
+        auto shader_error = tess_eval_shader_->Reload();
+        if(shader_error.error_occured)
+            return shader_error;
+    }
+
     glDeleteProgram(id);
 
-    if (vertex_shader_)
-        vertex_shader_->Reload();
-    if (fragment_shader_)
-        fragment_shader_->Reload();
-    if (geometry_shader_)
-        geometry_shader_->Reload();
-    if (tess_control_shader_)
-        tess_control_shader_->Reload();
-    if (tess_eval_shader_)
-        tess_eval_shader_->Reload();
-
-    linkShaders();
+    return linkShaders();
 }
 
 GLuint Program::getID() const {

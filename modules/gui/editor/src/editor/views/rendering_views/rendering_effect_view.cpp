@@ -164,7 +164,11 @@ void RenderingEffectView::RenderShaderWindow(Shader* shader,
                 render_error_window_ = true;
                 shader_error_message_ = shader_error.message;
             } else{
-                program->Reload();
+                auto program_error = program->Reload();
+                if(program_error.error_occured){
+                    render_error_window_ = true;
+                    shader_error_message_ = program_error.message;
+                }
             }
         }
         ImGui::SameLine();
@@ -177,8 +181,13 @@ void RenderingEffectView::RenderShaderWindow(Shader* shader,
                 render_error_window_ = true;
                 shader_error_message_ = shader_error.message;
             } else{
-                program->Reload();
-                ImGui::CloseCurrentPopup();
+                auto program_error = program->Reload();
+                if(program_error.error_occured){
+                    render_error_window_ = true;
+                    shader_error_message_ = program_error.message;
+                }else{
+                    ImGui::CloseCurrentPopup();
+                }
             }
         }
         ImGui::SameLine();

@@ -6,6 +6,7 @@
 #include "graphics/shaders/shaders/geometry_shader.h"
 #include "graphics/shaders/shaders/tess_control_shader.h"
 #include "graphics/shaders/shaders/tess_eval_shader.h"
+
 #include <resources/resource.h>
 
 #include <memory>
@@ -43,7 +44,7 @@ public:
 
     void use() const;
 
-    void Reload();
+    ShaderError Reload();
 
     GLuint getID() const;
 
@@ -52,7 +53,7 @@ public:
 private:
     Program(Shaders shaders);
 
-    void linkShaders();
+    ShaderError linkShaders();
 
     GLuint id;
 
