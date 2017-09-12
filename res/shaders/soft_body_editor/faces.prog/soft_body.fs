@@ -14,5 +14,4 @@ void main() {
 	float r = VertexID / 150.0;
 
 	color = vec4(vec3(1,0,0), alpha);
-	color = vec4(vec3(r,0,0), alpha);
 }

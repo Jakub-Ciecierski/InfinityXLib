@@ -12,6 +12,7 @@
 #include <gui/imgui/imgui.h>
 
 #include <RTFEM/FEM/Vertex.h>
+#include <RTFEM/FEM/FiniteElement.h>
 
 namespace ifx {
 
@@ -122,33 +123,37 @@ bool SoftBodyCreatorView::DebugCreator(
         auto fem_geometry = CreateFEMGeometry(rtfem_options, triangle_mesh);
 
         // <limit>
-        std::vector<rtfem::FiniteElementIndices> finite_element_indices;
-        std::sort(fem_geometry.finite_element_indices.begin(),
-                  fem_geometry.finite_element_indices.end(),
-                  [&fem_geometry](rtfem::FiniteElementIndices& a,
-                     rtfem::FiniteElementIndices& b) -> bool {
+        std::vector<std::shared_ptr<rtfem::FiniteElement<double>>>
+            finite_elements;
+        std::sort(fem_geometry.finite_elements.begin(),
+                  fem_geometry.finite_elements.end(),
+                  [&fem_geometry](
+                      std::shared_ptr<rtfem::FiniteElement<double>> a,
+                      std::shared_ptr<rtfem::FiniteElement<double>> b) -> bool {
+                      auto a_indices = a->vertices_indices();
+                      auto b_indices = b->vertices_indices();
                       auto a_avg_x =
-                              (fem_geometry.vertices[a.v1]->x()
-                              + fem_geometry.vertices[a.v2]->x()
-                              + fem_geometry.vertices[a.v3]->x()
-                              + fem_geometry.vertices[a.v4]->x()) / 4.0;
+                              (fem_geometry.vertices[a_indices[0]]->x()
+                              + fem_geometry.vertices[a_indices[1]]->x()
+                              + fem_geometry.vertices[a_indices[2]]->x()
+                              + fem_geometry.vertices[a_indices[3]]->x()) / 4.0;
 
                       auto b_avg_x =
-                              (fem_geometry.vertices[b.v1]->x()
-                               + fem_geometry.vertices[b.v2]->x()
-                               + fem_geometry.vertices[b.v3]->x()
-                               + fem_geometry.vertices[b.v4]->x()) / 4.0;
+                              (fem_geometry.vertices[b_indices[0]]->x()
+                               + fem_geometry.vertices[b_indices[1]]->x()
+                               + fem_geometry.vertices[b_indices[2]]->x()
+                               + fem_geometry.vertices[b_indices[3]]->x()) /4.0;
 
                       return a_avg_x < b_avg_x;
                   });
 
         unsigned int new_size
-                = limit * fem_geometry.finite_element_indices.size();
+                = limit * fem_geometry.finite_elements.size();
         for(unsigned int i = 0; i < new_size; i++){
-            finite_element_indices.push_back(
-                    fem_geometry.finite_element_indices[i]);
+            finite_elements.push_back(
+                    fem_geometry.finite_elements[i]);
         }
-        fem_geometry.finite_element_indices = finite_element_indices;
+        fem_geometry.finite_elements= finite_elements;
         // </limit>
 
         soft_body_objects.fem_geometry = CreateRenderComponent(fem_geometry);

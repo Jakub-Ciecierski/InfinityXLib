@@ -3,13 +3,10 @@
 #include <game/components/render/render_component.h>
 
 #include <graphics/model/model.h>
-#include <graphics/model/mesh.h>
-#include <graphics/shaders/data/shader_data.h>
 #include <graphics/model/model_creator.h>
 
-#include <RTFEM/FEM/Meshing/TriangleMesh.h>
-#include <RTFEM/DataTypes.h>
 #include <RTFEM/FEM/Vertex.h>
+#include <RTFEM/FEM/FiniteElement.h>
 
 #include <common/unique_ptr.h>
 
@@ -66,7 +63,7 @@ std::shared_ptr<RenderComponent> MeshingBuilder::CreateRenderComponent(
         const rtfem::FEMGeometry<double>& fem_geometry,
         std::shared_ptr<ResourceManager> resource_manager){
     unsigned int point_count= fem_geometry.vertices.size();
-    unsigned int element_count = fem_geometry.finite_element_indices.size();
+    unsigned int element_count = fem_geometry.finite_elements.size();
 
     std::vector<Vertex> vertices(point_count);
     std::vector<unsigned int> indices;
@@ -78,21 +75,22 @@ std::shared_ptr<RenderComponent> MeshingBuilder::CreateRenderComponent(
     }
 
     for(unsigned int i = 0; i < element_count; i++){
-        indices.push_back(fem_geometry.finite_element_indices[i].v1);
-        indices.push_back(fem_geometry.finite_element_indices[i].v2);
-        indices.push_back(fem_geometry.finite_element_indices[i].v4);
+        auto& finite_element = fem_geometry.finite_elements[i];
+        indices.push_back(finite_element->vertices_indices()[0]);
+        indices.push_back(finite_element->vertices_indices()[1]);
+        indices.push_back(finite_element->vertices_indices()[3]);
 
-        indices.push_back(fem_geometry.finite_element_indices[i].v1);
-        indices.push_back(fem_geometry.finite_element_indices[i].v4);
-        indices.push_back(fem_geometry.finite_element_indices[i].v3);
+        indices.push_back(finite_element->vertices_indices()[0]);
+        indices.push_back(finite_element->vertices_indices()[3]);
+        indices.push_back(finite_element->vertices_indices()[2]);
 
-        indices.push_back(fem_geometry.finite_element_indices[i].v1);
-        indices.push_back(fem_geometry.finite_element_indices[i].v2);
-        indices.push_back(fem_geometry.finite_element_indices[i].v3);
+        indices.push_back(finite_element->vertices_indices()[0]);
+        indices.push_back(finite_element->vertices_indices()[1]);
+        indices.push_back(finite_element->vertices_indices()[2]);
 
-        indices.push_back(fem_geometry.finite_element_indices[i].v3);
-        indices.push_back(fem_geometry.finite_element_indices[i].v4);
-        indices.push_back(fem_geometry.finite_element_indices[i].v2);
+        indices.push_back(finite_element->vertices_indices()[2]);
+        indices.push_back(finite_element->vertices_indices()[3]);
+        indices.push_back(finite_element->vertices_indices()[1]);
     }
 
     auto mesh = ifx::make_unique<Mesh>(vertices, indices);
