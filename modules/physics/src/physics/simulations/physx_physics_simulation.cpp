@@ -14,14 +14,14 @@
 namespace ifx {
 
 PhysxPhysicsSimulation::PhysxPhysicsSimulation(
-        std::shared_ptr<PhysicsContext> physics_context,
-        physx::PxDefaultCpuDispatcher *px_dispatcher,
-        physx::PxScene *px_scene) :
-        PhysicsSimulation(physics_context),
-        px_dispatcher_((px_dispatcher)),
-        px_scene_((px_scene)) {}
+    std::shared_ptr<PhysicsContext> physics_context,
+    physx::PxDefaultCpuDispatcher *px_dispatcher,
+    physx::PxScene *px_scene) :
+    PhysicsSimulation(physics_context),
+    px_dispatcher_((px_dispatcher)),
+    px_scene_((px_scene)) {}
 
-bool PhysxPhysicsSimulation::Terminate(){
+bool PhysxPhysicsSimulation::Terminate() {
     px_scene_->release();
     px_dispatcher_->release();
 
@@ -29,7 +29,7 @@ bool PhysxPhysicsSimulation::Terminate(){
 }
 
 void PhysxPhysicsSimulation::Update(float time_delta) {
-    if(!is_running_)
+    if (!is_running_)
         return;
 
     PX_UNUSED(false);
@@ -44,14 +44,14 @@ void PhysxPhysicsSimulation::Update(float time_delta) {
 
 void PhysxPhysicsSimulation::Add(std::shared_ptr<RigidBody> rigid_body) {
     PhysicsSimulation::Add(rigid_body);
-    auto px_actor = (physx::PxRigidActor*)rigid_body->GetNativeRigidBody();
+    auto px_actor = (physx::PxRigidActor *) rigid_body->GetNativeRigidBody();
     px_scene_->addActor(*px_actor);
 }
 
 bool PhysxPhysicsSimulation::Remove(std::shared_ptr<RigidBody> rigid_body) {
     bool ret = PhysicsSimulation::Remove(rigid_body);
 
-    auto px_actor = (physx::PxRigidActor*)rigid_body->GetNativeRigidBody();
+    auto px_actor = (physx::PxRigidActor *) rigid_body->GetNativeRigidBody();
 
     px_scene_->removeActor(*px_actor);
     px_actor->release();
@@ -75,20 +75,20 @@ void PhysxPhysicsSimulation::AddImpulse() {
 
 std::unique_ptr<RigidBodyImpl> PhysxPhysicsSimulation::CreateRigidBodyImpl() {
     auto physx_context = std::dynamic_pointer_cast<PhysxContext>(
-            physics_context_);
+        physics_context_);
     return ifx::make_unique<RigidBodyImplPhysx>(physx_context->px_physics());
 }
 
-void PhysxPhysicsSimulation::SynchronizeRigidBodiesTransform(){
-    for(auto& rigid_body : rigid_bodies_){
+void PhysxPhysicsSimulation::SynchronizeRigidBodiesTransform() {
+    for (auto &rigid_body : rigid_bodies_) {
         auto parent = rigid_body->movable_parent();
-        if(!parent)
+        if (!parent)
             continue;
         auto px_rigid_actor
-                = (physx::PxRigidActor*)rigid_body->GetNativeRigidBody();
+            = (physx::PxRigidActor *) rigid_body->GetNativeRigidBody();
 
-        auto& ifx_position = rigid_body->getPosition();
-        auto& ifx_rotation = rigid_body->getRotation();
+        auto &ifx_position = rigid_body->getPosition();
+        auto &ifx_rotation = rigid_body->getRotation();
         glm::quat ifx_quat(glm::radians(ifx_rotation));
 
         physx::PxTransform px_transform;
@@ -102,14 +102,14 @@ void PhysxPhysicsSimulation::SynchronizeRigidBodiesTransform(){
     }
 }
 
-void PhysxPhysicsSimulation::SynchronizeGameObjectsTransform(){
-    for(auto& rigid_body : rigid_bodies_){
+void PhysxPhysicsSimulation::SynchronizeGameObjectsTransform() {
+    for (auto &rigid_body : rigid_bodies_) {
         auto parent = rigid_body->movable_parent();
-        if(!parent)
+        if (!parent)
             continue;
         auto px_rigid_actor
-                = (physx::PxRigidActor*)rigid_body->GetNativeRigidBody();
-        const auto& px_transform = px_rigid_actor->getGlobalPose();
+            = (physx::PxRigidActor *) rigid_body->GetNativeRigidBody();
+        const auto &px_transform = px_rigid_actor->getGlobalPose();
         glm::quat ifx_quat = glm::quat(px_transform.q.w,
                                        px_transform.q.x,
                                        px_transform.q.y,

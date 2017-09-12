@@ -9,17 +9,16 @@ typedef unsigned int GLenum;
 class EBO {
 private:
     GLuint id;
-    const std::vector<GLuint>* indices;
+    const std::vector<GLuint> *indices;
 
 public:
 
-    EBO(const std::vector<GLuint>* indices);
+    EBO(const std::vector<GLuint> *indices);
 
     ~EBO();
 
     void bind(GLenum usage);
     void unbind();
 };
-
 
 #endif //DUCK_EBO_H

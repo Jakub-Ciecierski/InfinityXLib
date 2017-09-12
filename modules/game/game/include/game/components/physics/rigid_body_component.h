@@ -16,8 +16,8 @@ public:
     RigidBodyComponent();
   */
     RigidBodyComponent(
-            std::shared_ptr<PhysicsSimulation> physics_simulation,
-            const RigidBodyParams&& params);
+        std::shared_ptr<PhysicsSimulation> physics_simulation,
+        const RigidBodyParams &&params);
 
     ~RigidBodyComponent();
 

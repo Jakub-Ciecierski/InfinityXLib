@@ -7,19 +7,19 @@
 
 namespace ifx {
 
-bool RenderingContextOpengl::Terminate(){
-    if(!IsInit())
+bool RenderingContextOpengl::Terminate() {
+    if (!IsInit())
         return true;
 
-    if(!TerminateGLFW())
+    if (!TerminateGLFW())
         return false;
-    if(!TerminateGLEW())
+    if (!TerminateGLEW())
         return false;
     return true;
 }
 
-bool RenderingContextOpengl::InitGLFW(){
-    if(glfwInit() != GL_TRUE)
+bool RenderingContextOpengl::InitGLFW() {
+    if (glfwInit() != GL_TRUE)
         return false;
 
     // OpenGL version required
@@ -31,17 +31,17 @@ bool RenderingContextOpengl::InitGLFW(){
     return true;
 }
 
-bool RenderingContextOpengl::InitGLEW(){
+bool RenderingContextOpengl::InitGLEW() {
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK)
         return false;
     return true;
 }
 
-void* RenderingContextOpengl::InitAndCreateNativeWindowHandle(std::string name,
+void *RenderingContextOpengl::InitAndCreateNativeWindowHandle(std::string name,
                                                               int *width,
-                                                              int *height){
-    if(!InitGLFW())
+                                                              int *height) {
+    if (!InitGLFW())
         throw new std::invalid_argument("Failed to initialize GLFW");
 
     auto glfwWindow = glfwCreateWindow(*width, *height,
@@ -51,9 +51,9 @@ void* RenderingContextOpengl::InitAndCreateNativeWindowHandle(std::string name,
     glfwGetFramebufferSize(glfwWindow, width, height);
     glViewport(0, 0, *width, *height);
 
-    if(!glfwWindow)
+    if (!glfwWindow)
         throw new std::invalid_argument("Failed to initialize glfwWindow");
-    if(!InitGLEW())
+    if (!InitGLEW())
         throw new std::invalid_argument("Failed to initialize GLEW");
 
     // VSync
@@ -61,15 +61,15 @@ void* RenderingContextOpengl::InitAndCreateNativeWindowHandle(std::string name,
 
     is_init_ = true;
 
-    return (void*)glfwWindow;
+    return (void *) glfwWindow;
 }
 
-bool RenderingContextOpengl::TerminateGLFW(){
+bool RenderingContextOpengl::TerminateGLFW() {
     glfwTerminate();
     return true;
 }
 
-bool RenderingContextOpengl::TerminateGLEW(){
+bool RenderingContextOpengl::TerminateGLEW() {
     return true;
 }
 

@@ -19,19 +19,19 @@ public:
     ~SoftBodySelector() = default;
 
     void Select(std::shared_ptr<GameObject> selected_game_object,
-                SoftBodyRenderingEffects& rendering_effects,
-                SoftBodyObjects& soft_body_objects);
+                SoftBodyRenderingEffects &rendering_effects,
+                SoftBodyObjects &soft_body_objects);
 private:
-    void RemoveCurrentGameObject(SoftBodyObjects& soft_body_objects);
+    void RemoveCurrentGameObject(SoftBodyObjects &soft_body_objects);
     bool CheckSelectedGameObjectCorrectness(
-            std::shared_ptr<GameObject> selected_game_object,
-            SoftBodyObjects& soft_body_objects);
+        std::shared_ptr<GameObject> selected_game_object,
+        SoftBodyObjects &soft_body_objects);
     SoftBodyObjects CreateNewGameObject(
-            std::shared_ptr<GameObject> selected_game_object,
-            SoftBodyRenderingEffects& rendering_effects);
+        std::shared_ptr<GameObject> selected_game_object,
+        SoftBodyRenderingEffects &rendering_effects);
     void RegisterGameObjectToRenderingEffects(
-            std::shared_ptr<RenderComponent> render_component,
-            SoftBodyRenderingEffects& rendering_effects);
+        std::shared_ptr<RenderComponent> render_component,
+        SoftBodyRenderingEffects &rendering_effects);
 
     std::shared_ptr<SceneContainer> scene_;
 };

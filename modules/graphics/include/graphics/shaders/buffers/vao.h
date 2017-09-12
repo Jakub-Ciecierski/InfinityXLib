@@ -14,7 +14,7 @@ public:
     ~VAO();
 
     void bindVertexBuffers(VBO &vbo, EBO &ebo);
-    void bindInstancedRenderingBuffers(InstancedData& instanced_data);
+    void bindInstancedRenderingBuffers(InstancedData &instanced_data);
 
     void bind();
     void unbind();
@@ -22,6 +22,5 @@ public:
 private:
     GLuint id;
 };
-
 
 #endif //DUCK_VAO_H

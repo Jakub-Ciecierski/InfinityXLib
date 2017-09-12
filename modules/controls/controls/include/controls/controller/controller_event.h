@@ -24,5 +24,4 @@ protected:
 };
 }
 
-
 #endif //PROJECT_INPUT_EVENT_H

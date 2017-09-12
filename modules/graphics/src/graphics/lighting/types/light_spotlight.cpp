@@ -9,9 +9,9 @@
 
 namespace ifx {
 
-LightSpotlight::LightSpotlight(const LightParams& light_params,
+LightSpotlight::LightSpotlight(const LightParams &light_params,
                                std::shared_ptr<ShadowMapping> shadow_mapping) :
-        LightDirectional(light_params, shadow_mapping){
+    LightDirectional(light_params, shadow_mapping) {
     light_type_ = LightType::SPOTLIGHT;
 }
 
@@ -48,8 +48,8 @@ void LightSpotlight::bind(const Program &program, int id) {
 
     GLint lightOuterCutoffLoc = glGetUniformLocation(program.getID(),
                                                      builder.OUTCUTOFF.c_str());
-    auto& position = getPosition();
-    auto& direction = getDirection();
+    auto &position = getPosition();
+    auto &direction = getDirection();
     glUniform3f(lightPosLoc, position.x, position.y, position.z);
     glUniform3f(lightDirLoc, direction.x, direction.y, direction.z);
 
@@ -76,13 +76,13 @@ void LightSpotlight::bind(const Program &program, int id) {
                 glm::cos(glm::radians(light_params_.cutOff)));
 
     GLint lightSpaceMatrixLoc
-            = glGetUniformLocation(program.getID(),
-                                   builder.LIGHT_SPACE_MATRIX.c_str());
+        = glGetUniformLocation(program.getID(),
+                               builder.LIGHT_SPACE_MATRIX.c_str());
     glUniformMatrix4fv(lightSpaceMatrixLoc, 1, GL_FALSE,
                        glm::value_ptr(
-                               shadow_mapping_->GetLightSpaceMatrix(this)));
+                           shadow_mapping_->GetLightSpaceMatrix(this)));
 
-    if(cast_shadow_){
+    if (cast_shadow_) {
         int i = TextureActivator::GetInstance().GetNextGlobalID();
         glActiveTexture(GL_TEXTURE0 + i);
         shadow_mapping_->fbo()->texture()->Bind();

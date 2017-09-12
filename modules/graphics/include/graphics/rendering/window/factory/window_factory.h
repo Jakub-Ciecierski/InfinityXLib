@@ -26,5 +26,4 @@ private:
 };
 }
 
-
 #endif //PROJECT_WINDOW_FACTORY_H

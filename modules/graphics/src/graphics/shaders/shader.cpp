@@ -10,12 +10,12 @@ using namespace std;
 
 Shader::Shader(string shaderSource,
                string file_path) :
-        shaderSource(shaderSource),
-        last_compiled_shader_source_(shaderSource),
-        file_path_(file_path){
+    shaderSource(shaderSource),
+    last_compiled_shader_source_(shaderSource),
+    file_path_(file_path) {
 }
 
-Shader::Shader(const Shader& other){
+Shader::Shader(const Shader &other) {
     id = other.id;
     shaderSource = other.shaderSource;
     last_compiled_shader_source_ = other.last_compiled_shader_source_;
@@ -35,16 +35,16 @@ void Shader::deleteShader() {
     Delete(id);
 }
 
-ShaderError Shader::Reload(){
+ShaderError Shader::Reload() {
     ShaderLoader shader_loader;
 
     shaderSource = shader_loader.getShaderCode(file_path_.c_str());
     std::string shader_source_tmp = shaderSource;
 
     auto shader_error = CompileAndCheckError();
-    if(shader_error.error_occured){
+    if (shader_error.error_occured) {
         shaderSource = last_compiled_shader_source_;
-    }else{
+    } else {
         last_compiled_shader_source_ = shaderSource;
     }
 
@@ -56,13 +56,13 @@ ShaderError Shader::Reload(){
     return shader_error;
 }
 
-ShaderError Shader::CompileAndCheckError(){
+ShaderError Shader::CompileAndCheckError() {
     ShaderError shader_error{false, ""};
 
     GLuint test_id;
-    try{
+    try {
         Compile(test_id);
-    }catch(const std::invalid_argument& e){
+    } catch (const std::invalid_argument &e) {
         shader_error.error_occured = true;
         shader_error.message = e.what();
     }
@@ -71,9 +71,9 @@ ShaderError Shader::CompileAndCheckError(){
     return shader_error;
 }
 
-void Shader::Compile(GLuint& id){
+void Shader::Compile(GLuint &id) {
     id = createShader();
-    const GLchar* rawData = shaderSource.c_str();
+    const GLchar *rawData = shaderSource.c_str();
 
     glShaderSource(id, 1, &(rawData), NULL);
     glCompileShader(id);
@@ -82,15 +82,15 @@ void Shader::Compile(GLuint& id){
     GLint success;
     GLchar infoLog[512];
     glGetShaderiv(id, GL_COMPILE_STATUS, &success);
-    if(!success) {
+    if (!success) {
         glGetShaderInfoLog(id, 512, NULL, infoLog);
         std::string infoLogStr = infoLog;
         throw std::invalid_argument("ERROR::SHADER::COMPILATION_FAILED\n"
-                                    + infoLogStr);
+                                        + infoLogStr);
     }
 }
 
-void Shader::Delete(GLuint& id){
+void Shader::Delete(GLuint &id) {
     glDeleteShader(id);
 }
 
@@ -98,6 +98,6 @@ GLuint Shader::getKey() {
     return id;
 }
 
-std::string Shader::getSource(){
+std::string Shader::getSource() {
     return this->shaderSource;
 }

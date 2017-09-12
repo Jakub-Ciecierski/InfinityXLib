@@ -2,11 +2,11 @@
 
 namespace ifx {
 
-ControlContextImpl::ControlContextImpl(){}
+ControlContextImpl::ControlContextImpl() {}
 
-ControlContextImpl::~ControlContextImpl(){}
+ControlContextImpl::~ControlContextImpl() {}
 
-bool ControlContextImpl::InitAndSetupNativeCallbacks(void *){
+bool ControlContextImpl::InitAndSetupNativeCallbacks(void *) {
     return true;
 };
 

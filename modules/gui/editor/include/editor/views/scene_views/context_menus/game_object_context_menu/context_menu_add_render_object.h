@@ -4,7 +4,6 @@
 #include <memory>
 #include <string>
 
-
 namespace ifx {
 
 class ResourceContext;
@@ -22,16 +21,15 @@ public:
     ~ContextMenuAddRenderObject() = default;
 
     void Render(
-            std::shared_ptr<SceneRenderer> scene_renderer,
-            std::shared_ptr<ResourceContext> resource_creator,
-            std::shared_ptr<GameObject> game_object);
+        std::shared_ptr<SceneRenderer> scene_renderer,
+        std::shared_ptr<ResourceContext> resource_creator,
+        std::shared_ptr<GameObject> game_object);
 private:
     std::unique_ptr<ContextMenuAddRenderObjectParametricEquation>
-            context_menu_add_render_object_parametric_equation_;
+        context_menu_add_render_object_parametric_equation_;
     std::unique_ptr<ContextMenuAddRenderObjectAsset>
-            context_menu_add_render_object_asset_;
+        context_menu_add_render_object_asset_;
 };
 }
-
 
 #endif //PROJECT_GAME_OBJECT_CONTEXT_MENU_ADD_RENDER_OBJECT_H

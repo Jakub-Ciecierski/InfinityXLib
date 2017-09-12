@@ -3,7 +3,7 @@
 
 #include <graphics/lighting/types/light_directional.h>
 
-namespace ifx{
+namespace ifx {
 
 class ShadowMapping;
 
@@ -11,12 +11,12 @@ class ShadowMapping;
  * Represents Flashlight
  * Binds the cutOff angle with the shader
  */
-class LightSpotlight : public LightDirectional  {
+class LightSpotlight : public LightDirectional {
 protected:
-    virtual void bind(const Program& program, int id = -1) override;
+    virtual void bind(const Program &program, int id = -1) override;
 
 public:
-    LightSpotlight(const LightParams& light_params,
+    LightSpotlight(const LightParams &light_params,
                    std::shared_ptr<ShadowMapping> shadow_mapping);
     ~LightSpotlight();
 };

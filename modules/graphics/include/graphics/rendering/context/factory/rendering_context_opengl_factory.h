@@ -9,7 +9,7 @@ namespace ifx {
 
 class RenderingContext;
 
-class RenderingContextOpenglFactory : public RenderingContextFactory{
+class RenderingContextOpenglFactory : public RenderingContextFactory {
 public:
 
     RenderingContextOpenglFactory();
@@ -21,6 +21,5 @@ public:
 private:
 };
 }
-
 
 #endif //PROJECT_RENDERING_CONTEXT_OPENGL_FACTORY_H

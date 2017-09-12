@@ -22,7 +22,7 @@ struct CommandExecutable {
 
 class Command {
 public:
-    Command(const CommandExecutable&& executable);
+    Command(const CommandExecutable &&executable);
 
     virtual ~Command();
 
@@ -35,6 +35,5 @@ private:
 };
 
 }
-
 
 #endif //PROJECT_COMMAND_H

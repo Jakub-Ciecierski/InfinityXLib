@@ -8,9 +8,7 @@ namespace ifx {
 struct DepthState : public State {
 public:
 
-
 };
 }
-
 
 #endif //PROJECT_DEPTH_STATE_H

@@ -6,7 +6,7 @@
 #define _DEBUG
 #include <PxPhysicsAPI.h>
 
-namespace ifx{
+namespace ifx {
 
 std::shared_ptr<PhysicsContext> PhysxContextFactory::Create() {
     return std::make_shared<PhysxContext>();

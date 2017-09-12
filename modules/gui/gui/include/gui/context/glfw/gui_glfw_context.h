@@ -12,7 +12,8 @@ public:
 
     virtual ~GUIGLFWContext();
 
-    bool Init(void *native_window, std::shared_ptr<ControlContext> control_context) override;
+    bool Init(void *native_window,
+              std::shared_ptr<ControlContext> control_context) override;
     bool Terminate() override;
 
     void NewFrame() override;
@@ -21,6 +22,5 @@ public:
 private:
 };
 }
-
 
 #endif //PROJECT_GUI_GLFW_CONTEXT_H

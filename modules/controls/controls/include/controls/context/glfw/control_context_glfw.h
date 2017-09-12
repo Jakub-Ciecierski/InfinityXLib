@@ -5,7 +5,7 @@
 
 namespace ifx {
 
-namespace glfw_callbacks{
+namespace glfw_callbacks {
 struct ExternalCallbacks;
 }
 
@@ -19,11 +19,10 @@ public:
     virtual bool InitAndSetupNativeCallbacks(void *) override;
     virtual bool Terminate() override;
 
-    void SetExternalCallbacks(const glfw_callbacks::ExternalCallbacks& external_callbacks);
+    void SetExternalCallbacks(const glfw_callbacks::ExternalCallbacks &external_callbacks);
 
 private:
 };
 }
-
 
 #endif //PROJECT_CONTROL_CONTEXT_GLFW_H

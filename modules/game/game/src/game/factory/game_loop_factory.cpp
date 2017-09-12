@@ -11,11 +11,11 @@
 
 namespace ifx {
 
-GameLoopFactory::GameLoopFactory(){}
-GameLoopFactory::~GameLoopFactory(){}
+GameLoopFactory::GameLoopFactory() {}
+GameLoopFactory::~GameLoopFactory() {}
 
 std::shared_ptr<GameLoop> GameLoopFactory::Create(
-        std::shared_ptr<EngineArchitecture> engine_architecture){
+    std::shared_ptr<EngineArchitecture> engine_architecture) {
     auto game_updater = ifx::make_unique<GameUpdater>(engine_architecture);
 
     auto game_loop = std::make_shared<GameLoop>(std::move(game_updater),

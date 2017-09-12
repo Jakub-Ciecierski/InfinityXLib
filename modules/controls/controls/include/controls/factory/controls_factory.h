@@ -15,8 +15,8 @@ public:
     ControlsFactory();
     ~ControlsFactory();
 
-    ControlsFactory& SetInputContainerFactory(
-            std::shared_ptr<ControllerContainerFactory> factory){
+    ControlsFactory &SetInputContainerFactory(
+        std::shared_ptr<ControllerContainerFactory> factory) {
         controller_container_factory_ = factory;
         return *this;
     }
@@ -27,9 +27,8 @@ private:
     void CreateDefaultFactories();
 
     std::shared_ptr<ControllerContainerFactory>
-            controller_container_factory_;
+        controller_container_factory_;
 };
 }
-
 
 #endif //PROJECT_CONTROLS_FACTORY_H

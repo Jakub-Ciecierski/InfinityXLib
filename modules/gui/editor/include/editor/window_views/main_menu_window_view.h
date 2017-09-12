@@ -4,7 +4,7 @@
 #include <editor/window_view.h>
 #include <memory>
 
-namespace ifx{
+namespace ifx {
 
 class Editor;
 

@@ -9,5 +9,4 @@ public:
 };
 }
 
-
 #endif //PROJECT_STATE_H

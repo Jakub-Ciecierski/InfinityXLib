@@ -7,18 +7,18 @@
 
 namespace ifx {
 
-MouseControllerFactory::MouseControllerFactory(){}
-MouseControllerFactory::~MouseControllerFactory(){}
+MouseControllerFactory::MouseControllerFactory() {}
+MouseControllerFactory::~MouseControllerFactory() {}
 
-std::shared_ptr<MouseController> MouseControllerFactory::Create(){
+std::shared_ptr<MouseController> MouseControllerFactory::Create() {
     MouseControllerEvents events{
-            std::make_shared<MouseControllerEvent>(
-                    MouseControllerKeyType::MOUSE_LEFT),
-            std::make_shared<MouseControllerEvent>(
-                    MouseControllerKeyType::MOUSE_RIGHT),
-            std::make_shared<MouseControllerEvent>(
-                    MouseControllerKeyType::MOUSE_MIDDLE),
-            std::make_shared<MouseScrollControllerEvent>()
+        std::make_shared<MouseControllerEvent>(
+            MouseControllerKeyType::MOUSE_LEFT),
+        std::make_shared<MouseControllerEvent>(
+            MouseControllerKeyType::MOUSE_RIGHT),
+        std::make_shared<MouseControllerEvent>(
+            MouseControllerKeyType::MOUSE_MIDDLE),
+        std::make_shared<MouseScrollControllerEvent>()
     };
 
     auto mouse_input = std::make_shared<MouseController>(std::move(events));

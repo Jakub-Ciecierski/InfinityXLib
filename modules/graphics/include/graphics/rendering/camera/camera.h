@@ -9,7 +9,7 @@
 
 namespace ifx {
 
-enum class CameraStyle{
+enum class CameraStyle {
     FPS, ThirdPerson
 };
 
@@ -17,7 +17,7 @@ enum class CameraStyle{
  * Camera represents the Projection and View Matrices.
  * Uses Euler angles (lookAt) FPS style.
  */
-class Camera : public Transformable{
+class Camera : public Transformable {
 public:
     Camera(int *width, int *height,
            float FOV = 45.0f,
@@ -25,14 +25,16 @@ public:
 
     virtual ~Camera() = default;
 
-    float near_plane(){return near_;}
-    void near_plane(float near){near_ = near;}
+    float near_plane() { return near_; }
+    void near_plane(float near) { near_ = near; }
 
-    float far_plane(){return far_;}
-    void far_plane(float far){far_ = far;}
+    float far_plane() { return far_; }
+    void far_plane(float far) { far_ = far; }
 
-    CameraStyle camera_style(){return camera_style_;}
-    void camera_style(CameraStyle camera_style){camera_style_ = camera_style;}
+    CameraStyle camera_style() { return camera_style_; }
+    void camera_style(CameraStyle camera_style) {
+        camera_style_ = camera_style;
+    }
 
     /**
      * Override from MovableObject.
@@ -57,8 +59,8 @@ public:
     const glm::mat4 &getViewMatrix();
     const glm::mat4 &getProjectionMatrix();
 
-    const glm::vec3& GetRight(){return right;}
-    const glm::vec3& GetUp(){return up;}
+    const glm::vec3 &GetRight() { return right; }
+    const glm::vec3 &GetUp() { return up; }
 private:
     void clampRotation();
 

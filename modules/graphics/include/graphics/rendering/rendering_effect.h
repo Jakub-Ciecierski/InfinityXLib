@@ -19,16 +19,16 @@ public:
     RenderingEffect(std::shared_ptr<Program> program,
                     const RenderingState &rendering_state,
                     std::string name = "Rendering Effect");
-    RenderingEffect(const RenderingEffect&);
+    RenderingEffect(const RenderingEffect &);
 
     ~RenderingEffect() = default;
 
-    bool enabled(){return enabled_;}
-    void enabled(bool value){enabled_ = value;}
+    bool enabled() { return enabled_; }
+    void enabled(bool value) { enabled_ = value; }
 
-    std::shared_ptr<Program> program(){return program_;}
-    RenderingState& rendering_state(){return rendering_state_;}
-    const std::string& name(){return name_;}
+    std::shared_ptr<Program> program() { return program_; }
+    RenderingState &rendering_state() { return rendering_state_; }
+    const std::string &name() { return name_; }
 
     void Render(Camera &camera,
                 LightGroup &light_source);
@@ -45,6 +45,5 @@ private:
     std::vector<std::shared_ptr<RenderObject>> render_objects_;
 };
 }
-
 
 #endif //PROJECT_RENDERING_EFFECT_H

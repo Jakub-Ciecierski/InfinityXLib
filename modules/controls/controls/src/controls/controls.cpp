@@ -8,31 +8,31 @@
 #include <controls/controller/controllers/keyboard_controller.h>
 #include <controls/controller/controllers/mouse_controller.h>
 
-namespace ifx{
+namespace ifx {
 
 Controls::Controls(
-        std::shared_ptr<ControlContext> control_context,
-        std::shared_ptr<ControllerContainer> input_container) :
-        control_context_(control_context),
-        controller_container_(input_container){
+    std::shared_ptr<ControlContext> control_context,
+    std::shared_ptr<ControllerContainer> input_container) :
+    control_context_(control_context),
+    controller_container_(input_container) {
     ControlsContainer::GetInstance().controls(this);
 }
 
-void Controls::Update(float){
-    for(auto& command : commands_){
-        if(command->IsConditionSatisfied())
+void Controls::Update(float) {
+    for (auto &command : commands_) {
+        if (command->IsConditionSatisfied())
             command->Execute();
     }
     controller_container_->Update();
 }
 
-void Controls::AddCommand(std::shared_ptr<Command> command){
+void Controls::AddCommand(std::shared_ptr<Command> command) {
     commands_.push_back(command);
 }
 
-bool Controls::RemoveCommand(std::shared_ptr<Command> command){
-    for(unsigned int i = 0; i < commands_.size(); i++){
-        if(commands_[i] == command){
+bool Controls::RemoveCommand(std::shared_ptr<Command> command) {
+    for (unsigned int i = 0; i < commands_.size(); i++) {
+        if (commands_[i] == command) {
             commands_.erase(commands_.begin() + i);
             return true;
         }

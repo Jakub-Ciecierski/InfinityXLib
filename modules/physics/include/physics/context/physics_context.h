@@ -11,7 +11,7 @@ public:
     virtual bool Init() = 0;
     virtual bool Terminate() = 0;
 
-    virtual void* NativeData() = 0;
+    virtual void *NativeData() = 0;
 };
 }
 

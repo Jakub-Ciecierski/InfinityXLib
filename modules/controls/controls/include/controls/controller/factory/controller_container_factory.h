@@ -18,11 +18,11 @@ public:
     ControllerContainerFactory();
     ~ControllerContainerFactory() = default;
 
-    ControllerContainerFactory& SetMouseControllerFactory(
-            std::shared_ptr<MouseControllerFactory> factory);
+    ControllerContainerFactory &SetMouseControllerFactory(
+        std::shared_ptr<MouseControllerFactory> factory);
 
-    ControllerContainerFactory& SetKeyboardControllerFactory(
-            std::shared_ptr<KeyboardControllerFactory> factory);
+    ControllerContainerFactory &SetKeyboardControllerFactory(
+        std::shared_ptr<KeyboardControllerFactory> factory);
 
     std::shared_ptr<ControllerContainer> Create();
 
@@ -36,6 +36,5 @@ private:
     std::shared_ptr<MouseControllerFactory> mouse_controller_factory_;
 };
 }
-
 
 #endif //PROJECT_INPUT_EVENTS_CONTAINER_FACTORY_H

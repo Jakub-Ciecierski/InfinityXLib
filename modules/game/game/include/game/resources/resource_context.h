@@ -17,11 +17,11 @@ public:
 
     ~ResourceContext() = default;
 
-    std::shared_ptr<ProgramCreator> program_creator(){return program_creator_;}
-    std::shared_ptr<ModelCreator> model_creator(){return model_creator_;}
-    std::shared_ptr<TextureCreator> texture_creator() {return texture_creator_;}
+    std::shared_ptr<ProgramCreator> program_creator() { return program_creator_; }
+    std::shared_ptr<ModelCreator> model_creator() { return model_creator_; }
+    std::shared_ptr<TextureCreator> texture_creator() { return texture_creator_; }
 
-    std::shared_ptr<ResourceManager> resource_manager() {return resource_manager_;}
+    std::shared_ptr<ResourceManager> resource_manager() { return resource_manager_; }
 
 private:
 

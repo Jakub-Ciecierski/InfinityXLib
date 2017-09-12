@@ -13,7 +13,7 @@ public:
     GUIContext() = default;
     virtual ~GUIContext() = default;
 
-    virtual bool Init(void* native_window,
+    virtual bool Init(void *native_window,
                       std::shared_ptr<ControlContext> control_context) = 0;
     virtual bool Terminate() = 0;
 
@@ -23,6 +23,5 @@ public:
 private:
 };
 }
-
 
 #endif //PROJECT_GUI_CONTEXT_H

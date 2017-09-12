@@ -24,8 +24,8 @@ public:
     Window(int width, int height, std::string name);
     ~Window() = default;
 
-    int* width() {return &width_;}
-    int* height() {return &height_;}
+    int *width() { return &width_; }
+    int *height() { return &height_; }
 
     bool Init(std::shared_ptr<RenderingContext> rendering_context,
               std::shared_ptr<ControlContext> control_context);
@@ -37,13 +37,13 @@ public:
 
     int ShouldClose();
 
-    GLFWwindow* getHandle();
+    GLFWwindow *getHandle();
 
     void ShowCursor();
     void HideCursor();
 
 private:
-    GLFWwindow* glfwWindow;
+    GLFWwindow *glfwWindow;
 
     int width_;
     int height_;

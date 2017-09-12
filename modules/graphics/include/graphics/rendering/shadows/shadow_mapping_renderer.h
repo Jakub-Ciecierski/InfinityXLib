@@ -11,8 +11,8 @@ class Window;
 class ShadowMappingRenderer {
 public:
     ShadowMappingRenderer(
-            std::shared_ptr<SceneRenderer> scene_renderer,
-            std::shared_ptr<Window> window);
+        std::shared_ptr<SceneRenderer> scene_renderer,
+        std::shared_ptr<Window> window);
     ~ShadowMappingRenderer();
 
     void Render();

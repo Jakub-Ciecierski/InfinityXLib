@@ -10,7 +10,7 @@ public:
     GameInitializer() = default;
     ~GameInitializer() = default;
 
-    bool Initialize(Game& game);
+    bool Initialize(Game &game);
 };
 }
 

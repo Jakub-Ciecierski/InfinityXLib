@@ -18,7 +18,7 @@ enum class KeyboardControllerCallbackType {
     UNKNOWN,
 };
 
-struct KeyboardControllerEventType{
+struct KeyboardControllerEventType {
     KeyboardControllerKeyType key;
     KeyboardControllerCallbackType callback;
 };
@@ -36,7 +36,7 @@ enum class MouseControllerCallbackType {
     UNKNOWN,
 };
 
-struct MouseControllerEventType{
+struct MouseControllerEventType {
     MouseControllerKeyType key;
     MouseControllerCallbackType callback;
 };

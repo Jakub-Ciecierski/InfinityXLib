@@ -16,5 +16,4 @@ private:
 };
 }
 
-
 #endif //PROJECT_GUI_SUBSYSTEM_H

@@ -6,11 +6,11 @@ using namespace std;
 
 GeometryShader::GeometryShader(string shaderSource,
                                std::string file_path) :
-        Shader(shaderSource, file_path){
+    Shader(shaderSource, file_path) {
 }
 
-GeometryShader::GeometryShader(const GeometryShader& other)
-        : Shader(other){
+GeometryShader::GeometryShader(const GeometryShader &other)
+    : Shader(other) {
 
 }
 

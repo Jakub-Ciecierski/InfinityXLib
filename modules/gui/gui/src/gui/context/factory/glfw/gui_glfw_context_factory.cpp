@@ -2,7 +2,6 @@
 
 #include <gui/context/glfw/gui_glfw_context.h>
 
-
 namespace ifx {
 
 GUIGLFWContextFactory::GUIGLFWContextFactory() {}

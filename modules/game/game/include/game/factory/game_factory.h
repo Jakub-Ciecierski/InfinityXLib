@@ -32,10 +32,10 @@ public:
     GameFactory();
     ~GameFactory() = default;
 
-    GameFactory& SetGameContextsFactory(std::shared_ptr<GameContextsFactory>);
-    GameFactory& SetGameSystemsFactory(std::shared_ptr<GameSystemsFactory>);
-    GameFactory& SetWindowFactory(std::shared_ptr<WindowFactory>);
-    GameFactory& SetGameLoopFactory(std::shared_ptr<GameLoopFactory>);
+    GameFactory &SetGameContextsFactory(std::shared_ptr<GameContextsFactory>);
+    GameFactory &SetGameSystemsFactory(std::shared_ptr<GameSystemsFactory>);
+    GameFactory &SetWindowFactory(std::shared_ptr<WindowFactory>);
+    GameFactory &SetGameLoopFactory(std::shared_ptr<GameLoopFactory>);
 
     std::shared_ptr<Game> Create();
 

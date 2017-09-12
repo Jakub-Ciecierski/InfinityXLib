@@ -5,9 +5,9 @@ namespace ifx {
 
 const std::string NO_FILEPATH = "IFX_NO_FILEPATH";
 
-Resource::Resource(std::string filepath, ResourceType type) : 
+Resource::Resource(std::string filepath, ResourceType type) :
     filepath_(filepath), type_(type) {}
 
-Resource::~Resource(){}
+Resource::~Resource() {}
 
 }

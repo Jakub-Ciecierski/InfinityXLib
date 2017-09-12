@@ -14,8 +14,9 @@ public:
     EditorTool(std::shared_ptr<Docker> docker);
     ~EditorTool() = default;
 
-    const std::vector<std::shared_ptr<WindowView>>& window_views(){
-        return window_views_;}
+    const std::vector<std::shared_ptr<WindowView>> &window_views() {
+        return window_views_;
+    }
 
     void Render();
 

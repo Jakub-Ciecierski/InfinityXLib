@@ -12,22 +12,22 @@
 namespace ifx {
 
 void ContextMenuAddLight::Render(
-        std::shared_ptr<ResourceContext> resource_creator,
-        std::shared_ptr<GameObject> game_object) {
+    std::shared_ptr<ResourceContext> resource_creator,
+    std::shared_ptr<GameObject> game_object) {
     if (ImGui::BeginMenu("Light")) {
         if (ImGui::Selectable("Directional")) {
             auto light = LightComponentFactory().CreateDirectionalLight(
-                    resource_creator->texture_creator(),
-                    resource_creator->program_creator());
+                resource_creator->texture_creator(),
+                resource_creator->program_creator());
             game_object->Add
-                    (std::dynamic_pointer_cast<GameComponent>(light));
+                (std::dynamic_pointer_cast<GameComponent>(light));
         }
         if (ImGui::Selectable("Spotlight")) {
             auto light = LightComponentFactory().CreateSpotLight(
-                    resource_creator->texture_creator(),
-                    resource_creator->program_creator());
+                resource_creator->texture_creator(),
+                resource_creator->program_creator());
             game_object->Add(
-                    std::dynamic_pointer_cast<GameComponent>(light));
+                std::dynamic_pointer_cast<GameComponent>(light));
         }
         if (ImGui::Selectable("Point")) {
             auto light = LightComponentFactory().CreatePointLight();

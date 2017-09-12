@@ -8,7 +8,7 @@ namespace ifx {
 class GameObject;
 class GameComponent;
 
-enum class GameComponentContextMenuEvent{
+enum class GameComponentContextMenuEvent {
     Remove, None
 };
 

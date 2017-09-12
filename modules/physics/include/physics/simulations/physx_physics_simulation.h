@@ -3,7 +3,7 @@
 
 #include <physics/physics_simulation.h>
 
-namespace physx{
+namespace physx {
 class PxPhysics;
 
 class PxPvd;
@@ -22,9 +22,9 @@ namespace ifx {
 class PhysxPhysicsSimulation : public PhysicsSimulation {
 public:
     PhysxPhysicsSimulation(
-            std::shared_ptr<PhysicsContext> physics_context,
-            physx::PxDefaultCpuDispatcher *px_dispatcher,
-            physx::PxScene *px_scene
+        std::shared_ptr<PhysicsContext> physics_context,
+        physx::PxDefaultCpuDispatcher *px_dispatcher,
+        physx::PxScene *px_scene
     );
 
     ~PhysxPhysicsSimulation() = default;
@@ -46,10 +46,9 @@ public:
     void SynchronizeRigidBodiesTransform();
     void SynchronizeGameObjectsTransform();
 private:
-    physx::PxDefaultCpuDispatcher* px_dispatcher_;
-    physx::PxScene* px_scene_;
+    physx::PxDefaultCpuDispatcher *px_dispatcher_;
+    physx::PxScene *px_scene_;
 };
 }
-
 
 #endif //PROJECT_PHYSX_PHYSICS_SIMULATION_H

@@ -3,7 +3,7 @@
 
 using namespace std;
 
-ifx::LightShaderBuilder::LightShaderBuilder(int id){
+ifx::LightShaderBuilder::LightShaderBuilder(int id) {
     this->id = id;
 }
 

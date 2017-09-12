@@ -3,11 +3,11 @@
 #include "game/components/cameras/factory/camera_factory.h"
 #include <graphics/rendering/window/window.h>
 
-namespace ifx{
+namespace ifx {
 
-std::shared_ptr<CameraComponent> CameraFactory::CreateCamera(Window* window){
+std::shared_ptr<CameraComponent> CameraFactory::CreateCamera(Window *window) {
     auto camera = std::shared_ptr<CameraComponent>(
-            new ifx::CameraComponent(window->width(), window->height()));
+        new ifx::CameraComponent(window->width(), window->height()));
     return camera;
 }
 }

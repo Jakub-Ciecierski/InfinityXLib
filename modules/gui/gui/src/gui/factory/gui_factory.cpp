@@ -5,10 +5,10 @@
 namespace ifx {
 
 std::shared_ptr<GUI> GUIFactory::Create(
-        std::shared_ptr<GUIContext> context) {
-    if(!context){
+    std::shared_ptr<GUIContext> context) {
+    if (!context) {
         throw std::invalid_argument(
-                "Creating GUI System: Missing Dependencies");
+            "Creating GUI System: Missing Dependencies");
     }
 
     auto gui = std::make_shared<GUI>(context);

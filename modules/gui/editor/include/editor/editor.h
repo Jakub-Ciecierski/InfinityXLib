@@ -6,7 +6,7 @@
 #include <memory>
 #include <vector>
 
-namespace ifx{
+namespace ifx {
 
 class MainMenuWindowView;
 class SceneListView;
@@ -21,9 +21,9 @@ public:
 
     virtual bool Terminate() override;
 
-    std::shared_ptr<Docker> docker(){return docker_;}
+    std::shared_ptr<Docker> docker() { return docker_; }
 
-    const std::vector<std::shared_ptr<WindowView>>& window_views(){return window_views_;}
+    const std::vector<std::shared_ptr<WindowView>> &window_views() { return window_views_; }
 
     /**
      * Renders windows and other non scene related stuff.

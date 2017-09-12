@@ -6,15 +6,15 @@
 
 namespace ifx {
 
-class BoxCollisionShape : public CollisionShape{
+class BoxCollisionShape : public CollisionShape {
 public:
 
-    BoxCollisionShape(const glm::vec3& dim);
+    BoxCollisionShape(const glm::vec3 &dim);
     ~BoxCollisionShape();
 
-    const glm::vec3& dimension() const {return dimension_;}
+    const glm::vec3 &dimension() const { return dimension_; }
 
-    virtual void InitImpl(RigidBodyImpl* rigid_body_impl) override;
+    virtual void InitImpl(RigidBodyImpl *rigid_body_impl) override;
 
 private:
     glm::vec3 dimension_;

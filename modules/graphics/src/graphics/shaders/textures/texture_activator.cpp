@@ -3,35 +3,35 @@
 namespace ifx {
 
 TextureActivator::TextureActivator() :
-        local_id_start_(0),
-        global_id_start_(31),
-        local_id_(local_id_start_),
-        global_id_(global_id_start_){
+    local_id_start_(0),
+    global_id_start_(31),
+    local_id_(local_id_start_),
+    global_id_(global_id_start_) {
     ResetLocal();
     ResetGlobal();
 }
 
-TextureActivator::~TextureActivator(){}
+TextureActivator::~TextureActivator() {}
 
 // static
-TextureActivator& TextureActivator::GetInstance(){
+TextureActivator &TextureActivator::GetInstance() {
     static TextureActivator instance;
     return instance;
 }
 
-int TextureActivator::GetNextLocalID(){
+int TextureActivator::GetNextLocalID() {
     return local_id_++;
 }
 
-int TextureActivator::GetNextGlobalID(){
+int TextureActivator::GetNextGlobalID() {
     return global_id_++;
 }
 
-void TextureActivator::ResetLocal(){
+void TextureActivator::ResetLocal() {
     local_id_ = local_id_start_;
 }
 
-void TextureActivator::ResetGlobal(){
+void TextureActivator::ResetGlobal() {
     global_id_ = global_id_start_;
 }
 

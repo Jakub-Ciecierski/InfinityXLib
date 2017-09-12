@@ -2,7 +2,7 @@
 
 namespace ifx {
 
-LightComponent::LightComponent() : GameComponent(GameComponentType::LIGHT){}
+LightComponent::LightComponent() : GameComponent(GameComponentType::LIGHT) {}
 
 LightComponent::~LightComponent() {}
 

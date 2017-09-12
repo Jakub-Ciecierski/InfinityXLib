@@ -13,7 +13,7 @@ namespace ifx {
 class Model;
 class ModelCreator;
 
-struct ParametricEquation{
+struct ParametricEquation {
     std::function<glm::vec3(double u, double v)> P;
     std::function<glm::vec3(double u, double v)> Pu;
     std::function<glm::vec3(double u, double v)> Pv;
@@ -31,7 +31,6 @@ struct ParametricEquation{
     double v_global;
 };
 
-
 class ModelParametricLoader {
 public:
     ModelParametricLoader();
@@ -40,9 +39,9 @@ public:
     std::shared_ptr<Model> CreateModel(const ParametricEquation &parametric_equation,
                                        std::shared_ptr<ModelCreator> model_creator);
 private:
-    std::vector<Vertex> CreateVertices(const ParametricEquation& parametric_equation);
+    std::vector<Vertex> CreateVertices(const ParametricEquation &parametric_equation);
 
-    std::vector<unsigned int> CreateIndices(const ParametricEquation& parametric_equation);
+    std::vector<unsigned int> CreateIndices(const ParametricEquation &parametric_equation);
 };
 
 }

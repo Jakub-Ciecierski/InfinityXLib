@@ -2,8 +2,8 @@
 
 namespace ifx {
 
-ControlContextFactory::ControlContextFactory(){}
+ControlContextFactory::ControlContextFactory() {}
 
-ControlContextFactory::~ControlContextFactory(){}
+ControlContextFactory::~ControlContextFactory() {}
 
 }

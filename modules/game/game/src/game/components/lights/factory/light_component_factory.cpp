@@ -10,10 +10,10 @@
 
 #include <resources/resource_manager.h>
 
-namespace ifx{
+namespace ifx {
 
 std::shared_ptr<LightPointComponent>
-LightComponentFactory::CreatePointLight(){
+LightComponentFactory::CreatePointLight() {
     LightParams light;
 
     auto light_source = std::make_shared<LightPointComponent>(light);
@@ -23,52 +23,52 @@ LightComponentFactory::CreatePointLight(){
 
 std::shared_ptr<LightDirectionalComponent>
 LightComponentFactory::CreateDirectionalLight(
-        std::shared_ptr<TextureCreator> texture_creator,
-        std::shared_ptr<ProgramCreator> program_creator){
+    std::shared_ptr<TextureCreator> texture_creator,
+    std::shared_ptr<ProgramCreator> program_creator) {
     ifx::LightParams light;
 
     auto light_source = std::make_shared<ifx::LightDirectionalComponent>(
-                    light,
-                    CreateShadowMapping(texture_creator, program_creator));
+        light,
+        CreateShadowMapping(texture_creator, program_creator));
 
     light_source->rotateTo(glm::vec3(0, 0, 0));
-    light_source->LookAt(glm::vec3(0,0,0));
+    light_source->LookAt(glm::vec3(0, 0, 0));
 
     return light_source;
 }
 
 std::shared_ptr<LightSpotlightComponent>
 LightComponentFactory::CreateSpotLight(
-        std::shared_ptr<TextureCreator> texture_creator,
-        std::shared_ptr<ProgramCreator> program_creator){
+    std::shared_ptr<TextureCreator> texture_creator,
+    std::shared_ptr<ProgramCreator> program_creator) {
     ifx::LightParams light;
 
     auto light_source = std::make_shared<ifx::LightSpotlightComponent>(
-                    light,
-                    CreateShadowMapping(texture_creator, program_creator));
+        light,
+        CreateShadowMapping(texture_creator, program_creator));
 
     light_source->rotateTo(glm::vec3(0, 270, 0));
-    light_source->LookAt(glm::vec3(0,0,0));
+    light_source->LookAt(glm::vec3(0, 0, 0));
 
     return light_source;
 }
 
 std::shared_ptr<ShadowMapping> LightComponentFactory::CreateShadowMapping(
-        std::shared_ptr<TextureCreator> texture_creator,
-        std::shared_ptr<ProgramCreator> program_creator){
+    std::shared_ptr<TextureCreator> texture_creator,
+    std::shared_ptr<ProgramCreator> program_creator) {
     auto resource_path = texture_creator->resource_manager()->resource_path();
 
     std::string vertex_path = resource_path->GetResourcePath(
-                    "engine/shadow_mapping.prog/shadow_mapping.vs",
-                    ifx::ResourceType::SHADER);
+        "engine/shadow_mapping.prog/shadow_mapping.vs",
+        ifx::ResourceType::SHADER);
     std::string fragment_path = resource_path->GetResourcePath(
-                    "engine/shadow_mapping.prog/shadow_mapping.fs",
-                    ifx::ResourceType::SHADER);
+        "engine/shadow_mapping.prog/shadow_mapping.fs",
+        ifx::ResourceType::SHADER);
     auto program = ProgramLoader(program_creator).CreateProgram(
-            vertex_path, fragment_path);
+        vertex_path, fragment_path);
     return std::shared_ptr<ShadowMapping>(
-            new ShadowMapping(
-                    Dimensions{4024, 4024}, program, texture_creator));
+        new ShadowMapping(
+            Dimensions{4024, 4024}, program, texture_creator));
 }
 
 }

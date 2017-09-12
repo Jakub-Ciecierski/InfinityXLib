@@ -4,23 +4,20 @@
 
 namespace ifx {
 
-LightSource::LightSource(const LightParams& light_params, LightType type) :
-        light_params_(light_params),
-        light_type_(type),
-        cast_shadow_(true){
+LightSource::LightSource(const LightParams &light_params, LightType type) :
+    light_params_(light_params),
+    light_type_(type),
+    cast_shadow_(true) {
 }
 
 LightSource::~LightSource() {}
 
 // static
-std::string LightSource::LightTypeString(LightType type){
-    switch(type){
-        case LightType::DIRECTIONAL:
-            return "Directional";
-        case LightType::POINT:
-            return "Point";
-        case LightType::SPOTLIGHT:
-            return "Spotlight";
+std::string LightSource::LightTypeString(LightType type) {
+    switch (type) {
+        case LightType::DIRECTIONAL:return "Directional";
+        case LightType::POINT:return "Point";
+        case LightType::SPOTLIGHT:return "Spotlight";
     }
     return "Unknown";
 }

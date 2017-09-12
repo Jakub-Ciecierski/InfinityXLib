@@ -16,8 +16,8 @@ public:
     ~SceneContainerFactory();
 
     std::shared_ptr<SceneContainer> Create(
-            std::shared_ptr<SceneRenderer> scene_renderer,
-            std::shared_ptr<PhysicsSimulation> physics_simulation);
+        std::shared_ptr<SceneRenderer> scene_renderer,
+        std::shared_ptr<PhysicsSimulation> physics_simulation);
 private:
 
 };

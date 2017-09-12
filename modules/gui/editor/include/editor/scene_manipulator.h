@@ -9,7 +9,7 @@ namespace ifx {
 class Transformable;
 class CameraComponent;
 
-enum class SceneManipulatorOperation{
+enum class SceneManipulatorOperation {
     TRANSLATE, ROTATE, SCALE
 };
 
@@ -23,25 +23,28 @@ public:
     SceneManipulator();
     ~SceneManipulator();
 
-    void transformable_object(std::shared_ptr<Transformable> object){
-        transformable_object_ = object;};
-    void camera(std::shared_ptr<CameraComponent> new_camera){
-        camera_ = new_camera;}
-    void operation(SceneManipulatorOperation new_operation){
-        operation_ = new_operation;}
+    void transformable_object(std::shared_ptr<Transformable> object) {
+        transformable_object_ = object;
+    };
+    void camera(std::shared_ptr<CameraComponent> new_camera) {
+        camera_ = new_camera;
+    }
+    void operation(SceneManipulatorOperation new_operation) {
+        operation_ = new_operation;
+    }
 
-    bool show(){return show_;}
-    void show(bool v){show_ = v;}
+    bool show() { return show_; }
+    void show(bool v) { show_ = v; }
 
     void Manipulate();
 
 private:
     void Manipulate(std::shared_ptr<Transformable> movable_object,
-                    const float* new_model_matrix,
+                    const float *new_model_matrix,
                     SceneManipulatorOperation operation);
 
     ImGuizmo::OPERATION GetNativeOperationMode(
-            SceneManipulatorOperation operation);
+        SceneManipulatorOperation operation);
 
     std::shared_ptr<Transformable> transformable_object_;
     std::shared_ptr<CameraComponent> camera_;

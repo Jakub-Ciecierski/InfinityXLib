@@ -22,11 +22,12 @@ public:
     LightGroup();
     ~LightGroup();
 
-    const std::vector<std::shared_ptr<LightSource>>& lights() const {
-        return lights_;}
+    const std::vector<std::shared_ptr<LightSource>> &lights() const {
+        return lights_;
+    }
 
     const std::vector<std::shared_ptr<LightDirectional>>
-            GetDirectionalLights() const;
+    GetDirectionalLights() const;
     const std::vector<std::shared_ptr<LightSpotlight>> GetSpotlights() const;
 
     void Add(std::shared_ptr<LightSource> light_source);

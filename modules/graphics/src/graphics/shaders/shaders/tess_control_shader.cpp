@@ -4,11 +4,11 @@
 
 TessControlShader::TessControlShader(std::string shaderSource,
                                      std::string file_path) :
-    Shader(shaderSource, file_path){
+    Shader(shaderSource, file_path) {
 }
 
-TessControlShader::TessControlShader(const TessControlShader& other) :
-    Shader(other){
+TessControlShader::TessControlShader(const TessControlShader &other) :
+    Shader(other) {
 
 }
 

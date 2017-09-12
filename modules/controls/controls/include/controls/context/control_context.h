@@ -16,5 +16,4 @@ private:
 };
 }
 
-
 #endif //PROJECT_CONTROL_CONTEXT_H

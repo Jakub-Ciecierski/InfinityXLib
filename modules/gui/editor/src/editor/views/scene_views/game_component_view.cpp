@@ -11,9 +11,9 @@
 #include <game/components/cameras/camera_component.h>
 #include <graphics/lighting/light_source.h>
 
-namespace ifx{
+namespace ifx {
 
-GameComponentView::GameComponentView(std::shared_ptr<SceneRenderer> scene_renderer){
+GameComponentView::GameComponentView(std::shared_ptr<SceneRenderer> scene_renderer) {
     movable_object_view_.reset(new MovableObjectView());
 
     camera_view_.reset(new CameraView());
@@ -21,25 +21,24 @@ GameComponentView::GameComponentView(std::shared_ptr<SceneRenderer> scene_render
     render_object_view_.reset(new RenderObjectView(scene_renderer));
 }
 
-void GameComponentView::Render(std::shared_ptr<GameComponent> game_component){
+void GameComponentView::Render(std::shared_ptr<GameComponent> game_component) {
     movable_object_view_->Render(
-            std::dynamic_pointer_cast<Transformable>(game_component));
+        std::dynamic_pointer_cast<Transformable>(game_component));
 
-    switch(game_component->type()){
+    switch (game_component->type()) {
         case GameComponentType::LIGHT:
             light_view_->Render(
-                    std::dynamic_pointer_cast<LightSource>(game_component));
+                std::dynamic_pointer_cast<LightSource>(game_component));
             break;
         case GameComponentType::RENDER:
             render_object_view_->Render(
-                    std::dynamic_pointer_cast<RenderComponent>(game_component));
+                std::dynamic_pointer_cast<RenderComponent>(game_component));
             break;
         case GameComponentType::CAMERA:
             camera_view_->Render(
-                    std::dynamic_pointer_cast<CameraComponent>(game_component));
+                std::dynamic_pointer_cast<CameraComponent>(game_component));
             break;
-        default:
-            return;
+        default:return;
     }
 }
 

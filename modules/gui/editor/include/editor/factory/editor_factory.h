@@ -30,27 +30,27 @@ public:
     ~EditorFactory() = default;
 
     std::shared_ptr<Editor> CreateEngineGUI(
-            std::shared_ptr<EngineArchitecture> engine_architecture);
+        std::shared_ptr<EngineArchitecture> engine_architecture);
 private:
     std::shared_ptr<SceneListView> CreateSceneView(
-            std::shared_ptr<SceneContainer> scene,
-            std::shared_ptr<ResourceContext> resource_creator,
-            std::shared_ptr<SceneRenderer> scene_renderer);
+        std::shared_ptr<SceneContainer> scene,
+        std::shared_ptr<ResourceContext> resource_creator,
+        std::shared_ptr<SceneRenderer> scene_renderer);
     std::shared_ptr<PhysicsSimulationView> CreatePhysicsSimulationView(
-            std::shared_ptr<PhysicsSimulation> physics_simulation);
+        std::shared_ptr<PhysicsSimulation> physics_simulation);
     std::shared_ptr<RenderingView> CreateRenderingView(
-            std::shared_ptr<SceneRenderer> scene_renderer,
-            std::shared_ptr<ResourceContext> resource_creator);
+        std::shared_ptr<SceneRenderer> scene_renderer,
+        std::shared_ptr<ResourceContext> resource_creator);
     std::shared_ptr<SoftBodyView> CreateSoftBodyView(
-            std::shared_ptr<EngineArchitecture> engine_architecture);
+        std::shared_ptr<EngineArchitecture> engine_architecture);
 
     std::shared_ptr<Docker> CreateDefaultDocker(
-            std::shared_ptr<Window> window,
-            std::shared_ptr<WindowView> left_window_view,
-            std::shared_ptr<WindowView> right_window_view,
-            std::shared_ptr<WindowView> top_window_view,
-            std::shared_ptr<WindowView> bottom_window_view,
-            std::shared_ptr<WindowView> soft_body_window_view);
+        std::shared_ptr<Window> window,
+        std::shared_ptr<WindowView> left_window_view,
+        std::shared_ptr<WindowView> right_window_view,
+        std::shared_ptr<WindowView> top_window_view,
+        std::shared_ptr<WindowView> bottom_window_view,
+        std::shared_ptr<WindowView> soft_body_window_view);
 };
 
 }

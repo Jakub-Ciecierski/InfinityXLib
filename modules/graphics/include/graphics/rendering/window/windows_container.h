@@ -13,12 +13,12 @@ class WindowsContainer {
 public:
     ~WindowsContainer();
 
-    static WindowsContainer& GetInstance();
+    static WindowsContainer &GetInstance();
 
-    void AddWindow(Window* window);
-    Window* GetWindow(GLFWwindow* glfw_window);
+    void AddWindow(Window *window);
+    Window *GetWindow(GLFWwindow *glfw_window);
 private:
-    std::vector<Window*> windows_;
+    std::vector<Window *> windows_;
     WindowsContainer();
 };
 }

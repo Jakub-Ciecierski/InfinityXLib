@@ -11,7 +11,7 @@ class ShadowMapping;
 class LightDirectionalComponent : public LightDirectional,
                                   public GameComponent {
 public:
-    LightDirectionalComponent(const LightParams& light_params,
+    LightDirectionalComponent(const LightParams &light_params,
                               std::shared_ptr<ShadowMapping> shadow_mapping);
 
     ~LightDirectionalComponent() = default;

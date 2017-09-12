@@ -1,17 +1,17 @@
 #include <math/math_ifx.h>
 
-namespace ifx{
+namespace ifx {
 
-LineSphereIntersection Intersection(const LineIntersection& line,
-                                    const SphereIntersection& sphere){
+LineSphereIntersection Intersection(const LineIntersection &line,
+                                    const SphereIntersection &sphere) {
     LineSphereIntersection intersection;
     float a = ifx::dot(line.direction, line.origin - sphere.center);
-    float a_sqr = a*a;
+    float a_sqr = a * a;
     glm::vec3 co = line.origin - sphere.center;
     float b = ifx::dot(co, co);
 
     float under_sqrt = a_sqr - b + (sphere.radius * sphere.radius);
-    if(under_sqrt < 0)
+    if (under_sqrt < 0)
         return intersection;
 
     under_sqrt = sqrt(under_sqrt);
@@ -21,7 +21,7 @@ LineSphereIntersection Intersection(const LineIntersection& line,
     return intersection;
 }
 
-float Magnitude(const glm::vec3& v1){
+float Magnitude(const glm::vec3 &v1) {
     float x_d = v1.x * v1.x;
     float y_d = v1.y * v1.y;
     float z_d = v1.z * v1.z;
@@ -29,7 +29,7 @@ float Magnitude(const glm::vec3& v1){
     return sqrt(x_d + y_d + z_d);
 }
 
-float EuclideanDistance(const glm::vec3& v1, const glm::vec3& v2){
+float EuclideanDistance(const glm::vec3 &v1, const glm::vec3 &v2) {
     float x_d = v1.x - v2.x;
     x_d = x_d * x_d;
     float y_d = v1.y - v2.y;
@@ -40,7 +40,7 @@ float EuclideanDistance(const glm::vec3& v1, const glm::vec3& v2){
     return sqrt(x_d + y_d + z_d);
 }
 
-float EuclideanDistance(const glm::vec2& v1, const glm::vec2& v2){
+float EuclideanDistance(const glm::vec2 &v1, const glm::vec2 &v2) {
     float x_d = v1.x - v2.x;
     x_d = x_d * x_d;
     float y_d = v1.y - v2.y;
@@ -49,7 +49,7 @@ float EuclideanDistance(const glm::vec2& v1, const glm::vec2& v2){
     return sqrt(x_d + y_d);
 }
 
-float dot(const glm::vec3& v1, const glm::vec3& v2){
+float dot(const glm::vec3 &v1, const glm::vec3 &v2) {
     return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
 }
 
@@ -67,6 +67,5 @@ std::vector<std::string> SplitString(std::string s,
     tokens.push_back(s);
     return tokens;
 }
-
 
 }

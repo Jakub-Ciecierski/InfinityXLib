@@ -5,7 +5,7 @@
 
 #include <memory>
 
-namespace physx{
+namespace physx {
 class PxRigidActor;
 class PxPhysics;
 class PxShape;
@@ -16,9 +16,9 @@ namespace ifx {
 
 class CollisionShape;
 
-class RigidBodyImplPhysx : public RigidBodyImpl{
+class RigidBodyImplPhysx : public RigidBodyImpl {
 public:
-    RigidBodyImplPhysx(physx::PxPhysics* px_physics);
+    RigidBodyImplPhysx(physx::PxPhysics *px_physics);
 
     ~RigidBodyImplPhysx();
 
@@ -35,11 +35,11 @@ public:
 
     virtual bool IsDynamic() override;
 private:
-    physx::PxPhysics* px_physics_;
+    physx::PxPhysics *px_physics_;
 
-    physx::PxRigidActor* px_rigid_actor_;
-    physx::PxShape* px_shape_;
-    physx::PxMaterial* px_material_;
+    physx::PxRigidActor *px_rigid_actor_;
+    physx::PxShape *px_shape_;
+    physx::PxMaterial *px_material_;
 
     glm::vec3 previous_collision_shape_scale_;
     std::shared_ptr<CollisionShape> ifx_collision_shape_;
@@ -47,6 +47,5 @@ private:
     float mass_;
 };
 }
-
 
 #endif //PROJECT_RIGID_BODY_IMPL_PHYSX_H

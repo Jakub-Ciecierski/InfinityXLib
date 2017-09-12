@@ -12,12 +12,12 @@ class ControllerEvent;
 
 using ControllerEvents = std::vector<std::shared_ptr<ControllerEvent>>;
 
-class Controller : public Updatable{
+class Controller : public Updatable {
 public:
 
     virtual ~Controller();
 
-    const ControllerEvents& events(){return events_;}
+    const ControllerEvents &events() { return events_; }
 
     virtual void Update(float time_delta = 0) override;
 
@@ -28,6 +28,5 @@ protected:
 
 };
 }
-
 
 #endif //PROJECT_INPUT_H

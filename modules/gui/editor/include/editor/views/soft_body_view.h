@@ -24,7 +24,7 @@ class SoftBodySelector;
 class SoftBodyView : public View, public SceneViewObserver {
 public:
     SoftBodyView(std::unique_ptr<GameUpdater> game_updater,
-                 const SoftBodyRenderingEffects& rendering_effects);
+                 const SoftBodyRenderingEffects &rendering_effects);
     ~SoftBodyView() = default;
 
     bool Terminate() override;
@@ -32,7 +32,7 @@ public:
     virtual void Render() override;
 
     void OnSetSelectedGameObject(
-            std::shared_ptr<GameObject> selected_game_object) override;
+        std::shared_ptr<GameObject> selected_game_object) override;
 
 private:
     void RenderLeftColumn();

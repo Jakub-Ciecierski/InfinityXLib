@@ -17,11 +17,11 @@ public:
 
     void NotifyResize(int width, int height);
 
-    void AddObserver(WindowObserver* observer);
-    bool RemoveObserver(WindowObserver* observer);
+    void AddObserver(WindowObserver *observer);
+    bool RemoveObserver(WindowObserver *observer);
 
 protected:
-    std::vector<WindowObserver*> observers_;
+    std::vector<WindowObserver *> observers_;
 };
 }
 

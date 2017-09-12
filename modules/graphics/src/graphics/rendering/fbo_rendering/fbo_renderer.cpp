@@ -8,41 +8,41 @@
 
 #include <GL/glew.h>
 
-namespace ifx{
+namespace ifx {
 
 FBORenderer::FBORenderer(
-        std::shared_ptr<Window> window,
-        std::shared_ptr<RenderingContext> rendering_context,
-        std::unique_ptr<FBO> fbo,
-        std::unique_ptr<FBO> intermediate_fbo,
-        std::unique_ptr<Mesh> screen_mesh,
-        std::shared_ptr<Program> program) :
-        Renderer(window, rendering_context),
-        fbo_(std::move(fbo)),
-        intermediate_fbo_(std::move(intermediate_fbo)),
-        screen_mesh_(std::move(screen_mesh)),
-        program_(program),
-        render_to_screen_(true){
-    if(!fbo_ || !screen_mesh_ || !program_){
+    std::shared_ptr<Window> window,
+    std::shared_ptr<RenderingContext> rendering_context,
+    std::unique_ptr<FBO> fbo,
+    std::unique_ptr<FBO> intermediate_fbo,
+    std::unique_ptr<Mesh> screen_mesh,
+    std::shared_ptr<Program> program) :
+    Renderer(window, rendering_context),
+    fbo_(std::move(fbo)),
+    intermediate_fbo_(std::move(intermediate_fbo)),
+    screen_mesh_(std::move(screen_mesh)),
+    program_(program),
+    render_to_screen_(true) {
+    if (!fbo_ || !screen_mesh_ || !program_) {
         throw std::invalid_argument(
-                "FBORenderer2::FBORenderer2 - Invalid arguments");
+            "FBORenderer2::FBORenderer2 - Invalid arguments");
     }
     window_->AddObserver(this);
 }
 
-FBORenderer::~FBORenderer(){
+FBORenderer::~FBORenderer() {
     window_->RemoveObserver(this);
 }
 
-void FBORenderer::EnableRenderToScreen(bool value){
+void FBORenderer::EnableRenderToScreen(bool value) {
     render_to_screen_ = value;
 }
 
-const Texture2D& FBORenderer::GetSceneTexture(){
+const Texture2D &FBORenderer::GetSceneTexture() {
     return *intermediate_fbo_->texture();
 }
 
-void FBORenderer::Render(){
+void FBORenderer::Render() {
     shadow_mapping_renderer_->Render();
 
     fbo_->Bind();
@@ -60,11 +60,11 @@ void FBORenderer::Render(){
                       GL_NEAREST);
     fbo_->Unbind();
 
-    if(render_to_screen_)
+    if (render_to_screen_)
         RenderFBOToScreen();
 }
 
-void FBORenderer::RenderFBOToScreen(){
+void FBORenderer::RenderFBOToScreen() {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);

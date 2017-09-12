@@ -16,10 +16,10 @@ public:
     CollisionShape();
     virtual ~CollisionShape();
 
-    const glm::vec3& scale(){return scale_;}
-    void scale(const glm::vec3& scale){scale_ = scale;}
+    const glm::vec3 &scale() { return scale_; }
+    void scale(const glm::vec3 &scale) { scale_ = scale; }
 
-    virtual void InitImpl(RigidBodyImpl* rigid_body_impl) = 0;
+    virtual void InitImpl(RigidBodyImpl *rigid_body_impl) = 0;
 private:
     glm::vec3 scale_;
 };

@@ -24,5 +24,4 @@ private:
 };
 }
 
-
 #endif //PROJECT_GUI_FACTORY_H

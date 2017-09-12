@@ -3,23 +3,23 @@
 #include <editor/window_view.h>
 #include <editor/docker.h>
 
-namespace ifx{
+namespace ifx {
 
 EditorTool::EditorTool(std::shared_ptr<Docker> docker) :
-        docker_(docker){}
+    docker_(docker) {}
 
-void EditorTool::Render(){
-    for(auto& view : window_views_){
-        if(!view)
+void EditorTool::Render() {
+    for (auto &view : window_views_) {
+        if (!view)
             continue;
 
-        if(docker_)
+        if (docker_)
             docker_->Dock(view);
         view->Render();
     }
 }
 
-void EditorTool::AddWindowView(std::shared_ptr<WindowView> view){
+void EditorTool::AddWindowView(std::shared_ptr<WindowView> view) {
     window_views_.push_back(view);
 }
 

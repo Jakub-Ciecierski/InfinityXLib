@@ -7,17 +7,16 @@
 #include <imgui.h>
 #include "imgui_impl_a5.h"
 
-int main(int, char**)
-{
+int main(int, char **) {
     // Setup Allegro
     al_init();
     al_install_keyboard();
     al_install_mouse();
     al_init_primitives_addon();
     al_set_new_display_flags(ALLEGRO_RESIZABLE);
-    ALLEGRO_DISPLAY* display = al_create_display(1280, 720);
+    ALLEGRO_DISPLAY *display = al_create_display(1280, 720);
     al_set_window_title(display, "ImGui Allegro 5 example");
-    ALLEGRO_EVENT_QUEUE* queue = al_create_event_queue();
+    ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
     al_register_event_source(queue, al_get_display_event_source(display));
     al_register_event_source(queue, al_get_keyboard_event_source());
     al_register_event_source(queue, al_get_mouse_event_source());
@@ -41,15 +40,12 @@ int main(int, char**)
 
     // Main loop
     bool running = true;
-    while (running)
-    {
+    while (running) {
         ALLEGRO_EVENT ev;
-        while (al_get_next_event(queue, &ev))
-        {
+        while (al_get_next_event(queue, &ev)) {
             ImGui_ImplA5_ProcessEvent(&ev);
             if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) running = false;
-            if (ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE)
-            {
+            if (ev.type == ALLEGRO_EVENT_DISPLAY_RESIZE) {
                 ImGui_ImplA5_InvalidateDeviceObjects();
                 al_acknowledge_resize(display);
                 Imgui_ImplA5_CreateDeviceObjects();
@@ -63,30 +59,34 @@ int main(int, char**)
             static float f;
             ImGui::Text("Hello, world!");
             ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-            ImGui::ColorEdit3("clear color", (float*)&clear_color);
+            ImGui::ColorEdit3("clear color", (float *) &clear_color);
             if (ImGui::Button("Test Window")) show_test_window ^= 1;
             if (ImGui::Button("Another Window")) show_another_window ^= 1;
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f/ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
+                        1000.0f / ImGui::GetIO().Framerate,
+                        ImGui::GetIO().Framerate);
         }
 
         // 2. Show another simple window, this time using an explicit Begin/End pair
-        if (show_another_window)
-        {
-            ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiSetCond_FirstUseEver);
+        if (show_another_window) {
+            ImGui::SetNextWindowSize(ImVec2(200, 100),
+                                     ImGuiSetCond_FirstUseEver);
             ImGui::Begin("Another Window", &show_another_window);
             ImGui::Text("Hello");
             ImGui::End();
         }
 
         // 3. Show the ImGui test window. Most of the sample code is in ImGui::ShowTestWindow()
-        if (show_test_window)
-        {
+        if (show_test_window) {
             ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiSetCond_FirstUseEver);
             ImGui::ShowTestWindow(&show_test_window);
         }
 
         // Rendering
-        al_clear_to_color(al_map_rgba_f(clear_color.x, clear_color.y, clear_color.z, clear_color.w));
+        al_clear_to_color(al_map_rgba_f(clear_color.x,
+                                        clear_color.y,
+                                        clear_color.z,
+                                        clear_color.w));
         ImGui::Render();
         al_flip_display();
     }

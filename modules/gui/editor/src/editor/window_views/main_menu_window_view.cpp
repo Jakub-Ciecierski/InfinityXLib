@@ -6,18 +6,18 @@
 #include <gui/imgui/imgui.h>
 #include <gui/theme.h>
 
-namespace ifx{
+namespace ifx {
 
 MainMenuWindowView::MainMenuWindowView() :
-        WindowView("Main Menu"),
-        editor_(nullptr) {
+    WindowView("Main Menu"),
+    editor_(nullptr) {
     view_item_.reset(new MainMenuViewItem());
 }
 
-MainMenuWindowView::~MainMenuWindowView(){}
+MainMenuWindowView::~MainMenuWindowView() {}
 
 void MainMenuWindowView::Render() {
-    if (ImGui::BeginMainMenuBar()){
+    if (ImGui::BeginMainMenuBar()) {
         FetchSize();
 
         RenderContent();
@@ -26,12 +26,12 @@ void MainMenuWindowView::Render() {
     }
 }
 
-void MainMenuWindowView::RegisterEditor(std::shared_ptr<Editor> editor){
+void MainMenuWindowView::RegisterEditor(std::shared_ptr<Editor> editor) {
     editor_ = editor;
 }
 
-void MainMenuWindowView::RenderContent(){
-    if(!editor_)
+void MainMenuWindowView::RenderContent() {
+    if (!editor_)
         return;
     RenderFile();
     RenderEdit();
@@ -39,26 +39,26 @@ void MainMenuWindowView::RenderContent(){
     RenderWindow();
 }
 
-void MainMenuWindowView::RenderFile(){
-    if (ImGui::BeginMenu("File")){
+void MainMenuWindowView::RenderFile() {
+    if (ImGui::BeginMenu("File")) {
         ImGui::EndMenu();
     }
 }
 
-void MainMenuWindowView::RenderEdit(){
-    if (ImGui::BeginMenu("Edit")){
+void MainMenuWindowView::RenderEdit() {
+    if (ImGui::BeginMenu("Edit")) {
 
         ImGui::EndMenu();
     }
 }
 
-void MainMenuWindowView::RenderWindow(){
-    if (ImGui::BeginMenu("Window")){
-        if (ImGui::BeginMenu("Style")){
-            if(ImGui::MenuItem("Dracula")){
+void MainMenuWindowView::RenderWindow() {
+    if (ImGui::BeginMenu("Window")) {
+        if (ImGui::BeginMenu("Style")) {
+            if (ImGui::MenuItem("Dracula")) {
                 GUIThemeDracula();
             }
-            if(ImGui::MenuItem("ImGui Default")){
+            if (ImGui::MenuItem("ImGui Default")) {
                 GUIThemeIMGUIDefault();
             }
             ImGui::EndMenu();

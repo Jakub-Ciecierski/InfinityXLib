@@ -4,14 +4,14 @@
 
 namespace ifx {
 
-ImGuiDemoWindowView::ImGuiDemoWindowView() : WindowView("ImGui Demo"){
+ImGuiDemoWindowView::ImGuiDemoWindowView() : WindowView("ImGui Demo") {
     show_ = false;
 }
 
 ImGuiDemoWindowView::~ImGuiDemoWindowView() {}
 
 void ImGuiDemoWindowView::Render() {
-    if(show_)
+    if (show_)
         ImGui::ShowTestWindow();
 }
 

@@ -3,29 +3,29 @@
 namespace ifx {
 
 ControllerEvent::ControllerEvent() :
-        is_pressed_(false),
-        is_released_(false){}
+    is_pressed_(false),
+    is_released_(false) {}
 
-ControllerEvent::~ControllerEvent(){}
+ControllerEvent::~ControllerEvent() {}
 
-bool ControllerEvent::IsPressed(){
+bool ControllerEvent::IsPressed() {
     return is_pressed_;
 }
 
-bool ControllerEvent::IsReleased(){
+bool ControllerEvent::IsReleased() {
     return is_released_;
 }
 
-void ControllerEvent::Reset(){
+void ControllerEvent::Reset() {
     is_released_ = false;
 }
 
-void ControllerEvent::OnPressed(){
+void ControllerEvent::OnPressed() {
     is_pressed_ = true;
     is_released_ = false;
 }
 
-void ControllerEvent::OnReleased(){
+void ControllerEvent::OnReleased() {
     is_pressed_ = false;
     is_released_ = true;
 }

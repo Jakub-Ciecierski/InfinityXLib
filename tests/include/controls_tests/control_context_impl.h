@@ -19,5 +19,4 @@ private:
 };
 }
 
-
 #endif //PROJECT_CONTROL_CONTEXT_IMPL_H

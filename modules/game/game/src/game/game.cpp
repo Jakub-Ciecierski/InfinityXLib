@@ -12,34 +12,34 @@
 #include <physics/context/physics_context.h>
 #include <physics/physics_simulation.h>
 
-namespace ifx{
+namespace ifx {
 
 Game::Game(std::shared_ptr<GameLoop> game_loop,
            std::shared_ptr<EngineArchitecture> engine_architecture) :
-        game_loop_(game_loop),
-        engine_architecture_(engine_architecture){
-    if(!game_loop){
+    game_loop_(game_loop),
+    engine_architecture_(engine_architecture) {
+    if (!game_loop) {
         throw std::invalid_argument("Game::Game() - Requires GameLoop");
     }
 }
 
-void Game::Start(){
+void Game::Start() {
     game_loop_->Start();
 
     Terminate();
 }
 
-void Game::Terminate(){
+void Game::Terminate() {
     TerminateSystems();
     TerminateContexts();
 }
 
-void Game::TerminateSystems(){
+void Game::TerminateSystems() {
     engine_architecture_->engine_systems.gui->Terminate();
     engine_architecture_->engine_systems.physics_simulation->Terminate();
 }
 
-void Game::TerminateContexts(){
+void Game::TerminateContexts() {
     engine_architecture_->engine_contexts.rendering_context->Terminate();
     engine_architecture_->engine_contexts.control_context->Terminate();
     engine_architecture_->engine_contexts.gui_context->Terminate();

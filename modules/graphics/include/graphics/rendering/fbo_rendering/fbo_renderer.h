@@ -24,7 +24,7 @@ public:
 
     void EnableRenderToScreen(bool value);
 
-    const Texture2D& GetSceneTexture();
+    const Texture2D &GetSceneTexture();
 
     virtual void OnResize(int width, int height) override;
 protected:

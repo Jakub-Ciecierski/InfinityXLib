@@ -12,8 +12,7 @@
 #include <s3ePointer.h>
 #include <IwGx.h>
 
-int main(int, char**)
-{
+int main(int, char **) {
     // Setup ImGui binding
     ImGui_Marmalade_Init(true);
 
@@ -32,14 +31,13 @@ int main(int, char**)
     ImVec4 clear_color = ImColor(114, 144, 154);
 
     // Main loop
-    while (true)
-    {
-         if (s3eDeviceCheckQuitRequest())
-             break;
+    while (true) {
+        if (s3eDeviceCheckQuitRequest())
+            break;
 
-         s3eKeyboardUpdate();
-         s3ePointerUpdate();
-         ImGui_Marmalade_NewFrame();
+        s3eKeyboardUpdate();
+        s3ePointerUpdate();
+        ImGui_Marmalade_NewFrame();
 
         // 1. Show a simple window
         // Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets appears in a window automatically called "Debug"
@@ -47,30 +45,34 @@ int main(int, char**)
             static float f = 0.0f;
             ImGui::Text("Hello, world!");
             ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-            ImGui::ColorEdit3("clear color", (float*)&clear_color);
+            ImGui::ColorEdit3("clear color", (float *) &clear_color);
             if (ImGui::Button("Test Window")) show_test_window ^= 1;
             if (ImGui::Button("Another Window")) show_another_window ^= 1;
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
+                        1000.0f / ImGui::GetIO().Framerate,
+                        ImGui::GetIO().Framerate);
         }
 
         // 2. Show another simple window, this time using an explicit Begin/End pair
-        if (show_another_window)
-        {
-            ImGui::SetNextWindowSize(ImVec2(200,100), ImGuiSetCond_FirstUseEver);
+        if (show_another_window) {
+            ImGui::SetNextWindowSize(ImVec2(200, 100),
+                                     ImGuiSetCond_FirstUseEver);
             ImGui::Begin("Another Window", &show_another_window);
             ImGui::Text("Hello");
             ImGui::End();
         }
 
         // 3. Show the ImGui test window. Most of the sample code is in ImGui::ShowTestWindow()
-        if (show_test_window)
-        {
+        if (show_test_window) {
             ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiSetCond_FirstUseEver);
             ImGui::ShowTestWindow(&show_test_window);
         }
 
         // Rendering
-        IwGxSetColClear(clear_color.x*255,clear_color.y*255,clear_color.z*255,clear_color.w*255) ;
+        IwGxSetColClear(clear_color.x * 255,
+                        clear_color.y * 255,
+                        clear_color.z * 255,
+                        clear_color.w * 255);
         IwGxClear();
         ImGui::Render();
         IwGxSwapBuffers();

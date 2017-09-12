@@ -18,8 +18,8 @@ using namespace std;
 
 ModelFactory::ModelFactory(std::shared_ptr<ModelCreator> model_creator,
                            std::shared_ptr<TextureCreator> texture_creator) :
-        model_creator_(model_creator),
-        texture_creator_(texture_creator){}
+    model_creator_(model_creator),
+    texture_creator_(texture_creator) {}
 
 ModelFactory::~ModelFactory() {}
 
@@ -27,7 +27,7 @@ std::shared_ptr<Model> ModelFactory::LoadAsteroidModel() {
     auto resource_path = texture_creator_->resource_manager()->resource_path();
     std::string path
         = resource_path->GetResourcePath("asteroid/rock.obj",
-                                          ResourceType::MODEL);
+                                         ResourceType::MODEL);
     return LoadModel(path);
 }
 
@@ -35,15 +35,15 @@ std::shared_ptr<Model> ModelFactory::LoadNanoSuitModel() {
     auto resource_path = texture_creator_->resource_manager()->resource_path();
     std::string path
         = resource_path->GetResourcePath("nanosuit/nanosuit.obj",
-                                                   ResourceType::MODEL);
+                                         ResourceType::MODEL);
     return LoadModel(path);
 }
 
-std::shared_ptr<Model> ModelFactory::CreateQuad(int x, int y){
+std::shared_ptr<Model> ModelFactory::CreateQuad(int x, int y) {
     MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(mesh_factory.CreateQuad(x,y)));
+    meshes.push_back(std::move(mesh_factory.CreateQuad(x, y)));
 
     return model_creator_->MakeModel("Quad", std::move(meshes));
 }
@@ -98,7 +98,8 @@ std::shared_ptr<Model> ModelFactory::LoadBicubicBezierPatch() {
     MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(mesh_factory.LoadBicubicBezierPatch(-1, 1, 1.5f)));
+    meshes
+        .push_back(std::move(mesh_factory.LoadBicubicBezierPatch(-1, 1, 1.5f)));
 
     return model_creator_->MakeModel("BicubicBezierPatch",
                                      std::move(meshes));
@@ -108,18 +109,22 @@ std::shared_ptr<Model> ModelFactory::LoadBicubicBezierBowlPatch() {
     MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(mesh_factory.LoadBicubicBezierPatch(-1, 1, 1.5f)));
+    meshes
+        .push_back(std::move(mesh_factory.LoadBicubicBezierPatch(-1, 1, 1.5f)));
 
-    return model_creator_->MakeModel("BicubicBezierBowlPatch", std::move(meshes));
+    return model_creator_
+        ->MakeModel("BicubicBezierBowlPatch", std::move(meshes));
 }
 
 std::shared_ptr<Model> ModelFactory::LoadBicubicBezierAsymmetricPatch() {
     MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(mesh_factory.LoadBicubicBezierAsymmetricPatch()));
+    meshes
+        .push_back(std::move(mesh_factory.LoadBicubicBezierAsymmetricPatch()));
 
-    return model_creator_->MakeModel("BicubicBezierAsymmetricPatch", std::move(meshes));
+    return model_creator_
+        ->MakeModel("BicubicBezierAsymmetricPatch", std::move(meshes));
 }
 
 std::shared_ptr<Model> ModelFactory::LoadSquareModel() {
@@ -180,7 +185,7 @@ std::shared_ptr<Model> ModelFactory::LoadModel(std::string path) {
     return ModelLoader(path, model_creator_, texture_creator_).loadModel();
 }
 
-std::shared_ptr<Model> ModelFactory::LoadFloorModel(){
+std::shared_ptr<Model> ModelFactory::LoadFloorModel() {
     MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
@@ -189,7 +194,7 @@ std::shared_ptr<Model> ModelFactory::LoadFloorModel(){
     return model_creator_->MakeModel(NO_FILEPATH, std::move(meshes));
 }
 
-std::shared_ptr<Model> ModelFactory::LoadSphere(float radius){
+std::shared_ptr<Model> ModelFactory::LoadSphere(float radius) {
     MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
@@ -198,7 +203,7 @@ std::shared_ptr<Model> ModelFactory::LoadSphere(float radius){
     return model_creator_->MakeModel(ifx::NO_FILEPATH, std::move(meshes));
 }
 
-std::shared_ptr<Model> ModelFactory::LoadCircle(float radius){
+std::shared_ptr<Model> ModelFactory::LoadCircle(float radius) {
     MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
@@ -207,12 +212,12 @@ std::shared_ptr<Model> ModelFactory::LoadCircle(float radius){
     return model_creator_->MakeModel(ifx::NO_FILEPATH, std::move(meshes));
 }
 
-std::shared_ptr<Model> ModelFactory::CreateLine(const glm::vec3& p1,
-                                                const glm::vec3& p2){
+std::shared_ptr<Model> ModelFactory::CreateLine(const glm::vec3 &p1,
+                                                const glm::vec3 &p2) {
     MeshFactory mesh_factory(texture_creator_);
 
     std::vector<std::unique_ptr<Mesh>> meshes;
-    meshes.push_back(std::move(mesh_factory.CreateLine(p1,p2)));
+    meshes.push_back(std::move(mesh_factory.CreateLine(p1, p2)));
 
     return model_creator_->MakeModel(ifx::NO_FILEPATH, std::move(meshes));
 }

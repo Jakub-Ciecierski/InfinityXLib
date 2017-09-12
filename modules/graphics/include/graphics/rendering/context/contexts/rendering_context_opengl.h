@@ -5,7 +5,7 @@
 
 namespace ifx {
 
-class RenderingContextOpengl : public RenderingContext{
+class RenderingContextOpengl : public RenderingContext {
 public:
 
     RenderingContextOpengl() = default;
@@ -13,8 +13,9 @@ public:
 
     virtual bool Terminate() override;
 
-    virtual void*InitAndCreateNativeWindowHandle(std::string name,
-                                                 int *width, int *height) override;
+    virtual void *InitAndCreateNativeWindowHandle(std::string name,
+                                                  int *width,
+                                                  int *height) override;
 private:
     bool InitGLFW();
     bool InitGLEW();
@@ -23,6 +24,5 @@ private:
     bool TerminateGLEW();
 };
 }
-
 
 #endif //PROJECT_RENDERING_CONTEXT_OPENGL_H

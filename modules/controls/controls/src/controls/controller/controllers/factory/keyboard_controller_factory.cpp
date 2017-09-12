@@ -6,13 +6,13 @@
 
 namespace ifx {
 
-KeyboardControllerFactory::KeyboardControllerFactory(){}
+KeyboardControllerFactory::KeyboardControllerFactory() {}
 
-KeyboardControllerFactory::~KeyboardControllerFactory(){}
+KeyboardControllerFactory::~KeyboardControllerFactory() {}
 
-std::shared_ptr<KeyboardController> KeyboardControllerFactory::Create(){
-    auto NewKeyboardEvent = [](const KeyboardControllerKeyType&& type) ->
-            std::shared_ptr<KeyboardControllerEvent>{
+std::shared_ptr<KeyboardController> KeyboardControllerFactory::Create() {
+    auto NewKeyboardEvent = [](const KeyboardControllerKeyType &&type) ->
+        std::shared_ptr<KeyboardControllerEvent> {
         return std::make_shared<KeyboardControllerEvent>(std::move(type));
     };
 
@@ -48,12 +48,17 @@ std::shared_ptr<KeyboardController> KeyboardControllerFactory::Create(){
     keyboard_events.push_back(NewKeyboardEvent(KeyboardControllerKeyType::M));
 
     keyboard_events.push_back(NewKeyboardEvent(KeyboardControllerKeyType::UP));
-    keyboard_events.push_back(NewKeyboardEvent(KeyboardControllerKeyType::DOWN));
-    keyboard_events.push_back(NewKeyboardEvent(KeyboardControllerKeyType::LEFT));
-    keyboard_events.push_back(NewKeyboardEvent(KeyboardControllerKeyType::RIGHT));
+    keyboard_events
+        .push_back(NewKeyboardEvent(KeyboardControllerKeyType::DOWN));
+    keyboard_events
+        .push_back(NewKeyboardEvent(KeyboardControllerKeyType::LEFT));
+    keyboard_events
+        .push_back(NewKeyboardEvent(KeyboardControllerKeyType::RIGHT));
 
-    keyboard_events.push_back(NewKeyboardEvent(KeyboardControllerKeyType::SPACE));
-    keyboard_events.push_back(NewKeyboardEvent(KeyboardControllerKeyType::ENTER));
+    keyboard_events
+        .push_back(NewKeyboardEvent(KeyboardControllerKeyType::SPACE));
+    keyboard_events
+        .push_back(NewKeyboardEvent(KeyboardControllerKeyType::ENTER));
 
     auto keyboard_input = std::make_shared<KeyboardController>(keyboard_events);
 

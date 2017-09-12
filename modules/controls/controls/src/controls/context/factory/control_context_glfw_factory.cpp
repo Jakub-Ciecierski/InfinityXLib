@@ -4,11 +4,11 @@
 
 namespace ifx {
 
-ControlContextGLFWFactory::ControlContextGLFWFactory(){}
+ControlContextGLFWFactory::ControlContextGLFWFactory() {}
 
-ControlContextGLFWFactory::~ControlContextGLFWFactory(){}
+ControlContextGLFWFactory::~ControlContextGLFWFactory() {}
 
-std::shared_ptr<ControlContext> ControlContextGLFWFactory::Create(){
+std::shared_ptr<ControlContext> ControlContextGLFWFactory::Create() {
     return std::make_shared<ControlContextGLFW>();
 }
 

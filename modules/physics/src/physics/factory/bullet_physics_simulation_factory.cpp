@@ -11,48 +11,51 @@
 namespace ifx {
 
 BulletPhysicsSimulationFactory::BulletPhysicsSimulationFactory() :
-        dynamic_world_type_(DynamicWorldType::DISCRETE){}
+    dynamic_world_type_(DynamicWorldType::DISCRETE) {}
 
-BulletPhysicsSimulationFactory::~BulletPhysicsSimulationFactory(){}
+BulletPhysicsSimulationFactory::~BulletPhysicsSimulationFactory() {}
 
 std::shared_ptr<PhysicsSimulation> BulletPhysicsSimulationFactory::Create(
-        std::shared_ptr<PhysicsContext> physics_context){
+    std::shared_ptr<PhysicsContext> physics_context) {
     auto create_params = CreateBulletDynamics();
     auto physics_simulation = std::make_shared<BulletPhysicsSimulation>(
-            physics_context, *create_params);
+        physics_context, *create_params);
     return physics_simulation;
 }
 
-BulletPhysicsSimulationFactory&
-BulletPhysicsSimulationFactory::SetDynamicWorldType(DynamicWorldType type){
+BulletPhysicsSimulationFactory &
+BulletPhysicsSimulationFactory::SetDynamicWorldType(DynamicWorldType type) {
     dynamic_world_type_ = type;
     return *this;
 }
 
 std::shared_ptr<BulletPhysicsSimulationCreateParams>
-BulletPhysicsSimulationFactory::CreateBulletDynamics(){
+BulletPhysicsSimulationFactory::CreateBulletDynamics() {
     auto create_params
-            = std::shared_ptr<BulletPhysicsSimulationCreateParams>(
-                    new BulletPhysicsSimulationCreateParams());
+        = std::shared_ptr<BulletPhysicsSimulationCreateParams>(
+            new BulletPhysicsSimulationCreateParams());
     create_params->collision_configuration
-            = std::shared_ptr<btDefaultCollisionConfiguration>(
-            new btDefaultCollisionConfiguration());
+        = std::shared_ptr<btDefaultCollisionConfiguration>(
+        new btDefaultCollisionConfiguration());
 
     create_params->dispatcher = std::shared_ptr<btCollisionDispatcher>(
-            new btCollisionDispatcher(create_params->collision_configuration.get()));
+        new btCollisionDispatcher(create_params->collision_configuration
+                                      .get()));
 
-    create_params->broadphase = std::shared_ptr<btDbvtBroadphase>(new btDbvtBroadphase());
+    create_params->broadphase =
+        std::shared_ptr<btDbvtBroadphase>(new btDbvtBroadphase());
 
-    create_params->solver = std::shared_ptr<btSequentialImpulseConstraintSolver>(
+    create_params->solver =
+        std::shared_ptr<btSequentialImpulseConstraintSolver>(
             new btSequentialImpulseConstraintSolver());
-    switch (dynamic_world_type_){
+    switch (dynamic_world_type_) {
         case DynamicWorldType::DISCRETE:
             create_params->dynamics_world
-                    = CreateDiscreteDynamicWorld(create_params);
+                = CreateDiscreteDynamicWorld(create_params);
             break;
         case DynamicWorldType::FRACTURE:
             create_params->dynamics_world
-                    = CreateDiscreteDynamicWorld(create_params);
+                = CreateDiscreteDynamicWorld(create_params);
             break;
     }
     return create_params;
@@ -60,13 +63,13 @@ BulletPhysicsSimulationFactory::CreateBulletDynamics(){
 
 std::shared_ptr<btDiscreteDynamicsWorld>
 BulletPhysicsSimulationFactory::CreateDiscreteDynamicWorld(
-        const std::shared_ptr<BulletPhysicsSimulationCreateParams> params){
+    const std::shared_ptr<BulletPhysicsSimulationCreateParams> params) {
     return std::shared_ptr<btDiscreteDynamicsWorld>(
-            new btDiscreteDynamicsWorld(
-                    params->dispatcher.get(),
-                    params->broadphase.get(),
-                    params->solver.get(),
-                    params->collision_configuration.get()));
+        new btDiscreteDynamicsWorld(
+            params->dispatcher.get(),
+            params->broadphase.get(),
+            params->solver.get(),
+            params->collision_configuration.get()));
 }
 
 }

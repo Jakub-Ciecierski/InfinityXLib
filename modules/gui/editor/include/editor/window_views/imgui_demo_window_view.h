@@ -5,7 +5,7 @@
 
 namespace ifx {
 
-class ImGuiDemoWindowView : public WindowView{
+class ImGuiDemoWindowView : public WindowView {
 public:
     ImGuiDemoWindowView();
     ~ImGuiDemoWindowView();

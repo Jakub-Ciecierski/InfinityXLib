@@ -23,5 +23,4 @@ private:
 };
 }
 
-
 #endif //PROJECT_RENDERING_STATE_H

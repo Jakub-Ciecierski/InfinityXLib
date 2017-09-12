@@ -12,20 +12,20 @@
 namespace ifx {
 
 TextureCreator::TextureCreator(
-        std::shared_ptr<ResourceManager> resource_manager) :
-        resource_manager_(resource_manager){}
+    std::shared_ptr<ResourceManager> resource_manager) :
+    resource_manager_(resource_manager) {}
 
 std::shared_ptr<Texture2D> TextureCreator::MakeTexture2DFromFile(
-        std::string filepath, TextureTypes type){
+    std::string filepath, TextureTypes type) {
     std::shared_ptr<Texture2D> texture
-            = std::static_pointer_cast<Texture2D>(
-                    resource_manager_->resource_memory_cache()->Get(filepath));
-    if(!texture) {
+        = std::static_pointer_cast<Texture2D>(
+            resource_manager_->resource_memory_cache()->Get(filepath));
+    if (!texture) {
         TextureInternalFormat format = TextureInternalFormat::RGBA;
         TexturePixelType pixel_type = TexturePixelType::UNSIGNED_BYTE;
         texture = std::shared_ptr<Texture2D>(
-                new Texture2D(filepath, type, format, pixel_type));
-        texture->InitData((void*)nullptr, 0, 0);
+            new Texture2D(filepath, type, format, pixel_type));
+        texture->InitData((void *) nullptr, 0, 0);
 
         int width, height;
         int c = -1;
@@ -50,18 +50,18 @@ std::shared_ptr<Texture2D> TextureCreator::MakeTexture2DFromFile(
 }
 
 std::shared_ptr<Texture2D> TextureCreator::MakeTexture2DEmpty(
-        std::string filepath,
-        TextureTypes type,
-        TextureInternalFormat format,
-        TexturePixelType pixel_type,
-        int width, int height){
+    std::string filepath,
+    TextureTypes type,
+    TextureInternalFormat format,
+    TexturePixelType pixel_type,
+    int width, int height) {
     std::shared_ptr<Texture2D> texture
-            = std::static_pointer_cast<Texture2D>(
-                    resource_manager_->resource_memory_cache()->Get(filepath));
-    if(!texture) {
+        = std::static_pointer_cast<Texture2D>(
+            resource_manager_->resource_memory_cache()->Get(filepath));
+    if (!texture) {
         texture = std::shared_ptr<Texture2D>(
-                new Texture2D(filepath, type, format, pixel_type,
-                              width, height));
+            new Texture2D(filepath, type, format, pixel_type,
+                          width, height));
         texture->InitData();
         resource_manager_->resource_memory_cache()->Add(texture);
     }
@@ -69,12 +69,12 @@ std::shared_ptr<Texture2D> TextureCreator::MakeTexture2DEmpty(
 }
 
 std::shared_ptr<Texture2D> TextureCreator::MakeTextureMultisample(
-        TextureTypes type,
-        TextureInternalFormat format,
-        unsigned int sample_count,
-        int width, int height){
+    TextureTypes type,
+    TextureInternalFormat format,
+    unsigned int sample_count,
+    int width, int height) {
     auto texture = std::shared_ptr<TextureMultisample>(
-            new TextureMultisample(type, format, sample_count, width, height));
+        new TextureMultisample(type, format, sample_count, width, height));
 
     return texture;
 }

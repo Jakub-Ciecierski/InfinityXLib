@@ -6,18 +6,18 @@
 namespace ifx {
 
 ProgramCreator::ProgramCreator(
-        std::shared_ptr<ResourceManager> resource_manager) :
-        resource_manager_(resource_manager){}
+    std::shared_ptr<ResourceManager> resource_manager) :
+    resource_manager_(resource_manager) {}
 
-ProgramCreator::~ProgramCreator(){}
+ProgramCreator::~ProgramCreator() {}
 
-std::shared_ptr<Program> ProgramCreator::MakeProgram(Shaders& shaders){
+std::shared_ptr<Program> ProgramCreator::MakeProgram(Shaders &shaders) {
     std::shared_ptr<Program> program
-            = std::static_pointer_cast<Program>(
-                    resource_manager_->resource_memory_cache()->Get(
-                            Program::GetProgramPath(shaders)
-                    ));
-    if(!program){
+        = std::static_pointer_cast<Program>(
+            resource_manager_->resource_memory_cache()->Get(
+                Program::GetProgramPath(shaders)
+            ));
+    if (!program) {
         program = std::shared_ptr<Program>(new Program(shaders));
     }
     resource_manager_->resource_memory_cache()->Add(program);

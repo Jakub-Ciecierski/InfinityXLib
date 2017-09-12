@@ -6,11 +6,11 @@ using namespace std;
 
 FragmentShader::FragmentShader(string shaderSource,
                                std::string file_path) :
-        Shader(shaderSource, file_path){
+    Shader(shaderSource, file_path) {
 }
 
-FragmentShader::FragmentShader(const FragmentShader& other)
-        : Shader(other){
+FragmentShader::FragmentShader(const FragmentShader &other)
+    : Shader(other) {
 
 }
 

@@ -16,7 +16,7 @@ class Scene;
 class SceneRenderer;
 class TextureCreator;
 
-struct ProjectionParameters{
+struct ProjectionParameters {
     float near_plane = 0.1f;
     float far_plane = 100.0f;
 
@@ -44,28 +44,29 @@ public:
                   std::shared_ptr<TextureCreator> texture_creator);
     ~ShadowMapping();
 
-    FBO* fbo(){return fbo_.get();}
+    FBO *fbo() { return fbo_.get(); }
 
-    const Dimensions& dimensions(){return dimensions_;}
-    ProjectionParameters& projection_parameters(){
-        return projection_parameters_;}
+    const Dimensions &dimensions() { return dimensions_; }
+    ProjectionParameters &projection_parameters() {
+        return projection_parameters_;
+    }
 
     /**
      * Renders the scene in light's space, writing only depth buffer.
      * Changed Viewport
      */
     void Render(const std::shared_ptr<SceneRenderer> scene,
-                LightDirectional* light);
+                LightDirectional *light);
 
-    glm::mat4 GetLightSpaceMatrix(LightDirectional* light);
+    glm::mat4 GetLightSpaceMatrix(LightDirectional *light);
 
-    void Reset(Dimensions&& new_dimensions);
+    void Reset(Dimensions &&new_dimensions);
 
 private:
     std::shared_ptr<Texture2D> CreateTexture();
     void InitFBO(std::shared_ptr<Texture2D> texture);
 
-    void BindLightMatrix(const Program* program, LightDirectional* light);
+    void BindLightMatrix(const Program *program, LightDirectional *light);
 
     std::unique_ptr<FBO> fbo_;
 

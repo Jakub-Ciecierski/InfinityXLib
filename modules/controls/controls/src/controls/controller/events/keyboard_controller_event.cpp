@@ -3,9 +3,9 @@
 namespace ifx {
 
 KeyboardControllerEvent::KeyboardControllerEvent(
-        const KeyboardControllerKeyType&& type) :
-        type_(type){}
+    const KeyboardControllerKeyType &&type) :
+    type_(type) {}
 
-KeyboardControllerEvent::~KeyboardControllerEvent(){}
+KeyboardControllerEvent::~KeyboardControllerEvent() {}
 
 }

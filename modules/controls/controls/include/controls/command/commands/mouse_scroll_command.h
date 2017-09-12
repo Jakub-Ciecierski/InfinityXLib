@@ -16,5 +16,4 @@ private:
 };*/
 }
 
-
 #endif //PROJECT_MOUSE_SCROLL_COMMAND_H

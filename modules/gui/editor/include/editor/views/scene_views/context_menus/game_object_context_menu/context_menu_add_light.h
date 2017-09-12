@@ -22,5 +22,4 @@ private:
 };
 }
 
-
 #endif //PROJECT_CONTEXT_MENU_ADD_LIGHT_H

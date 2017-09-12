@@ -8,7 +8,7 @@ namespace ifx {
 class LightSource;
 class LightDirectional;
 
-class LightView{
+class LightView {
 public:
 
     LightView();
@@ -31,11 +31,11 @@ private:
 
     void RenderShadowMapping(std::shared_ptr<LightSource> light_source);
     void RenderShadowMappingCastShadow(
-            std::shared_ptr<LightDirectional> light_source);
+        std::shared_ptr<LightDirectional> light_source);
     void RenderShadowMappingProjectionParameters(
-            std::shared_ptr<LightDirectional> light_source);
+        std::shared_ptr<LightDirectional> light_source);
     void RenderShadowMappingResolution(
-            std::shared_ptr<LightDirectional> light_source);
+        std::shared_ptr<LightDirectional> light_source);
 };
 }
 

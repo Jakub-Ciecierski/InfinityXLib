@@ -4,16 +4,16 @@
 
 namespace ifx {
 
-ParametricEquationExpressionsFactory::ParametricEquationExpressionsFactory(){}
+ParametricEquationExpressionsFactory::ParametricEquationExpressionsFactory() {}
 
-ParametricEquationExpressionsFactory::~ParametricEquationExpressionsFactory(){}
+ParametricEquationExpressionsFactory::~ParametricEquationExpressionsFactory() {}
 
 std::unique_ptr<ParametricEquationExpressions>
-ParametricEquationExpressionsFactory::CreateSphere(){
+ParametricEquationExpressionsFactory::CreateSphere() {
     auto expression = std::unique_ptr<ParametricEquationExpressions>(
-            new ParametricEquationExpressions());
+        new ParametricEquationExpressions());
     expression->constants.push_back(
-            ParametricEquationConstantExpression{"r",1});
+        ParametricEquationConstantExpression{"r", 1});
     expression->Px = "r * cos(u) * sin(v)";
     expression->Py = "r * sin(u) * sin(v)";
     expression->Pz = "r * cos(v)";
@@ -39,13 +39,13 @@ ParametricEquationExpressionsFactory::CreateSphere(){
 }
 
 std::unique_ptr<ParametricEquationExpressions>
-ParametricEquationExpressionsFactory::CreateTorus(){
+ParametricEquationExpressionsFactory::CreateTorus() {
     auto expression = std::unique_ptr<ParametricEquationExpressions>(
-            new ParametricEquationExpressions());
+        new ParametricEquationExpressions());
     expression->constants.push_back(
-            ParametricEquationConstantExpression{"c",2});
+        ParametricEquationConstantExpression{"c", 2});
     expression->constants.push_back(
-            ParametricEquationConstantExpression{"a",1});
+        ParametricEquationConstantExpression{"a", 1});
 
     expression->Px = "(c + a*cos(v)) * cos(u)";
     expression->Py = "(c + a*cos(v)) * sin(u)";
@@ -72,13 +72,13 @@ ParametricEquationExpressionsFactory::CreateTorus(){
 }
 
 std::unique_ptr<ParametricEquationExpressions>
-ParametricEquationExpressionsFactory::CreateCone(){
+ParametricEquationExpressionsFactory::CreateCone() {
     auto expression = std::unique_ptr<ParametricEquationExpressions>(
-            new ParametricEquationExpressions());
+        new ParametricEquationExpressions());
     expression->constants.push_back(
-            ParametricEquationConstantExpression{"h",2});
+        ParametricEquationConstantExpression{"h", 2});
     expression->constants.push_back(
-            ParametricEquationConstantExpression{"r",1});
+        ParametricEquationConstantExpression{"r", 1});
 
     expression->Px = "((h - u) / h) * r * cos(v)";
     expression->Py = "((h - u) / h) * r * sin(v)";
@@ -105,13 +105,13 @@ ParametricEquationExpressionsFactory::CreateCone(){
 }
 
 std::unique_ptr<ParametricEquationExpressions>
-ParametricEquationExpressionsFactory::CreateCylinder(){
+ParametricEquationExpressionsFactory::CreateCylinder() {
     auto expression = std::unique_ptr<ParametricEquationExpressions>(
-            new ParametricEquationExpressions());
+        new ParametricEquationExpressions());
     expression->constants.push_back(
-            ParametricEquationConstantExpression{"h",2});
+        ParametricEquationConstantExpression{"h", 2});
     expression->constants.push_back(
-            ParametricEquationConstantExpression{"r",1});
+        ParametricEquationConstantExpression{"r", 1});
 
     expression->Px = "r*cos(u)";
     expression->Py = "r*sin(u)";

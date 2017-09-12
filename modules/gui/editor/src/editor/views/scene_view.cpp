@@ -1,10 +1,10 @@
 #include "editor/views/scene_view.h"
 
-namespace ifx{
+namespace ifx {
 
-SceneView::SceneView() : View("Scene"){}
+SceneView::SceneView() : View("Scene") {}
 
-void SceneView::Render(){
+void SceneView::Render() {
 
 }
 

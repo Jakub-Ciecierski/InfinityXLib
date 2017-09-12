@@ -2,7 +2,7 @@
 
 #include <physics/context/bullet_physics_context.h>
 
-namespace ifx{
+namespace ifx {
 
 std::shared_ptr<PhysicsContext> BulletContextFactory::Create() {
     return std::make_shared<BulletPhysicsContext>();

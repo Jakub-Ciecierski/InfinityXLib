@@ -1,8 +1,8 @@
 #include "graphics/rendering/context/rendering_context.h"
 
-namespace ifx{
+namespace ifx {
 
-RenderingContext::RenderingContext() : is_init_(false){}
-RenderingContext::~RenderingContext(){}
+RenderingContext::RenderingContext() : is_init_(false) {}
+RenderingContext::~RenderingContext() {}
 
 }

@@ -12,15 +12,15 @@ namespace ifx {
 
 class TextureCreator;
 
-enum class TextureTypes{
+enum class TextureTypes {
     DIFFUSE, SPECULAR, NORMAL, DISPLACEMENT, CUBEMAP, FBO
 };
 
-enum class TextureInternalFormat{
+enum class TextureInternalFormat {
     R, RGB, RGBA, DEPTH_COMPONENT
 };
 
-enum class TexturePixelType{
+enum class TexturePixelType {
     FLOAT, UNSIGNED_BYTE
 };
 
@@ -28,7 +28,7 @@ enum class TextureTarget {
     Normal, MultiSample
 };
 
-struct TextureParameter{
+struct TextureParameter {
     GLenum param;
     GLenum value;
 };
@@ -37,18 +37,18 @@ class Texture2D : public Resource {
 public:
     virtual ~Texture2D();
 
-    GLuint id() const {return id_;}
-    TextureTypes texture_type(){return type_;}
-    TextureInternalFormat format(){return format_;}
-    TexturePixelType pixel_type(){return pixel_type_;}
-    int width() const {return width_;}
-    int height() const {return height_;}
+    GLuint id() const { return id_; }
+    TextureTypes texture_type() { return type_; }
+    TextureInternalFormat format() { return format_; }
+    TexturePixelType pixel_type() { return pixel_type_; }
+    int width() const { return width_; }
+    int height() const { return height_; }
 
     void AddParameter(TextureParameter param);
 
     virtual void InitData();
     virtual void InitData(int width, int height);
-    virtual void InitData(void* data, int width, int height);
+    virtual void InitData(void *data, int width, int height);
 
     void Bind();
     void Unbind();

@@ -8,12 +8,13 @@
 
 #include <gui/imgui/imgui.h>
 
-namespace ifx{
+namespace ifx {
 
-RenderObjectView::RenderObjectView(std::shared_ptr<SceneRenderer> scene_renderer) :
-        scene_renderer_(scene_renderer) {}
+RenderObjectView::RenderObjectView(std::shared_ptr<SceneRenderer> scene_renderer)
+    :
+    scene_renderer_(scene_renderer) {}
 
-void RenderObjectView::Render(std::shared_ptr<RenderComponent> render_object){
+void RenderObjectView::Render(std::shared_ptr<RenderComponent> render_object) {
     if (ImGui::TreeNode("Rendering Effects")) {
         RenderRenderingEffectsContextMenu(render_object);
         RenderList(render_object);
@@ -21,12 +22,14 @@ void RenderObjectView::Render(std::shared_ptr<RenderComponent> render_object){
     }
 }
 
-void RenderObjectView::RenderRenderingEffectsContextMenu(std::shared_ptr<RenderComponent> render_object){
+void RenderObjectView::RenderRenderingEffectsContextMenu(std::shared_ptr<
+    RenderComponent> render_object) {
     if (ImGui::BeginPopupContextItem("Rendering Effects Context Menu")) {
-        if(ImGui::BeginMenu("Add")){
-            auto& rendering_effects = scene_renderer_->rendering_effects();
-            for(unsigned int i = 0; i < rendering_effects.size(); i++){
-                if(ImGui::Selectable(GetBaseName(rendering_effects[i]->name()).c_str())){
+        if (ImGui::BeginMenu("Add")) {
+            auto &rendering_effects = scene_renderer_->rendering_effects();
+            for (unsigned int i = 0; i < rendering_effects.size(); i++) {
+                if (ImGui::Selectable(GetBaseName(rendering_effects[i]->name())
+                                          .c_str())) {
                     rendering_effects[i]->RegisterRenderObject(render_object);
                 }
             }
@@ -36,22 +39,23 @@ void RenderObjectView::RenderRenderingEffectsContextMenu(std::shared_ptr<RenderC
     }
 }
 
-void RenderObjectView::RenderList(std::shared_ptr<RenderComponent> render_object){
+void RenderObjectView::RenderList(std::shared_ptr<RenderComponent> render_object) {
     auto rendering_effects = render_object->rendering_effects();
 
     static int selection_mask = (1 << 2);
-    for(unsigned int i = 0;i < rendering_effects.size(); i++){
+    for (unsigned int i = 0; i < rendering_effects.size(); i++) {
         int node_clicked = -1;
         ImGuiTreeNodeFlags node_flags
-                = ImGuiTreeNodeFlags_Bullet | ((selection_mask & (1 << i)) ?
-                                               ImGuiTreeNodeFlags_Selected : 0);
-        bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i,
+            = ImGuiTreeNodeFlags_Bullet | ((selection_mask & (1 << i)) ?
+                                           ImGuiTreeNodeFlags_Selected : 0);
+        bool node_open = ImGui::TreeNodeEx((void *) (intptr_t) i,
                                            node_flags,
-                                           GetBaseName(rendering_effects[i]->name()).c_str());
-        if (ImGui::IsItemClicked()){
+                                           GetBaseName(rendering_effects[i]
+                                                           ->name()).c_str());
+        if (ImGui::IsItemClicked()) {
             node_clicked = i;
         }
-        if (node_clicked != -1){
+        if (node_clicked != -1) {
             selection_mask = (1 << node_clicked);
         }
         ImGui::PushID(i);
@@ -59,26 +63,27 @@ void RenderObjectView::RenderList(std::shared_ptr<RenderComponent> render_object
                                          render_object);
         ImGui::PopID();
 
-        if (node_open){
+        if (node_open) {
             ImGui::TreePop();
         }
     }
 }
 
-void RenderObjectView::RenderRenderingEffectContextMenu(RenderingEffect* rendering_effect,
-                                                        std::shared_ptr<RenderComponent> render_object){
+void RenderObjectView::RenderRenderingEffectContextMenu(RenderingEffect *rendering_effect,
+                                                        std::shared_ptr<
+                                                            RenderComponent> render_object) {
     if (ImGui::BeginPopupContextItem("Rendering Effect Context Menu")) {
-        if(ImGui::Selectable("Remove")){
+        if (ImGui::Selectable("Remove")) {
             rendering_effect->DeregisterRenderObject(render_object);
         }
         ImGui::EndPopup();
     }
 }
 
-std::string RenderObjectView::GetBaseName(const std::string& name){
+std::string RenderObjectView::GetBaseName(const std::string &name) {
     std::string base_name = "";
-    for(unsigned int i = 0; i < name.length(); i++){
-        if(name[i] == '.')
+    for (unsigned int i = 0; i < name.length(); i++) {
+        if (name[i] == '.')
             break;
         base_name += name[i];
     }

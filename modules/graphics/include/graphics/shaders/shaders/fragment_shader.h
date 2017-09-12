@@ -3,7 +3,7 @@
 
 #include "graphics/shaders/shader.h"
 
-class FragmentShader : public Shader{
+class FragmentShader : public Shader {
 private:
 
 protected:
@@ -12,11 +12,10 @@ protected:
 public:
     FragmentShader(std::string shaderSource,
                    std::string file_path);
-    FragmentShader(const FragmentShader& other);
+    FragmentShader(const FragmentShader &other);
 
     ~FragmentShader();
 
 };
-
 
 #endif //DUCK_FRAGMENT_SHADER_H

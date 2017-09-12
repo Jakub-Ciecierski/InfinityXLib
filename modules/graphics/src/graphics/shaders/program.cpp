@@ -11,7 +11,7 @@
 namespace ifx {
 
 Program::Program(Shaders shaders) :
-        Resource(GetProgramPath(shaders), ifx::ResourceType::SHADER) {
+    Resource(GetProgramPath(shaders), ifx::ResourceType::SHADER) {
     vertex_shader_.reset(shaders.vertexShader);
     fragment_shader_.reset(shaders.fragmentShader);
     geometry_shader_.reset(shaders.geometryShader);
@@ -67,25 +67,24 @@ ShaderError Program::linkShaders() {
     return shader_error;
 }
 
-
 void Program::use() const {
     glUseProgram(id);
 }
 
 ShaderError Program::Reload() {
-    if (vertex_shader_){
+    if (vertex_shader_) {
         auto shader_error = vertex_shader_->Reload();
-        if(shader_error.error_occured)
+        if (shader_error.error_occured)
             return shader_error;
     }
-    if (fragment_shader_){
+    if (fragment_shader_) {
         auto shader_error = fragment_shader_->Reload();
-        if(shader_error.error_occured)
+        if (shader_error.error_occured)
             return shader_error;
     }
-    if (geometry_shader_){
+    if (geometry_shader_) {
         auto shader_error = geometry_shader_->Reload();
-        if(shader_error.error_occured)
+        if (shader_error.error_occured)
             return shader_error;
     }
     if (tess_control_shader_) {
@@ -93,9 +92,9 @@ ShaderError Program::Reload() {
         if (shader_error.error_occured)
             return shader_error;
     }
-    if (tess_eval_shader_){
+    if (tess_eval_shader_) {
         auto shader_error = tess_eval_shader_->Reload();
-        if(shader_error.error_occured)
+        if (shader_error.error_occured)
             return shader_error;
     }
 

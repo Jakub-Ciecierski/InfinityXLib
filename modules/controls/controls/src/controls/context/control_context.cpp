@@ -2,8 +2,8 @@
 
 namespace ifx {
 
-ControlContext::ControlContext(){}
+ControlContext::ControlContext() {}
 
-ControlContext::~ControlContext(){}
+ControlContext::~ControlContext() {}
 
 }

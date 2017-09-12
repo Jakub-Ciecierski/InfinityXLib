@@ -19,5 +19,4 @@ private:
 };
 }
 
-
 #endif //PROJECT_MOUSE_INPUT_FACTORY_H

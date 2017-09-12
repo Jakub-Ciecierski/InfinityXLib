@@ -10,11 +10,11 @@ typedef unsigned int GLuint;
 class VBO {
 private:
     GLuint vboID;
-    const std::vector<Vertex>* vertices;
+    const std::vector<Vertex> *vertices;
 
 public:
 
-    VBO(const std::vector<Vertex>* vertices);
+    VBO(const std::vector<Vertex> *vertices);
     ~VBO();
 
     /*
@@ -24,6 +24,5 @@ public:
 
     void unbind();
 };
-
 
 #endif //DUCK_VBO_H

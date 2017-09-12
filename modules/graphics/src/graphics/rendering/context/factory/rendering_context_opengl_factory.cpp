@@ -4,13 +4,13 @@
 
 namespace ifx {
 
-RenderingContextOpenglFactory::RenderingContextOpenglFactory(){}
+RenderingContextOpenglFactory::RenderingContextOpenglFactory() {}
 
-RenderingContextOpenglFactory::~RenderingContextOpenglFactory(){}
+RenderingContextOpenglFactory::~RenderingContextOpenglFactory() {}
 
-std::shared_ptr<RenderingContext> RenderingContextOpenglFactory::Create(){
+std::shared_ptr<RenderingContext> RenderingContextOpenglFactory::Create() {
     auto context = std::shared_ptr<RenderingContextOpengl>(
-            new RenderingContextOpengl());
+        new RenderingContextOpengl());
     return context;
 }
 

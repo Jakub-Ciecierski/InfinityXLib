@@ -6,24 +6,24 @@
 #include <string>
 #include <vector>
 
-namespace ifx{
+namespace ifx {
 
-struct Dimensions{
+struct Dimensions {
     int width;
     int height;
 };
 
-struct SphereIntersection{
+struct SphereIntersection {
     glm::vec3 center;
     float radius;
 };
 
-struct LineIntersection{
+struct LineIntersection {
     glm::vec3 origin;
     glm::vec3 direction;
 };
 
-struct LineSphereIntersection{
+struct LineSphereIntersection {
     const float NO_SOLUTION = -9999.9F;
     float d1 = NO_SOLUTION;
     float d2 = NO_SOLUTION;
@@ -32,19 +32,18 @@ struct LineSphereIntersection{
 /**
  * https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
  */
-LineSphereIntersection Intersection(const LineIntersection& line,
-                                    const SphereIntersection& sphere);
+LineSphereIntersection Intersection(const LineIntersection &line,
+                                    const SphereIntersection &sphere);
 
-float Magnitude(const glm::vec3& v1);
+float Magnitude(const glm::vec3 &v1);
 
-float EuclideanDistance(const glm::vec3& v1, const glm::vec3& v2);
-float EuclideanDistance(const glm::vec2& v1, const glm::vec2& v2);
+float EuclideanDistance(const glm::vec3 &v1, const glm::vec3 &v2);
+float EuclideanDistance(const glm::vec2 &v1, const glm::vec2 &v2);
 
-float dot(const glm::vec3& v1, const glm::vec3& v2);
+float dot(const glm::vec3 &v1, const glm::vec3 &v2);
 
 std::vector<std::string> SplitString(std::string s,
                                      std::string delimiter);
-
 
 }
 

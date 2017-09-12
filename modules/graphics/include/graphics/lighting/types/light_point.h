@@ -12,7 +12,7 @@ protected:
     virtual void bind(const Program &program, int id = -1) override;
 
 public:
-    LightPoint(const LightParams& light_params);
+    LightPoint(const LightParams &light_params);
     ~LightPoint();
 };
 }

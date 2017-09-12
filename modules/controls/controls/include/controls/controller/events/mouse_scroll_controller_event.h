@@ -24,5 +24,4 @@ private:
 };
 }
 
-
 #endif //PROJECT_SCROLL_INPUT_EVENT_H

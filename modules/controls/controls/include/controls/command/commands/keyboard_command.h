@@ -17,8 +17,8 @@ struct KeyboardCommandCondition {
 class KeyboardCommand : public Command {
 public:
 
-    KeyboardCommand(const CommandExecutable&& executable,
-                    const KeyboardCommandCondition&& condition);
+    KeyboardCommand(const CommandExecutable &&executable,
+                    const KeyboardCommandCondition &&condition);
 
     ~KeyboardCommand();
 
@@ -28,6 +28,5 @@ private:
     KeyboardCommandCondition condition_;
 };
 }
-
 
 #endif //PROJECT_KEYBOARD_COMMAND_H

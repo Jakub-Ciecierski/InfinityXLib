@@ -14,9 +14,10 @@ public:
     ResourceManager();
     ~ResourceManager();
 
-    ResourceMemoryCache* resource_memory_cache(){
-        return resource_memory_cache_.get();}
-    Resources* resource_path(){return resource_path_.get();}
+    ResourceMemoryCache *resource_memory_cache() {
+        return resource_memory_cache_.get();
+    }
+    Resources *resource_path() { return resource_path_.get(); }
 private:
 
     std::unique_ptr<ResourceMemoryCache> resource_memory_cache_;

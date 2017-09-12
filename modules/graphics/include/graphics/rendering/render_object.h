@@ -23,22 +23,24 @@ public:
 
     virtual ~RenderObject() = default;
 
-    const std::vector<RenderingEffect*>& rendering_effects(){return rendering_effects_;}
+    const std::vector<RenderingEffect *> &rendering_effects() { return rendering_effects_; }
 
     const std::vector<std::shared_ptr<Program>> &programs() { return programs_; }
 
     std::vector<std::shared_ptr<Model>> models() { return models_; }
-    void models(std::vector<std::shared_ptr<Model>> models) { models_ = models;}
+    void models(std::vector<std::shared_ptr<Model>> models) {
+        models_ = models;
+    }
 
     bool do_render() { return do_render_; }
 
     void do_render(bool val) { do_render_ = val; }
 
     void SetBeforeRender(std::function<void(
-            const Program *program)> before_render);
+        const Program *program)> before_render);
 
     void SetAfterRender(std::function<void(
-            const Program *program)> after_render);
+        const Program *program)> after_render);
 
     void addProgram(std::shared_ptr<Program> program);
 
@@ -47,8 +49,8 @@ public:
      */
     virtual void Render(const Program &program);
 
-    void RegisterRenderingEffect(RenderingEffect* rendering_effect);
-    void DeregisterRenderingEffect(RenderingEffect* rendering_effect);
+    void RegisterRenderingEffect(RenderingEffect *rendering_effect);
+    void DeregisterRenderingEffect(RenderingEffect *rendering_effect);
 
 protected:
     std::vector<std::shared_ptr<Model>> models_;
@@ -61,7 +63,7 @@ private:
 
     bool do_render_;
 
-    std::vector<RenderingEffect*> rendering_effects_;
+    std::vector<RenderingEffect *> rendering_effects_;
 };
 }
 

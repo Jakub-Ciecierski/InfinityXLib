@@ -6,32 +6,32 @@
 #include <graphics/rendering/camera/camera.h>
 #include <game/components/cameras/camera_component.h>
 
-namespace ifx{
+namespace ifx {
 
 SceneContainer::SceneContainer(
-        std::shared_ptr<SceneRenderer> scene_renderer,
-        std::shared_ptr<PhysicsSimulation> physics_simulation){
+    std::shared_ptr<SceneRenderer> scene_renderer,
+    std::shared_ptr<PhysicsSimulation> physics_simulation) {
     scene_distributor_ = std::shared_ptr<SceneDistributor>(
-            new SceneDistributor(scene_renderer, physics_simulation));
+        new SceneDistributor(scene_renderer, physics_simulation));
 }
 
-void SceneContainer::Update(float time_delta){
-    for(auto& object : game_objects_){
+void SceneContainer::Update(float time_delta) {
+    for (auto &object : game_objects_) {
         object->Update();
     }
 }
 
-void SceneContainer::Add(std::shared_ptr<GameObject> game_object){
-    if(Exists(game_object))
+void SceneContainer::Add(std::shared_ptr<GameObject> game_object) {
+    if (Exists(game_object))
         return;
     game_objects_.push_back(game_object);
 }
 
-bool SceneContainer::Remove(std::shared_ptr<GameObject> game_object){
+bool SceneContainer::Remove(std::shared_ptr<GameObject> game_object) {
     OnRemove(game_object);
 
-    for(unsigned int i = 0; i < game_objects_.size(); i++){
-        if(game_objects_[i] == game_object){
+    for (unsigned int i = 0; i < game_objects_.size(); i++) {
+        if (game_objects_[i] == game_object) {
             game_objects_.erase(game_objects_.begin() + i);
             return true;
         }
@@ -39,34 +39,34 @@ bool SceneContainer::Remove(std::shared_ptr<GameObject> game_object){
     return false;
 }
 
-bool SceneContainer::Exists(std::shared_ptr<GameObject> game_object){
-    for(unsigned int i = 0; i < game_objects_.size(); i++){
-        if(game_objects_[i] == game_object){
+bool SceneContainer::Exists(std::shared_ptr<GameObject> game_object) {
+    for (unsigned int i = 0; i < game_objects_.size(); i++) {
+        if (game_objects_[i] == game_object) {
             return true;
         }
     }
     return false;
 }
 
-std::shared_ptr<GameObject> SceneContainer::CreateAndAddEmptyGameObject(){
+std::shared_ptr<GameObject> SceneContainer::CreateAndAddEmptyGameObject() {
     auto game_object = std::shared_ptr<GameObject>(
-            new GameObject(scene_distributor_));
+        new GameObject(scene_distributor_));
     Add(game_object);
     return game_object;
 }
 
-std::shared_ptr<GameObject> SceneContainer::CreateGameObject(){
+std::shared_ptr<GameObject> SceneContainer::CreateGameObject() {
     auto game_object = std::shared_ptr<GameObject>(
-            new GameObject(scene_distributor_));
+        new GameObject(scene_distributor_));
     return game_object;
 }
 
-std::shared_ptr<CameraComponent> SceneContainer::GetActiveCamera(){
+std::shared_ptr<CameraComponent> SceneContainer::GetActiveCamera() {
     std::shared_ptr<CameraComponent> camera = nullptr;
 
-    for(auto& object : game_objects_){
+    for (auto &object : game_objects_) {
         auto cameras = object->GetComponents(GameComponentType::CAMERA);
-        if(cameras.size() != 0){
+        if (cameras.size() != 0) {
             camera = std::dynamic_pointer_cast<CameraComponent>(cameras[0]);
         }
     }
@@ -74,13 +74,13 @@ std::shared_ptr<CameraComponent> SceneContainer::GetActiveCamera(){
     return camera;
 }
 
-void SceneContainer::OnAdd(std::shared_ptr<GameObject> game_object){
-    if(scene_distributor_)
+void SceneContainer::OnAdd(std::shared_ptr<GameObject> game_object) {
+    if (scene_distributor_)
         scene_distributor_->Add(game_object);
 }
 
-bool SceneContainer::OnRemove(std::shared_ptr<GameObject> game_object){
-    if(scene_distributor_)
+bool SceneContainer::OnRemove(std::shared_ptr<GameObject> game_object) {
+    if (scene_distributor_)
         return scene_distributor_->Remove(game_object);
     return false;
 }

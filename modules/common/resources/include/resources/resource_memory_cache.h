@@ -13,7 +13,7 @@ class ResourceMemoryCache {
 public:
     ResourceMemoryCache();
     ~ResourceMemoryCache();
-    
+
     /**
      * Adds resources to cache.
      * Returns false if resource already exists.

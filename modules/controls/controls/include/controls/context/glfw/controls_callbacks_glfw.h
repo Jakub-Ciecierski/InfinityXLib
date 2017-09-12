@@ -23,7 +23,7 @@ void mousescroll_callback(GLFWwindow *window,
 
 void char_callback(GLFWwindow *window, unsigned int c);
 
-struct ExternalCallbacks{
+struct ExternalCallbacks {
     std::function<bool(GLFWwindow *window, int key,
                        int scancode, int action, int mode)> key_callback;
     std::function<bool(GLFWwindow *window,
@@ -39,6 +39,5 @@ extern ExternalCallbacks external_callbacks_;
 
 };
 };
-
 
 #endif //PROJECT_CONTROLS_CALLBACKS_GLFW_H

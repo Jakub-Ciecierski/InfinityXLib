@@ -4,14 +4,14 @@
 
 #include <physics/impl/rigid_body_impl.h>
 
-namespace ifx{
+namespace ifx {
 
-BoxCollisionShape::BoxCollisionShape(const glm::vec3& dim) :
-    dimension_(dim){}
+BoxCollisionShape::BoxCollisionShape(const glm::vec3 &dim) :
+    dimension_(dim) {}
 
-BoxCollisionShape::~BoxCollisionShape(){}
+BoxCollisionShape::~BoxCollisionShape() {}
 
-void BoxCollisionShape::InitImpl(RigidBodyImpl* rigid_body_impl){
+void BoxCollisionShape::InitImpl(RigidBodyImpl *rigid_body_impl) {
     rigid_body_impl->InitCollisionShape(this);
 }
 

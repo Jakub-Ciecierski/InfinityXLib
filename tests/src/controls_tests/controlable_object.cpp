@@ -3,7 +3,7 @@
 namespace ifx {
 
 ControlableObject::ControlableObject() :
-        value_(false){}
-ControlableObject::~ControlableObject(){}
+    value_(false) {}
+ControlableObject::~ControlableObject() {}
 
 }

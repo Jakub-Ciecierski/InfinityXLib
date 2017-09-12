@@ -6,19 +6,19 @@
 #include <graphics/lighting/types/light_directional.h>
 #include <graphics/lighting/light_group.h>
 
-namespace ifx{
+namespace ifx {
 
 ShadowMappingRenderer::ShadowMappingRenderer(
-        std::shared_ptr<SceneRenderer> scene_renderer,
-        std::shared_ptr<Window> window) :
-        scene_renderer_(scene_renderer),
-        window_(window){}
+    std::shared_ptr<SceneRenderer> scene_renderer,
+    std::shared_ptr<Window> window) :
+    scene_renderer_(scene_renderer),
+    window_(window) {}
 
-ShadowMappingRenderer::~ShadowMappingRenderer(){}
+ShadowMappingRenderer::~ShadowMappingRenderer() {}
 
-void ShadowMappingRenderer::Render(){
+void ShadowMappingRenderer::Render() {
     auto lights = scene_renderer_->light_group()->GetDirectionalLights();
-    for(auto& light : lights){
+    for (auto &light : lights) {
         light->RenderToShadowMap(scene_renderer_);
     }
 }

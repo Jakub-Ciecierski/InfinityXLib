@@ -17,5 +17,4 @@ private:
 };
 }
 
-
 #endif //PROJECT_CONTROL_CONTEXT_GLFW_FACTORY_H

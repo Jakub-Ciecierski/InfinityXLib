@@ -6,18 +6,18 @@
 
 #include <gui/imgui/imgui.h>
 
-namespace ifx{
+namespace ifx {
 
-LightView::LightView(){}
-LightView::~LightView(){}
+LightView::LightView() {}
+LightView::~LightView() {}
 
-void LightView::Render(std::shared_ptr<LightSource> light_source){
+void LightView::Render(std::shared_ptr<LightSource> light_source) {
     std::string display = "Light";
     display += " [";
     display += LightSource::LightTypeString(light_source->light_type());
     display += "]";
 
-    if(ImGui::TreeNode(display.c_str())){
+    if (ImGui::TreeNode(display.c_str())) {
         RenderColor(light_source);
 
         ImGui::PushItemWidth(150);
@@ -33,8 +33,8 @@ void LightView::Render(std::shared_ptr<LightSource> light_source){
 
 }
 
-void LightView::RenderColor(std::shared_ptr<LightSource> light_source){
-    if(ImGui::TreeNode("Color")){
+void LightView::RenderColor(std::shared_ptr<LightSource> light_source) {
+    if (ImGui::TreeNode("Color")) {
         RenderColorAmbient(light_source);
         RenderColorDiffuse(light_source);
         RenderColorSpecular(light_source);
@@ -43,11 +43,11 @@ void LightView::RenderColor(std::shared_ptr<LightSource> light_source){
     }
 
 }
-void LightView::RenderColorAmbient(std::shared_ptr<LightSource> light_source){
-    LightParams& light_params = light_source->light_params();
+void LightView::RenderColorAmbient(std::shared_ptr<LightSource> light_source) {
+    LightParams &light_params = light_source->light_params();
 
     static float raw[3];
-    glm::vec3& v = light_params.ambient;
+    glm::vec3 &v = light_params.ambient;
     raw[0] = v.x;
     raw[1] = v.y;
     raw[2] = v.z;
@@ -56,11 +56,11 @@ void LightView::RenderColorAmbient(std::shared_ptr<LightSource> light_source){
     v = glm::vec3(raw[0], raw[1], raw[2]);
 }
 
-void LightView::RenderColorDiffuse(std::shared_ptr<LightSource> light_source){
-    LightParams& light_params = light_source->light_params();
+void LightView::RenderColorDiffuse(std::shared_ptr<LightSource> light_source) {
+    LightParams &light_params = light_source->light_params();
 
     static float raw[3];
-    glm::vec3& v = light_params.diffuse;
+    glm::vec3 &v = light_params.diffuse;
     raw[0] = v.x;
     raw[1] = v.y;
     raw[2] = v.z;
@@ -69,11 +69,11 @@ void LightView::RenderColorDiffuse(std::shared_ptr<LightSource> light_source){
     v = glm::vec3(raw[0], raw[1], raw[2]);
 }
 
-void LightView::RenderColorSpecular(std::shared_ptr<LightSource> light_source){
-    LightParams& light_params = light_source->light_params();
+void LightView::RenderColorSpecular(std::shared_ptr<LightSource> light_source) {
+    LightParams &light_params = light_source->light_params();
 
     static float raw[3];
-    glm::vec3& v = light_params.specular;
+    glm::vec3 &v = light_params.specular;
     raw[0] = v.x;
     raw[1] = v.y;
     raw[2] = v.z;
@@ -82,8 +82,8 @@ void LightView::RenderColorSpecular(std::shared_ptr<LightSource> light_source){
     v = glm::vec3(raw[0], raw[1], raw[2]);
 }
 
-void LightView::RenderAttenuation(std::shared_ptr<LightSource> light_source){
-    if(ImGui::TreeNode("Attenuation")){
+void LightView::RenderAttenuation(std::shared_ptr<LightSource> light_source) {
+    if (ImGui::TreeNode("Attenuation")) {
         RenderAttenuationConstant(light_source);
         RenderAttenuationLinear(light_source);
         RenderAttenuationQuadratic(light_source);
@@ -93,29 +93,29 @@ void LightView::RenderAttenuation(std::shared_ptr<LightSource> light_source){
 }
 
 void LightView::RenderAttenuationConstant(
-        std::shared_ptr<LightSource> light_source){
-    LightParams& light_params = light_source->light_params();
+    std::shared_ptr<LightSource> light_source) {
+    LightParams &light_params = light_source->light_params();
 
     ImGui::SliderFloat("Contant", &light_params.constant, 0, 1);
 }
 void LightView::RenderAttenuationLinear(
-        std::shared_ptr<LightSource> light_source){
-    LightParams& light_params = light_source->light_params();
+    std::shared_ptr<LightSource> light_source) {
+    LightParams &light_params = light_source->light_params();
 
     ImGui::SliderFloat("Linear", &light_params.linear, 0, 1);
 }
 void LightView::RenderAttenuationQuadratic(
-        std::shared_ptr<LightSource> light_source){
-    LightParams& light_params = light_source->light_params();
+    std::shared_ptr<LightSource> light_source) {
+    LightParams &light_params = light_source->light_params();
 
     ImGui::SliderFloat("Quadratic", &light_params.quadratic, 0, 1);
 }
 
-void LightView::RenderSpotlight(std::shared_ptr<LightSource> light_source){
-    if(light_source->light_type() != LightType::SPOTLIGHT) return;
+void LightView::RenderSpotlight(std::shared_ptr<LightSource> light_source) {
+    if (light_source->light_type() != LightType::SPOTLIGHT) return;
 
-    LightParams& light_params = light_source->light_params();
-    if(ImGui::TreeNode("Cut off [degrees]")){
+    LightParams &light_params = light_source->light_params();
+    if (ImGui::TreeNode("Cut off [degrees]")) {
         ImGui::SliderFloat("Inner Cut off", &light_params.cutOff, 0, 360);
         ImGui::SliderFloat("Outer Cut off", &light_params.outerCutOff, 0, 360);
 
@@ -124,35 +124,36 @@ void LightView::RenderSpotlight(std::shared_ptr<LightSource> light_source){
 }
 
 void LightView::RenderShadowMapping(
-        std::shared_ptr<LightSource> light_source){
-    if(light_source->light_type() != LightType::SPOTLIGHT
-       && light_source->light_type() != LightType::DIRECTIONAL) return;
+    std::shared_ptr<LightSource> light_source) {
+    if (light_source->light_type() != LightType::SPOTLIGHT
+        && light_source->light_type() != LightType::DIRECTIONAL)
+        return;
 
-    if(ImGui::TreeNode("Shadow Mapping")){
+    if (ImGui::TreeNode("Shadow Mapping")) {
         RenderShadowMappingCastShadow(
-                std::static_pointer_cast<LightDirectional>(light_source));
+            std::static_pointer_cast<LightDirectional>(light_source));
         RenderShadowMappingProjectionParameters(
-                std::static_pointer_cast<LightDirectional>(light_source));
+            std::static_pointer_cast<LightDirectional>(light_source));
         RenderShadowMappingResolution(
-                std::static_pointer_cast<LightDirectional>(light_source));
+            std::static_pointer_cast<LightDirectional>(light_source));
         ImGui::TreePop();
     }
 }
 
 void LightView::RenderShadowMappingCastShadow(
-        std::shared_ptr<LightDirectional> light_source){
+    std::shared_ptr<LightDirectional> light_source) {
     static bool raw;
     raw = light_source->cast_shadow();
-    if(ImGui::Checkbox("Cast Shadow", &raw)){
+    if (ImGui::Checkbox("Cast Shadow", &raw)) {
         light_source->cast_shadow(raw);
     }
 }
 
 void LightView::RenderShadowMappingProjectionParameters(
-        std::shared_ptr<LightDirectional> light_source){
-    auto& projection_parameters
-            = light_source->shadow_mapping()->projection_parameters();
-    if(ImGui::TreeNode("Projection Parameters")){
+    std::shared_ptr<LightDirectional> light_source) {
+    auto &projection_parameters
+        = light_source->shadow_mapping()->projection_parameters();
+    if (ImGui::TreeNode("Projection Parameters")) {
 
         ImGui::SliderFloat("Near Plane", &projection_parameters.near_plane,
                            0.1f, 100.0f);
@@ -164,22 +165,22 @@ void LightView::RenderShadowMappingProjectionParameters(
 }
 
 void LightView::RenderShadowMappingResolution(
-        std::shared_ptr<LightDirectional> light_source){
-    const auto& dimensions = light_source->shadow_mapping()->dimensions();
+    std::shared_ptr<LightDirectional> light_source) {
+    const auto &dimensions = light_source->shadow_mapping()->dimensions();
     static float height;
     static float width;
     height = dimensions.height;
     width = dimensions.width;
 
-    if(ImGui::TreeNode("Resolution")){
+    if (ImGui::TreeNode("Resolution")) {
         bool width_changed
-                = ImGui::SliderFloat("Width", &width, 50.0f, 4080.0f);
+            = ImGui::SliderFloat("Width", &width, 50.0f, 4080.0f);
         bool height_changed
-                = ImGui::SliderFloat("Height", &height, 50.0f, 4080.0f);
+            = ImGui::SliderFloat("Height", &height, 50.0f, 4080.0f);
 
-        if(width_changed || height_changed){
+        if (width_changed || height_changed) {
             light_source->shadow_mapping()->Reset(
-                    Dimensions{(int)width, (int)height});
+                Dimensions{(int) width, (int) height});
         }
 
         ImGui::TreePop();

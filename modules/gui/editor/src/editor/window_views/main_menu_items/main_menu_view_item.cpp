@@ -10,10 +10,10 @@ namespace ifx {
 
 MainMenuViewItem::MainMenuViewItem() {}
 
-MainMenuViewItem::~MainMenuViewItem(){}
+MainMenuViewItem::~MainMenuViewItem() {}
 
-void MainMenuViewItem::Render(std::shared_ptr<Editor> editor){
-    if (ImGui::BeginMenu("View")){
+void MainMenuViewItem::Render(std::shared_ptr<Editor> editor) {
+    if (ImGui::BeginMenu("View")) {
         RenderShowWindows(editor);
         RenderDocker(editor->docker());
 
@@ -21,8 +21,8 @@ void MainMenuViewItem::Render(std::shared_ptr<Editor> editor){
     }
 }
 
-void MainMenuViewItem::RenderShowWindows(std::shared_ptr<Editor> editor){
-    if(ImGui::BeginMenu("Show")) {
+void MainMenuViewItem::RenderShowWindows(std::shared_ptr<Editor> editor) {
+    if (ImGui::BeginMenu("Show")) {
         for (auto &view : editor->window_views()) {
             ImGui::MenuItem(view->name().c_str(), NULL, view->show());
         }
@@ -40,18 +40,17 @@ void MainMenuViewItem::RenderShowWindows(std::shared_ptr<Editor> editor){
     }
 }
 
-void MainMenuViewItem::RenderDocker(std::shared_ptr<Docker> docker){
-    if(ImGui::Button("Docker Settings"))
+void MainMenuViewItem::RenderDocker(std::shared_ptr<Docker> docker) {
+    if (ImGui::Button("Docker Settings"))
         ImGui::OpenPopup("Docker Settings");
     if (ImGui::BeginPopupModal("Docker Settings", NULL,
                                ImGuiWindowFlags_AlwaysAutoResize)) {
         DockerSettings docker_settings = docker->docker_settings();
 
         RenderDockerHeader(docker, docker_settings);
-        if(docker_settings.is_automatic_scale){
+        if (docker_settings.is_automatic_scale) {
             RenderDockerAutomaticScale(docker_settings);
-        }
-        else{
+        } else {
             RenderDockerManualScale(docker_settings);
         }
         RenderDockerFooter();
@@ -63,10 +62,10 @@ void MainMenuViewItem::RenderDocker(std::shared_ptr<Docker> docker){
 }
 
 void MainMenuViewItem::RenderDockerHeader(std::shared_ptr<Docker> docker,
-                                          DockerSettings& settings){
+                                          DockerSettings &settings) {
     static bool is_enabled = docker->IsEnabled();
     ImGui::Checkbox("Enable", &is_enabled);
-    if(is_enabled)
+    if (is_enabled)
         docker->Enable();
     else
         docker->Disable();
@@ -78,7 +77,7 @@ void MainMenuViewItem::RenderDockerHeader(std::shared_ptr<Docker> docker,
 }
 
 void MainMenuViewItem::RenderDockerAutomaticScale(
-        DockerSettings& settings){
+    DockerSettings &settings) {
     ImGui::SameLine();
     ImGui::PushItemWidth(100);
     ImGui::SliderFloat("Automatic Scale",
@@ -87,7 +86,7 @@ void MainMenuViewItem::RenderDockerAutomaticScale(
     ImGui::PopItemWidth();
 }
 
-void MainMenuViewItem::RenderDockerManualScale(DockerSettings& settings){
+void MainMenuViewItem::RenderDockerManualScale(DockerSettings &settings) {
     ImGui::Separator();
     ImGui::SliderFloat("Left Window Width",
                        &settings.left_view_width,
@@ -100,7 +99,7 @@ void MainMenuViewItem::RenderDockerManualScale(DockerSettings& settings){
                        10, 1000);
 }
 
-void MainMenuViewItem::RenderDockerFooter(){
+void MainMenuViewItem::RenderDockerFooter() {
     ImGui::Separator();
     if (ImGui::Button("OK", ImVec2(120, 0))) {
         ImGui::CloseCurrentPopup();

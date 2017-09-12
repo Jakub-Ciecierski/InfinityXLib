@@ -5,36 +5,36 @@
 namespace ifx {
 
 ProgramLoader::ProgramLoader(std::shared_ptr<ProgramCreator> program_creator) :
-        program_creator_(program_creator) { }
+    program_creator_(program_creator) {}
 
-ProgramLoader::~ProgramLoader() { }
+ProgramLoader::~ProgramLoader() {}
 
-std::shared_ptr<Program> ProgramLoader::CreateProgram(const ShaderPaths& shader_paths){
+std::shared_ptr<Program> ProgramLoader::CreateProgram(const ShaderPaths &shader_paths) {
     Shaders shaders;
 
-    if(shader_paths.vertex_path != ""){
+    if (shader_paths.vertex_path != "") {
         shaders.vertexShader =
-                shaderLoader.loadVertexShader(shader_paths.vertex_path.c_str());
+            shaderLoader.loadVertexShader(shader_paths.vertex_path.c_str());
         shaders.vertexShader->compile();
     }
-    if(shader_paths.fragment_path != ""){
+    if (shader_paths.fragment_path != "") {
         shaders.fragmentShader =
-                shaderLoader.loadFragmentShader(shader_paths.fragment_path.c_str());
+            shaderLoader.loadFragmentShader(shader_paths.fragment_path.c_str());
         shaders.fragmentShader->compile();
     }
-    if(shader_paths.geometry_path!= ""){
+    if (shader_paths.geometry_path != "") {
         shaders.geometryShader =
-                shaderLoader.loadGeometryShader(shader_paths.geometry_path.c_str());
+            shaderLoader.loadGeometryShader(shader_paths.geometry_path.c_str());
         shaders.geometryShader->compile();
     }
-    if(shader_paths.tcs_path!= ""){
+    if (shader_paths.tcs_path != "") {
         shaders.tessControlShader =
-                shaderLoader.loadTessControlShader(shader_paths.tcs_path.c_str());
+            shaderLoader.loadTessControlShader(shader_paths.tcs_path.c_str());
         shaders.tessControlShader->compile();
     }
-    if(shader_paths.tes_path!= ""){
+    if (shader_paths.tes_path != "") {
         shaders.tessEvalShader =
-                shaderLoader.loadTessEvalShader(shader_paths.tes_path.c_str());
+            shaderLoader.loadTessEvalShader(shader_paths.tes_path.c_str());
         shaders.tessEvalShader->compile();
     }
 
@@ -44,9 +44,9 @@ std::shared_ptr<Program> ProgramLoader::CreateProgram(const ShaderPaths& shader_
 std::shared_ptr<Program> ProgramLoader::CreateProgram(std::string vertex_path,
                                                       std::string fragment_path) {
     VertexShader *vertexShader =
-            shaderLoader.loadVertexShader(vertex_path.c_str());
+        shaderLoader.loadVertexShader(vertex_path.c_str());
     FragmentShader *fragmentShader =
-            shaderLoader.loadFragmentShader(fragment_path.c_str());
+        shaderLoader.loadFragmentShader(fragment_path.c_str());
 
     vertexShader->compile();
     fragmentShader->compile();
@@ -62,11 +62,11 @@ std::shared_ptr<Program> ProgramLoader::CreateProgram(std::string vertex_path,
                                                       std::string fragment_path,
                                                       std::string geometry_path) {
     VertexShader *vertexShader =
-            shaderLoader.loadVertexShader(vertex_path.c_str());
+        shaderLoader.loadVertexShader(vertex_path.c_str());
     FragmentShader *fragmentShader =
-            shaderLoader.loadFragmentShader(fragment_path.c_str());
+        shaderLoader.loadFragmentShader(fragment_path.c_str());
     GeometryShader *geometryShader =
-            shaderLoader.loadGeometryShader(geometry_path.c_str());
+        shaderLoader.loadGeometryShader(geometry_path.c_str());
 
     vertexShader->compile();
     fragmentShader->compile();
@@ -85,13 +85,13 @@ std::shared_ptr<Program> ProgramLoader::CreateProgram(std::string vertex_path,
                                                       std::string tcs_path,
                                                       std::string tes_path) {
     VertexShader *vertexShader =
-            shaderLoader.loadVertexShader(vertex_path.c_str());
+        shaderLoader.loadVertexShader(vertex_path.c_str());
     FragmentShader *fragmentShader =
-            shaderLoader.loadFragmentShader(fragment_path.c_str());
+        shaderLoader.loadFragmentShader(fragment_path.c_str());
     TessControlShader *tessControlShader =
-            shaderLoader.loadTessControlShader(tcs_path.c_str());
+        shaderLoader.loadTessControlShader(tcs_path.c_str());
     TessEvalShader *tessEvalShader =
-            shaderLoader.loadTessEvalShader(tes_path.c_str());
+        shaderLoader.loadTessEvalShader(tes_path.c_str());
 
     vertexShader->compile();
     fragmentShader->compile();

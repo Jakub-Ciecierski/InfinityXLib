@@ -9,12 +9,11 @@ namespace ifx {
  */
 class Controlable {
 public:
-    virtual ~Controlable(){}
+    virtual ~Controlable() {}
 
 protected:
-    Controlable(){}
+    Controlable() {}
 };
 }
-
 
 #endif //PROJECT_CONTROLABLE_H

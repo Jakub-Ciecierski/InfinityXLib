@@ -18,16 +18,16 @@ public:
     GameContextsFactory();
     ~GameContextsFactory() = default;
 
-    GameContextsFactory& SetRenderingContextFactory(
-            std::shared_ptr<RenderingContextFactory> factory);
-    GameContextsFactory& SetResourceContextFactory(
-            std::shared_ptr<ResourceContextFactory> factory);
-    GameContextsFactory& SetControlContextFactory(
-            std::shared_ptr<ControlContextFactory> factory);
-    GameContextsFactory& SetGUIContextFactory(
-            std::shared_ptr<GUIContextFactory> factory);
-    GameContextsFactory& SetPhysicsContextFactory(
-            std::shared_ptr<PhysicsContextFactory> factory);
+    GameContextsFactory &SetRenderingContextFactory(
+        std::shared_ptr<RenderingContextFactory> factory);
+    GameContextsFactory &SetResourceContextFactory(
+        std::shared_ptr<ResourceContextFactory> factory);
+    GameContextsFactory &SetControlContextFactory(
+        std::shared_ptr<ControlContextFactory> factory);
+    GameContextsFactory &SetGUIContextFactory(
+        std::shared_ptr<GUIContextFactory> factory);
+    GameContextsFactory &SetPhysicsContextFactory(
+        std::shared_ptr<PhysicsContextFactory> factory);
 
     EngineContexts Create();
 

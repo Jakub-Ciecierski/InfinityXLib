@@ -4,7 +4,7 @@
 
 namespace ifx {
 
-bool GameInitializer::Initialize(Game &game){
+bool GameInitializer::Initialize(Game &game) {
     return true;
 }
 

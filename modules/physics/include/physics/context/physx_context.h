@@ -24,23 +24,23 @@ public:
     PhysxContext() = default;
     ~PhysxContext() = default;
 
-    physx::PxFoundation* px_foundation(){return px_foundation_;}
-    physx::PxPhysics* px_physics(){return px_physics_;}
+    physx::PxFoundation *px_foundation() { return px_foundation_; }
+    physx::PxPhysics *px_physics() { return px_physics_; }
 
     virtual bool Init() override;
 
     virtual bool Terminate() override;
 
-    virtual void* NativeData() override;
+    virtual void *NativeData() override;
 
 private:
-    physx::PxFoundation* px_foundation_;
+    physx::PxFoundation *px_foundation_;
     std::unique_ptr<physx::PxAllocatorCallback> px_allocator_callback_;
     std::unique_ptr<physx::PxErrorCallback> px_error_callback_;
 
-    physx::PxPhysics* px_physics_;
-    physx::PxPvd* px_pvd_;
-    physx::PxPvdTransport* px_pvd_transport_;
+    physx::PxPhysics *px_physics_;
+    physx::PxPvd *px_pvd_;
+    physx::PxPvdTransport *px_pvd_transport_;
 };
 }
 

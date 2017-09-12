@@ -13,11 +13,10 @@ public:
 
     TessControlShader(std::string shaderSource,
                       std::string file_path);
-    TessControlShader(const TessControlShader& other);
+    TessControlShader(const TessControlShader &other);
 
     ~TessControlShader();
 
 };
-
 
 #endif //TESELATION_TESS_CONTROL_SHADER_H

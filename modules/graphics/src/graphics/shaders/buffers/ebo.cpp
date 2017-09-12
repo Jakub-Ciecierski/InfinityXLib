@@ -2,8 +2,8 @@
 
 #include <GL/glew.h>
 
-EBO::EBO(const std::vector<GLuint>* indices) :
-        indices(indices){
+EBO::EBO(const std::vector<GLuint> *indices) :
+    indices(indices) {
     glGenBuffers(1, &id);
 }
 
@@ -12,7 +12,7 @@ EBO::~EBO() {
 }
 
 void EBO::bind(GLenum usage) {
-    const GLuint* rawData = indices->data();
+    const GLuint *rawData = indices->data();
     GLuint bytesCount = sizeof(GLuint) * indices->size();
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);

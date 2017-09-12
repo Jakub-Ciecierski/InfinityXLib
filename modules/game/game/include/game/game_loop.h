@@ -18,7 +18,7 @@ class GameUpdater;
 
 struct EngineArchitecture;
 
-struct GameTimeData{
+struct GameTimeData {
     float last_time = 0;
     float current_time = 0;
 
@@ -34,13 +34,20 @@ public:
              std::shared_ptr<EngineArchitecture> engine_architecture);
     ~GameLoop();
 
-    std::shared_ptr<Renderer> renderer(){return
-                engine_architecture_->engine_systems.renderer;}
-    std::shared_ptr<PhysicsSimulation> physics_simulation(){
-        return engine_architecture_->engine_systems.physics_simulation;}
-    std::shared_ptr<Controls> controls(){return
-                engine_architecture_->engine_systems.controls;};
-    std::shared_ptr<GUI> gui(){return engine_architecture_->engine_systems.gui;}
+    std::shared_ptr<Renderer> renderer() {
+        return
+            engine_architecture_->engine_systems.renderer;
+    }
+    std::shared_ptr<PhysicsSimulation> physics_simulation() {
+        return engine_architecture_->engine_systems.physics_simulation;
+    }
+    std::shared_ptr<Controls> controls() {
+        return
+            engine_architecture_->engine_systems.controls;
+    };
+    std::shared_ptr<GUI> gui() {
+        return engine_architecture_->engine_systems.gui;
+    }
 
     void Start();
 private:

@@ -32,5 +32,4 @@ private:
 };
 }
 
-
 #endif //PROJECT_GUI_TMP_H

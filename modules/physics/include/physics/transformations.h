@@ -8,10 +8,10 @@
 #include <LinearMath/btTransform.h>
 #include <math/transform.h>
 
-namespace ifx{
+namespace ifx {
 
-btTransform IFX2BTTransform(const TransformData&);
-TransformData BT2IFXTransform(const btTransform&);
+btTransform IFX2BTTransform(const TransformData &);
+TransformData BT2IFXTransform(const btTransform &);
 
 }
 

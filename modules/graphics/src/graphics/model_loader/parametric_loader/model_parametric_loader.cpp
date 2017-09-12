@@ -4,14 +4,14 @@
 #include <factory/mesh_factory.h>
 #include <graphics/model/model_creator.h>
 
-namespace ifx{
+namespace ifx {
 
-ModelParametricLoader::ModelParametricLoader(){}
-ModelParametricLoader::~ModelParametricLoader(){}
+ModelParametricLoader::ModelParametricLoader() {}
+ModelParametricLoader::~ModelParametricLoader() {}
 
 std::shared_ptr<Model> ModelParametricLoader::CreateModel(
-        const ParametricEquation& parametric_equation,
-        std::shared_ptr<ModelCreator> model_creator) {
+    const ParametricEquation &parametric_equation,
+    std::shared_ptr<ModelCreator> model_creator) {
     std::vector<Vertex> vertices = CreateVertices(parametric_equation);
     std::vector<GLuint> indices = CreateIndices(parametric_equation);
 
@@ -20,20 +20,23 @@ std::shared_ptr<Model> ModelParametricLoader::CreateModel(
     return model_creator->MakeModel(ifx::NO_FILEPATH, std::move(mesh));
 }
 
-std::vector<Vertex> ModelParametricLoader::CreateVertices(const ParametricEquation& parametric_equation){
+std::vector<Vertex> ModelParametricLoader::CreateVertices(const ParametricEquation &parametric_equation) {
     std::vector<Vertex> vertices;
 
-    for(double i = 0; i <= parametric_equation.u_precision; i++){
-        auto u = ((i / parametric_equation.u_precision) * parametric_equation.u_end) + parametric_equation.u_start;
-        for(double j = 0; j <= parametric_equation.v_precision; j++){
-            auto v = ((j / (double)parametric_equation.v_precision) *
-                    parametric_equation.v_end) + parametric_equation.v_start;
+    for (double i = 0; i <= parametric_equation.u_precision; i++) {
+        auto u =
+            ((i / parametric_equation.u_precision) * parametric_equation.u_end)
+                + parametric_equation.u_start;
+        for (double j = 0; j <= parametric_equation.v_precision; j++) {
+            auto v = ((j / (double) parametric_equation.v_precision) *
+                parametric_equation.v_end) + parametric_equation.v_start;
             Vertex vs;
             vs.Position = parametric_equation.P(u, v);
             vs.Normal = -glm::cross(parametric_equation.Pu(u, v),
                                     parametric_equation.Pv(u, v));
-            vs.TexCoords = glm::vec2(1 - (j / (double)parametric_equation.v_precision),
-                                     1 - (i / (double)parametric_equation.u_precision));
+            vs.TexCoords =
+                glm::vec2(1 - (j / (double) parametric_equation.v_precision),
+                          1 - (i / (double) parametric_equation.u_precision));
 
             vertices.push_back(vs);
         }
@@ -41,13 +44,15 @@ std::vector<Vertex> ModelParametricLoader::CreateVertices(const ParametricEquati
     return vertices;
 }
 
-std::vector<unsigned int> ModelParametricLoader::CreateIndices(const ParametricEquation& parametric_equation){
+std::vector<unsigned int> ModelParametricLoader::CreateIndices(const ParametricEquation &parametric_equation) {
     std::vector<GLuint> indices;
 
-    for(double i = 0; i < parametric_equation.u_precision; i++){
-        for(double j = 0; j < parametric_equation.v_precision; j++){
-            unsigned int first = (i * ((double)parametric_equation.v_precision + 1)) + j;
-            unsigned int second = first + (double)parametric_equation.v_precision + 1;
+    for (double i = 0; i < parametric_equation.u_precision; i++) {
+        for (double j = 0; j < parametric_equation.v_precision; j++) {
+            unsigned int first =
+                (i * ((double) parametric_equation.v_precision + 1)) + j;
+            unsigned int
+                second = first + (double) parametric_equation.v_precision + 1;
 
             indices.push_back(first);
             indices.push_back(second);

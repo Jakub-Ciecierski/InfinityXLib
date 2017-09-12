@@ -19,5 +19,4 @@ private:
 };
 }
 
-
 #endif //PROJECT_RENDERING_CONTEXT_FACTORY_H

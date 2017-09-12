@@ -23,14 +23,17 @@ public:
          std::shared_ptr<EngineArchitecture> engine_architecture);
     ~Game() = default;
 
-    std::shared_ptr<GameLoop> game_loop() {return game_loop_;}
+    std::shared_ptr<GameLoop> game_loop() { return game_loop_; }
     std::shared_ptr<SceneContainer> scene() {
-            return engine_architecture_->engine_systems.scene_container;}
+        return engine_architecture_->engine_systems.scene_container;
+    }
     std::shared_ptr<ResourceContext> resource_context() {
-        return engine_architecture_->engine_contexts.resource_context;}
+        return engine_architecture_->engine_contexts.resource_context;
+    }
 
-    std::shared_ptr<EngineArchitecture> engine_architecture(){
-        return engine_architecture_; }
+    std::shared_ptr<EngineArchitecture> engine_architecture() {
+        return engine_architecture_;
+    }
 
     void Start();
 private:

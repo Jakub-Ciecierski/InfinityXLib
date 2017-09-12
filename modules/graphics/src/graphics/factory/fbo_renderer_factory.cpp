@@ -16,39 +16,39 @@
 
 #include <GL/glew.h>
 
-namespace ifx{
+namespace ifx {
 
 std::shared_ptr<Renderer> FBORendererFactory::Create(
-        std::shared_ptr<Window> window,
-        std::shared_ptr<RenderingContext> rendering_context,
-        std::shared_ptr<TextureCreator> texture_creator,
-        std::shared_ptr<ProgramCreator> program_creator,
-        std::shared_ptr<ResourceManager> resource_manager){
+    std::shared_ptr<Window> window,
+    std::shared_ptr<RenderingContext> rendering_context,
+    std::shared_ptr<TextureCreator> texture_creator,
+    std::shared_ptr<ProgramCreator> program_creator,
+    std::shared_ptr<ResourceManager> resource_manager) {
     auto fbo = CreateFBO(window, texture_creator);
     auto intermediate_fbo = CreateIntermediateFBO(window, texture_creator);
     auto screen_mesh = CreateScreenMesh(*intermediate_fbo);
     auto program = CreateProgram(program_creator, resource_manager);
 
     auto fbo_renderer = std::make_shared<FBORenderer>(
-            window,
-            rendering_context,
-            std::move(fbo),
-            std::move(intermediate_fbo),
-            std::move(screen_mesh),
-            program);
+        window,
+        rendering_context,
+        std::move(fbo),
+        std::move(intermediate_fbo),
+        std::move(screen_mesh),
+        program);
 
     return fbo_renderer;
 }
 
 std::unique_ptr<FBO> FBORendererFactory::CreateFBO(
-        std::shared_ptr<Window> window,
-        std::shared_ptr<TextureCreator> texture_creator){
+    std::shared_ptr<Window> window,
+    std::shared_ptr<TextureCreator> texture_creator) {
     unsigned int sample_count = 4;
     auto texture = texture_creator->MakeTextureMultisample(
-            TextureTypes::FBO,
-            TextureInternalFormat::RGB,
-            sample_count,
-            *(window->width()), *(window->height()));
+        TextureTypes::FBO,
+        TextureInternalFormat::RGB,
+        sample_count,
+        *(window->width()), *(window->height()));
     texture->InitData();
 
     auto fbo = ifx::make_unique<FBO>(texture,
@@ -60,14 +60,14 @@ std::unique_ptr<FBO> FBORendererFactory::CreateFBO(
 }
 
 std::unique_ptr<FBO> FBORendererFactory::CreateIntermediateFBO(
-        std::shared_ptr<Window> window,
-        std::shared_ptr<TextureCreator> texture_creator){
+    std::shared_ptr<Window> window,
+    std::shared_ptr<TextureCreator> texture_creator) {
     auto texture = texture_creator->MakeTexture2DEmpty(
-            ifx::NO_FILEPATH,
-            TextureTypes::FBO,
-            TextureInternalFormat::RGB,
-            TexturePixelType::UNSIGNED_BYTE,
-            *(window->width()), *(window->height()));
+        ifx::NO_FILEPATH,
+        TextureTypes::FBO,
+        TextureInternalFormat::RGB,
+        TexturePixelType::UNSIGNED_BYTE,
+        *(window->width()), *(window->height()));
     texture->InitData();
 
     texture->AddParameter(TextureParameter{GL_TEXTURE_MIN_FILTER, GL_LINEAR});
@@ -81,18 +81,18 @@ std::unique_ptr<FBO> FBORendererFactory::CreateIntermediateFBO(
     return fbo;
 }
 
-std::unique_ptr<Mesh> FBORendererFactory::CreateScreenMesh(const FBO& fbo){
-    std::vector <Vertex> vertices = {
-            Vertex{glm::vec3(1.0f, 1.0f, 0.0f),
-                   glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 1.0f)},
-            Vertex{glm::vec3(1.0f, -1.0f, 0.0f),
-                   glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 0.0f)},
-            Vertex{glm::vec3(-1.0f, -1.0f, 0.0f),
-                   glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 0.0f)},
-            Vertex{glm::vec3(-1.0f, 1.0f, 0.0f),
-                   glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 1.0f)},
+std::unique_ptr<Mesh> FBORendererFactory::CreateScreenMesh(const FBO &fbo) {
+    std::vector<Vertex> vertices = {
+        Vertex{glm::vec3(1.0f, 1.0f, 0.0f),
+               glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 1.0f)},
+        Vertex{glm::vec3(1.0f, -1.0f, 0.0f),
+               glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 0.0f)},
+        Vertex{glm::vec3(-1.0f, -1.0f, 0.0f),
+               glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 0.0f)},
+        Vertex{glm::vec3(-1.0f, 1.0f, 0.0f),
+               glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 1.0f)},
     };
-    std::vector <GLuint> indices = { 0, 1, 3, 1, 2, 3 };
+    std::vector<GLuint> indices = {0, 1, 3, 1, 2, 3};
 
     auto screen_mesh = ifx::make_unique<Mesh>(vertices, indices);
 
@@ -104,14 +104,14 @@ std::unique_ptr<Mesh> FBORendererFactory::CreateScreenMesh(const FBO& fbo){
 }
 
 std::shared_ptr<Program> FBORendererFactory::CreateProgram(
-        std::shared_ptr<ProgramCreator> program_creator,
-        std::shared_ptr<ResourceManager> resource_manager){
+    std::shared_ptr<ProgramCreator> program_creator,
+    std::shared_ptr<ResourceManager> resource_manager) {
     std::string vertex_path =
-            resource_manager->resource_path()->GetResourcePath(
-                    "engine/fbo.prog/fbo.vs", ifx::ResourceType::SHADER);
+        resource_manager->resource_path()->GetResourcePath(
+            "engine/fbo.prog/fbo.vs", ifx::ResourceType::SHADER);
     std::string fragment_path =
-            resource_manager->resource_path()->GetResourcePath(
-                    "engine/fbo.prog/fbo.fs", ifx::ResourceType::SHADER);
+        resource_manager->resource_path()->GetResourcePath(
+            "engine/fbo.prog/fbo.fs", ifx::ResourceType::SHADER);
 
     auto program = ProgramLoader(program_creator).CreateProgram(vertex_path,
                                                                 fragment_path);

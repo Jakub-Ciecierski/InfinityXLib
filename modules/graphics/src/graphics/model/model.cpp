@@ -8,8 +8,8 @@ namespace ifx {
 
 Model::Model(std::string filepath,
              std::vector<std::unique_ptr<Mesh>> meshes) :
-        ifx::Resource(filepath, ifx::ResourceType::MODEL),
-        meshes(std::move(meshes)) { }
+    ifx::Resource(filepath, ifx::ResourceType::MODEL),
+    meshes(std::move(meshes)) {}
 
 std::vector<Mesh *> Model::getMeshes() {
     std::vector<Mesh *> meshes_raw(meshes.size());

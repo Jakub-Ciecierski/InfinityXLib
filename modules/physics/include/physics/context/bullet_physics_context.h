@@ -5,7 +5,7 @@
 
 namespace ifx {
 
-class BulletPhysicsContext : public PhysicsContext{
+class BulletPhysicsContext : public PhysicsContext {
 public:
     BulletPhysicsContext() = default;
     ~BulletPhysicsContext() = default;
@@ -14,7 +14,7 @@ public:
 
     virtual bool Terminate() override;
 
-    virtual void* NativeData() override;
+    virtual void *NativeData() override;
 };
 
 }

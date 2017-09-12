@@ -2,11 +2,11 @@
 
 namespace ifx {
 
-ControlsContainer::ControlsContainer(){}
+ControlsContainer::ControlsContainer() {}
 
-ControlsContainer::~ControlsContainer(){}
+ControlsContainer::~ControlsContainer() {}
 
-ControlsContainer& ControlsContainer::GetInstance(){
+ControlsContainer &ControlsContainer::GetInstance() {
     static ControlsContainer container;
 
     return container;

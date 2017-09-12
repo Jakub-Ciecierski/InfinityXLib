@@ -32,8 +32,8 @@ public:
     bool Remove(std::shared_ptr<GameComponent> game_component);
 
     std::vector<std::shared_ptr<GameComponent>> GetComponents(
-            const GameComponentType&& type);
-    std::vector<std::shared_ptr<GameComponent>>& GetComponents();
+        const GameComponentType &&type);
+    std::vector<std::shared_ptr<GameComponent>> &GetComponents();
 
     bool Exists(std::shared_ptr<GameComponent> game_component);
 private:

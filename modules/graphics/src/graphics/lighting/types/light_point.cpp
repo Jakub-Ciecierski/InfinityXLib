@@ -5,8 +5,8 @@
 
 namespace ifx {
 
-LightPoint::LightPoint(const LightParams& light_params) :
-        LightSource(light_params, LightType::POINT) {}
+LightPoint::LightPoint(const LightParams &light_params) :
+    LightSource(light_params, LightType::POINT) {}
 
 LightPoint::~LightPoint() {}
 

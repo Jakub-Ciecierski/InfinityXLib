@@ -6,19 +6,19 @@
 namespace ifx {
 
 SceneManipulator::SceneManipulator() :
-        transformable_object_(nullptr),
+    transformable_object_(nullptr),
     camera_(nullptr),
     operation_(SceneManipulatorOperation::TRANSLATE),
-    show_(true){
+    show_(true) {
     ImGuizmo::Enable(true);
 }
 
-SceneManipulator::~SceneManipulator() { }
+SceneManipulator::~SceneManipulator() {}
 
 void SceneManipulator::Manipulate() {
-    if(!show_)
+    if (!show_)
         return;
-    if(!transformable_object_ || !camera_)
+    if (!transformable_object_ || !camera_)
         return;
 
     ImGuizmo::BeginFrame();
@@ -52,26 +52,21 @@ void SceneManipulator::Manipulate(std::shared_ptr<Transformable> movable_object,
     if (operation == SceneManipulatorOperation::TRANSLATE) {
         auto v = glm::make_vec3(translate_raw);
         movable_object->moveTo(v);
-    }
-    else if (operation == SceneManipulatorOperation::ROTATE) {
+    } else if (operation == SceneManipulatorOperation::ROTATE) {
         auto v = glm::make_vec3(rotation_raw);
         movable_object->rotateTo(v);
-    }
-    else if (operation == SceneManipulatorOperation::SCALE) {
+    } else if (operation == SceneManipulatorOperation::SCALE) {
         auto v = glm::make_vec3(scale_raw);
         movable_object->scale(v);
     }
 }
 
 ImGuizmo::OPERATION SceneManipulator::GetNativeOperationMode(
-        SceneManipulatorOperation operation) {
+    SceneManipulatorOperation operation) {
     switch (operation) {
-        case SceneManipulatorOperation::TRANSLATE:
-            return ImGuizmo::OPERATION::TRANSLATE;
-        case SceneManipulatorOperation::ROTATE:
-            return ImGuizmo::OPERATION::ROTATE;
-        case SceneManipulatorOperation::SCALE:
-            return ImGuizmo::OPERATION::SCALE;
+        case SceneManipulatorOperation::TRANSLATE:return ImGuizmo::OPERATION::TRANSLATE;
+        case SceneManipulatorOperation::ROTATE:return ImGuizmo::OPERATION::ROTATE;
+        case SceneManipulatorOperation::SCALE:return ImGuizmo::OPERATION::SCALE;
     }
     return ImGuizmo::OPERATION::TRANSLATE;
 }

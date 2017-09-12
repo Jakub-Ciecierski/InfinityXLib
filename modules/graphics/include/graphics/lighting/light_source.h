@@ -28,7 +28,7 @@ struct LightParams {
     float outerCutOff = 27.5;
 };
 
-enum class LightType{
+enum class LightType {
     DIRECTIONAL, POINT, SPOTLIGHT
 };
 
@@ -41,17 +41,17 @@ enum class LightType{
  */
 class LightSource : public Transformable {
 public:
-    LightSource(const LightParams& light, LightType type);
+    LightSource(const LightParams &light, LightType type);
     virtual ~LightSource();
 
-    LightParams& light_params() {return light_params_;}
-    LightType light_type(){return light_type_;}
-    bool cast_shadow(){return cast_shadow_;}
-    void cast_shadow(bool v){cast_shadow_ = v;}
+    LightParams &light_params() { return light_params_; }
+    LightType light_type() { return light_type_; }
+    bool cast_shadow() { return cast_shadow_; }
+    void cast_shadow(bool v) { cast_shadow_ = v; }
 
     static std::string LightTypeString(LightType type);
 
-    void SetLightParams(const LightParams& light);
+    void SetLightParams(const LightParams &light);
 
     /*
      * The id is used to separated lights of the same type in the shaders.

@@ -4,7 +4,7 @@
 using namespace ifx;
 
 ifx::PointlightShaderBuilder::PointlightShaderBuilder(int id) :
-        LightShaderBuilder(id){
+    LightShaderBuilder(id) {
 }
 
 ifx::PointlightShaderBuilder::~PointlightShaderBuilder() {
@@ -15,9 +15,9 @@ void ifx::PointlightShaderBuilder::build() {
     POSITION = appendToBase(id,
                             LIGHT_POINTLIGHT_NAME,
                             LIGHT_POSITION_NAME);
-    DIRECTION= appendToBase(id,
-                            LIGHT_POINTLIGHT_NAME,
-                            LIGHT_DIRECTION_NAME);
+    DIRECTION = appendToBase(id,
+                             LIGHT_POINTLIGHT_NAME,
+                             LIGHT_DIRECTION_NAME);
 
     AMBIENT = appendToBase(id,
                            LIGHT_POINTLIGHT_NAME,

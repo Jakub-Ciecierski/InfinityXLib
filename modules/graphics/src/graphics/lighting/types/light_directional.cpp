@@ -12,10 +12,10 @@
 using namespace ifx;
 
 LightDirectional::LightDirectional(
-        const LightParams& light_params,
-        std::shared_ptr<ShadowMapping> shadow_mapping) :
-        LightSource(light_params, LightType::DIRECTIONAL),
-        shadow_mapping_(shadow_mapping){}
+    const LightParams &light_params,
+    std::shared_ptr<ShadowMapping> shadow_mapping) :
+    LightSource(light_params, LightType::DIRECTIONAL),
+    shadow_mapping_(shadow_mapping) {}
 
 LightDirectional::~LightDirectional() {}
 
@@ -25,15 +25,15 @@ void LightDirectional::bind(const Program &program, int id) {
 
     GLint lightDirLoc = glGetUniformLocation(program.getID(),
                                              builder.DIRECTION.c_str());
-    GLint lightAmbientLoc  = glGetUniformLocation(program.getID(),
-                                                  builder.AMBIENT.c_str());
-    GLint lightDiffuseLoc  = glGetUniformLocation(program.getID(),
-                                                  builder.DIFFUSE.c_str());
+    GLint lightAmbientLoc = glGetUniformLocation(program.getID(),
+                                                 builder.AMBIENT.c_str());
+    GLint lightDiffuseLoc = glGetUniformLocation(program.getID(),
+                                                 builder.DIFFUSE.c_str());
     GLint lightSpecularLoc = glGetUniformLocation(program.getID(),
                                                   builder.SPECULAR.c_str());
     GLint lightSpaceMatrixLoc
-            = glGetUniformLocation(program.getID(),
-                                   builder.LIGHT_SPACE_MATRIX.c_str());
+        = glGetUniformLocation(program.getID(),
+                               builder.LIGHT_SPACE_MATRIX.c_str());
 
     glUniform3f(lightAmbientLoc,
                 light_params_.ambient.x,
@@ -47,13 +47,13 @@ void LightDirectional::bind(const Program &program, int id) {
                 light_params_.specular.x,
                 light_params_.specular.y,
                 light_params_.specular.z);
-    auto& direction = getDirection();
+    auto &direction = getDirection();
     glUniform3f(lightDirLoc, direction.x, direction.y, direction.z);
     glUniformMatrix4fv(lightSpaceMatrixLoc, 1, GL_FALSE,
                        glm::value_ptr(
-                               shadow_mapping_->GetLightSpaceMatrix(this)));
+                           shadow_mapping_->GetLightSpaceMatrix(this)));
 
-    if(cast_shadow_){
+    if (cast_shadow_) {
         int i = TextureActivator::GetInstance().GetNextGlobalID();
         glActiveTexture(GL_TEXTURE0 + i);
         shadow_mapping_->fbo()->texture()->Bind();
@@ -63,7 +63,7 @@ void LightDirectional::bind(const Program &program, int id) {
 }
 
 void LightDirectional::RenderToShadowMap(
-        const std::shared_ptr<SceneRenderer> scene){
-    if(cast_shadow_)
+    const std::shared_ptr<SceneRenderer> scene) {
+    if (cast_shadow_)
         shadow_mapping_->Render(scene, this);
 }

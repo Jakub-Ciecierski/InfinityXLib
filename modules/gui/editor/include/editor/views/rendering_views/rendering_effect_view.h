@@ -16,31 +16,31 @@ class Program;
 class RenderingEffectView {
 public:
     RenderingEffectView(
-            std::shared_ptr<RenderingEffectProcessor> rendering_effect_processor);
+        std::shared_ptr<RenderingEffectProcessor> rendering_effect_processor);
     ~RenderingEffectView() = default;
 
-    void Render(const std::vector<std::shared_ptr<RenderingEffect>>& rendering_effects);
+    void Render(const std::vector<std::shared_ptr<RenderingEffect>> &rendering_effects);
 private:
     void RenderReloadProject();
 
-    void RenderList(const std::vector<std::shared_ptr<RenderingEffect>>& rendering_effects);
+    void RenderList(const std::vector<std::shared_ptr<RenderingEffect>> &rendering_effects);
 
     void RenderInspector(std::shared_ptr<RenderingEffect> rendering_effect);
 
     void RenderShaders(std::shared_ptr<RenderingEffect> rendering_effect);
     void RenderShaderReload(std::shared_ptr<RenderingEffect> rendering_effect);
-    void RenderShader(Shader* shader,
+    void RenderShader(Shader *shader,
                       std::shared_ptr<Program> program,
                       std::string shader_type_name);
-    void RenderShaderWindow(Shader* shader,
+    void RenderShaderWindow(Shader *shader,
                             std::shared_ptr<Program> program,
                             bool open);
-    void RenderErrorWindow(const ShaderError& shader_error);
+    void RenderErrorWindow(const ShaderError &shader_error);
 
     void RenderState(std::shared_ptr<RenderingEffect> rendering_effect);
 
-    std::string GetBaseName(const std::string& name);
-    std::string GetBaseShaderName(const std::string& name);
+    std::string GetBaseName(const std::string &name);
+    std::string GetBaseShaderName(const std::string &name);
 
     std::shared_ptr<RenderingEffectProcessor> rendering_effect_processor_;
     std::shared_ptr<RenderingEffect> selected_rendering_effect_;

@@ -12,7 +12,7 @@
 #include <graphics/factory/scene_factory.h>
 #include <factory/texture_factory.h>
 
-namespace ifx{
+namespace ifx {
 
 RenderObjectFactory::RenderObjectFactory() {}
 

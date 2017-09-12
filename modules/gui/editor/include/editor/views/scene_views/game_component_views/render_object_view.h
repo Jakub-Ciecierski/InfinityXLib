@@ -19,10 +19,10 @@ public:
 private:
     void RenderRenderingEffectsContextMenu(std::shared_ptr<RenderComponent> render_object);
     void RenderList(std::shared_ptr<RenderComponent> render_object);
-    void RenderRenderingEffectContextMenu(RenderingEffect* rendering_effect,
+    void RenderRenderingEffectContextMenu(RenderingEffect *rendering_effect,
                                           std::shared_ptr<RenderComponent> render_object);
 
-    std::string GetBaseName(const std::string& name);
+    std::string GetBaseName(const std::string &name);
 
     std::shared_ptr<SceneRenderer> scene_renderer_;
 };

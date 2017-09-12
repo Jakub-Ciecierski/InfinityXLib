@@ -6,15 +6,15 @@
 
 namespace ifx {
 
-ControlContextGLFW::ControlContextGLFW(){}
+ControlContextGLFW::ControlContextGLFW() {}
 
-ControlContextGLFW::~ControlContextGLFW(){}
+ControlContextGLFW::~ControlContextGLFW() {}
 
-bool ControlContextGLFW::InitAndSetupNativeCallbacks(void *native_window){
-    if(glfwInit() != GL_TRUE)
+bool ControlContextGLFW::InitAndSetupNativeCallbacks(void *native_window) {
+    if (glfwInit() != GL_TRUE)
         return false;
 
-    auto glfw_window = (GLFWwindow*)native_window;
+    auto glfw_window = (GLFWwindow *) native_window;
 
     glfwSetKeyCallback(glfw_window,
                        glfw_callbacks::key_callback);
@@ -30,11 +30,11 @@ bool ControlContextGLFW::InitAndSetupNativeCallbacks(void *native_window){
     return true;
 }
 
-void ControlContextGLFW::SetExternalCallbacks(const glfw_callbacks::ExternalCallbacks& external_callbacks){
+void ControlContextGLFW::SetExternalCallbacks(const glfw_callbacks::ExternalCallbacks &external_callbacks) {
     glfw_callbacks::external_callbacks_ = external_callbacks;
 }
 
-bool ControlContextGLFW::Terminate(){
+bool ControlContextGLFW::Terminate() {
     glfwTerminate();
     return true;
 }

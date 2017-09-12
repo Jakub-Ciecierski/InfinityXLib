@@ -15,11 +15,11 @@ public:
     Resource(std::string filepath, ResourceType type);
     virtual ~Resource();
 
-    Resource(const Resource& resource) = delete;
-    Resource& operator=(const Resource& resource) = delete;
+    Resource(const Resource &resource) = delete;
+    Resource &operator=(const Resource &resource) = delete;
 
-    std::string filepath(){return filepath_;};
-    ResourceType type(){return type_;};
+    std::string filepath() { return filepath_; };
+    ResourceType type() { return type_; };
 
 private:
     std::string filepath_;

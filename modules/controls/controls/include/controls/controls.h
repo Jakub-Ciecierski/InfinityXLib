@@ -24,8 +24,9 @@ public:
              std::shared_ptr<ControllerContainer>);
     ~Controls() = default;
 
-    std::shared_ptr<ControllerContainer> controller_container(){
-        return controller_container_;}
+    std::shared_ptr<ControllerContainer> controller_container() {
+        return controller_container_;
+    }
 
     virtual void Update(float = 0) override;
 

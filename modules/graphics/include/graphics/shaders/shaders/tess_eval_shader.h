@@ -3,7 +3,7 @@
 
 #include <graphics/shaders/shader.h>
 
-class TessEvalShader : public Shader{
+class TessEvalShader : public Shader {
 private:
 
 protected:
@@ -13,11 +13,10 @@ public:
 
     TessEvalShader(std::string shaderSource,
                    std::string file_path);
-    TessEvalShader(const TessEvalShader& other);
+    TessEvalShader(const TessEvalShader &other);
 
     ~TessEvalShader();
 
 };
-
 
 #endif //TESELATION_TESS_EVAL_SHADER_H

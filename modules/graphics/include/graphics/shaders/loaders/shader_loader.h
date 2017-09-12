@@ -20,14 +20,13 @@ public:
 
     ~ShaderLoader();
 
-    std::string getShaderCode(const GLchar* path);
+    std::string getShaderCode(const GLchar *path);
 
-    VertexShader* loadVertexShader(const GLchar* path);
-    GeometryShader* loadGeometryShader(const GLchar* path);
-    FragmentShader* loadFragmentShader(const GLchar* path);
-    TessControlShader* loadTessControlShader(const GLchar *path);
-    TessEvalShader* loadTessEvalShader(const GLchar *path);
+    VertexShader *loadVertexShader(const GLchar *path);
+    GeometryShader *loadGeometryShader(const GLchar *path);
+    FragmentShader *loadFragmentShader(const GLchar *path);
+    TessControlShader *loadTessControlShader(const GLchar *path);
+    TessEvalShader *loadTessEvalShader(const GLchar *path);
 };
-
 
 #endif //DUCK_SHADER_LOADER_H

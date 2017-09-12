@@ -41,7 +41,6 @@ private:
     bool Remove(std::shared_ptr<CameraComponent> camera);
     bool Remove(std::shared_ptr<RigidBodyComponent> rigid_body);
 
-
     std::shared_ptr<SceneRenderer> scene_renderer_;
     std::shared_ptr<PhysicsSimulation> physics_simulation_;
 };

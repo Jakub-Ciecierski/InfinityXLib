@@ -34,65 +34,65 @@
 
 #include <iostream>
 
-namespace ifx{
+namespace ifx {
 
 const std::string NODE_RENDERING_EFFECT_NAME = "soft_body_editor/nodes.prog";
 const std::string EDGES_RENDERING_EFFECT_NAME = "soft_body_editor/edges.prog";
 const std::string FACES_RENDERING_EFFECT_NAME = "soft_body_editor/faces.prog";
 
 SoftBodyViewFactory::SoftBodyViewFactory(
-        std::shared_ptr<EngineArchitecture> engine_architecture) :
-        engine_architecture_(engine_architecture){}
+    std::shared_ptr<EngineArchitecture> engine_architecture) :
+    engine_architecture_(engine_architecture) {}
 
-std::shared_ptr<View> SoftBodyViewFactory::Create(){
+std::shared_ptr<View> SoftBodyViewFactory::Create() {
     auto engine_architecture = CreateEngineArchitecture();
 
     auto soft_body_rendering_effects =
-            SetRendererSettings(engine_architecture->engine_systems.renderer,
-                                engine_architecture_->engine_systems.renderer);
+        SetRendererSettings(engine_architecture->engine_systems.renderer,
+                            engine_architecture_->engine_systems.renderer);
 
     auto game_updater = ifx::make_unique<GameUpdater>(engine_architecture);
     auto soft_body_view = std::make_shared<SoftBodyView>(
-            std::move(game_updater),
-            soft_body_rendering_effects);
+        std::move(game_updater),
+        soft_body_rendering_effects);
 
-    SetDefaultScene(engine_architecture ->engine_systems.scene_container,
+    SetDefaultScene(engine_architecture->engine_systems.scene_container,
                     soft_body_view);
 
     return soft_body_view;
 }
 
 std::shared_ptr<EngineArchitecture>
-SoftBodyViewFactory::CreateEngineArchitecture(){
+SoftBodyViewFactory::CreateEngineArchitecture() {
     auto game_systems_factory = CreateGameSystemsFactory();
 
     auto engine_architecture = std::make_shared<EngineArchitecture>();
     engine_architecture->window = engine_architecture_->window;
     engine_architecture->engine_contexts
-            = engine_architecture_->engine_contexts;
+        = engine_architecture_->engine_contexts;
     engine_architecture->engine_systems = game_systems_factory->Create(
-            engine_architecture_->window,
-            engine_architecture_->engine_contexts);
+        engine_architecture_->window,
+        engine_architecture_->engine_contexts);
     engine_architecture->window = nullptr;
 
     return engine_architecture;
 }
 
 std::unique_ptr<GameSystemsFactory>
-SoftBodyViewFactory::CreateGameSystemsFactory(){
+SoftBodyViewFactory::CreateGameSystemsFactory() {
     auto game_systems_factory = ifx::make_unique<GameSystemsFactory>();
 
     game_systems_factory->SetGUIFactory(nullptr);
     game_systems_factory->SetControlsFactory(nullptr);
     game_systems_factory->SetRendererFactory(
-            std::make_shared<FBORendererFactory>());
+        std::make_shared<FBORendererFactory>());
 
     return game_systems_factory;
 }
 
 SoftBodyRenderingEffects SoftBodyViewFactory::SetRendererSettings(
-        std::shared_ptr<Renderer> renderer,
-        std::shared_ptr<Renderer> old_renderer){
+    std::shared_ptr<Renderer> renderer,
+    std::shared_ptr<Renderer> old_renderer) {
     auto fbo_renderer = std::dynamic_pointer_cast<FBORenderer>(renderer);
     fbo_renderer->EnableRenderToScreen(false);
 
@@ -112,34 +112,32 @@ SoftBodyRenderingEffects SoftBodyViewFactory::SetRendererSettings(
 }
 
 SoftBodyRenderingEffects SoftBodyViewFactory::CreateRenderingEffects(
-        std::shared_ptr<Renderer> old_renderer){
+    std::shared_ptr<Renderer> old_renderer) {
     SoftBodyRenderingEffects soft_body_rendering_effects;
     soft_body_rendering_effects.main =
-            std::make_shared<RenderingEffect>(
-                    *old_renderer->scene_renderer()->
-                            default_rendering_effect());
+        std::make_shared<RenderingEffect>(
+            *old_renderer->scene_renderer()->
+                default_rendering_effect());
 
-    auto& rendering_effects =
-            old_renderer->scene_renderer()->rendering_effects();
-    for(auto& rendering_effect : rendering_effects){
-        if(rendering_effect->name() == NODE_RENDERING_EFFECT_NAME){
+    auto &rendering_effects =
+        old_renderer->scene_renderer()->rendering_effects();
+    for (auto &rendering_effect : rendering_effects) {
+        if (rendering_effect->name() == NODE_RENDERING_EFFECT_NAME) {
             soft_body_rendering_effects.nodes =
-                    std::make_shared<RenderingEffect>(*rendering_effect);
-        }
-        else if(rendering_effect->name() == EDGES_RENDERING_EFFECT_NAME){
+                std::make_shared<RenderingEffect>(*rendering_effect);
+        } else if (rendering_effect->name() == EDGES_RENDERING_EFFECT_NAME) {
             soft_body_rendering_effects.edges =
-                    std::make_shared<RenderingEffect>(*rendering_effect);
-        }
-        else if(rendering_effect->name() == FACES_RENDERING_EFFECT_NAME){
+                std::make_shared<RenderingEffect>(*rendering_effect);
+        } else if (rendering_effect->name() == FACES_RENDERING_EFFECT_NAME) {
             soft_body_rendering_effects.faces =
-                    std::make_shared<RenderingEffect>(*rendering_effect);
+                std::make_shared<RenderingEffect>(*rendering_effect);
         }
     }
 
-    if(!soft_body_rendering_effects.main
-       || !soft_body_rendering_effects.nodes
-       || !soft_body_rendering_effects.edges
-       || !soft_body_rendering_effects.faces){
+    if (!soft_body_rendering_effects.main
+        || !soft_body_rendering_effects.nodes
+        || !soft_body_rendering_effects.edges
+        || !soft_body_rendering_effects.faces) {
         throw std::invalid_argument("SoftBodyRenderingEffects not found");
     }
 
@@ -147,15 +145,15 @@ SoftBodyRenderingEffects SoftBodyViewFactory::CreateRenderingEffects(
 }
 
 void SoftBodyViewFactory::SetDefaultScene(
-        std::shared_ptr<SceneContainer> scene,
-        std::shared_ptr<SoftBodyView> soft_body_view){
+    std::shared_ptr<SceneContainer> scene,
+    std::shared_ptr<SoftBodyView> soft_body_view) {
     // Camera
     auto game_object = scene->CreateAndAddEmptyGameObject();
     auto camera = CameraFactory().CreateCamera(
-            engine_architecture_->window.get());
+        engine_architecture_->window.get());
     camera->camera_style(CameraStyle::ThirdPerson);
-    camera->moveTo(glm::vec3(0,0,0));
-    camera->rotateTo(glm::vec3(0,0,0));
+    camera->moveTo(glm::vec3(0, 0, 0));
+    camera->rotateTo(glm::vec3(0, 0, 0));
     camera->scale(5);
 
     game_object->Add(std::dynamic_pointer_cast<GameComponent>(camera));
@@ -166,125 +164,125 @@ void SoftBodyViewFactory::SetDefaultScene(
     // Lights
     auto light_game_object = scene->CreateAndAddEmptyGameObject();
     light_game_object->Add(
-            LightComponentFactory().CreateDirectionalLight(
-                    engine_architecture_->engine_contexts.resource_context->
-                            texture_creator(),
-                    engine_architecture_->engine_contexts.resource_context->
-                            program_creator()));
+        LightComponentFactory().CreateDirectionalLight(
+            engine_architecture_->engine_contexts.resource_context->
+                texture_creator(),
+            engine_architecture_->engine_contexts.resource_context->
+                program_creator()));
     light_game_object->rotateTo(glm::vec3(50, -50, 0));
-    light_game_object->moveTo(glm::vec3(0,10,0));
+    light_game_object->moveTo(glm::vec3(0, 10, 0));
 }
 
 void SoftBodyViewFactory::SetKeybinds(
-        std::shared_ptr<ifx::Controls> controls,
-        std::shared_ptr<ifx::CameraComponent> camera,
-        std::shared_ptr<SoftBodyView> soft_body_view){
+    std::shared_ptr<ifx::Controls> controls,
+    std::shared_ptr<ifx::CameraComponent> camera,
+    std::shared_ptr<SoftBodyView> soft_body_view) {
     auto command_factory = ifx::CommandFactory(controls);
 
     auto command_rotate_mouse = command_factory.CreateMouseCommand(
-            camera,
-            [soft_body_view](
-                    std::shared_ptr<ifx::Controller> controller,
-                    std::shared_ptr<ifx::Controlable> obj){
-                if(!soft_body_view->is_window_focused())
-                    return;
+        camera,
+        [soft_body_view](
+            std::shared_ptr<ifx::Controller> controller,
+            std::shared_ptr<ifx::Controlable> obj) {
+            if (!soft_body_view->is_window_focused())
+                return;
 
-                auto mouse = std::static_pointer_cast<ifx::MouseController>(
-                        controller);
-                auto camera = std::static_pointer_cast<ifx::CameraComponent>
-                        (obj);
-                auto current_position = mouse->GetCurrentPosition();
-                auto previous_position = mouse->GetPreviousPosition();
+            auto mouse = std::static_pointer_cast<ifx::MouseController>(
+                controller);
+            auto camera = std::static_pointer_cast<ifx::CameraComponent>
+                (obj);
+            auto current_position = mouse->GetCurrentPosition();
+            auto previous_position = mouse->GetPreviousPosition();
 
-                float xoffset = current_position.x - previous_position.x;
-                float yoffset = previous_position.y - current_position.y;
+            float xoffset = current_position.x - previous_position.x;
+            float yoffset = previous_position.y - current_position.y;
 
-                float rotationSpeed = 0.1f;
-                camera->rotate(glm::vec3(xoffset * rotationSpeed,
-                                         -yoffset * rotationSpeed,
-                                         0));
-            },
-            ifx::MouseControllerEventType {
-                    ifx::MouseControllerKeyType::MOUSE_LEFT,
-                    ifx::MouseControllerCallbackType::PRESSED
-            }
+            float rotationSpeed = 0.1f;
+            camera->rotate(glm::vec3(xoffset * rotationSpeed,
+                                     -yoffset * rotationSpeed,
+                                     0));
+        },
+        ifx::MouseControllerEventType {
+            ifx::MouseControllerKeyType::MOUSE_LEFT,
+            ifx::MouseControllerCallbackType::PRESSED
+        }
     );
 
     auto command_scroll = command_factory.CreateMouseCommand(
-            camera,
-            [soft_body_view](
-                    std::shared_ptr<ifx::Controller> controller,
-                    std::shared_ptr<ifx::Controlable> obj){
-                if(!soft_body_view->is_window_focused())
-                    return;
-                auto mouse = std::static_pointer_cast<ifx::MouseController>(
-                        controller);
-                auto camera = std::static_pointer_cast<ifx::CameraComponent>
-                        (obj);
+        camera,
+        [soft_body_view](
+            std::shared_ptr<ifx::Controller> controller,
+            std::shared_ptr<ifx::Controlable> obj) {
+            if (!soft_body_view->is_window_focused())
+                return;
+            auto mouse = std::static_pointer_cast<ifx::MouseController>(
+                controller);
+            auto camera = std::static_pointer_cast<ifx::CameraComponent>
+                (obj);
 
-                auto current_scale = camera->getScale();
-                auto offset = (0.5f * mouse->GetScrollOffset().y);
-                if(current_scale.x < 0 && offset < 0)
-                    offset = 0;
-                camera->scale(current_scale + offset);
-            },
-            ifx::MouseControllerEventType {
-                    ifx::MouseControllerKeyType::MOUSE_SCROLL,
-                    ifx::MouseControllerCallbackType::SCROLL_ACTIVE
-            }
+            auto current_scale = camera->getScale();
+            auto offset = (0.5f * mouse->GetScrollOffset().y);
+            if (current_scale.x < 0 && offset < 0)
+                offset = 0;
+            camera->scale(current_scale + offset);
+        },
+        ifx::MouseControllerEventType {
+            ifx::MouseControllerKeyType::MOUSE_SCROLL,
+            ifx::MouseControllerCallbackType::SCROLL_ACTIVE
+        }
     );
     auto command_middle = command_factory.CreateMouseCommand(
-            camera,
-            [](std::shared_ptr<ifx::Controller> controller,
-               std::shared_ptr<ifx::Controlable> obj){
-                auto mouse = std::static_pointer_cast<ifx::MouseController>(
-                        controller);
-                auto camera = std::static_pointer_cast<ifx::CameraComponent>
-                        (obj);
-                float movementSpeed = 0.1f;
+        camera,
+        [](std::shared_ptr<ifx::Controller> controller,
+           std::shared_ptr<ifx::Controlable> obj) {
+            auto mouse = std::static_pointer_cast<ifx::MouseController>(
+                controller);
+            auto camera = std::static_pointer_cast<ifx::CameraComponent>
+                (obj);
+            float movementSpeed = 0.1f;
 
-                auto current_position = mouse->GetCurrentPosition();
-                auto previous_position = mouse->GetPreviousPosition();
+            auto current_position = mouse->GetCurrentPosition();
+            auto previous_position = mouse->GetPreviousPosition();
 
-                float xoffset = current_position.x - previous_position.x;
-                float yoffset = previous_position.y - current_position.y;
+            float xoffset = current_position.x - previous_position.x;
+            float yoffset = previous_position.y - current_position.y;
 
-                camera->move(-xoffset * camera->GetRight() *
-                             movementSpeed *  0.1f);
-                camera->move(yoffset * camera->GetUp() *
-                             movementSpeed *  0.1f);
+            camera->move(-xoffset * camera->GetRight() *
+                movementSpeed * 0.1f);
+            camera->move(yoffset * camera->GetUp() *
+                movementSpeed * 0.1f);
 
-            },
-            ifx::MouseControllerEventType {
-                    ifx::MouseControllerKeyType::MOUSE_MIDDLE,
-                    ifx::MouseControllerCallbackType::PRESSED
-            }
+        },
+        ifx::MouseControllerEventType {
+            ifx::MouseControllerKeyType::MOUSE_MIDDLE,
+            ifx::MouseControllerCallbackType::PRESSED
+        }
     );
     auto command_zoom = command_factory.CreateMouseCommand(
-            camera,
-            [soft_body_view](
-                    std::shared_ptr<ifx::Controller> controller,
-                    std::shared_ptr<ifx::Controlable> obj){
-                if(!soft_body_view->is_window_focused())
-                    return;
-                auto mouse = std::static_pointer_cast<ifx::MouseController>(
-                        controller);
-                auto camera = std::static_pointer_cast<ifx::CameraComponent>
-                        (obj);
-                float movementSpeed = 0.1f;
+        camera,
+        [soft_body_view](
+            std::shared_ptr<ifx::Controller> controller,
+            std::shared_ptr<ifx::Controlable> obj) {
+            if (!soft_body_view->is_window_focused())
+                return;
+            auto mouse = std::static_pointer_cast<ifx::MouseController>(
+                controller);
+            auto camera = std::static_pointer_cast<ifx::CameraComponent>
+                (obj);
+            float movementSpeed = 0.1f;
 
-                auto current_position = mouse->GetCurrentPosition();
-                auto previous_position = mouse->GetPreviousPosition();
+            auto current_position = mouse->GetCurrentPosition();
+            auto previous_position = mouse->GetPreviousPosition();
 
-                float yoffset = previous_position.y - current_position.y;
+            float yoffset = previous_position.y - current_position.y;
 
-                auto current_scale = camera->getScale();
-                camera->scale(current_scale + (0.1f * movementSpeed * yoffset));
-            },
-            ifx::MouseControllerEventType {
-                    ifx::MouseControllerKeyType::MOUSE_RIGHT,
-                    ifx::MouseControllerCallbackType::PRESSED
-            }
+            auto current_scale = camera->getScale();
+            camera->scale(current_scale + (0.1f * movementSpeed * yoffset));
+        },
+        ifx::MouseControllerEventType {
+            ifx::MouseControllerKeyType::MOUSE_RIGHT,
+            ifx::MouseControllerCallbackType::PRESSED
+        }
     );
     controls->AddCommand(command_middle);
     controls->AddCommand(command_rotate_mouse);

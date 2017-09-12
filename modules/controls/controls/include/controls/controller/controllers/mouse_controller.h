@@ -25,19 +25,19 @@ struct MouseControllerEvents {
 
 class MouseController : public Controller {
 public:
-    MouseController(const MouseControllerEvents&& mouse_input_events);
+    MouseController(const MouseControllerEvents &&mouse_input_events);
 
     ~MouseController();
 
-    const MousePosition& GetCurrentPosition(){return current_position_;}
-    const MousePosition& GetPreviousPosition(){return previous_position_;}
-    const MousePosition& GetScrollOffset(){return scroll_offset_;}
+    const MousePosition &GetCurrentPosition() { return current_position_; }
+    const MousePosition &GetPreviousPosition() { return previous_position_; }
+    const MousePosition &GetScrollOffset() { return scroll_offset_; }
 
-    void SetCurrentPosition(const MousePosition&& pos);
-    void SetScrollOffset(const MousePosition&& pos);
+    void SetCurrentPosition(const MousePosition &&pos);
+    void SetScrollOffset(const MousePosition &&pos);
 
     std::shared_ptr<MouseControllerEvent> GetEvent(
-            MouseControllerKeyType type);
+        MouseControllerKeyType type);
 
     virtual void Update(float time_delta = 0) override;
 
@@ -48,6 +48,5 @@ private:
     MousePosition scroll_offset_;
 };
 }
-
 
 #endif //PROJECT_MOUSE_INPUT_H

@@ -10,18 +10,19 @@
 
 #include <boost/filesystem.hpp>
 
-namespace ifx{
+namespace ifx {
 
 RenderingEffectView::RenderingEffectView(
-        std::shared_ptr<RenderingEffectProcessor> rendering_effect_processor) :
-        rendering_effect_processor_(rendering_effect_processor),
-        selected_rendering_effect_(nullptr),
-        render_error_window_(false),
-        shader_error_message_(""){}
+    std::shared_ptr<RenderingEffectProcessor> rendering_effect_processor) :
+    rendering_effect_processor_(rendering_effect_processor),
+    selected_rendering_effect_(nullptr),
+    render_error_window_(false),
+    shader_error_message_("") {}
 
 void RenderingEffectView::Render(
-        const std::vector<std::shared_ptr<RenderingEffect>>& rendering_effects ){
-    if(ImGui::TreeNodeEx("Rendering Effects", ImGuiTreeNodeFlags_DefaultOpen)) {
+    const std::vector<std::shared_ptr<RenderingEffect>> &rendering_effects) {
+    if (ImGui::TreeNodeEx("Rendering Effects",
+                          ImGuiTreeNodeFlags_DefaultOpen)) {
         RenderReloadProject();
         RenderList(rendering_effects);
         ImGui::TreePop();
@@ -29,56 +30,58 @@ void RenderingEffectView::Render(
 
     ImGui::Separator();
 
-    if(ImGui::TreeNodeEx("Inspector", ImGuiTreeNodeFlags_DefaultOpen)) {
+    if (ImGui::TreeNodeEx("Inspector", ImGuiTreeNodeFlags_DefaultOpen)) {
         RenderInspector(selected_rendering_effect_);
         ImGui::TreePop();
     }
 
 }
 
-void RenderingEffectView::RenderReloadProject(){
+void RenderingEffectView::RenderReloadProject() {
     if (ImGui::BeginPopupContextItem("Reload Project Context Menu")) {
-        if(ImGui::Selectable("Reload Project")){
+        if (ImGui::Selectable("Reload Project")) {
             rendering_effect_processor_->CompileAllPrograms();
         }
         ImGui::EndPopup();
     }
 }
 
-void RenderingEffectView::RenderList(const std::vector<std::shared_ptr<RenderingEffect>>& rendering_effects){
+void RenderingEffectView::RenderList(const std::vector<std::shared_ptr<
+    RenderingEffect>> &rendering_effects) {
     static int selection_mask = (1 << 2);
 
-    for(unsigned int i = 0;i < rendering_effects.size(); i++){
+    for (unsigned int i = 0; i < rendering_effects.size(); i++) {
         int node_clicked = -1;
         ImGuiTreeNodeFlags node_flags
-                = ImGuiTreeNodeFlags_Bullet | ((selection_mask & (1 << i)) ?
-                                               ImGuiTreeNodeFlags_Selected : 0);
-        bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)i,
+            = ImGuiTreeNodeFlags_Bullet | ((selection_mask & (1 << i)) ?
+                                           ImGuiTreeNodeFlags_Selected : 0);
+        bool node_open = ImGui::TreeNodeEx((void *) (intptr_t) i,
                                            node_flags,
-                                           GetBaseName(rendering_effects[i]->name()).c_str());
-        if (ImGui::IsItemClicked()){
+                                           GetBaseName(rendering_effects[i]
+                                                           ->name()).c_str());
+        if (ImGui::IsItemClicked()) {
             node_clicked = i;
         }
-        if (node_clicked != -1){
+        if (node_clicked != -1) {
             selection_mask = (1 << node_clicked);
             selected_rendering_effect_ = rendering_effects[i];
         }
 
-        if (node_open){
+        if (node_open) {
             ImGui::TreePop();
         }
     }
 }
 
 void RenderingEffectView::RenderInspector(
-        std::shared_ptr<RenderingEffect> rendering_effect){
-    if(rendering_effect){
-        if(ImGui::TreeNodeEx("Shaders", ImGuiTreeNodeFlags_DefaultOpen)){
+    std::shared_ptr<RenderingEffect> rendering_effect) {
+    if (rendering_effect) {
+        if (ImGui::TreeNodeEx("Shaders", ImGuiTreeNodeFlags_DefaultOpen)) {
             RenderShaders(rendering_effect);
             ImGui::TreePop();
         }
-        if(ImGui::TreeNodeEx("Rendering State",
-                             ImGuiTreeNodeFlags_DefaultOpen)){
+        if (ImGui::TreeNodeEx("Rendering State",
+                              ImGuiTreeNodeFlags_DefaultOpen)) {
             RenderState(rendering_effect);
             ImGui::TreePop();
         }
@@ -86,7 +89,7 @@ void RenderingEffectView::RenderInspector(
 }
 
 void RenderingEffectView::RenderShaders(
-        std::shared_ptr<RenderingEffect> rendering_effect){
+    std::shared_ptr<RenderingEffect> rendering_effect) {
     RenderShaderReload(rendering_effect);
 
     auto program = rendering_effect->program();
@@ -100,23 +103,23 @@ void RenderingEffectView::RenderShaders(
 }
 
 void RenderingEffectView::RenderShaderReload(
-        std::shared_ptr<RenderingEffect> rendering_effect){
+    std::shared_ptr<RenderingEffect> rendering_effect) {
     if (ImGui::BeginPopupContextItem("Recompile Shaders Context Menu")) {
-        if(ImGui::Selectable("Recompile Shaders")){
+        if (ImGui::Selectable("Recompile Shaders")) {
             rendering_effect->program()->Reload();
         }
         ImGui::EndPopup();
     }
 }
 
-void RenderingEffectView::RenderShader(Shader* shader,
+void RenderingEffectView::RenderShader(Shader *shader,
                                        std::shared_ptr<Program> program,
-                                       std::string shader_type_name){
-    if(!shader)
+                                       std::string shader_type_name) {
+    if (!shader)
         return;
     ImGui::PushID(shader_type_name.c_str());
     std::string text = shader_type_name + ": "
-                       + GetBaseShaderName(shader->file_path());
+        + GetBaseShaderName(shader->file_path());
 
     ImGui::Bullet();
     ImGui::SameLine();
@@ -132,7 +135,7 @@ void RenderingEffectView::RenderShader(Shader* shader,
     ImGui::PopID();
 }
 
-void RenderingEffectView::RenderShaderWindow(Shader* shader,
+void RenderingEffectView::RenderShaderWindow(Shader *shader,
                                              std::shared_ptr<Program> program,
                                              bool open) {
     if (!shader)
@@ -157,15 +160,15 @@ void RenderingEffectView::RenderShaderWindow(Shader* shader,
         ImGui::SameLine();
         if (ImGui::Button("Save", ImVec2(120, 0))) {
             boost::filesystem::save_string_file(
-                    boost::filesystem::path(shader->file_path()),
-                    std::string(raw_text));
+                boost::filesystem::path(shader->file_path()),
+                std::string(raw_text));
             shader_error = shader->Reload();
             if (shader_error.error_occured) {
                 render_error_window_ = true;
                 shader_error_message_ = shader_error.message;
-            } else{
+            } else {
                 auto program_error = program->Reload();
-                if(program_error.error_occured){
+                if (program_error.error_occured) {
                     render_error_window_ = true;
                     shader_error_message_ = program_error.message;
                 }
@@ -174,18 +177,18 @@ void RenderingEffectView::RenderShaderWindow(Shader* shader,
         ImGui::SameLine();
         if (ImGui::Button("Save & Close", ImVec2(120, 0))) {
             boost::filesystem::save_string_file(
-                    boost::filesystem::path(shader->file_path()),
-                    std::string(raw_text));
+                boost::filesystem::path(shader->file_path()),
+                std::string(raw_text));
             shader_error = shader->Reload();
             if (shader_error.error_occured) {
                 render_error_window_ = true;
                 shader_error_message_ = shader_error.message;
-            } else{
+            } else {
                 auto program_error = program->Reload();
-                if(program_error.error_occured){
+                if (program_error.error_occured) {
                     render_error_window_ = true;
                     shader_error_message_ = program_error.message;
-                }else{
+                } else {
                     ImGui::CloseCurrentPopup();
                 }
             }
@@ -194,19 +197,21 @@ void RenderingEffectView::RenderShaderWindow(Shader* shader,
         if (ImGui::Button("Close", ImVec2(120, 0)))
             ImGui::CloseCurrentPopup();
 
-        if(render_error_window_)
+        if (render_error_window_)
             RenderErrorWindow(shader_error);
 
         ImGui::EndPopup();
     }
 }
 
-void RenderingEffectView::RenderErrorWindow(const ShaderError& shader_error){
+void RenderingEffectView::RenderErrorWindow(const ShaderError &shader_error) {
     ImGui::OpenPopup("Shader Error");
-    if (ImGui::BeginPopupModal("Shader Error", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+    if (ImGui::BeginPopupModal("Shader Error",
+                               NULL,
+                               ImGuiWindowFlags_AlwaysAutoResize)) {
         ImGui::Text(shader_error_message_.c_str());
         ImGui::Separator();
-        if(ImGui::Button("OK", ImVec2(100, 0))) {
+        if (ImGui::Button("OK", ImVec2(100, 0))) {
             render_error_window_ = false;
             ImGui::CloseCurrentPopup();
         }
@@ -215,27 +220,28 @@ void RenderingEffectView::RenderErrorWindow(const ShaderError& shader_error){
 }
 
 void RenderingEffectView::RenderState(
-        std::shared_ptr<RenderingEffect> rendering_effect){
+    std::shared_ptr<RenderingEffect> rendering_effect) {
     ImGui::PushItemWidth(75);
     ImGui::SliderInt("Drawing Priority",
-                     (int *) &rendering_effect->rendering_state().drawing_priority,
+                     (int *) &rendering_effect->rendering_state()
+                         .drawing_priority,
                      0, 100);
     ImGui::PopItemWidth();
 }
 
-std::string RenderingEffectView::GetBaseName(const std::string& name){
+std::string RenderingEffectView::GetBaseName(const std::string &name) {
     std::string base_name = "";
-    for(unsigned int i = 0; i < name.length(); i++){
-        if(name[i] == '.')
+    for (unsigned int i = 0; i < name.length(); i++) {
+        if (name[i] == '.')
             break;
         base_name += name[i];
     }
     return base_name;
 }
 
-std::string RenderingEffectView::GetBaseShaderName(const std::string& name){
+std::string RenderingEffectView::GetBaseShaderName(const std::string &name) {
     auto pos = name.find_last_of("/");
-    return name.substr(pos+1, name.length());
+    return name.substr(pos + 1, name.length());
 }
 
 }

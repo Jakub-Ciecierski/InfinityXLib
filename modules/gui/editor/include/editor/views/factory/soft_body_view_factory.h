@@ -24,7 +24,7 @@ extern const std::string FACES_RENDERING_EFFECT_NAME;
 class SoftBodyViewFactory : public ViewFactory {
 public:
     SoftBodyViewFactory(
-            std::shared_ptr<EngineArchitecture> engine_architecture);
+        std::shared_ptr<EngineArchitecture> engine_architecture);
     ~SoftBodyViewFactory() = default;
 
     virtual std::shared_ptr<View> Create() override;
@@ -33,18 +33,18 @@ private:
     std::unique_ptr<GameSystemsFactory> CreateGameSystemsFactory();
 
     SoftBodyRenderingEffects SetRendererSettings(
-            std::shared_ptr<Renderer> renderer,
-            std::shared_ptr<Renderer> old_renderer);
+        std::shared_ptr<Renderer> renderer,
+        std::shared_ptr<Renderer> old_renderer);
     SoftBodyRenderingEffects CreateRenderingEffects(
-            std::shared_ptr<Renderer> old_renderer);
+        std::shared_ptr<Renderer> old_renderer);
 
     void SetDefaultScene(std::shared_ptr<SceneContainer> scene,
                          std::shared_ptr<SoftBodyView> soft_body_view);
 
     void SetKeybinds(
-            std::shared_ptr<Controls> controls,
-            std::shared_ptr<CameraComponent> camera,
-            std::shared_ptr<SoftBodyView> soft_body_view);
+        std::shared_ptr<Controls> controls,
+        std::shared_ptr<CameraComponent> camera,
+        std::shared_ptr<SoftBodyView> soft_body_view);
 
     std::shared_ptr<EngineArchitecture> engine_architecture_;
 };

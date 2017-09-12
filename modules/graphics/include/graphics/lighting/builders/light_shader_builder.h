@@ -5,25 +5,25 @@
 
 namespace ifx {
 
-    /*
-     * Abstract Class for building strings for shader binding
-     */
-    class LightShaderBuilder {
-    protected:
-        int id;
+/*
+ * Abstract Class for building strings for shader binding
+ */
+class LightShaderBuilder {
+protected:
+    int id;
 
-    public:
+public:
 
-        LightShaderBuilder(int id);
+    LightShaderBuilder(int id);
 
-        virtual ~LightShaderBuilder();
+    virtual ~LightShaderBuilder();
 
-        std::string appendToBase(int id,
-                                 const std::string baseName,
-                                 const std::string fieldName);
+    std::string appendToBase(int id,
+                             const std::string baseName,
+                             const std::string fieldName);
 
-        virtual void build() = 0;
-    };
+    virtual void build() = 0;
+};
 }
 
 #endif //DUCK_LIGHT_SHADER_BUILDER_H

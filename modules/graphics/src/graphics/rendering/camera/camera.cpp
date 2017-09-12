@@ -10,11 +10,11 @@ namespace ifx {
 
 Camera::Camera(int *width, int *height,
                float FOV, float near, float far) :
-        width(width), height(height),
-        FOV(FOV), near_(near), far_(far),
-        camera_style_(CameraStyle::FPS){
+    width(width), height(height),
+    FOV(FOV), near_(near), far_(far),
+    camera_style_(CameraStyle::FPS) {
     WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
-    moveTo(glm::vec3(1,1,1));
+    moveTo(glm::vec3(1, 1, 1));
     Update();
 }
 
@@ -34,14 +34,14 @@ void Camera::Update(float time_delta) {
     UpdateGlobal();
 
     ProjectionMatrix
-            = glm::perspective(FOV, (float) (*width) / (float) (*height),
-                               near_, far_);
+        = glm::perspective(FOV, (float) (*width) / (float) (*height),
+                           near_, far_);
     auto position = getPosition();
     auto rotation = getRotation();
 
     glm::vec3 direction;
     direction.x = cos(glm::radians(rotation.x))
-                  * cos(glm::radians(rotation.y));
+        * cos(glm::radians(rotation.y));
     direction.y = sin(glm::radians(rotation.y));
     direction.z = sin(glm::radians(rotation.x)) * cos(glm::radians(rotation.y));
     direction = glm::normalize(direction);
@@ -94,7 +94,7 @@ void Camera::use(const Program &program) {
     // View Position
     GLint viewPosLoc = glGetUniformLocation(program.getID(),
                                             VIEW_POSITION_NAME.c_str());
-    auto& position = getPosition();
+    auto &position = getPosition();
     glUniform3f(viewPosLoc, position.x, position.y, position.z);
 }
 
@@ -119,12 +119,14 @@ void Camera::clampRotation() {
 
 glm::mat4 Camera::ComputeViewMatrix(const glm::vec3 position,
                                     const glm::vec3 direction,
-                                    const glm::vec3 up){
-    switch(camera_style_){
+                                    const glm::vec3 up) {
+    switch (camera_style_) {
         case CameraStyle::FPS:
-            return glm::lookAt(position, position + direction, up);
+            return glm::lookAt(position,
+                               position + direction,
+                               up);
         case CameraStyle::ThirdPerson:
-            return glm::lookAt(position - glm::length(getScale())*direction,
+            return glm::lookAt(position - glm::length(getScale()) * direction,
                                position + direction,
                                up);
     }

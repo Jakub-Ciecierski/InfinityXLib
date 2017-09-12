@@ -17,11 +17,11 @@ public:
     ~MeshingBuilder() = default;
 
     rtfem::TriangleMeshIndexed<double> CreateTriangleMesh(
-            std::shared_ptr<RenderComponent> render_component);
+        std::shared_ptr<RenderComponent> render_component);
 
     std::shared_ptr<RenderComponent> CreateRenderComponent(
-            const rtfem::FEMGeometry<double>& fem_geometry,
-            std::shared_ptr<ResourceManager> resource_manager);
+        const rtfem::FEMGeometry<double> &fem_geometry,
+        std::shared_ptr<ResourceManager> resource_manager);
 
 private:
 };

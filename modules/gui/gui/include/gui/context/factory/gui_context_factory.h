@@ -20,5 +20,4 @@ private:
 };
 }
 
-
 #endif //PROJECT_CONTEXT_FACTORY_H

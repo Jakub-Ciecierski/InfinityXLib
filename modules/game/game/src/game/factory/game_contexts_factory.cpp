@@ -10,38 +10,38 @@
 
 #include <physics/context/factory/physx_context_factory.h>
 
-namespace ifx{
+namespace ifx {
 
-GameContextsFactory::GameContextsFactory(){
+GameContextsFactory::GameContextsFactory() {
     CreateDefaultFactories();
 }
 
-EngineContexts GameContextsFactory::Create(){
+EngineContexts GameContextsFactory::Create() {
     EngineContexts engine_contexts;
 
-    if(rendering_context_factory_) {
+    if (rendering_context_factory_) {
         engine_contexts.rendering_context
-                = rendering_context_factory_->Create();
+            = rendering_context_factory_->Create();
     }
-    if(resource_context_factory_) {
+    if (resource_context_factory_) {
         engine_contexts.resource_context = resource_context_factory_->Create();
     }
-    if(control_context_factory_) {
+    if (control_context_factory_) {
         engine_contexts.control_context = control_context_factory_->Create();
     }
-    if(gui_context_factory_) {
+    if (gui_context_factory_) {
         engine_contexts.gui_context = gui_context_factory_->Create();
     }
-    if(physics_context_factory_){
+    if (physics_context_factory_) {
         engine_contexts.physics_context = physics_context_factory_->Create();
     }
 
     return engine_contexts;
 }
 
-void GameContextsFactory::CreateDefaultFactories(){
+void GameContextsFactory::CreateDefaultFactories() {
     rendering_context_factory_
-            = std::make_shared<RenderingContextOpenglFactory>();
+        = std::make_shared<RenderingContextOpenglFactory>();
 
     resource_context_factory_ = std::make_shared<ResourceContextFactory>();
 
@@ -52,33 +52,33 @@ void GameContextsFactory::CreateDefaultFactories(){
     physics_context_factory_ = std::make_shared<PhysxContextFactory>();
 }
 
-GameContextsFactory& GameContextsFactory::SetRenderingContextFactory(
-        std::shared_ptr<RenderingContextFactory> factory){
+GameContextsFactory &GameContextsFactory::SetRenderingContextFactory(
+    std::shared_ptr<RenderingContextFactory> factory) {
     rendering_context_factory_ = factory;
     return *this;
 }
 
-GameContextsFactory& GameContextsFactory::SetResourceContextFactory(
-        std::shared_ptr<ResourceContextFactory> factory){
+GameContextsFactory &GameContextsFactory::SetResourceContextFactory(
+    std::shared_ptr<ResourceContextFactory> factory) {
     resource_context_factory_ = factory;
     return *this;
 }
 
-GameContextsFactory& GameContextsFactory::SetControlContextFactory(
-        std::shared_ptr<ControlContextFactory> factory){
+GameContextsFactory &GameContextsFactory::SetControlContextFactory(
+    std::shared_ptr<ControlContextFactory> factory) {
     control_context_factory_ = factory;
     return *this;
 }
 
 GameContextsFactory &
 GameContextsFactory::SetGUIContextFactory(
-        std::shared_ptr<GUIContextFactory> factory) {
+    std::shared_ptr<GUIContextFactory> factory) {
     gui_context_factory_ = factory;
     return *this;
 }
 
-GameContextsFactory& GameContextsFactory::SetPhysicsContextFactory(
-        std::shared_ptr<PhysicsContextFactory> factory){
+GameContextsFactory &GameContextsFactory::SetPhysicsContextFactory(
+    std::shared_ptr<PhysicsContextFactory> factory) {
     physics_context_factory_ = factory;
     return *this;
 }

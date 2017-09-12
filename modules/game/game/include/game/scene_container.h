@@ -18,15 +18,16 @@ class CameraComponent;
 /**
  * Container for GameObjects. Distributes game components to sub systems.
  */
-class  SceneContainer : public Updatable{
+class SceneContainer : public Updatable {
 public:
 
     SceneContainer(std::shared_ptr<SceneRenderer> scene_renderer,
                    std::shared_ptr<PhysicsSimulation> physics_simulation);
     ~SceneContainer() = default;
 
-    std::vector<std::shared_ptr<GameObject>>& game_objects(){
-        return game_objects_;}
+    std::vector<std::shared_ptr<GameObject>> &game_objects() {
+        return game_objects_;
+    }
 
     virtual void Update(float time_delta = 0) override;
 

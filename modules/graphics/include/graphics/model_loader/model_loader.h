@@ -24,9 +24,9 @@ class ModelLoader {
 public:
 
     ModelLoader(
-            std::string filepath,
-            std::shared_ptr<ModelCreator> model_creator,
-            std::shared_ptr<TextureCreator> texture_creator);
+        std::string filepath,
+        std::shared_ptr<ModelCreator> model_creator,
+        std::shared_ptr<TextureCreator> texture_creator);
 
     ~ModelLoader() = default;
 
@@ -57,9 +57,9 @@ private:
      */
     std::vector<GLuint> processIndices(aiMesh *mesh);
 
-    void calculateTBN(std::vector<Vertex>& vertices,
-                      const std::vector<GLuint>& indices);
-    void calculateTBN(Vertex& v0, Vertex& v1, Vertex& v2);
+    void calculateTBN(std::vector<Vertex> &vertices,
+                      const std::vector<GLuint> &indices);
+    void calculateTBN(Vertex &v0, Vertex &v1, Vertex &v2);
 
     /*
      * Loads all textures.
@@ -67,15 +67,15 @@ private:
      * Update this function to support more textures types.
      */
     std::vector<std::shared_ptr<Texture2D>> processTextures(
-            aiMesh *mesh, const aiScene* scene);
+        aiMesh *mesh, const aiScene *scene);
 
     /*
      * Loads all texture of specific type e.g. Diffuse or Specular
      */
     std::vector<std::shared_ptr<Texture2D>> loadMaterialTextures(
-            aiMaterial *mat,
-            aiTextureType type,
-            TextureTypes texType);
+        aiMaterial *mat,
+        aiTextureType type,
+        TextureTypes texType);
 
     void printInfo(const Model &model);
 

@@ -9,14 +9,14 @@ class RenderingEffect;
 class GameObject;
 class RenderComponent;
 
-struct SoftBodyRenderingEffects{
+struct SoftBodyRenderingEffects {
     std::shared_ptr<RenderingEffect> nodes = nullptr;
     std::shared_ptr<RenderingEffect> edges = nullptr;
     std::shared_ptr<RenderingEffect> faces = nullptr;
     std::shared_ptr<RenderingEffect> main = nullptr;
 };
 
-struct SoftBodyObjects{
+struct SoftBodyObjects {
     std::shared_ptr<GameObject> current_game_object;
     std::shared_ptr<RenderComponent> triangle_mesh;
     std::shared_ptr<RenderComponent> fem_geometry;

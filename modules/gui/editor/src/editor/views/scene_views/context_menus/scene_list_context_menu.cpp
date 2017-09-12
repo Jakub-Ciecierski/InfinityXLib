@@ -6,10 +6,11 @@
 
 namespace ifx {
 
-SceneListContextMenu::SceneListContextMenu(std::shared_ptr<SceneContainer> scene) :
-        scene_(scene) {}
+SceneListContextMenu::SceneListContextMenu(std::shared_ptr<SceneContainer> scene)
+    :
+    scene_(scene) {}
 
-SceneListContextMenu::~SceneListContextMenu(){}
+SceneListContextMenu::~SceneListContextMenu() {}
 
 void SceneListContextMenu::Render() {
     if (ImGui::BeginPopupContextItem("GameObjects context menu")) {

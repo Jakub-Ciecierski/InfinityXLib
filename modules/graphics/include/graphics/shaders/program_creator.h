@@ -14,10 +14,11 @@ public:
 
     ~ProgramCreator();
 
-    std::shared_ptr<ResourceManager> resource_manager(){
-        return resource_manager_;}
+    std::shared_ptr<ResourceManager> resource_manager() {
+        return resource_manager_;
+    }
 
-    std::shared_ptr<Program> MakeProgram(Shaders& shaders);
+    std::shared_ptr<Program> MakeProgram(Shaders &shaders);
 private:
 
     std::shared_ptr<ResourceManager> resource_manager_;

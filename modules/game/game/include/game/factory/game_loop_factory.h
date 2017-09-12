@@ -21,7 +21,7 @@ public:
     ~GameLoopFactory();
 
     std::shared_ptr<GameLoop> Create(
-            std::shared_ptr<EngineArchitecture> engine_architecture);
+        std::shared_ptr<EngineArchitecture> engine_architecture);
 private:
 };
 }

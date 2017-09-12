@@ -11,11 +11,11 @@ public:
     RenderingContext();
     virtual ~RenderingContext();
 
-    bool IsInit(){return is_init_;}
+    bool IsInit() { return is_init_; }
 
     virtual bool Terminate() = 0;
 
-    virtual void* InitAndCreateNativeWindowHandle(std::string name,
+    virtual void *InitAndCreateNativeWindowHandle(std::string name,
                                                   int *width, int *height) = 0;
 protected:
     bool is_init_;

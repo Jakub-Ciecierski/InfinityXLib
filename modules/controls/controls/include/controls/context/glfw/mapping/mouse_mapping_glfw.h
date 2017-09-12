@@ -3,7 +3,7 @@
 
 #include <controls/controller/controller_types.h>
 
-namespace ifx{
+namespace ifx {
 
 int MouseKeyIFX2GLFW(MouseControllerKeyType ifx_key);
 MouseControllerKeyType MouseGLFW2IFX(int glfw_key);

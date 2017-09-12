@@ -1,12 +1,12 @@
 #include "editor/view.h"
 
-namespace ifx{
+namespace ifx {
 
 View::View(std::string name) :
-        name_(name),
-        is_window_focused_(false){}
+    name_(name),
+    is_window_focused_(false) {}
 
-bool View::Terminate(){
+bool View::Terminate() {
     return true;
 }
 

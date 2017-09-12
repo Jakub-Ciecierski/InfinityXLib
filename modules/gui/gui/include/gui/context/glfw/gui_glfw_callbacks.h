@@ -5,7 +5,7 @@ struct GLFWwindow;
 
 namespace ifx {
 
-namespace gui_glfw_callbacks{
+namespace gui_glfw_callbacks {
 
 bool key_callback(GLFWwindow *window, int key,
                   int scancode, int action, int mode);

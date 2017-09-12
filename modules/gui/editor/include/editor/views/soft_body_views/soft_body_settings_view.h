@@ -13,7 +13,7 @@ struct SoftBodyObjects;
 class RenderingEffect;
 class RenderComponent;
 
-enum class RenderObjectMode{
+enum class RenderObjectMode {
     Output, Input
 };
 
@@ -28,23 +28,24 @@ public:
     SoftBodySettingsView();
     ~SoftBodySettingsView() = default;
 
-    const rtfem::TetrahedralizationOptions& rtfem_options(){
-        return rtfem_options_;}
+    const rtfem::TetrahedralizationOptions &rtfem_options() {
+        return rtfem_options_;
+    }
 
-    void Render(SoftBodyObjects& soft_body_objects,
-                SoftBodyRenderingEffects& rendering_effects);
+    void Render(SoftBodyObjects &soft_body_objects,
+                SoftBodyRenderingEffects &rendering_effects);
 
     void SetRenderObjectMode(RenderObjectMode mode);
 
 private:
-    void RenderShow(SoftBodyRenderingEffects& rendering_effects,
-                    SoftBodyObjects& soft_body_objects);
+    void RenderShow(SoftBodyRenderingEffects &rendering_effects,
+                    SoftBodyObjects &soft_body_objects);
     void RenderShowRenderingEffects(
-            SoftBodyRenderingEffects& rendering_effects);
+        SoftBodyRenderingEffects &rendering_effects);
     void RenderShowRenderingEffectCheckbox(std::string name,
                                            RenderingEffect &rendering_effect);
 
-    void RenderShowObjects(SoftBodyObjects& soft_body_objects);
+    void RenderShowObjects(SoftBodyObjects &soft_body_objects);
 
     void RenderMeshingSettings();
 

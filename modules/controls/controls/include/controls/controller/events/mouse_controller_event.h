@@ -10,16 +10,15 @@ namespace ifx {
 class MouseControllerEvent : public ControllerEvent {
 public:
 
-    MouseControllerEvent(const MouseControllerKeyType&& type);
+    MouseControllerEvent(const MouseControllerKeyType &&type);
 
     virtual ~MouseControllerEvent();
 
-    const MouseControllerKeyType& type(){return type_;}
+    const MouseControllerKeyType &type() { return type_; }
 
 private:
     MouseControllerKeyType type_;
 };
 }
-
 
 #endif //PROJECT_MOUSE_INPUT_EVENT_H

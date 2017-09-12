@@ -4,14 +4,14 @@
 
 #include <game/game_object.h>
 
-namespace ifx{
+namespace ifx {
 
-GameObjectView::GameObjectView(){
+GameObjectView::GameObjectView() {
     movable_object_view_.reset(new MovableObjectView());
 }
-GameObjectView::~GameObjectView(){}
+GameObjectView::~GameObjectView() {}
 
-void GameObjectView::Render(std::shared_ptr<GameObject> game_object){
+void GameObjectView::Render(std::shared_ptr<GameObject> game_object) {
     movable_object_view_->Render(game_object);
 }
 

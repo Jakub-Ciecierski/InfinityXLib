@@ -6,10 +6,10 @@
 
 namespace ifx {
 
-class LightPointComponent : public GameComponent, public LightPoint{
+class LightPointComponent : public GameComponent, public LightPoint {
 public:
 
-    LightPointComponent(const LightParams& light_params);
+    LightPointComponent(const LightParams &light_params);
 
     ~LightPointComponent();
 

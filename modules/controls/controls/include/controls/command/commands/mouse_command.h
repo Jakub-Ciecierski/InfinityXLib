@@ -12,11 +12,10 @@ struct MouseCommandCondition {
     MouseControllerCallbackType type_;
 };
 
-
 class MouseCommand : public Command {
 public:
-    MouseCommand(const CommandExecutable&& executable,
-                 const MouseCommandCondition&& mouse_condition);
+    MouseCommand(const CommandExecutable &&executable,
+                 const MouseCommandCondition &&mouse_condition);
 
     virtual ~MouseCommand();
 
@@ -26,6 +25,5 @@ private:
 
 };
 }
-
 
 #endif //PROJECT_MOUSE_COMMAND_H

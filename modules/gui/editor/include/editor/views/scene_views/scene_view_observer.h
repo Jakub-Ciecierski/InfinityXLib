@@ -13,7 +13,7 @@ public:
     virtual ~SceneViewObserver() = default;
 
     virtual void OnSetSelectedGameObject(
-            std::shared_ptr<GameObject> selected_game_object) = 0;
+        std::shared_ptr<GameObject> selected_game_object) = 0;
 };
 }
 

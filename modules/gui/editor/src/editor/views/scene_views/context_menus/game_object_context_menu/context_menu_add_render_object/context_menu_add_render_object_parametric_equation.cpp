@@ -20,16 +20,16 @@
 namespace ifx {
 
 ContextMenuAddRenderObjectParametricEquation
-        ::ContextMenuAddRenderObjectParametricEquation() :
-        render_error_window_(false){
+::ContextMenuAddRenderObjectParametricEquation() :
+    render_error_window_(false) {
     parametric_equation_expressions_ = std::move
-            (CreateDefaultParametricEquationExpression());
+        (CreateDefaultParametricEquationExpression());
 }
 
 void ContextMenuAddRenderObjectParametricEquation::Render(
-        std::shared_ptr <SceneRenderer> scene_renderer,
-        std::shared_ptr <ResourceContext> resource_creator,
-        std::shared_ptr <GameObject> game_object) {
+    std::shared_ptr<SceneRenderer> scene_renderer,
+    std::shared_ptr<ResourceContext> resource_creator,
+    std::shared_ptr<GameObject> game_object) {
     if (ImGui::Button("Parametric Equation")) {
         ImGui::OpenPopup("Parametric Equation");
     }
@@ -43,14 +43,14 @@ void ContextMenuAddRenderObjectParametricEquation::Render(
 }
 
 std::unique_ptr<ParametricEquationExpressions>
-ContextMenuAddRenderObjectParametricEquation::CreateDefaultParametricEquationExpression(){
+ContextMenuAddRenderObjectParametricEquation::CreateDefaultParametricEquationExpression() {
     return ParametricEquationExpressionsFactory().CreateSphere();
 }
 
 void ContextMenuAddRenderObjectParametricEquation::RenderWindow(
-        std::shared_ptr <SceneRenderer> scene_renderer,
-        std::shared_ptr<ResourceContext> resource_creator,
-        std::shared_ptr<GameObject> game_object){
+    std::shared_ptr<SceneRenderer> scene_renderer,
+    std::shared_ptr<ResourceContext> resource_creator,
+    std::shared_ptr<GameObject> game_object) {
     RenderExampleEquations();
     ImGui::Separator();
     RenderExpressions();
@@ -64,7 +64,7 @@ void ContextMenuAddRenderObjectParametricEquation::RenderWindow(
     RenderFooter(scene_renderer, resource_creator, game_object);
 }
 
-void ContextMenuAddRenderObjectParametricEquation::RenderExpressions(){
+void ContextMenuAddRenderObjectParametricEquation::RenderExpressions() {
     ImGui::Text("Equations:");
 
     ImGui::PushItemWidth(200);
@@ -90,16 +90,16 @@ void ContextMenuAddRenderObjectParametricEquation::RenderExpressions(){
     ImGui::PopItemWidth();
 }
 
-void ContextMenuAddRenderObjectParametricEquation::RenderConstants(){
+void ContextMenuAddRenderObjectParametricEquation::RenderConstants() {
     ImGui::Text("Constants:");
     ImGui::SameLine();
-    if(ImGui::Button("Add Constant")){
+    if (ImGui::Button("Add Constant")) {
         parametric_equation_expressions_->constants.push_back(
-                ParametricEquationConstantExpression{"c", 1});
+            ParametricEquationConstantExpression{"c", 1});
     }
 
     int id = 0;
-    for(auto& constant : parametric_equation_expressions_->constants){
+    for (auto &constant : parametric_equation_expressions_->constants) {
         ImGui::PushID(id++);
 
         RenderInputExpression("name", constant.name);
@@ -110,7 +110,7 @@ void ContextMenuAddRenderObjectParametricEquation::RenderConstants(){
     }
 }
 
-void ContextMenuAddRenderObjectParametricEquation::RenderVariables(){
+void ContextMenuAddRenderObjectParametricEquation::RenderVariables() {
     ImGui::Text("Variables:");
     ImGui::PushItemWidth(50);
 
@@ -126,7 +126,7 @@ void ContextMenuAddRenderObjectParametricEquation::RenderVariables(){
 
 }
 
-void ContextMenuAddRenderObjectParametricEquation::RenderPrecision(){
+void ContextMenuAddRenderObjectParametricEquation::RenderPrecision() {
     ImGui::Text("Precision:");
     ImGui::PushItemWidth(50);
 
@@ -142,15 +142,15 @@ void ContextMenuAddRenderObjectParametricEquation::RenderPrecision(){
 }
 
 void ContextMenuAddRenderObjectParametricEquation::RenderFooter(
-        std::shared_ptr <SceneRenderer> scene_renderer,
-        std::shared_ptr<ResourceContext> resource_creator,
-        std::shared_ptr<GameObject> game_object) {
-    if(render_error_window_)
+    std::shared_ptr<SceneRenderer> scene_renderer,
+    std::shared_ptr<ResourceContext> resource_creator,
+    std::shared_ptr<GameObject> game_object) {
+    if (render_error_window_)
         RenderErrorWindow();
 
     if (ImGui::Button("OK", ImVec2(120, 0))) {
         TryCreateRenderComponent(scene_renderer, resource_creator, game_object);
-        if(!render_error_window_)
+        if (!render_error_window_)
             ImGui::CloseCurrentPopup();
     }
     ImGui::SameLine();
@@ -160,16 +160,17 @@ void ContextMenuAddRenderObjectParametricEquation::RenderFooter(
 }
 
 bool ContextMenuAddRenderObjectParametricEquation::TryCreateRenderComponent(
-        std::shared_ptr <SceneRenderer> scene_renderer,
-        std::shared_ptr<ResourceContext> resource_creator,
-        std::shared_ptr<GameObject> game_object){
+    std::shared_ptr<SceneRenderer> scene_renderer,
+    std::shared_ptr<ResourceContext> resource_creator,
+    std::shared_ptr<GameObject> game_object) {
     try {
         auto parametric_equation = ParametricInterpreter().Interpret(
-                *parametric_equation_expressions_.get());
+            *parametric_equation_expressions_.get());
 
-        game_object->Add(CreateRenderComponent(scene_renderer, std::move(parametric_equation),
+        game_object->Add(CreateRenderComponent(scene_renderer,
+                                               std::move(parametric_equation),
                                                resource_creator));
-    }catch(const std::invalid_argument& e){
+    } catch (const std::invalid_argument &e) {
         render_error_window_ = true;
         error_message_ = std::string(e.what());
         return false;
@@ -179,25 +180,25 @@ bool ContextMenuAddRenderObjectParametricEquation::TryCreateRenderComponent(
 
 std::shared_ptr<RenderComponent>
 ContextMenuAddRenderObjectParametricEquation::CreateRenderComponent(
-        std::shared_ptr <SceneRenderer> scene_renderer,
-        std::unique_ptr<ParametricEquation> parametric_equation,
-        std::shared_ptr<ResourceContext> resource_creator){
+    std::shared_ptr<SceneRenderer> scene_renderer,
+    std::unique_ptr<ParametricEquation> parametric_equation,
+    std::shared_ptr<ResourceContext> resource_creator) {
 
     auto model = ModelParametricLoader().CreateModel(
-            *parametric_equation.get(),
-            resource_creator->model_creator());
+        *parametric_equation.get(),
+        resource_creator->model_creator());
 
     auto render_object = std::make_shared<RenderComponent>(model);
     auto rendering_effects = scene_renderer->rendering_effects();
-    if(scene_renderer->default_rendering_effect()) {
+    if (scene_renderer->default_rendering_effect()) {
         scene_renderer->default_rendering_effect()->RegisterRenderObject(
-                render_object);
+            render_object);
     }
 
     return render_object;
 }
 
-void ContextMenuAddRenderObjectParametricEquation::RenderErrorWindow(){
+void ContextMenuAddRenderObjectParametricEquation::RenderErrorWindow() {
     ImGui::OpenPopup("Compilation Error");
     if (ImGui::BeginPopupModal("Compilation Error", NULL,
                                ImGuiWindowFlags_AlwaysAutoResize)) {
@@ -211,29 +212,29 @@ void ContextMenuAddRenderObjectParametricEquation::RenderErrorWindow(){
     }
 }
 
-void ContextMenuAddRenderObjectParametricEquation::RenderExampleEquations(){
+void ContextMenuAddRenderObjectParametricEquation::RenderExampleEquations() {
     if (ImGui::Button("Example Equations"))
         ImGui::OpenPopup("Equations");
     if (ImGui::BeginPopupModal("Equations", NULL,
-                               ImGuiWindowFlags_AlwaysAutoResize)){
+                               ImGuiWindowFlags_AlwaysAutoResize)) {
         if (ImGui::Button("Sphere", ImVec2(80, 0))) {
             parametric_equation_expressions_ =
-                    ParametricEquationExpressionsFactory().CreateSphere();
+                ParametricEquationExpressionsFactory().CreateSphere();
             ImGui::CloseCurrentPopup();
         }
         if (ImGui::Button("Torus", ImVec2(80, 0))) {
             parametric_equation_expressions_ =
-                    ParametricEquationExpressionsFactory().CreateTorus();
+                ParametricEquationExpressionsFactory().CreateTorus();
             ImGui::CloseCurrentPopup();
         }
         if (ImGui::Button("Cone", ImVec2(80, 0))) {
             parametric_equation_expressions_ =
-                    ParametricEquationExpressionsFactory().CreateCone();
+                ParametricEquationExpressionsFactory().CreateCone();
             ImGui::CloseCurrentPopup();
         }
         if (ImGui::Button("Cylinder", ImVec2(80, 0))) {
             parametric_equation_expressions_ =
-                    ParametricEquationExpressionsFactory().CreateCylinder();
+                ParametricEquationExpressionsFactory().CreateCylinder();
             ImGui::CloseCurrentPopup();
         }
 
@@ -247,7 +248,7 @@ void ContextMenuAddRenderObjectParametricEquation::RenderExampleEquations(){
 }
 
 void ContextMenuAddRenderObjectParametricEquation::RenderInputExpression(
-        std::string name, std::string& expression){
+    std::string name, std::string &expression) {
     constexpr int raw_size = 1024;
     char raw_text[raw_size];
 

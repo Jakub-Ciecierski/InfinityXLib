@@ -4,7 +4,7 @@
 using namespace ifx;
 
 ifx::DirlightShaderBuilder::DirlightShaderBuilder(int id) :
-        LightShaderBuilder(id){
+    LightShaderBuilder(id) {
 
 }
 
@@ -13,9 +13,9 @@ ifx::DirlightShaderBuilder::~DirlightShaderBuilder() {
 }
 
 void ifx::DirlightShaderBuilder::build() {
-    DIRECTION= appendToBase(id,
-                            LIGHT_DIRLIGHT_NAME,
-                            LIGHT_DIRECTION_NAME);
+    DIRECTION = appendToBase(id,
+                             LIGHT_DIRLIGHT_NAME,
+                             LIGHT_DIRECTION_NAME);
 
     AMBIENT = appendToBase(id,
                            LIGHT_DIRLIGHT_NAME,

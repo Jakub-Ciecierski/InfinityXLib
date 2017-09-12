@@ -6,9 +6,9 @@
 
 namespace ifx {
 
-GameComponentContextMenu::GameComponentContextMenu(){}
+GameComponentContextMenu::GameComponentContextMenu() {}
 
-GameComponentContextMenu::~GameComponentContextMenu(){}
+GameComponentContextMenu::~GameComponentContextMenu() {}
 
 GameComponentContextMenuEvent
 GameComponentContextMenu::Render(std::shared_ptr<GameObject> game_object,

@@ -18,7 +18,7 @@ public:
     bool RemoveObserver(std::shared_ptr<SceneViewObserver> observer);
 
     void NotifySetSelectedGameObject(
-            std::shared_ptr<GameObject> selected_game_object);
+        std::shared_ptr<GameObject> selected_game_object);
 
 private:
     std::vector<std::weak_ptr<SceneViewObserver>> observers_;

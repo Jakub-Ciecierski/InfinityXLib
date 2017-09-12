@@ -2,15 +2,15 @@
 
 #include <RTFEM/FEM/Meshing/Tetrahedralization.h>
 
-class RTFEMTests : public testing::Test{
+class RTFEMTests : public testing::Test {
 protected:
 
-    virtual void SetUp(){
+    virtual void SetUp() {
 
     }
 
 };
 
-TEST_F(RTFEMTests, Intergration){
+TEST_F(RTFEMTests, Intergration) {
     rtfem::Tetrahedralization<float> tetrahedralization;
 }

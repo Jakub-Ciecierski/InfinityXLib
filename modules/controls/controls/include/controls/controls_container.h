@@ -10,19 +10,18 @@ class Controls;
  */
 class ControlsContainer {
 public:
-    static ControlsContainer& GetInstance();
+    static ControlsContainer &GetInstance();
 
     ~ControlsContainer();
 
-    Controls* controls(){return controls_;}
-    void controls(Controls* controls){controls_ = controls;}
+    Controls *controls() { return controls_; }
+    void controls(Controls *controls) { controls_ = controls; }
 
 private:
     ControlsContainer();
 
-    Controls* controls_;
+    Controls *controls_;
 };
 }
-
 
 #endif //PROJECT_CONTROLS_CONTAINER_H

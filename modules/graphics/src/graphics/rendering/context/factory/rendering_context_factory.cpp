@@ -2,7 +2,7 @@
 
 namespace ifx {
 
-RenderingContextFactory::RenderingContextFactory(){}
-RenderingContextFactory::~RenderingContextFactory(){}
+RenderingContextFactory::RenderingContextFactory() {}
+RenderingContextFactory::~RenderingContextFactory() {}
 
 }

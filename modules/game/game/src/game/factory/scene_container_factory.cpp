@@ -4,21 +4,21 @@
 #include <graphics/rendering/scene_renderer.h>
 //#include <physics/physics_simulation.h>
 
-namespace ifx{
+namespace ifx {
 
-SceneContainerFactory::SceneContainerFactory(){}
-SceneContainerFactory::~SceneContainerFactory(){}
+SceneContainerFactory::SceneContainerFactory() {}
+SceneContainerFactory::~SceneContainerFactory() {}
 
 std::shared_ptr<SceneContainer> SceneContainerFactory::Create(
-        std::shared_ptr<SceneRenderer> scene_renderer,
-        std::shared_ptr<PhysicsSimulation> physics_simulation){
-    if(!scene_renderer || !physics_simulation){
+    std::shared_ptr<SceneRenderer> scene_renderer,
+    std::shared_ptr<PhysicsSimulation> physics_simulation) {
+    if (!scene_renderer || !physics_simulation) {
         throw std::invalid_argument(
-                "Creating Scene Container System: Missing Dependencies");
+            "Creating Scene Container System: Missing Dependencies");
     }
 
     auto scene = std::shared_ptr<SceneContainer>(
-            new SceneContainer(scene_renderer, physics_simulation));
+        new SceneContainer(scene_renderer, physics_simulation));
     return scene;
 }
 

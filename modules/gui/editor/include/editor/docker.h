@@ -10,11 +10,11 @@ namespace ifx {
 class WindowView;
 class Window;
 
-enum class DockPosition{
+enum class DockPosition {
     Left, Right, Top, Bottom, SoftBody
 };
 
-struct DockerSettings{
+struct DockerSettings {
     float left_view_width;
     float right_view_width;
     float bottom_view_height;
@@ -36,14 +36,14 @@ public:
     Docker(std::shared_ptr<Window> window);
 
     ~Docker() = default;
-    std::shared_ptr<Window> window(){return window_;}
+    std::shared_ptr<Window> window() { return window_; }
 
-    const DockerSettings& docker_settings(){return docker_settings_;}
-    void docker_settings(const DockerSettings& settings){
+    const DockerSettings &docker_settings() { return docker_settings_; }
+    void docker_settings(const DockerSettings &settings) {
         docker_settings_ = settings;
     }
 
-    bool IsEnabled(){return is_enabled_;}
+    bool IsEnabled() { return is_enabled_; }
 
     void Enable();
     void Disable();
@@ -79,6 +79,5 @@ private:
     DockerSettings docker_settings_;
 };
 }
-
 
 #endif //PROJECT_DOCKER_H

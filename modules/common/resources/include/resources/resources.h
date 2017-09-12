@@ -5,7 +5,7 @@
 
 namespace ifx {
 
-enum class ResourceType{
+enum class ResourceType {
     MODEL, SHADER, TEXTURE
 };
 
@@ -27,7 +27,6 @@ private:
     std::string ConcatenatePath(std::string path1, std::string path2);
 
     std::string resource_root_path_;
-
 
 };
 

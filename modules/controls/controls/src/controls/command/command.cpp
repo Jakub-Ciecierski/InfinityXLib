@@ -2,12 +2,12 @@
 
 namespace ifx {
 
-Command::Command(const CommandExecutable&& executable) :
-        executable_(executable) {}
+Command::Command(const CommandExecutable &&executable) :
+    executable_(executable) {}
 
-Command::~Command(){}
+Command::~Command() {}
 
-void Command::Execute(){
+void Command::Execute() {
     executable_.execute_fuction(executable_.controller,
                                 executable_.object);
 }

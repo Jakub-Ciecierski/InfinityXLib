@@ -8,10 +8,10 @@ namespace ifx {
 
 class ShadowMapping;
 
-class LightSpotlightComponent : public GameComponent, public LightSpotlight{
+class LightSpotlightComponent : public GameComponent, public LightSpotlight {
 public:
 
-    LightSpotlightComponent(const LightParams& light_params,
+    LightSpotlightComponent(const LightParams &light_params,
                             std::shared_ptr<ShadowMapping> shadow_mapping);
 
     ~LightSpotlightComponent();

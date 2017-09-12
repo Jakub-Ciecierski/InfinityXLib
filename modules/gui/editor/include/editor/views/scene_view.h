@@ -5,7 +5,7 @@
 
 namespace ifx {
 
-class SceneView : public View{
+class SceneView : public View {
 public:
     SceneView();
     ~SceneView() = default;

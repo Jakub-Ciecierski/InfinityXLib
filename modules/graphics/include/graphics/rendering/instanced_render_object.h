@@ -17,12 +17,12 @@ namespace ifx {
 class InstancedRenderObject : public RenderObject {
 public:
     InstancedRenderObject(std::shared_ptr<Model> model,
-                          InstancedData& instanced_data);
+                          InstancedData &instanced_data);
 
     ~InstancedRenderObject();
 
     // Overridden from RenderObject
-    void Render(const Program& program) override;
+    void Render(const Program &program) override;
 
 private:
     InstancedData instanced_data_;

@@ -10,15 +10,15 @@ namespace ifx {
 ModelLoader::ModelLoader(std::string filepath,
                          std::shared_ptr<ModelCreator> model_creator,
                          std::shared_ptr<TextureCreator> texture_creator) :
-        filepath(filepath),
-        model_creator_(model_creator),
-        texture_creator_(texture_creator){}
+    filepath(filepath),
+    model_creator_(model_creator),
+    texture_creator_(texture_creator) {}
 
 std::shared_ptr<Model> ModelLoader::loadModel() {
     Assimp::Importer importer;
     const aiScene *scene =
-            importer.ReadFile(filepath,
-                              aiProcess_Triangulate
+        importer.ReadFile(filepath,
+                          aiProcess_Triangulate
                               | aiProcess_FlipUVs
                               | aiProcess_CalcTangentSpace);
 
@@ -51,7 +51,7 @@ void ModelLoader::processNode(aiNode *node, const aiScene *scene,
     for (GLuint i = 0; i < node->mNumMeshes; i++) {
         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
         std::unique_ptr<Mesh> ifxMesh =
-                std::move(this->processMesh(mesh, scene));
+            std::move(this->processMesh(mesh, scene));
 
         meshes.push_back(std::move(ifxMesh));
     }
@@ -61,7 +61,7 @@ void ModelLoader::processNode(aiNode *node, const aiScene *scene,
 }
 
 std::unique_ptr<Mesh> ModelLoader::processMesh(aiMesh *mesh,
-                                               const aiScene* scene) {
+                                               const aiScene *scene) {
     vector<Vertex> vertices;
     vector<GLuint> indices;
     std::vector<std::shared_ptr<Texture2D>> textures;
@@ -69,12 +69,12 @@ std::unique_ptr<Mesh> ModelLoader::processMesh(aiMesh *mesh,
     vertices = processVertices(mesh);
     indices = processIndices(mesh);
     textures = processTextures(mesh, scene);
-    if(!mesh->HasTangentsAndBitangents())
+    if (!mesh->HasTangentsAndBitangents())
         calculateTBN(vertices, indices);
 
     auto mesh_ifx = std::unique_ptr<Mesh>(new Mesh(vertices, indices));
     auto material = std::make_shared<Material>();
-    for(unsigned int i = 0; i < textures.size();i++)
+    for (unsigned int i = 0; i < textures.size(); i++)
         material->AddTexture(textures[i]);
     mesh_ifx->material(material);
 
@@ -97,12 +97,12 @@ vector<Vertex> ModelLoader::processVertices(aiMesh *mesh) {
             vNorm.x = mesh->mNormals[i].x;
             vNorm.y = mesh->mNormals[i].y;
             vNorm.z = mesh->mNormals[i].z;
-        }else{
+        } else {
             std::cout << "No normals" << std::endl;
         }
         vertex.Normal = vNorm;
 
-        if(mesh->HasTangentsAndBitangents()){
+        if (mesh->HasTangentsAndBitangents()) {
             vertex.Tangent.x = mesh->mTangents[i].x;
             vertex.Tangent.y = mesh->mTangents[i].y;
             vertex.Tangent.z = mesh->mTangents[i].z;
@@ -139,9 +139,8 @@ vector<GLuint> ModelLoader::processIndices(aiMesh *mesh) {
     return indices;
 }
 
-
-void ModelLoader::calculateTBN(std::vector<Vertex>& vertices,
-                               const std::vector<GLuint>& indices){
+void ModelLoader::calculateTBN(std::vector<Vertex> &vertices,
+                               const std::vector<GLuint> &indices) {
     std::cout << "Calculating Tangents And Bitangents" << std::endl;
     const int DATA_PER_FACE = 3;
     int faceCount = indices.size() / DATA_PER_FACE;
@@ -158,7 +157,7 @@ void ModelLoader::calculateTBN(std::vector<Vertex>& vertices,
     }
 }
 
-void ModelLoader::calculateTBN(Vertex &v0, Vertex &v1, Vertex &v2) {
+void ModelLoader::calculateTBN(Vertex & v0, Vertex & v1, Vertex & v2) {
     glm::vec2 &uv0 = v0.TexCoords;
     glm::vec2 &uv1 = v1.TexCoords;
     glm::vec2 &uv2 = v2.TexCoords;
@@ -193,22 +192,22 @@ void ModelLoader::calculateTBN(Vertex &v0, Vertex &v1, Vertex &v2) {
 }
 
 std::vector<std::shared_ptr<Texture2D>> ModelLoader::processTextures(
-        aiMesh *mesh, const aiScene *scene) {
+    aiMesh *mesh, const aiScene *scene) {
     std::vector<std::shared_ptr<Texture2D>> textures;
     if (mesh->mMaterialIndex >= 0) {
         aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
         std::vector<std::shared_ptr<Texture2D>> diffuseMaps
-                = loadMaterialTextures(material, aiTextureType_DIFFUSE,
-                                       TextureTypes::DIFFUSE);
+            = loadMaterialTextures(material, aiTextureType_DIFFUSE,
+                                   TextureTypes::DIFFUSE);
         std::vector<std::shared_ptr<Texture2D>> specularMaps
-                = loadMaterialTextures(material, aiTextureType_SPECULAR,
-                                       TextureTypes::SPECULAR);
+            = loadMaterialTextures(material, aiTextureType_SPECULAR,
+                                   TextureTypes::SPECULAR);
         // WARNING aiTextureType_HEIGHT hide the Normal maps !!
         // For .obj format the normal map is under aiTextureType_HEIGHT.
         // TODO check the format.
         std::vector<std::shared_ptr<Texture2D>> normalMaps
-                = loadMaterialTextures(material, aiTextureType_HEIGHT,
-                                       TextureTypes::NORMAL);
+            = loadMaterialTextures(material, aiTextureType_HEIGHT,
+                                   TextureTypes::NORMAL);
 
         textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
         textures.insert(textures.end(), specularMaps.begin(),
@@ -219,7 +218,7 @@ std::vector<std::shared_ptr<Texture2D>> ModelLoader::processTextures(
 }
 
 std::vector<std::shared_ptr<Texture2D>> ModelLoader::loadMaterialTextures(
-        aiMaterial *mat, aiTextureType type, TextureTypes texType) {
+    aiMaterial *mat, aiTextureType type, TextureTypes texType) {
     std::vector<std::shared_ptr<Texture2D>> textures;
     for (GLuint i = 0; i < mat->GetTextureCount(type); i++) {
         aiString str;
@@ -228,7 +227,7 @@ std::vector<std::shared_ptr<Texture2D>> ModelLoader::loadMaterialTextures(
 
         std::string filepath = directory + '/' + filename;
         auto texture
-                = texture_creator_->MakeTexture2DFromFile(filepath, texType);
+            = texture_creator_->MakeTexture2DFromFile(filepath, texType);
         textures.push_back(texture);
     }
     return textures;

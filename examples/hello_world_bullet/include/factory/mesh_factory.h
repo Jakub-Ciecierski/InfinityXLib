@@ -19,19 +19,19 @@ public:
     ~MeshFactory();
 
     std::unique_ptr<Mesh> CreateQuad(int x, int y);
-    std::unique_ptr<Mesh> CreateLine(const glm::vec3& p1,
-                                            const glm::vec3& p2);
+    std::unique_ptr<Mesh> CreateLine(const glm::vec3 &p1,
+                                     const glm::vec3 &p2);
 
     std::unique_ptr<Mesh> LoadBicubicBezierPatch(float startX,
-                                                        float startY,
-                                                        float depth,
-                                                        int idI = 0,
-                                                        int idJ = 0);
+                                                 float startY,
+                                                 float depth,
+                                                 int idI = 0,
+                                                 int idJ = 0);
     std::unique_ptr<Mesh> LoadBicubicBezierPolygon(float startX,
-                                                          float startY,
-                                                          float depth,
-                                                          int idI = 0,
-                                                          int idJ = 0);
+                                                   float startY,
+                                                   float depth,
+                                                   int idI = 0,
+                                                   int idJ = 0);
     std::unique_ptr<Mesh> LoadBicubicBezierAsymmetricPatch();
 
     std::unique_ptr<Mesh> LoadPatch();

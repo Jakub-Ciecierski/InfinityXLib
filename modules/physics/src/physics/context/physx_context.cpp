@@ -14,10 +14,10 @@ bool PhysxContext::Init() {
     px_error_callback_ = ifx::make_unique<physx::PxDefaultErrorCallback>();
 
     px_foundation_
-            = PxCreateFoundation(PX_FOUNDATION_VERSION,
-                                 *px_allocator_callback_,
-                                 *px_error_callback_);
-    if(!px_foundation_)
+        = PxCreateFoundation(PX_FOUNDATION_VERSION,
+                             *px_allocator_callback_,
+                             *px_error_callback_);
+    if (!px_foundation_)
         return false;
 
     // Visual debugger.
@@ -26,9 +26,9 @@ bool PhysxContext::Init() {
                                                                  5425, 10);
     px_pvd_->connect(*px_pvd_transport_, physx::PxPvdInstrumentationFlag::eALL);
     px_physics_ = PxCreatePhysics(PX_PHYSICS_VERSION, *px_foundation_,
-                                      physx::PxTolerancesScale(),
-                                      true, px_pvd_);
-    if(!px_physics_)
+                                  physx::PxTolerancesScale(),
+                                  true, px_pvd_);
+    if (!px_physics_)
         return false;
 
     return true;
@@ -43,8 +43,8 @@ bool PhysxContext::Terminate() {
     return true;
 }
 
-void* PhysxContext::NativeData(){
-    return (void*)px_foundation_;
+void *PhysxContext::NativeData() {
+    return (void *) px_foundation_;
 }
 
 }

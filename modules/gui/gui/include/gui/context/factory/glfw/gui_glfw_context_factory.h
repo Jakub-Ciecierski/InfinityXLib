@@ -18,5 +18,4 @@ private:
 };
 }
 
-
 #endif //PROJECT_GUI_GLFW_CONTEXT_FACTORY_H

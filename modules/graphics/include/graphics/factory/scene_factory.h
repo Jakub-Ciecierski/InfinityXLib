@@ -14,7 +14,7 @@ public:
     SceneFactory();
     ~SceneFactory();
 
-    std::shared_ptr<Camera> CreateCamera(Window* window);
+    std::shared_ptr<Camera> CreateCamera(Window *window);
 
 private:
 };

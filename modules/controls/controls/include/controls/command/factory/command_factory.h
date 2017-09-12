@@ -25,14 +25,14 @@ public:
     ~CommandFactory();
 
     std::shared_ptr<MouseCommand> CreateMouseCommand(
-            std::shared_ptr<Controlable> object,
-            CommandFunction function,
-            const MouseControllerEventType&& event_type);
+        std::shared_ptr<Controlable> object,
+        CommandFunction function,
+        const MouseControllerEventType &&event_type);
 
     std::shared_ptr<KeyboardCommand> CreateKeyboardCommand(
-            std::shared_ptr<Controlable> object,
-            CommandFunction function,
-            const KeyboardControllerEventType&& event_type);
+        std::shared_ptr<Controlable> object,
+        CommandFunction function,
+        const KeyboardControllerEventType &&event_type);
 
     std::shared_ptr<MouseScrollCommand> CreateMouseScrollCommand();
 
@@ -40,6 +40,5 @@ private:
     std::shared_ptr<Controls> controls_;
 };
 }
-
 
 #endif //PROJECT_COMMAND_FACTORY_H

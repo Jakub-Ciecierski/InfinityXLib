@@ -24,13 +24,12 @@ private:
 
     void RenderDocker(std::shared_ptr<Docker> docker);
     void RenderDockerHeader(std::shared_ptr<Docker> docker,
-                            DockerSettings& settings);
-    void RenderDockerAutomaticScale(DockerSettings& settings);
-    void RenderDockerManualScale(DockerSettings& settings);
+                            DockerSettings &settings);
+    void RenderDockerAutomaticScale(DockerSettings &settings);
+    void RenderDockerManualScale(DockerSettings &settings);
     void RenderDockerFooter();
 
 };
 }
-
 
 #endif //PROJECT_VIEW_ITEM_H

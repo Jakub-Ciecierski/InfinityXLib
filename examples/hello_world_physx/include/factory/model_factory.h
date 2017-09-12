@@ -39,8 +39,8 @@ public:
     std::shared_ptr<Model> LoadModel(std::string path);
     std::shared_ptr<Model> LoadSphere(float radius = 2.0f);
     std::shared_ptr<Model> LoadCircle(float radius = 2.0f);
-    std::shared_ptr<Model> CreateLine(const glm::vec3& p1,
-                                      const glm::vec3& p2);
+    std::shared_ptr<Model> CreateLine(const glm::vec3 &p1,
+                                      const glm::vec3 &p2);
 private:
     std::shared_ptr<ModelCreator> model_creator_;
     std::shared_ptr<TextureCreator> texture_creator_;

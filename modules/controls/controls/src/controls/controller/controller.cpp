@@ -4,12 +4,12 @@
 
 namespace ifx {
 
-Controller::Controller(){}
+Controller::Controller() {}
 
-Controller::~Controller(){}
+Controller::~Controller() {}
 
-void Controller::Update(float){
-    for(auto& event : events())
+void Controller::Update(float) {
+    for (auto &event : events())
         event->Reset();
 }
 

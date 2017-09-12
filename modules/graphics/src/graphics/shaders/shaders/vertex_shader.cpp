@@ -6,11 +6,11 @@ using namespace std;
 
 VertexShader::VertexShader(string shaderSource,
                            std::string file_path) :
-        Shader(shaderSource, file_path){
+    Shader(shaderSource, file_path) {
 }
 
-VertexShader::VertexShader(const VertexShader& other) :
-    Shader(other){
+VertexShader::VertexShader(const VertexShader &other) :
+    Shader(other) {
 
 }
 

@@ -5,7 +5,7 @@
 
 namespace ifx {
 
-class BulletContextFactory : public PhysicsContextFactory{
+class BulletContextFactory : public PhysicsContextFactory {
 public:
     BulletContextFactory() = default;
 

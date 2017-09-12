@@ -21,15 +21,15 @@ public:
 
     ~RigidBodyImplBullet();
 
-    virtual void* GetNativeRigidBody() override;
+    virtual void *GetNativeRigidBody() override;
 
     virtual void InitImpl(std::shared_ptr<CollisionShape> collision_shape,
                           float mass) override;
 
-    virtual void InitCollisionShape(const StaticPlaneShape* shape) override;
-    virtual void InitCollisionShape(const BoxCollisionShape* shape) override;
+    virtual void InitCollisionShape(const StaticPlaneShape *shape) override;
+    virtual void InitCollisionShape(const BoxCollisionShape *shape) override;
 
-    virtual void SetCollisionShapeScale(const glm::vec3& scale) override;
+    virtual void SetCollisionShapeScale(const glm::vec3 &scale) override;
 
     virtual bool IsDynamic() override;
 
@@ -41,6 +41,5 @@ private:
 
 };
 }
-
 
 #endif //PROJECT_RIGID_BODY_IMPL_BULLET_H

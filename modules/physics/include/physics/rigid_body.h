@@ -9,19 +9,19 @@ namespace ifx {
 class CollisionShape;
 class RigidBodyImpl;
 
-struct RigidBodyParams{
+struct RigidBodyParams {
     std::shared_ptr<CollisionShape> collision_shape;
     float mass;
 };
 
-class RigidBody : public Transformable{
+class RigidBody : public Transformable {
 public:
 
     RigidBody(std::unique_ptr<RigidBodyImpl> rigid_body_impl,
-              const RigidBodyParams&& params);
+              const RigidBodyParams &&params);
     ~RigidBody();
 
-    void* GetNativeRigidBody();
+    void *GetNativeRigidBody();
 
     virtual void Update(float time_delta = 0) override;
 private:
@@ -31,6 +31,5 @@ private:
     float mass_;
 };
 }
-
 
 #endif //PROJECT_RIGID_BODY_TMP_H

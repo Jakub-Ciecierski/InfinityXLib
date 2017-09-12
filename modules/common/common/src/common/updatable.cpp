@@ -2,8 +2,8 @@
 
 namespace ifx {
 
-Updatable::Updatable(){}
+Updatable::Updatable() {}
 
-Updatable::~Updatable(){}
+Updatable::~Updatable() {}
 
 }

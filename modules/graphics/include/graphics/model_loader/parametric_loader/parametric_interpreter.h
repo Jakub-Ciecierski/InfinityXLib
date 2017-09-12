@@ -5,12 +5,12 @@
 #include <memory>
 #include <vector>
 
-namespace exprtk{
+namespace exprtk {
 
-template <typename T>
+template<typename T>
 class expression;
 
-template <typename T>
+template<typename T>
 class symbol_table;
 }
 
@@ -18,12 +18,12 @@ namespace ifx {
 
 struct ParametricEquation;
 
-struct ParametricEquationConstantExpression{
+struct ParametricEquationConstantExpression {
     std::string name;
     float value;
 };
 
-struct ParametricEquationExpressions{
+struct ParametricEquationExpressions {
     std::string Px;
     std::string Py;
     std::string Pz;
@@ -58,38 +58,37 @@ public:
     ~ParametricInterpreter() = default;
 
     std::unique_ptr<ParametricEquation> Interpret(
-            const ParametricEquationExpressions& expression);
+        const ParametricEquationExpressions &expression);
 
 private:
     exprtk::symbol_table<double> CreateSymbolTable(
-            const ParametricEquationExpressions &expressions,
-            ParametricEquation& parametric_equation);
+        const ParametricEquationExpressions &expressions,
+        ParametricEquation &parametric_equation);
 
     void AddEquation(
-            const ParametricEquationExpressions &expressions,
-            ParametricEquation &parametric_equation,
-            exprtk::symbol_table<double> &exprtk_symbol_table);
+        const ParametricEquationExpressions &expressions,
+        ParametricEquation &parametric_equation,
+        exprtk::symbol_table<double> &exprtk_symbol_table);
     void AddEquationDu(
-            const ParametricEquationExpressions &expressions,
-            ParametricEquation &parametric_equation,
-            exprtk::symbol_table<double> &exprtk_symbol_table);
+        const ParametricEquationExpressions &expressions,
+        ParametricEquation &parametric_equation,
+        exprtk::symbol_table<double> &exprtk_symbol_table);
     void AddEquationDv(
-            const ParametricEquationExpressions &expressions,
-            ParametricEquation &parametric_equation,
-            exprtk::symbol_table<double> &exprtk_symbol_table);
+        const ParametricEquationExpressions &expressions,
+        ParametricEquation &parametric_equation,
+        exprtk::symbol_table<double> &exprtk_symbol_table);
     void AddVariables(
-            const ParametricEquationExpressions &expressions,
-            ParametricEquation &parametric_equation,
-            exprtk::symbol_table<double> &exprtk_symbol_table);
+        const ParametricEquationExpressions &expressions,
+        ParametricEquation &parametric_equation,
+        exprtk::symbol_table<double> &exprtk_symbol_table);
     void AddVariablesPrecision(
-            const ParametricEquationExpressions &expressions,
-            ParametricEquation &parametric_equation);
+        const ParametricEquationExpressions &expressions,
+        ParametricEquation &parametric_equation);
 
     exprtk::expression<double> CreateExpression(
-            exprtk::symbol_table<double> &exprtk_symbol_table,
-            std::string expression);
+        exprtk::symbol_table<double> &exprtk_symbol_table,
+        std::string expression);
 };
 }
-
 
 #endif //PROJECT_PARAMETRIC_INTERPRETER_H

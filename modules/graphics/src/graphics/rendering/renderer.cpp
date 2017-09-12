@@ -13,25 +13,25 @@ namespace ifx {
 Renderer::Renderer(std::shared_ptr<Window> window,
                    std::shared_ptr<RenderingContext> rendering_context) :
     window_(window),
-    rendering_context_(rendering_context){
+    rendering_context_(rendering_context) {
     scene_renderer_ = std::make_shared<SceneRenderer>();
     shadow_mapping_renderer_ = std::make_shared<ShadowMappingRenderer>(
-            scene_renderer_, window_);
+        scene_renderer_, window_);
 }
 
-void Renderer::Update(float){
+void Renderer::Update(float) {
     TextureActivator::GetInstance().ResetGlobal();
 
     Render();
 }
 
-void Renderer::Render(){
+void Renderer::Render() {
     shadow_mapping_renderer_->Render();
 
     RenderScene();
 }
 
-void Renderer::RenderScene(){
+void Renderer::RenderScene() {
     glViewport(0, 0, *(window_->width()), *(window_->height()));
     glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

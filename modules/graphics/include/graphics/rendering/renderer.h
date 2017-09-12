@@ -15,14 +15,14 @@ class RenderingContext;
 /**
  * Takes ownership over ShadowMapping
  */
-class Renderer : public Updatable{
+class Renderer : public Updatable {
 public:
     Renderer(std::shared_ptr<Window> window,
              std::shared_ptr<RenderingContext> rendering_context);
     virtual ~Renderer() = default;
 
-    std::shared_ptr<Window> window()  {return window_;}
-    std::shared_ptr<SceneRenderer> scene_renderer(){return scene_renderer_;}
+    std::shared_ptr<Window> window() { return window_; }
+    std::shared_ptr<SceneRenderer> scene_renderer() { return scene_renderer_; }
 
     virtual void Update(float time_delta = 0) override;
 protected:

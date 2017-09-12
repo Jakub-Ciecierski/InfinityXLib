@@ -5,7 +5,7 @@
 
 namespace ifx {
 
-class LightComponent : public GameComponent{
+class LightComponent : public GameComponent {
 public:
 
     LightComponent();

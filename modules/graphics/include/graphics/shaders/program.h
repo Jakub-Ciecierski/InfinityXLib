@@ -36,11 +36,13 @@ public:
 
     ~Program();
 
-    VertexShader* vertex_shader(){return vertex_shader_.get();}
-    FragmentShader* fragment_shader(){return fragment_shader_.get();}
-    GeometryShader* geometry_shader(){return geometry_shader_.get();}
-    TessControlShader* tess_control_shader(){return tess_control_shader_.get();}
-    TessEvalShader* tess_eval_shader(){return tess_eval_shader_.get();}
+    VertexShader *vertex_shader() { return vertex_shader_.get(); }
+    FragmentShader *fragment_shader() { return fragment_shader_.get(); }
+    GeometryShader *geometry_shader() { return geometry_shader_.get(); }
+    TessControlShader *tess_control_shader() {
+        return tess_control_shader_.get();
+    }
+    TessEvalShader *tess_eval_shader() { return tess_eval_shader_.get(); }
 
     void use() const;
 

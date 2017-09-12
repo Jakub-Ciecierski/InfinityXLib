@@ -17,8 +17,8 @@ public:
 
     std::shared_ptr<ResourceContext> Create();
 
-    ResourceContextFactory& SetResourceManagerFactory(
-            std::shared_ptr<ResourceManagerFactory> factory);
+    ResourceContextFactory &SetResourceManagerFactory(
+        std::shared_ptr<ResourceManagerFactory> factory);
 
 private:
     std::shared_ptr<ResourceManagerFactory> resource_manager_factory_;

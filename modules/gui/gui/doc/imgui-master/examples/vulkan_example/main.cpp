@@ -13,58 +13,57 @@
 
 #define IMGUI_MAX_POSSIBLE_BACK_BUFFERS 16
 
-static VkAllocationCallbacks*   g_Allocator = NULL;
-static VkInstance               g_Instance = VK_NULL_HANDLE;
-static VkSurfaceKHR             g_Surface = VK_NULL_HANDLE;
-static VkPhysicalDevice         g_Gpu = VK_NULL_HANDLE;
-static VkDevice                 g_Device = VK_NULL_HANDLE;
-static VkSwapchainKHR           g_Swapchain = VK_NULL_HANDLE;
-static VkRenderPass             g_RenderPass = VK_NULL_HANDLE;
-static uint32_t                 g_QueueFamily = 0;
-static VkQueue                  g_Queue = VK_NULL_HANDLE;
+static VkAllocationCallbacks *g_Allocator = NULL;
+static VkInstance g_Instance = VK_NULL_HANDLE;
+static VkSurfaceKHR g_Surface = VK_NULL_HANDLE;
+static VkPhysicalDevice g_Gpu = VK_NULL_HANDLE;
+static VkDevice g_Device = VK_NULL_HANDLE;
+static VkSwapchainKHR g_Swapchain = VK_NULL_HANDLE;
+static VkRenderPass g_RenderPass = VK_NULL_HANDLE;
+static uint32_t g_QueueFamily = 0;
+static VkQueue g_Queue = VK_NULL_HANDLE;
 
-static VkFormat                 g_Format = VK_FORMAT_B8G8R8A8_UNORM;
-static VkColorSpaceKHR          g_ColorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
-static VkImageSubresourceRange  g_ImageRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
+static VkFormat g_Format = VK_FORMAT_B8G8R8A8_UNORM;
+static VkColorSpaceKHR g_ColorSpace = VK_COLORSPACE_SRGB_NONLINEAR_KHR;
+static VkImageSubresourceRange
+    g_ImageRange = {VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1};
 
-static VkPipelineCache          g_PipelineCache = VK_NULL_HANDLE;
-static VkDescriptorPool         g_DescriptorPool = VK_NULL_HANDLE;
+static VkPipelineCache g_PipelineCache = VK_NULL_HANDLE;
+static VkDescriptorPool g_DescriptorPool = VK_NULL_HANDLE;
 
-static int                      fb_width, fb_height;
-static uint32_t                 g_BackBufferIndex = 0;
-static uint32_t                 g_BackBufferCount = 0;
-static VkImage                  g_BackBuffer[IMGUI_MAX_POSSIBLE_BACK_BUFFERS] = {};
-static VkImageView              g_BackBufferView[IMGUI_MAX_POSSIBLE_BACK_BUFFERS] = {};
-static VkFramebuffer            g_Framebuffer[IMGUI_MAX_POSSIBLE_BACK_BUFFERS] = {};
+static int fb_width, fb_height;
+static uint32_t g_BackBufferIndex = 0;
+static uint32_t g_BackBufferCount = 0;
+static VkImage g_BackBuffer[IMGUI_MAX_POSSIBLE_BACK_BUFFERS] = {};
+static VkImageView g_BackBufferView[IMGUI_MAX_POSSIBLE_BACK_BUFFERS] = {};
+static VkFramebuffer g_Framebuffer[IMGUI_MAX_POSSIBLE_BACK_BUFFERS] = {};
 
-static uint32_t                 g_FrameIndex = 0;
-static VkCommandPool            g_CommandPool[IMGUI_VK_QUEUED_FRAMES];
-static VkCommandBuffer          g_CommandBuffer[IMGUI_VK_QUEUED_FRAMES];
-static VkFence                  g_Fence[IMGUI_VK_QUEUED_FRAMES];
-static VkSemaphore              g_Semaphore[IMGUI_VK_QUEUED_FRAMES];
+static uint32_t g_FrameIndex = 0;
+static VkCommandPool g_CommandPool[IMGUI_VK_QUEUED_FRAMES];
+static VkCommandBuffer g_CommandBuffer[IMGUI_VK_QUEUED_FRAMES];
+static VkFence g_Fence[IMGUI_VK_QUEUED_FRAMES];
+static VkSemaphore g_Semaphore[IMGUI_VK_QUEUED_FRAMES];
 
-static VkClearValue             g_ClearValue = {};
+static VkClearValue g_ClearValue = {};
 
-static void check_vk_result(VkResult err)
-{
+static void check_vk_result(VkResult err) {
     if (err == 0) return;
     printf("VkResult %d\n", err);
-    if (err < 0) 
+    if (err < 0)
         abort();
 }
 
-static void resize_vulkan(GLFWwindow* /*window*/, int w, int h)
-{
+static void resize_vulkan(GLFWwindow * /*window*/, int w, int h) {
     VkResult err;
     VkSwapchainKHR old_swapchain = g_Swapchain;
     err = vkDeviceWaitIdle(g_Device);
     check_vk_result(err);
 
     // Destroy old Framebuffer:
-    for (uint32_t i=0; i<g_BackBufferCount; i++)
+    for (uint32_t i = 0; i < g_BackBufferCount; i++)
         if (g_BackBufferView[i])
             vkDestroyImageView(g_Device, g_BackBufferView[i], g_Allocator);
-     for(uint32_t i=0; i<g_BackBufferCount; i++)
+    for (uint32_t i = 0; i < g_BackBufferCount; i++)
         if (g_Framebuffer[i])
             vkDestroyFramebuffer(g_Device, g_Framebuffer[i], g_Allocator);
     if (g_RenderPass)
@@ -89,18 +88,17 @@ static void resize_vulkan(GLFWwindow* /*window*/, int w, int h)
         err = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(g_Gpu, g_Surface, &cap);
         check_vk_result(err);
         if (cap.maxImageCount > 0)
-            info.minImageCount = (cap.minImageCount + 2 < cap.maxImageCount) ? (cap.minImageCount + 2) : cap.maxImageCount;
+            info.minImageCount =
+                (cap.minImageCount + 2 < cap.maxImageCount) ? (cap.minImageCount
+                    + 2) : cap.maxImageCount;
         else
             info.minImageCount = cap.minImageCount + 2;
-        if (cap.currentExtent.width == 0xffffffff)
-        {
+        if (cap.currentExtent.width == 0xffffffff) {
             fb_width = w;
             fb_height = h;
             info.imageExtent.width = fb_width;
             info.imageExtent.height = fb_height;
-        }
-        else
-        {
+        } else {
             fb_width = cap.currentExtent.width;
             fb_height = cap.currentExtent.height;
             info.imageExtent.width = fb_width;
@@ -108,9 +106,15 @@ static void resize_vulkan(GLFWwindow* /*window*/, int w, int h)
         }
         err = vkCreateSwapchainKHR(g_Device, &info, g_Allocator, &g_Swapchain);
         check_vk_result(err);
-        err = vkGetSwapchainImagesKHR(g_Device, g_Swapchain, &g_BackBufferCount, NULL);
+        err = vkGetSwapchainImagesKHR(g_Device,
+                                      g_Swapchain,
+                                      &g_BackBufferCount,
+                                      NULL);
         check_vk_result(err);
-        err = vkGetSwapchainImagesKHR(g_Device, g_Swapchain, &g_BackBufferCount, g_BackBuffer);
+        err = vkGetSwapchainImagesKHR(g_Device,
+                                      g_Swapchain,
+                                      &g_BackBufferCount,
+                                      g_BackBuffer);
         check_vk_result(err);
     }
     if (old_swapchain)
@@ -155,10 +159,12 @@ static void resize_vulkan(GLFWwindow* /*window*/, int w, int h)
         info.components.b = VK_COMPONENT_SWIZZLE_B;
         info.components.a = VK_COMPONENT_SWIZZLE_A;
         info.subresourceRange = g_ImageRange;
-        for (uint32_t i = 0; i<g_BackBufferCount; i++)
-        {
+        for (uint32_t i = 0; i < g_BackBufferCount; i++) {
             info.image = g_BackBuffer[i];
-            err = vkCreateImageView(g_Device, &info, g_Allocator, &g_BackBufferView[i]);
+            err = vkCreateImageView(g_Device,
+                                    &info,
+                                    g_Allocator,
+                                    &g_BackBufferView[i]);
             check_vk_result(err);
         }
     }
@@ -174,23 +180,25 @@ static void resize_vulkan(GLFWwindow* /*window*/, int w, int h)
         info.width = fb_width;
         info.height = fb_height;
         info.layers = 1;
-        for (uint32_t i = 0; i<g_BackBufferCount; i++)
-        {
+        for (uint32_t i = 0; i < g_BackBufferCount; i++) {
             attachment[0] = g_BackBufferView[i];
-            err = vkCreateFramebuffer(g_Device, &info, g_Allocator, &g_Framebuffer[i]);
+            err = vkCreateFramebuffer(g_Device,
+                                      &info,
+                                      g_Allocator,
+                                      &g_Framebuffer[i]);
             check_vk_result(err);
         }
     }
 }
 
-static void setup_vulkan(GLFWwindow* window)
-{
+static void setup_vulkan(GLFWwindow *window) {
     VkResult err;
 
     // Create Vulkan Instance
     {
         uint32_t glfw_extensions_count;
-        const char** glfw_extensions = glfwGetRequiredInstanceExtensions(&glfw_extensions_count);
+        const char **glfw_extensions =
+            glfwGetRequiredInstanceExtensions(&glfw_extensions_count);
         VkInstanceCreateInfo create_info = {};
         create_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
         create_info.enabledExtensionCount = glfw_extensions_count;
@@ -201,10 +209,13 @@ static void setup_vulkan(GLFWwindow* window)
 
     // Create Window Surface
     {
-        err = glfwCreateWindowSurface(g_Instance, window, g_Allocator, &g_Surface);
+        err = glfwCreateWindowSurface(g_Instance,
+                                      window,
+                                      g_Allocator,
+                                      &g_Surface);
         check_vk_result(err);
     }
-    
+
     // Get GPU
     {
         uint32_t count = 1;
@@ -215,7 +226,7 @@ static void setup_vulkan(GLFWwindow* window)
     // Create Logical Device
     {
         int device_extension_count = 1;
-        const char* device_extensions[] = {"VK_KHR_swapchain"};
+        const char *device_extensions[] = {"VK_KHR_swapchain"};
         const uint32_t queue_index = 0;
         const uint32_t queue_count = 1;
         const float queue_priority[] = {1.0f};
@@ -226,7 +237,8 @@ static void setup_vulkan(GLFWwindow* window)
         queue_info[0].pQueuePriorities = queue_priority;
         VkDeviceCreateInfo create_info = {};
         create_info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-        create_info.queueCreateInfoCount = sizeof(queue_info)/sizeof(queue_info[0]);
+        create_info.queueCreateInfoCount =
+            sizeof(queue_info) / sizeof(queue_info[0]);
         create_info.pQueueCreateInfos = queue_info;
         create_info.enabledExtensionCount = device_extension_count;
         create_info.ppEnabledExtensionNames = device_extensions;
@@ -244,14 +256,16 @@ static void setup_vulkan(GLFWwindow* window)
     }
 
     // Create Command Buffers
-    for (int i=0; i<IMGUI_VK_QUEUED_FRAMES; i++)
-    {
+    for (int i = 0; i < IMGUI_VK_QUEUED_FRAMES; i++) {
         {
             VkCommandPoolCreateInfo info = {};
             info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
             info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
             info.queueFamilyIndex = g_QueueFamily;
-            err = vkCreateCommandPool(g_Device, &info, g_Allocator, &g_CommandPool[i]);
+            err = vkCreateCommandPool(g_Device,
+                                      &info,
+                                      g_Allocator,
+                                      &g_CommandPool[i]);
             check_vk_result(err);
         }
         {
@@ -260,7 +274,8 @@ static void setup_vulkan(GLFWwindow* window)
             info.commandPool = g_CommandPool[i];
             info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
             info.commandBufferCount = 1;
-            err = vkAllocateCommandBuffers(g_Device, &info, &g_CommandBuffer[i]);
+            err =
+                vkAllocateCommandBuffers(g_Device, &info, &g_CommandBuffer[i]);
             check_vk_result(err);
         }
         {
@@ -273,50 +288,56 @@ static void setup_vulkan(GLFWwindow* window)
         {
             VkSemaphoreCreateInfo info = {};
             info.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-            err = vkCreateSemaphore(g_Device, &info, g_Allocator, &g_Semaphore[i]);
+            err = vkCreateSemaphore(g_Device,
+                                    &info,
+                                    g_Allocator,
+                                    &g_Semaphore[i]);
             check_vk_result(err);
         }
     }
 
     // Create Descriptor Pool
     {
-        VkDescriptorPoolSize pool_size[11] = 
-        {
-            { VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
-            { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000 },
-            { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000 },
-            { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000 },
-            { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000 },
-            { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000 },
-            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000 },
-            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000 },
-            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000 },
-            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000 },
-            { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000 }
-        };
+        VkDescriptorPoolSize pool_size[11] =
+            {
+                {VK_DESCRIPTOR_TYPE_SAMPLER, 1000},
+                {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000},
+                {VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 1000},
+                {VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1000},
+                {VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 1000},
+                {VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 1000},
+                {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000},
+                {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 1000},
+                {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1000},
+                {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 1000},
+                {VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1000}
+            };
         VkDescriptorPoolCreateInfo pool_info = {};
         pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
         pool_info.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
         pool_info.maxSets = 1000 * 11;
         pool_info.poolSizeCount = 11;
         pool_info.pPoolSizes = pool_size;
-        err = vkCreateDescriptorPool(g_Device, &pool_info, g_Allocator, &g_DescriptorPool);
+        err = vkCreateDescriptorPool(g_Device,
+                                     &pool_info,
+                                     g_Allocator,
+                                     &g_DescriptorPool);
         check_vk_result(err);
     }
 }
 
-static void cleanup_vulkan()
-{
+static void cleanup_vulkan() {
     vkDestroyDescriptorPool(g_Device, g_DescriptorPool, g_Allocator);
-    for (int i = 0; i < IMGUI_VK_QUEUED_FRAMES; i++)
-    {
+    for (int i = 0; i < IMGUI_VK_QUEUED_FRAMES; i++) {
         vkDestroyFence(g_Device, g_Fence[i], g_Allocator);
-        vkFreeCommandBuffers(g_Device, g_CommandPool[i], 1, &g_CommandBuffer[i]);
+        vkFreeCommandBuffers(g_Device,
+                             g_CommandPool[i],
+                             1,
+                             &g_CommandBuffer[i]);
         vkDestroyCommandPool(g_Device, g_CommandPool[i], g_Allocator);
         vkDestroySemaphore(g_Device, g_Semaphore[i], g_Allocator);
     }
-    for (uint32_t i = 0; i < g_BackBufferCount; i++)
-    {
+    for (uint32_t i = 0; i < g_BackBufferCount; i++) {
         vkDestroyImageView(g_Device, g_BackBufferView[i], g_Allocator);
         vkDestroyFramebuffer(g_Device, g_Framebuffer[i], g_Allocator);
     }
@@ -327,18 +348,22 @@ static void cleanup_vulkan()
     vkDestroyInstance(g_Instance, g_Allocator);
 }
 
-static void frame_begin()
-{
+static void frame_begin() {
     VkResult err;
-    while (true)
-    {
-        err = vkWaitForFences(g_Device, 1, &g_Fence[g_FrameIndex], VK_TRUE, 100);
+    while (true) {
+        err =
+            vkWaitForFences(g_Device, 1, &g_Fence[g_FrameIndex], VK_TRUE, 100);
         if (err == VK_SUCCESS) break;
         if (err == VK_TIMEOUT) continue;
         check_vk_result(err);
     }
     {
-        err = vkAcquireNextImageKHR(g_Device, g_Swapchain, UINT64_MAX, g_Semaphore[g_FrameIndex], VK_NULL_HANDLE, &g_BackBufferIndex);
+        err = vkAcquireNextImageKHR(g_Device,
+                                    g_Swapchain,
+                                    UINT64_MAX,
+                                    g_Semaphore[g_FrameIndex],
+                                    VK_NULL_HANDLE,
+                                    &g_BackBufferIndex);
         check_vk_result(err);
     }
     {
@@ -359,12 +384,13 @@ static void frame_begin()
         info.renderArea.extent.height = fb_height;
         info.clearValueCount = 1;
         info.pClearValues = &g_ClearValue;
-        vkCmdBeginRenderPass(g_CommandBuffer[g_FrameIndex], &info, VK_SUBPASS_CONTENTS_INLINE);
+        vkCmdBeginRenderPass(g_CommandBuffer[g_FrameIndex],
+                             &info,
+                             VK_SUBPASS_CONTENTS_INLINE);
     }
 }
 
-static void frame_end()
-{
+static void frame_end() {
     VkResult err;
     vkCmdEndRenderPass(g_CommandBuffer[g_FrameIndex]);
     {
@@ -378,7 +404,16 @@ static void frame_end()
         barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
         barrier.image = g_BackBuffer[g_BackBufferIndex];
         barrier.subresourceRange = g_ImageRange;
-        vkCmdPipelineBarrier(g_CommandBuffer[g_FrameIndex], VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, 0, NULL, 0, NULL, 1, &barrier);
+        vkCmdPipelineBarrier(g_CommandBuffer[g_FrameIndex],
+                             VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                             VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+                             0,
+                             0,
+                             NULL,
+                             0,
+                             NULL,
+                             1,
+                             &barrier);
     }
     {
         VkSubmitInfo info = {};
@@ -412,24 +447,22 @@ static void frame_end()
     g_FrameIndex = (g_FrameIndex) % IMGUI_VK_QUEUED_FRAMES;
 }
 
-static void error_callback(int error, const char* description)
-{
+static void error_callback(int error, const char *description) {
     fprintf(stderr, "Error %d: %s\n", error, description);
 }
 
-int main(int, char**)
-{
+int main(int, char **) {
     // Setup window
     glfwSetErrorCallback(error_callback);
     if (!glfwInit())
         return 1;
 
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "ImGui Vulkan example", NULL, NULL);
+    GLFWwindow *window =
+        glfwCreateWindow(1280, 720, "ImGui Vulkan example", NULL, NULL);
 
     // Setup Vulkan
-    if (!glfwVulkanSupported())
-    {
+    if (!glfwVulkanSupported()) {
         printf("GLFW: Vulkan Not Supported\n");
         return 1;
     }
@@ -488,8 +521,7 @@ int main(int, char**)
     ImVec4 clear_color = ImColor(114, 144, 154);
 
     // Main loop
-    while (!glfwWindowShouldClose(window))
-    {
+    while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
         ImGui_ImplGlfwVulkan_NewFrame();
 
@@ -499,24 +531,25 @@ int main(int, char**)
             static float f = 0.0f;
             ImGui::Text("Hello, world!");
             ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-            ImGui::ColorEdit3("clear color", (float*)&clear_color);
+            ImGui::ColorEdit3("clear color", (float *) &clear_color);
             if (ImGui::Button("Test Window")) show_test_window ^= 1;
             if (ImGui::Button("Another Window")) show_another_window ^= 1;
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
+                        1000.0f / ImGui::GetIO().Framerate,
+                        ImGui::GetIO().Framerate);
         }
 
         // 2. Show another simple window, this time using an explicit Begin/End pair
-        if (show_another_window)
-        {
-            ImGui::SetNextWindowSize(ImVec2(200,100), ImGuiSetCond_FirstUseEver);
+        if (show_another_window) {
+            ImGui::SetNextWindowSize(ImVec2(200, 100),
+                                     ImGuiSetCond_FirstUseEver);
             ImGui::Begin("Another Window", &show_another_window);
             ImGui::Text("Hello");
             ImGui::End();
         }
 
         // 3. Show the ImGui test window. Most of the sample code is in ImGui::ShowTestWindow()
-        if (show_test_window)
-        {
+        if (show_test_window) {
             ImGui::SetNextWindowPos(ImVec2(650, 20), ImGuiSetCond_FirstUseEver);
             ImGui::ShowTestWindow(&show_test_window);
         }

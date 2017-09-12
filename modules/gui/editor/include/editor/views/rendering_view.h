@@ -13,7 +13,7 @@ class RenderingEffectView;
 class RenderingView : public View {
 public:
     RenderingView(
-            std::shared_ptr<RenderingEffectProcessor> rendering_effect_processor);
+        std::shared_ptr<RenderingEffectProcessor> rendering_effect_processor);
     ~RenderingView() = default;
 
     virtual void Render() override;

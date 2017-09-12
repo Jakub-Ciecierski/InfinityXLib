@@ -18,5 +18,4 @@ private:
 };
 }
 
-
 #endif //PROJECT_KEYBOARD_INPUT_FACTORY_H

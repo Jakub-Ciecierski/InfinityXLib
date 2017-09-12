@@ -5,7 +5,7 @@ using namespace std;
 using namespace ifx;
 
 SpotLightShaderBuilder::SpotLightShaderBuilder(int id) :
-        LightShaderBuilder(id){
+    LightShaderBuilder(id) {
 
 }
 
@@ -30,9 +30,9 @@ void SpotLightShaderBuilder::build() {
 
     ATTEN_CONSTANT = appendToBase(id, LIGHT_SPOTLIGHT_NAME,
                                   LIGHT_ATTENUATION_CONST_NAME);
-    ATTEN_LINEAR = appendToBase(id,LIGHT_SPOTLIGHT_NAME,
+    ATTEN_LINEAR = appendToBase(id, LIGHT_SPOTLIGHT_NAME,
                                 LIGHT_ATTENUATION_LINEAR_NAME);
-    ATTEN_QUAD = appendToBase(id,LIGHT_SPOTLIGHT_NAME,
+    ATTEN_QUAD = appendToBase(id, LIGHT_SPOTLIGHT_NAME,
                               LIGHT_ATTENUATION_QUAD_NAME);
 
     LIGHT_SPACE_MATRIX = appendToBase(id,

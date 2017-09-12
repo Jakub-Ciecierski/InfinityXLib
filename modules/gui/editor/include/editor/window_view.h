@@ -7,7 +7,7 @@
 
 typedef int ImGuiWindowFlags;
 
-namespace ifx{
+namespace ifx {
 
 class View;
 
@@ -23,21 +23,21 @@ public:
 
     bool Terminate();
 
-    void show(bool val){show_ = val;}
-    bool* show(){return &show_;}
+    void show(bool val) { show_ = val; }
+    bool *show() { return &show_; }
 
-    float width(){
-        if(!show_)
+    float width() {
+        if (!show_)
             return 0;
         return width_;
     }
-    float height(){
-        if(!show_)
+    float height() {
+        if (!show_)
             return 0;
         return height_;
     }
 
-    const std::string& name(){return name_;}
+    const std::string &name() { return name_; }
 
     virtual void Render();
 
@@ -69,7 +69,7 @@ private:
     void FetchWindowInfo();
     void FetchFocus();
 
-    std::vector<std::shared_ptr<View>>  views_;
+    std::vector<std::shared_ptr<View>> views_;
 
 };
 

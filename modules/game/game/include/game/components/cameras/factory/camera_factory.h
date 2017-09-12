@@ -12,7 +12,7 @@ public:
     CameraFactory() = default;
     ~CameraFactory() = default;
 
-    std::shared_ptr<CameraComponent> CreateCamera(Window* window);
+    std::shared_ptr<CameraComponent> CreateCamera(Window *window);
 private:
 };
 }

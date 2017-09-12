@@ -5,33 +5,33 @@
 
 #include <gui/theme.h>
 
-namespace ifx{
+namespace ifx {
 
 Editor::Editor(std::shared_ptr<Docker> docker) :
-        docker_(docker){
+    docker_(docker) {
     SetDefaultTheme();
 }
 
-bool Editor::Terminate(){
-    for(auto& window_view : window_views_){
-        if(!window_view->Terminate())
+bool Editor::Terminate() {
+    for (auto &window_view : window_views_) {
+        if (!window_view->Terminate())
             return false;
     }
     return true;
 }
 
-void Editor::Render(){
-    for(auto& view : window_views_){
-        if(!view)
+void Editor::Render() {
+    for (auto &view : window_views_) {
+        if (!view)
             continue;
 
-        if(docker_)
+        if (docker_)
             docker_->Dock(view);
         view->Render();
     }
 }
 
-void Editor::SetDefaultTheme(){
+void Editor::SetDefaultTheme() {
     GUIThemeDracula();
 }
 

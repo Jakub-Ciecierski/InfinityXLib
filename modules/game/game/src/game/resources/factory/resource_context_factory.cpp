@@ -4,24 +4,24 @@
 
 #include <game/resources/resource_context.h>
 
-namespace ifx{
+namespace ifx {
 
-ResourceContextFactory::ResourceContextFactory(){
+ResourceContextFactory::ResourceContextFactory() {
     resource_manager_factory_
-            = std::shared_ptr<ResourceManagerFactory>(
-            new ResourceManagerFactory());
+        = std::shared_ptr<ResourceManagerFactory>(
+        new ResourceManagerFactory());
 }
 
-ResourceContextFactory::~ResourceContextFactory(){}
+ResourceContextFactory::~ResourceContextFactory() {}
 
-std::shared_ptr<ResourceContext> ResourceContextFactory::Create(){
+std::shared_ptr<ResourceContext> ResourceContextFactory::Create() {
     auto resource_creator = std::shared_ptr<ResourceContext>(
-            new ResourceContext(resource_manager_factory_->Create()));
+        new ResourceContext(resource_manager_factory_->Create()));
     return resource_creator;
 }
 
-ResourceContextFactory& ResourceContextFactory::SetResourceManagerFactory(
-        std::shared_ptr<ResourceManagerFactory> factory){
+ResourceContextFactory &ResourceContextFactory::SetResourceManagerFactory(
+    std::shared_ptr<ResourceManagerFactory> factory) {
     resource_manager_factory_ = factory;
     return *this;
 }

@@ -3,9 +3,9 @@
 namespace ifx {
 
 MouseControllerEvent::MouseControllerEvent(
-        const MouseControllerKeyType&& type) :
-        type_(type){}
+    const MouseControllerKeyType &&type) :
+    type_(type) {}
 
-MouseControllerEvent::~MouseControllerEvent(){}
+MouseControllerEvent::~MouseControllerEvent() {}
 
 }

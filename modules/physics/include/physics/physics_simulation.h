@@ -14,17 +14,17 @@ class RigidBodyImpl;
 struct RigidBodyParams;
 class PhysicsContext;
 
-class PhysicsSimulation : public Updatable{
+class PhysicsSimulation : public Updatable {
 public:
     PhysicsSimulation(std::shared_ptr<PhysicsContext> physics_context);
     virtual ~PhysicsSimulation() = default;
 
     virtual bool Terminate() = 0;
 
-    bool is_running(){return is_running_;}
-    void is_running(bool v){is_running_ = v;}
+    bool is_running() { return is_running_; }
+    void is_running(bool v) { is_running_ = v; }
 
-    virtual void SetGravity(const glm::vec3& g) = 0;
+    virtual void SetGravity(const glm::vec3 &g) = 0;
     virtual glm::vec3 GetGravity() = 0;
 
     virtual void AddImpulse() = 0;

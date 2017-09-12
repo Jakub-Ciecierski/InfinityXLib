@@ -17,21 +17,20 @@ public:
 
     virtual ~RigidBodyImpl();
 
-    virtual void* GetNativeRigidBody() = 0;
+    virtual void *GetNativeRigidBody() = 0;
 
     virtual void InitImpl(
-            std::shared_ptr<CollisionShape> collision_shape,
-            float mass) = 0;
-    virtual void InitCollisionShape(const StaticPlaneShape* shape) = 0;
-    virtual void InitCollisionShape(const BoxCollisionShape* shape) = 0;
+        std::shared_ptr<CollisionShape> collision_shape,
+        float mass) = 0;
+    virtual void InitCollisionShape(const StaticPlaneShape *shape) = 0;
+    virtual void InitCollisionShape(const BoxCollisionShape *shape) = 0;
 
-    virtual void SetCollisionShapeScale(const glm::vec3& scale) = 0;
+    virtual void SetCollisionShapeScale(const glm::vec3 &scale) = 0;
 
     virtual bool IsDynamic() = 0;
 
 private:
 };
 }
-
 
 #endif //PROJECT_RIGIDBODYIMPL_H

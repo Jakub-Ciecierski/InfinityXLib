@@ -7,7 +7,7 @@
 
 namespace ifx {
 
-enum class GameComponentType{
+enum class GameComponentType {
     RENDER, PHYSICS, LIGHT, CAMERA
 };
 
@@ -23,7 +23,7 @@ public:
 
     virtual ~GameComponent() = default;
 
-    GameComponentType type(){return type_;}
+    GameComponentType type() { return type_; }
 
     static std::string GetTypeString(GameComponentType type);
 

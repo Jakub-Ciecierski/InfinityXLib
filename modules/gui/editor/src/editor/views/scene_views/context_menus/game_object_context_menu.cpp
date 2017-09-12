@@ -19,18 +19,19 @@
 namespace ifx {
 
 GameObjectContextMenu::GameObjectContextMenu(
-        std::shared_ptr<SceneRenderer> scene_renderer,
-        std::shared_ptr<ResourceContext> resource_creator,
-        std::shared_ptr<SceneContainer> scene) :
-        scene_renderer_(scene_renderer),
-        resource_creator_(resource_creator),
-        scene_(scene) {
+    std::shared_ptr<SceneRenderer> scene_renderer,
+    std::shared_ptr<ResourceContext> resource_creator,
+    std::shared_ptr<SceneContainer> scene) :
+    scene_renderer_(scene_renderer),
+    resource_creator_(resource_creator),
+    scene_(scene) {
     context_menu_add_light_ = ifx::make_unique<ContextMenuAddLight>();
     context_menu_add_render_object_
-            = ifx::make_unique<ContextMenuAddRenderObject>();
+        = ifx::make_unique<ContextMenuAddRenderObject>();
 }
 
-GameObjectContextMenuEvent GameObjectContextMenu::Render(std::shared_ptr<GameObject> game_object,
+GameObjectContextMenuEvent GameObjectContextMenu::Render(std::shared_ptr<
+    GameObject> game_object,
                                                          int game_object_id) {
     GameObjectContextMenuEvent event = GameObjectContextMenuEvent::None;
     ImGui::PushID(std::to_string(game_object_id).c_str());
@@ -38,7 +39,7 @@ GameObjectContextMenuEvent GameObjectContextMenu::Render(std::shared_ptr<GameObj
 
         Add(scene_renderer_, resource_creator_, game_object);
         ImGui::Separator();
-        if(Remove(scene_, game_object))
+        if (Remove(scene_, game_object))
             event = GameObjectContextMenuEvent::Remove;
 
         ImGui::EndPopup();
@@ -74,11 +75,11 @@ void GameObjectContextMenu::AddLight(std::shared_ptr<ResourceContext> resource_c
 }
 
 void GameObjectContextMenu::AddRenderObject(
-        std::shared_ptr<SceneRenderer> scene_renderer,
-        std::shared_ptr<ResourceContext> resource_creator,
-        std::shared_ptr<GameObject> game_object) {
+    std::shared_ptr<SceneRenderer> scene_renderer,
+    std::shared_ptr<ResourceContext> resource_creator,
+    std::shared_ptr<GameObject> game_object) {
     context_menu_add_render_object_->Render(
-            scene_renderer,resource_creator, game_object);
+        scene_renderer, resource_creator, game_object);
 }
 
 }

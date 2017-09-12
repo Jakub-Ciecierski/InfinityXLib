@@ -12,13 +12,12 @@ public:
 
     ~ControlableObject();
 
-    bool value(){return value_;}
-    void value(bool v){value_ = v;}
+    bool value() { return value_; }
+    void value(bool v) { value_ = v; }
 
 private:
     bool value_;
 };
 }
-
 
 #endif //PROJECT_CONTROLLABLE_OBJECT_H

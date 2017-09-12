@@ -5,26 +5,26 @@
 
 namespace ifx {
 
-    class PointlightShaderBuilder : public LightShaderBuilder{
+class PointlightShaderBuilder : public LightShaderBuilder {
 
-    public:
-        std::string POSITION;
-        std::string DIRECTION;
+public:
+    std::string POSITION;
+    std::string DIRECTION;
 
-        std::string AMBIENT;
-        std::string DIFFUSE;
-        std::string SPECULAR;
+    std::string AMBIENT;
+    std::string DIFFUSE;
+    std::string SPECULAR;
 
-        std::string ATTEN_CONSTANT;
-        std::string ATTEN_LINEAR;
-        std::string ATTEN_QUAD;
+    std::string ATTEN_CONSTANT;
+    std::string ATTEN_LINEAR;
+    std::string ATTEN_QUAD;
 
-        PointlightShaderBuilder(int id);
+    PointlightShaderBuilder(int id);
 
-        ~PointlightShaderBuilder();
+    ~PointlightShaderBuilder();
 
-        virtual void build() override;
-    };
+    virtual void build() override;
+};
 }
 
 #endif //DUCK_POINTLIGHT_SHADER_BUILDER_H

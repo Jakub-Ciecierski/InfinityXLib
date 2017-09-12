@@ -6,7 +6,7 @@
 
 namespace ifx {
 
-class RenderComponent : public GameComponent, public RenderObject{
+class RenderComponent : public GameComponent, public RenderObject {
 public:
     RenderComponent(std::shared_ptr<Model>);
     RenderComponent(std::vector<std::shared_ptr<Model>>);

@@ -21,7 +21,7 @@ class Texture2D;
 /**
  * Draw the polygon in filling mode or just the lines.
  */
-enum class PolygonMode{
+enum class PolygonMode {
     FILL,
     LINES, // draw lines for Triangles
     LINE // Use for to draw lines for Patches
@@ -30,7 +30,7 @@ enum class PolygonMode{
 /**
  * How to interpret the vertices.
  */
-enum class PrimitiveDrawMode{
+enum class PrimitiveDrawMode {
     TRIANGLES, PATCHES,
     LINES, POINTS
 };
@@ -53,19 +53,20 @@ public:
     virtual ~Mesh() = default;
 
     const std::vector<Vertex> &vertices() { return vertices_; }
-    const std::vector<unsigned int>& indices() {return indices_;}
+    const std::vector<unsigned int> &indices() { return indices_; }
 
     VAO *vao() { return vao_.get(); };
     VBO *vbo() { return vbo_.get(); };
 
-    std::shared_ptr<Material> material(){return material_;}
-    void material(std::shared_ptr<Material> material){material_ = material;}
+    std::shared_ptr<Material> material() { return material_; }
+    void material(std::shared_ptr<Material> material) { material_ = material; }
 
-    PrimitiveDrawMode primitive_draw_mode(){return primitive_draw_mode_;}
-    PolygonMode polygon_mode() {return polygon_mode_;}
-    void primitive_draw_mode(PrimitiveDrawMode mode){
-        primitive_draw_mode_ = mode;}
-    void polygon_mode(PolygonMode mode) {polygon_mode_ = mode;}
+    PrimitiveDrawMode primitive_draw_mode() { return primitive_draw_mode_; }
+    PolygonMode polygon_mode() { return polygon_mode_; }
+    void primitive_draw_mode(PrimitiveDrawMode mode) {
+        primitive_draw_mode_ = mode;
+    }
+    void polygon_mode(PolygonMode mode) { polygon_mode_ = mode; }
 
     virtual void draw(const Program &program);
     virtual void drawInstanced(const Program &program, int count);

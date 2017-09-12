@@ -22,21 +22,23 @@ public:
     SceneRenderer();
     ~SceneRenderer() = default;
 
-    const std::vector<std::shared_ptr<RenderingEffect>>& rendering_effects(){
-            return rendering_effects_;}
-    const std::shared_ptr<RenderingEffect>& default_rendering_effect(){
+    const std::vector<std::shared_ptr<RenderingEffect>> &rendering_effects() {
+        return rendering_effects_;
+    }
+    const std::shared_ptr<RenderingEffect> &default_rendering_effect() {
         return default_rendering_effect_;
     };
-    const std::vector<std::shared_ptr<RenderObject>>& render_objects() {
-        return render_objects_;}
-    const std::shared_ptr<LightGroup> light_group() const {return light_group_;}
-    const std::shared_ptr<Camera> camera(){return camera_;}
+    const std::vector<std::shared_ptr<RenderObject>> &render_objects() {
+        return render_objects_;
+    }
+    const std::shared_ptr<LightGroup> light_group() const { return light_group_; }
+    const std::shared_ptr<Camera> camera() { return camera_; }
 
     void Render() const;
     void Render(const std::shared_ptr<Program> program) const;
 
     void SetDefaultRenderingEffect(
-            std::shared_ptr<RenderingEffect> rendering_effect);
+        std::shared_ptr<RenderingEffect> rendering_effect);
 
     void Add(std::shared_ptr<RenderingEffect> rendering_effect);
     void Add(std::shared_ptr<RenderObject> render_object);

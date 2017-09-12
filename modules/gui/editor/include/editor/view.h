@@ -10,12 +10,12 @@ public:
     View(std::string name);
     virtual ~View() = default;
 
-    bool is_window_focused() {return is_window_focused_;}
-    void is_window_focused(bool value) {is_window_focused_ = value;}
+    bool is_window_focused() { return is_window_focused_; }
+    void is_window_focused(bool value) { is_window_focused_ = value; }
 
     virtual bool Terminate();
 
-    const std::string& name(){return name_;}
+    const std::string &name() { return name_; }
 
     virtual void Render() = 0;
 private:

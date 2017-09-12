@@ -6,8 +6,8 @@
 
 //#include <boost/filesystem.hpp>
 
-namespace boost{
-namespace filesystem{
+namespace boost {
+namespace filesystem {
 class directory_entry;
 }
 }
@@ -30,7 +30,7 @@ public:
                              std::shared_ptr<SceneRenderer> scene_renderer);
     ~RenderingEffectProcessor() = default;
 
-    std::shared_ptr<SceneRenderer> scene_renderer(){return scene_renderer_;}
+    std::shared_ptr<SceneRenderer> scene_renderer() { return scene_renderer_; }
 
     void CompileAllPrograms();
 
@@ -40,13 +40,13 @@ private:
     bool IsValidProgramDirectory(const std::string dir_name);
 
     ShaderPaths GetShaderPaths(boost::filesystem::directory_entry dir);
-    ShaderType GetShaderType(const std::string& filename);
+    ShaderType GetShaderType(const std::string &filename);
 
-    bool EndsWith(const std::string& str,
-                  const std::string& end);
+    bool EndsWith(const std::string &str,
+                  const std::string &end);
 
-    std::string GetDifference(const std::string& str1,
-                              const std::string& str2);
+    std::string GetDifference(const std::string &str1,
+                              const std::string &str2);
 
     std::shared_ptr<ResourceContext> resource_context_;
     std::shared_ptr<SceneRenderer> scene_renderer_;

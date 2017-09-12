@@ -5,7 +5,7 @@
 
 namespace ifx {
 
-struct TesselationParams{
+struct TesselationParams {
     float tess_level_inner;
     float tess_level_outer;
     long unsigned int vertex_count_per_patch;

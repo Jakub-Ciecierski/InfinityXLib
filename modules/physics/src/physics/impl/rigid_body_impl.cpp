@@ -2,8 +2,8 @@
 
 namespace ifx {
 
-RigidBodyImpl::RigidBodyImpl(){}
+RigidBodyImpl::RigidBodyImpl() {}
 
-RigidBodyImpl::~RigidBodyImpl(){}
+RigidBodyImpl::~RigidBodyImpl() {}
 
 }

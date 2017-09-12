@@ -16,23 +16,23 @@ enum class DynamicWorldType {
     DISCRETE, FRACTURE
 };
 
-class BulletPhysicsSimulationFactory : public PhysicsSimulationFactory{
+class BulletPhysicsSimulationFactory : public PhysicsSimulationFactory {
 public:
 
     BulletPhysicsSimulationFactory();
     ~BulletPhysicsSimulationFactory();
 
     virtual std::shared_ptr<PhysicsSimulation> Create(
-            std::shared_ptr<PhysicsContext> physics_context) override;
+        std::shared_ptr<PhysicsContext> physics_context) override;
 
-    BulletPhysicsSimulationFactory& SetDynamicWorldType(DynamicWorldType type);
+    BulletPhysicsSimulationFactory &SetDynamicWorldType(DynamicWorldType type);
 
 private:
     std::shared_ptr<BulletPhysicsSimulationCreateParams>
-            CreateBulletDynamics();
+    CreateBulletDynamics();
 
     std::shared_ptr<btDiscreteDynamicsWorld> CreateDiscreteDynamicWorld(
-            const std::shared_ptr<BulletPhysicsSimulationCreateParams>);
+        const std::shared_ptr<BulletPhysicsSimulationCreateParams>);
 
     DynamicWorldType dynamic_world_type_;
 };

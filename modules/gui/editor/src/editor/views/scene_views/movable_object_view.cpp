@@ -4,13 +4,13 @@
 #include <math/transform.h>
 #include <math/math_ifx.h>
 
-namespace ifx{
+namespace ifx {
 
-MovableObjectView::MovableObjectView(){}
-MovableObjectView::~MovableObjectView(){}
+MovableObjectView::MovableObjectView() {}
+MovableObjectView::~MovableObjectView() {}
 
-void MovableObjectView::Render(std::shared_ptr<Transformable> movable_object){
-    if(ImGui::TreeNode("Transform")){
+void MovableObjectView::Render(std::shared_ptr<Transformable> movable_object) {
+    if (ImGui::TreeNode("Transform")) {
         RenderPosition(movable_object);
         RenderRotation(movable_object);
         RenderScale(movable_object);
@@ -20,9 +20,9 @@ void MovableObjectView::Render(std::shared_ptr<Transformable> movable_object){
 }
 
 void MovableObjectView::RenderPosition(
-        std::shared_ptr<Transformable> movable_object){
+    std::shared_ptr<Transformable> movable_object) {
     static float raw[3];
-    const glm::vec3& position = movable_object->local_transform().position;
+    const glm::vec3 &position = movable_object->local_transform().position;
 
     raw[0] = position.x;
     raw[1] = position.y;
@@ -33,9 +33,9 @@ void MovableObjectView::RenderPosition(
 }
 
 void MovableObjectView::RenderRotation(
-        std::shared_ptr<Transformable> movable_object){
+    std::shared_ptr<Transformable> movable_object) {
     static float raw[3];
-    const glm::vec3& rotation = movable_object->local_transform().rotation;
+    const glm::vec3 &rotation = movable_object->local_transform().rotation;
 
     raw[0] = rotation.x;
     raw[1] = rotation.y;
@@ -45,9 +45,9 @@ void MovableObjectView::RenderRotation(
     movable_object->rotateTo(glm::vec3(raw[0], raw[1], raw[2]));
 }
 void MovableObjectView::RenderScale(
-        std::shared_ptr<Transformable> movable_object){
+    std::shared_ptr<Transformable> movable_object) {
     static float raw[3];
-    const glm::vec3& scale = movable_object->local_transform().scale;
+    const glm::vec3 &scale = movable_object->local_transform().scale;
     raw[0] = scale.x;
     raw[1] = scale.y;
     raw[2] = scale.z;
@@ -57,9 +57,9 @@ void MovableObjectView::RenderScale(
 }
 
 void MovableObjectView::RenderDirection(
-        std::shared_ptr<Transformable> movable_object){
+    std::shared_ptr<Transformable> movable_object) {
     static float raw[3];
-    const glm::vec3& v = movable_object->getDirection();
+    const glm::vec3 &v = movable_object->getDirection();
     raw[0] = v.x;
     raw[1] = v.y;
     raw[2] = v.z;

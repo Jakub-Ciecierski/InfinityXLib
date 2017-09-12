@@ -9,12 +9,12 @@ namespace ifx {
 
 struct EngineArchitecture;
 
-class GameUpdater : public Updatable{
+class GameUpdater : public Updatable {
 public:
     GameUpdater(std::shared_ptr<EngineArchitecture> engine_architecture);
     ~GameUpdater() = default;
 
-    std::shared_ptr<EngineArchitecture> engine_architecture(){
+    std::shared_ptr<EngineArchitecture> engine_architecture() {
         return engine_architecture_;
     }
 

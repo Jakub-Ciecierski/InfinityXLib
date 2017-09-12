@@ -21,13 +21,12 @@ public:
     ~KeyboardController();
 
     std::shared_ptr<KeyboardControllerEvent> GetEvent(
-            KeyboardControllerKeyType type);
+        KeyboardControllerKeyType type);
 
 private:
 
 };
 
 }
-
 
 #endif //PROJECT_KEYBOARD_INPUT_H

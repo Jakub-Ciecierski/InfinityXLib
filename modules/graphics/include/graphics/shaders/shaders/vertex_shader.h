@@ -3,7 +3,7 @@
 
 #include "graphics/shaders/shader.h"
 
-class VertexShader : public Shader{
+class VertexShader : public Shader {
 private:
 
 protected:
@@ -13,11 +13,10 @@ public:
 
     VertexShader(std::string shaderSource,
                  std::string file_path);
-    VertexShader(const VertexShader& other);
+    VertexShader(const VertexShader &other);
 
     ~VertexShader();
 
 };
-
 
 #endif //DUCK_VERTEX_SHADER_H

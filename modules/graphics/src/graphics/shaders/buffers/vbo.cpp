@@ -7,8 +7,8 @@
 
 using namespace std;
 
-VBO::VBO(const std::vector<Vertex>* vertices) :
-        vertices(vertices){
+VBO::VBO(const std::vector<Vertex> *vertices) :
+    vertices(vertices) {
     glGenBuffers(1, &vboID);
 }
 
