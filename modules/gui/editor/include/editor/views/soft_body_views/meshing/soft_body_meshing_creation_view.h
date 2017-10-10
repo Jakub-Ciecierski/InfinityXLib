@@ -1,5 +1,7 @@
-#ifndef PROJECT_SOFT_BODY_CREATOR_VIEW_H
-#define PROJECT_SOFT_BODY_CREATOR_VIEW_H
+#ifndef PROJECT_SOFT_BODY_MESHING_CREATION_VIEW_H
+#define PROJECT_SOFT_BODY_MESHING_CREATION_VIEW_H
+
+#include <memory>
 
 #include <RTFEM/FEM/Meshing/Tetrahedralization.h>
 #include <RTFEM/FEM/Meshing/TriangleMesh.h>
@@ -13,10 +15,11 @@ struct SoftBodyRenderingEffects;
 class ResourceManager;
 class RenderComponent;
 
-class SoftBodyCreatorView {
+class SoftBodyMeshingCreationView {
 public:
-    SoftBodyCreatorView(std::shared_ptr<ResourceManager> resource_manager);
-    ~SoftBodyCreatorView() = default;
+    SoftBodyMeshingCreationView(
+        std::shared_ptr<ResourceManager> resource_manager);
+    ~SoftBodyMeshingCreationView() = default;
 
     bool Render(const rtfem::TetrahedralizationOptions &rtfem_options,
                 SoftBodyObjects &soft_body_objects,
@@ -49,4 +52,4 @@ private:
 
 }
 
-#endif //PROJECT_SOFT_BODY_CREATOR_VIEW_H
+#endif //PROJECT_SOFT_BODY_MESHING_CREATION_VIEW_H

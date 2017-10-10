@@ -11,17 +11,25 @@
 #include <physics/physics_simulation.h>
 
 #include <gui/imgui/imgui.h>
+#include <gui/imgui/imgui_internal.h>
 
 #include <graphics/rendering/fbo_rendering/fbo_renderer.h>
 #include <graphics/rendering/scene_renderer.h>
 #include <graphics/rendering/rendering_effect.h>
 #include <graphics/shaders/textures/texture.h>
 
-#include <editor/views/soft_body_views/meshing_builder.h>
+#include <editor/views/soft_body_views/meshing/meshing_builder.h>
 #include "editor/views/soft_body_views/soft_body_screen_view.h"
-#include "editor/views/soft_body_views/soft_body_settings_view.h"
-#include <editor/views/soft_body_views/soft_body_creator_view.h>
 #include <editor/views/soft_body_views/soft_body_selector.h>
+#include <editor/views/soft_body_views/solver/soft_body_solver_view.h>
+#include <editor/views/soft_body_views/boundary_conditions/soft_body_boundary_conditions_view.h>
+#include <editor/views/soft_body_views/meshing/soft_body_meshing_view.h>
+#include <editor/views/soft_body_views/rendering/soft_body_rendering_view.h>
+#include <editor/views/soft_body_views/material/soft_body_material_view.h>
+#include <editor/views/soft_body_views/load/soft_body_load_view.h>
+#include "editor/views/soft_body_views/meshing/soft_body_meshing_settings_view.h"
+#include "editor/views/soft_body_views/meshing/soft_body_meshing_creation_view.h"
+#include "editor/views/soft_body_views/meshing/soft_body_meshing_info_view.h"
 
 #include <common/unique_ptr.h>
 
@@ -35,14 +43,19 @@ SoftBodyView::SoftBodyView(std::unique_ptr<GameUpdater> game_updater,
     soft_body_objects_(SoftBodyObjects{nullptr, nullptr, nullptr}),
     first_render_(true) {
     screen_view_ = ifx::make_unique<SoftBodyScreenView>();
-    settings_view_ = ifx::make_unique<SoftBodySettingsView>();
-    creator_view_ = ifx::make_unique<SoftBodyCreatorView>(
-        game_updater_->engine_architecture()->
-            engine_contexts.resource_context->
-            resource_manager());
     selector_ = ifx::make_unique<SoftBodySelector>(
         game_updater_->engine_architecture()->
             engine_systems.scene_container);
+
+    meshing_view_ = ifx::make_unique<SoftBodyMeshingView>(
+        game_updater_->engine_architecture()->
+            engine_contexts.resource_context->
+            resource_manager());
+    rendering_view_ = ifx::make_unique<SoftBodyRenderingView>();
+    material_view_ = ifx::make_unique<SoftBodyMaterialView>();
+    boundarary_conditions_view_ = ifx::make_unique<SoftBodyBoundaryConditionsView>();
+    load_view_ = ifx::make_unique<SoftBodyLoadView>();
+    solver_view_ = ifx::make_unique<SoftBodySolverView>();
 }
 
 bool SoftBodyView::Terminate() {
@@ -66,12 +79,45 @@ void SoftBodyView::Render() {
 }
 
 void SoftBodyView::RenderLeftColumn() {
-    settings_view_->Render(soft_body_objects_,
-                           rendering_effects_);
-    if (creator_view_->Render(settings_view_->rtfem_options(),
-                              soft_body_objects_,
-                              rendering_effects_)) {
-        settings_view_->SetRenderObjectMode(RenderObjectMode::Output);
+    if (ImGui::Button(soft_body_views.names[soft_body_views.selected].c_str(),
+                      ImVec2(150, 20))){
+        ImGui::OpenPopup("select");
+    }
+
+    if (ImGui::BeginPopup("select")) {
+        for (unsigned int i = 0; i < soft_body_views.names.size(); i++)
+            if (ImGui::Selectable(soft_body_views.names[i].c_str()))
+                soft_body_views.selected = i;
+        ImGui::EndPopup();
+    }
+    ImGui::Separator();
+
+    bool mesh_created = false;
+
+    switch(soft_body_views.selected){
+        case soft_body_views.meshing_id:
+            mesh_created = meshing_view_->Render(soft_body_objects_,
+                                                 rendering_effects_);
+            break;
+        case soft_body_views.material_id:
+            break;
+        case soft_body_views.boudary_conditions_id:
+            break;
+        case soft_body_views.load_id:
+            break;
+        case soft_body_views.rendering_id:
+            rendering_view_->Render(soft_body_objects_,
+                                    rendering_effects_);
+            break;
+        case soft_body_views.solver_id:
+            break;
+        default:
+            break;
+
+    }
+
+    if(mesh_created){
+        rendering_view_->SetRenderObjectMode(RenderObjectMode::Output);
     }
 }
 

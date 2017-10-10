@@ -2,9 +2,17 @@
 
 #include "editor/views/soft_body_view.h"
 #include "editor/views/soft_body_views/soft_body_screen_view.h"
-#include "editor/views/soft_body_views/soft_body_settings_view.h"
-#include "editor/views/soft_body_views/soft_body_creator_view.h"
 #include "editor/views/soft_body_views/soft_body_selector.h"
+#include <editor/views/soft_body_views/solver/soft_body_solver_view.h>
+#include <editor/views/soft_body_views/boundary_conditions/soft_body_boundary_conditions_view.h>
+#include <editor/views/soft_body_views/meshing/soft_body_meshing_view.h>
+#include <editor/views/soft_body_views/rendering/soft_body_rendering_view.h>
+#include <editor/views/soft_body_views/material/soft_body_material_view.h>
+#include <editor/views/soft_body_views/load/soft_body_load_view.h>
+#include "editor/views/factory/soft_body_view_factory.h"
+#include "editor/views/soft_body_views/meshing/soft_body_meshing_settings_view.h"
+#include "editor/views/soft_body_views/meshing/soft_body_meshing_creation_view.h"
+#include "editor/views/soft_body_views/meshing/soft_body_meshing_info_view.h"
 
 #include <game/factory/game_systems_factory.h>
 #include <game/game_updater.h>

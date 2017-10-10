@@ -1,37 +1,26 @@
-#include "editor/views/soft_body_views/soft_body_settings_view.h"
+#include "editor/views/soft_body_views/rendering/soft_body_rendering_view.h"
 
 #include <editor/views/soft_body_views/soft_body_structers.h>
+#include <editor/views/soft_body_views/meshing/meshing_builder.h>
 
 #include <gui/imgui/imgui.h>
 
 #include <graphics/rendering/rendering_effect.h>
 
 #include <game/components/render/render_component.h>
-#include <editor/views/soft_body_views/meshing_builder.h>
 
 namespace ifx {
 
-SoftBodySettingsView::SoftBodySettingsView() :
+SoftBodyRenderingView::SoftBodyRenderingView() :
     render_object_settings_(RenderObjectSettings()) {}
 
-void SoftBodySettingsView::Render(SoftBodyObjects &soft_body_objects,
-                                  SoftBodyRenderingEffects &rendering_effects) {
-    RenderShow(rendering_effects, soft_body_objects);
-    RenderMeshingSettings();
+void SoftBodyRenderingView::Render(SoftBodyObjects &soft_body_objects,
+                                   SoftBodyRenderingEffects &rendering_effects) {
+    RenderShowRenderingEffects(rendering_effects);
+    RenderShowObjects(soft_body_objects);
 }
 
-void SoftBodySettingsView::RenderShow(
-    SoftBodyRenderingEffects &rendering_effects,
-    SoftBodyObjects &soft_body_objects) {
-    if (ImGui::TreeNodeEx("Show", ImGuiTreeNodeFlags_DefaultOpen)) {
-        RenderShowRenderingEffects(rendering_effects);
-        RenderShowObjects(soft_body_objects);
-
-        ImGui::TreePop();
-    }
-}
-
-void SoftBodySettingsView::RenderShowRenderingEffects(
+void SoftBodyRenderingView::RenderShowRenderingEffects(
     SoftBodyRenderingEffects &rendering_effects) {
     if (ImGui::TreeNodeEx("Rendering Effects",
                           ImGuiTreeNodeFlags_DefaultOpen)) {
@@ -44,7 +33,7 @@ void SoftBodySettingsView::RenderShowRenderingEffects(
     }
 }
 
-void SoftBodySettingsView::RenderShowRenderingEffectCheckbox(
+void SoftBodyRenderingView::RenderShowRenderingEffectCheckbox(
     std::string name,
     RenderingEffect &rendering_effect) {
     static bool enabled;
@@ -53,7 +42,7 @@ void SoftBodySettingsView::RenderShowRenderingEffectCheckbox(
     rendering_effect.enabled(enabled);
 }
 
-void SoftBodySettingsView::RenderShowObjects(
+void SoftBodyRenderingView::RenderShowObjects(
     SoftBodyObjects &soft_body_objects) {
     if (ImGui::TreeNodeEx("Objects",
                           ImGuiTreeNodeFlags_DefaultOpen)) {
@@ -80,14 +69,7 @@ void SoftBodySettingsView::RenderShowObjects(
     }
 }
 
-void SoftBodySettingsView::RenderMeshingSettings() {
-    ImGui::PushItemWidth(50);
-    ImGui::SliderFloat("Maximum Volume", &rtfem_options_.maximum_volume,
-                       0, 10);
-    ImGui::PopItemWidth();
-}
-
-void SoftBodySettingsView::SetRenderObjectMode(RenderObjectMode mode) {
+void SoftBodyRenderingView::SetRenderObjectMode(RenderObjectMode mode) {
     render_object_settings_.mode = mode;
     switch (render_object_settings_.mode) {
         case RenderObjectMode::Input:render_object_settings_.show_input = true;

@@ -1,4 +1,4 @@
-#include "editor/views/soft_body_views/meshing_builder.h"
+#include "editor/views/soft_body_views/meshing/meshing_builder.h"
 
 #include <game/components/render/render_component.h>
 

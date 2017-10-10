@@ -1,7 +1,7 @@
-#include "editor/views/soft_body_views/soft_body_creator_view.h"
+#include "editor/views/soft_body_views/meshing/soft_body_meshing_creation_view.h"
 
 #include <editor/views/soft_body_views/soft_body_structers.h>
-#include <editor/views/soft_body_views/meshing_builder.h>
+#include <editor/views/soft_body_views/meshing/meshing_builder.h>
 
 #include <game/game_object.h>
 #include <game/game_component.h>
@@ -14,26 +14,35 @@
 #include <RTFEM/FEM/Vertex.h>
 #include <RTFEM/FEM/FiniteElement.h>
 
+#include <iostream>
+
 namespace ifx {
 
-SoftBodyCreatorView::SoftBodyCreatorView(
+SoftBodyMeshingCreationView::SoftBodyMeshingCreationView(
     std::shared_ptr<ResourceManager> resource_manager) :
     resource_manager_(resource_manager) {}
 
-bool SoftBodyCreatorView::Render(
+bool SoftBodyMeshingCreationView::Render(
     const rtfem::TetrahedralizationOptions &rtfem_options,
     SoftBodyObjects &soft_body_objects,
     SoftBodyRenderingEffects &rendering_effects) {
-    if (ImGui::Button("Compute 3D Mesh")) {
-        return BuildMesh(rtfem_options, soft_body_objects, rendering_effects);
+    bool return_value = false;
+    if (ImGui::TreeNodeEx("Creation",
+                          ImGuiTreeNodeFlags_DefaultOpen)) {
+        if (ImGui::Button("Compute Mesh")) {
+            return_value = BuildMesh(rtfem_options, soft_body_objects,
+                                     rendering_effects);
+        }
+        if (DebugCreator(rtfem_options, soft_body_objects, rendering_effects)) {
+            return_value = true;
+        }
+        ImGui::TreePop();
     }
-    if (DebugCreator(rtfem_options, soft_body_objects, rendering_effects)) {
-        return true;
-    }
-    return false;
+
+    return return_value;
 }
 
-bool SoftBodyCreatorView::BuildMesh(
+bool SoftBodyMeshingCreationView::BuildMesh(
     const rtfem::TetrahedralizationOptions &rtfem_options,
     SoftBodyObjects &soft_body_objects,
     SoftBodyRenderingEffects &rendering_effects) {
@@ -56,11 +65,29 @@ bool SoftBodyCreatorView::BuildMesh(
                             soft_body_objects,
                             rendering_effects);
 
+    // Print
+    int i = 0;
+    for(const auto& vertex : fem_geometry.vertices){
+        std::cout << i++ << ": " << vertex->coordinates() << std::endl;
+    }
+    i = 0;
+    for(const auto& element : fem_geometry.finite_elements){
+        auto indices = element->vertices_indices();
+        std::cout << i++ << ": "
+                  << indices[0] << ", "
+                  << indices[1] << ", "
+                  << indices[2] << ", "
+                  << indices[3] << ", "
+                  << std::endl;
+    }
+
+    //
+
     return true;
 }
 
 rtfem::TriangleMeshIndexed<double>
-SoftBodyCreatorView::CreateTriangleMesh(SoftBodyObjects &soft_body_objects) {
+SoftBodyMeshingCreationView::CreateTriangleMesh(SoftBodyObjects &soft_body_objects) {
     auto render_components
         = soft_body_objects.current_game_object->GetComponents(
             std::move(GameComponentType::RENDER));
@@ -73,7 +100,7 @@ SoftBodyCreatorView::CreateTriangleMesh(SoftBodyObjects &soft_body_objects) {
     );
 }
 
-rtfem::FEMGeometry<double> SoftBodyCreatorView::CreateFEMGeometry(
+rtfem::FEMGeometry<double> SoftBodyMeshingCreationView::CreateFEMGeometry(
     const rtfem::TetrahedralizationOptions &rtfem_options,
     const rtfem::TriangleMeshIndexed<double> &triangle_mesh) {
     rtfem::Tetrahedralization<double> tetrahedralization;
@@ -81,13 +108,13 @@ rtfem::FEMGeometry<double> SoftBodyCreatorView::CreateFEMGeometry(
     return tetrahedralization.Compute(triangle_mesh);
 }
 
-std::shared_ptr<RenderComponent> SoftBodyCreatorView::CreateRenderComponent(
+std::shared_ptr<RenderComponent> SoftBodyMeshingCreationView::CreateRenderComponent(
     const rtfem::FEMGeometry<double> &fem_geometry) {
     return MeshingBuilder().CreateRenderComponent(
         fem_geometry, resource_manager_);
 }
 
-void SoftBodyCreatorView::RegisterRenderComponent(
+void SoftBodyMeshingCreationView::RegisterRenderComponent(
     std::shared_ptr<RenderComponent> render_component,
     SoftBodyObjects &soft_body_objects,
     SoftBodyRenderingEffects &rendering_effects) {
@@ -100,7 +127,7 @@ void SoftBodyCreatorView::RegisterRenderComponent(
         soft_body_objects.fem_geometry);
 }
 
-bool SoftBodyCreatorView::DebugCreator(
+bool SoftBodyMeshingCreationView::DebugCreator(
     const rtfem::TetrahedralizationOptions &rtfem_options,
     SoftBodyObjects &soft_body_objects,
     SoftBodyRenderingEffects &rendering_effects) {
@@ -166,5 +193,6 @@ bool SoftBodyCreatorView::DebugCreator(
     return false;
 
 }
+
 
 }

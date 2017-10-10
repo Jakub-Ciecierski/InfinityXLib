@@ -17,9 +17,69 @@ class RenderingEffect;
 class RenderComponent;
 
 class SoftBodyScreenView;
-class SoftBodySettingsView;
-class SoftBodyCreatorView;
 class SoftBodySelector;
+
+class SoftBodySolverView;
+class SoftBodyBoundaryConditionsView;
+class SoftBodyMeshingView;
+class SoftBodyRenderingView;
+class SoftBodyMaterialView;
+class SoftBodyLoadView;
+
+struct SoftBodyViews{
+    unsigned int selected = 0;
+
+    const std::string meshing_name = "Meshing";
+    static constexpr unsigned int meshing_id = 0;
+
+    const std::string material_name = "Material";
+    static constexpr unsigned int material_id = 1;
+
+    const std::string boudary_conditions_name = "Boundary Conditions";
+    static constexpr unsigned int boudary_conditions_id = 2;
+
+    const std::string load_name = "Load";
+    static constexpr unsigned int load_id = 3;
+
+    const std::string rendering_name = "Rendering";
+    static constexpr unsigned int rendering_id = 4;
+
+    const std::string solver_name = "Solver";
+    static constexpr unsigned int solver_id = 5;
+
+    const std::vector<std::string> names{
+        meshing_name,
+        material_name,
+        boudary_conditions_name,
+        load_name,
+        rendering_name,
+        solver_name
+    };
+
+    const int GetID(std::string name)  {
+        for (unsigned int i = 0; i < names.size(); i++) {
+            if (names[i] == name) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    const std::string GetSelectedName(){
+        if(selected < 0 || selected >= names.size()){
+            return "";
+        }
+        return names[selected];
+    }
+
+    const std::string GetName(unsigned int id)  {
+        if(id < 0 || id >= names.size()){
+            return "";
+        }
+        return names[id];
+    }
+};
+
 
 class SoftBodyView : public View, public SceneViewObserver {
 public:
@@ -45,10 +105,17 @@ private:
 
     bool first_render_;
 
+    SoftBodyViews soft_body_views;
+
     std::unique_ptr<SoftBodyScreenView> screen_view_;
-    std::unique_ptr<SoftBodySettingsView> settings_view_;
-    std::unique_ptr<SoftBodyCreatorView> creator_view_;
     std::unique_ptr<SoftBodySelector> selector_;
+
+    std::unique_ptr<SoftBodyMeshingView> meshing_view_;
+    std::unique_ptr<SoftBodyRenderingView> rendering_view_;
+    std::unique_ptr<SoftBodyMaterialView> material_view_;
+    std::unique_ptr<SoftBodyBoundaryConditionsView> boundarary_conditions_view_;
+    std::unique_ptr<SoftBodyLoadView> load_view_;
+    std::unique_ptr<SoftBodySolverView> solver_view_;
 };
 }
 
