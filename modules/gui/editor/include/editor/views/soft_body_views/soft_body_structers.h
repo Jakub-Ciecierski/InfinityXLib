@@ -9,6 +9,9 @@ class RenderingEffect;
 class GameObject;
 class RenderComponent;
 
+template<class T>
+class SoftBodyFEMComponent;
+
 struct SoftBodyRenderingEffects {
     std::shared_ptr<RenderingEffect> nodes = nullptr;
     std::shared_ptr<RenderingEffect> edges = nullptr;
@@ -19,7 +22,8 @@ struct SoftBodyRenderingEffects {
 struct SoftBodyObjects {
     std::shared_ptr<GameObject> current_game_object;
     std::shared_ptr<RenderComponent> triangle_mesh;
-    std::shared_ptr<RenderComponent> fem_geometry;
+    std::shared_ptr<RenderComponent> soft_body_fem_render;
+    std::shared_ptr<SoftBodyFEMComponent<double>> soft_body_fem;
 };
 
 extern const unsigned int MAX_RENDER_COMPONENTS;

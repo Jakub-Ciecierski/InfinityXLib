@@ -30,7 +30,8 @@ bool SoftBodyMeshingCreationView::Render(
     if (ImGui::TreeNodeEx("Creation",
                           ImGuiTreeNodeFlags_DefaultOpen)) {
         if (ImGui::Button("Compute Mesh")) {
-            return_value = BuildMesh(rtfem_options, soft_body_objects,
+            return_value = BuildMesh(rtfem_options,
+                                     soft_body_objects,
                                      rendering_effects);
         }
         if (DebugCreator(rtfem_options, soft_body_objects, rendering_effects)) {
@@ -50,7 +51,7 @@ bool SoftBodyMeshingCreationView::BuildMesh(
         return false;
     }
     soft_body_objects.current_game_object->Remove(
-        soft_body_objects.fem_geometry);
+        soft_body_objects.soft_body_fem_render);
 
     rtfem::TriangleMeshIndexed<double> triangle_mesh;
     try {
@@ -60,8 +61,8 @@ bool SoftBodyMeshingCreationView::BuildMesh(
     }
 
     auto fem_geometry = CreateFEMGeometry(rtfem_options, triangle_mesh);
-    soft_body_objects.fem_geometry = CreateRenderComponent(fem_geometry);
-    RegisterRenderComponent(soft_body_objects.fem_geometry,
+    soft_body_objects.soft_body_fem_render = CreateRenderComponent(fem_geometry);
+    RegisterRenderComponent(soft_body_objects.soft_body_fem_render,
                             soft_body_objects,
                             rendering_effects);
 
@@ -124,7 +125,7 @@ void SoftBodyMeshingCreationView::RegisterRenderComponent(
     rendering_effects.faces->RegisterRenderObject(render_component);
 
     soft_body_objects.current_game_object->Add(
-        soft_body_objects.fem_geometry);
+        soft_body_objects.soft_body_fem_render);
 }
 
 bool SoftBodyMeshingCreationView::DebugCreator(
@@ -137,7 +138,7 @@ bool SoftBodyMeshingCreationView::DebugCreator(
             return false;
         }
         soft_body_objects.current_game_object->Remove(
-            soft_body_objects.fem_geometry);
+            soft_body_objects.soft_body_fem_render);
 
         rtfem::TriangleMeshIndexed<double> triangle_mesh;
         try {
@@ -182,8 +183,8 @@ bool SoftBodyMeshingCreationView::DebugCreator(
         fem_geometry.finite_elements = finite_elements;
         // </limit>
 
-        soft_body_objects.fem_geometry = CreateRenderComponent(fem_geometry);
-        RegisterRenderComponent(soft_body_objects.fem_geometry,
+        soft_body_objects.soft_body_fem_render = CreateRenderComponent(fem_geometry);
+        RegisterRenderComponent(soft_body_objects.soft_body_fem_render,
                                 soft_body_objects,
                                 rendering_effects);
 

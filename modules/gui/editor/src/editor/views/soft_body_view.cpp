@@ -7,6 +7,7 @@
 #include <game/game_component.h>
 #include <game/components/render/render_component.h>
 #include "game/resources/resource_context.h"
+#include <game/components/physics/soft_body_fem_component.h>
 
 #include <physics/physics_simulation.h>
 
@@ -30,8 +31,12 @@
 #include "editor/views/soft_body_views/meshing/soft_body_meshing_settings_view.h"
 #include "editor/views/soft_body_views/meshing/soft_body_meshing_creation_view.h"
 #include "editor/views/soft_body_views/meshing/soft_body_meshing_info_view.h"
+#include <editor/views/soft_body_views/guide/soft_body_guide_view.h>
+#include <editor/views/soft_body_views/picking/ray_casting.h>
 
 #include <common/unique_ptr.h>
+
+#include <RTFEM/FEM/Meshing/Tetrahedralization.h>
 
 namespace ifx {
 
@@ -41,12 +46,14 @@ SoftBodyView::SoftBodyView(std::unique_ptr<GameUpdater> game_updater,
     game_updater_(std::move(game_updater)),
     rendering_effects_(rendering_effects),
     soft_body_objects_(SoftBodyObjects{nullptr, nullptr, nullptr}),
-    first_render_(true) {
+    first_render_(true),
+    soft_body_fem_(nullptr){
     screen_view_ = ifx::make_unique<SoftBodyScreenView>();
     selector_ = ifx::make_unique<SoftBodySelector>(
         game_updater_->engine_architecture()->
             engine_systems.scene_container);
 
+    soft_body_guide_view_ = ifx::make_unique<SoftBodyGuideView>();
     meshing_view_ = ifx::make_unique<SoftBodyMeshingView>(
         game_updater_->engine_architecture()->
             engine_contexts.resource_context->
@@ -95,11 +102,15 @@ void SoftBodyView::RenderLeftColumn() {
     bool mesh_created = false;
 
     switch(soft_body_views.selected){
+        case soft_body_views.guide_id:
+            soft_body_guide_view_->Render(soft_body_objects_);
+            break;
         case soft_body_views.meshing_id:
             mesh_created = meshing_view_->Render(soft_body_objects_,
                                                  rendering_effects_);
             break;
         case soft_body_views.material_id:
+            material_view_->Render(soft_body_objects_.soft_body_fem);
             break;
         case soft_body_views.boudary_conditions_id:
             break;

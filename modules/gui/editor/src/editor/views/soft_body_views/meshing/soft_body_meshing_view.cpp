@@ -19,14 +19,12 @@ SoftBodyMeshingView::SoftBodyMeshingView(
 
 bool SoftBodyMeshingView::Render(SoftBodyObjects &soft_body_objects,
                                  SoftBodyRenderingEffects &rendering_effects){
-    bool mesh_created = false;
-
     RenderSettings();
-    mesh_created = RenderCreation(soft_body_objects,
-                                  rendering_effects);
+    bool is_mesh_created = RenderCreation(soft_body_objects,
+                                       rendering_effects);
     RenderInfo();
 
-    return mesh_created;
+    return is_mesh_created;
 }
 
 void SoftBodyMeshingView::RenderSettings(){
@@ -42,7 +40,7 @@ bool SoftBodyMeshingView::RenderCreation(SoftBodyObjects &soft_body_objects,
     );
 }
 
-bool SoftBodyMeshingView::RenderInfo(){
+void SoftBodyMeshingView::RenderInfo(){
     info_view_->Render();
 }
 

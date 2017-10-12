@@ -14,6 +14,4 @@ RigidBodyComponent::RigidBodyComponent(
 
 }
 
-RigidBodyComponent::~RigidBodyComponent() {}
-
 }

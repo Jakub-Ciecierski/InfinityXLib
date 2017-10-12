@@ -5,15 +5,25 @@
 
 namespace ifx {
 
+class CameraComponent;
 class Renderer;
+class RayCasting;
 
 class SoftBodyScreenView {
 public:
-    SoftBodyScreenView() = default;
+    SoftBodyScreenView();
+
     ~SoftBodyScreenView() = default;
+
+    void SetCamera(std::shared_ptr<CameraComponent> camera){
+        camera_ = camera;
+    }
 
     void Render(std::shared_ptr<Renderer> renderer);
 private:
+    std::shared_ptr<CameraComponent> camera_;
+
+    std::unique_ptr<RayCasting> ray_casting_;
 };
 
 }

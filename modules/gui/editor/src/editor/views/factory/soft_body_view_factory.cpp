@@ -13,6 +13,8 @@
 #include "editor/views/soft_body_views/meshing/soft_body_meshing_settings_view.h"
 #include "editor/views/soft_body_views/meshing/soft_body_meshing_creation_view.h"
 #include "editor/views/soft_body_views/meshing/soft_body_meshing_info_view.h"
+#include "editor/views/soft_body_views/guide/soft_body_guide_view.h"
+#include <editor/views/soft_body_views/picking/ray_casting.h>
 
 #include <game/factory/game_systems_factory.h>
 #include <game/game_updater.h>
@@ -165,6 +167,8 @@ void SoftBodyViewFactory::SetDefaultScene(
     camera->scale(5);
 
     game_object->Add(std::dynamic_pointer_cast<GameComponent>(camera));
+    soft_body_view->screen_view().SetCamera(camera);
+
     SetKeybinds(engine_architecture_->engine_systems.controls,
                 camera,
                 soft_body_view);

@@ -60,8 +60,8 @@ void SoftBodyRenderingView::RenderShowObjects(
             soft_body_objects.triangle_mesh->do_render(
                 render_object_settings_.show_input);
         }
-        if (soft_body_objects.fem_geometry) {
-            soft_body_objects.fem_geometry->do_render(
+        if (soft_body_objects.soft_body_fem_render) {
+            soft_body_objects.soft_body_fem_render->do_render(
                 render_object_settings_.show_output);
         }
 

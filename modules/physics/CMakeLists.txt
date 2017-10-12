@@ -36,6 +36,10 @@ include_directories(${IFX_ROOT}/${DEPS_DIR}/PhysX-3.4/PxShared/include)
 include_directories(${IFX_ROOT}/modules/common/math/${INC_DIR})
 include_directories(${IFX_ROOT}/modules/common/common/${INC_DIR})
 
+include_directories(${IFX_ROOT}/dependencies/RT-FEM/sources/include)
+include_directories(${IFX_ROOT}/dependencies/RT-FEM/external/tetgen1.5.0)
+include_directories(${IFX_ROOT}/dependencies/RT-FEM/external/eigen)
+
 #---------------------------------
 # PROJECT
 #---------------------------------
