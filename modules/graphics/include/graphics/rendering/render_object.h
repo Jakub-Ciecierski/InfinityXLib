@@ -27,7 +27,7 @@ public:
 
     const std::vector<std::shared_ptr<Program>> &programs() { return programs_; }
 
-    std::vector<std::shared_ptr<Model>> models() { return models_; }
+    const std::vector<std::shared_ptr<Model>>& models() { return models_; }
     void models(std::vector<std::shared_ptr<Model>> models) {
         models_ = models;
     }

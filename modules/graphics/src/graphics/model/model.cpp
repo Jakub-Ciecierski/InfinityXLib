@@ -44,4 +44,9 @@ std::string Model::toString() const {
 
     return str;
 }
+
+void Model::AddMesh(std::unique_ptr<Mesh> mesh){
+    meshes.push_back(std::move(mesh));
+}
+
 }

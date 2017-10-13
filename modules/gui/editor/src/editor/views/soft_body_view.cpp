@@ -33,6 +33,7 @@
 #include "editor/views/soft_body_views/meshing/soft_body_meshing_info_view.h"
 #include <editor/views/soft_body_views/guide/soft_body_guide_view.h>
 #include <editor/views/soft_body_views/picking/ray_casting.h>
+#include "editor/views/soft_body_views/picking/soft_body_picker.h"
 
 #include <common/unique_ptr.h>
 
@@ -135,8 +136,9 @@ void SoftBodyView::RenderLeftColumn() {
 void SoftBodyView::RenderRightColumn() {
     if (first_render_)
         ImGui::SetColumnOffset(-1, 150);
-    screen_view_->Render(game_updater_->engine_architecture()->
-        engine_systems.renderer);
+    screen_view_->Render(
+        game_updater_->engine_architecture()->engine_systems.renderer,
+        soft_body_objects_.soft_body_fem_render);
 }
 
 void SoftBodyView::OnSetSelectedGameObject(

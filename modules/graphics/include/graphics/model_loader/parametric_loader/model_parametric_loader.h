@@ -6,7 +6,7 @@
 
 #include <memory>
 
-class Vertex;
+struct Vertex;
 
 namespace ifx {
 

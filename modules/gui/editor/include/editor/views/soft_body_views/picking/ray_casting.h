@@ -5,6 +5,22 @@
 
 namespace ifx {
 
+struct Ray{
+    glm::vec3 origin;
+    glm::vec3 direction;
+};
+
+struct Sphere{
+    glm::vec3 center;
+    float radius;
+};
+
+struct SphereRayIntersectionOutput{
+    int number_of_solutions;
+    float t1;
+    float t2;
+};
+
 class RayCasting {
 public:
     RayCasting();
@@ -16,7 +32,12 @@ public:
     void projection(const glm::mat4& projection) {projection_ = projection;}
     void view(const glm::mat4& view) {view_ = view;}
 
-    void ComputeRay(const glm::vec2& viewport_space);
+    void origin(const glm::vec3& origin){origin_ = origin;}
+
+    Ray ComputeRayDirection(const glm::vec2 &viewport_space);
+
+    SphereRayIntersectionOutput RaySphereIntersection(const Ray& ray,
+                                                      const Sphere& sphere);
 private:
     glm::vec3 ViewPortSpace2NormalisedDeviceSpace(
         const glm::vec2& viewport_space,
@@ -28,11 +49,15 @@ private:
     glm::vec3 EyeSpace2WorldSpace(const glm::vec4& eye_space,
                                   const glm::mat4& view);
 
+    SphereRayIntersectionOutput ComputeQuadratic(float a, float b, float c);
+
     int window_width_;
     int window_height_;
 
     glm::mat4 projection_;
     glm::mat4 view_;
+
+    glm::vec3 origin_;
 
     const float z_forward_ = -1.0f;
 };

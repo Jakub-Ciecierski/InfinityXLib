@@ -2,25 +2,34 @@
 
 #include <graphics/rendering/fbo_rendering/fbo_renderer.h>
 #include <graphics/shaders/textures/texture.h>
+#include <graphics/shaders/data/shader_data.h>
 #include <graphics/rendering/window/window.h>
+#include <graphics/model/model.h>
+#include <graphics/model/mesh.h>
 
 #include <game/components/cameras/camera_component.h>
+#include <game/components/render/render_component.h>
 
 #include <editor/views/soft_body_views/picking/ray_casting.h>
+#include <editor/views/soft_body_views/picking/soft_body_picker.h>
 
 #include <gui/imgui/imgui.h>
 
 #include <common/unique_ptr.h>
+
+#include <math/print_math.h>
 
 #include <iostream>
 
 namespace ifx {
 
 SoftBodyScreenView::SoftBodyScreenView() : camera_(nullptr){
-    ray_casting_ = ifx::make_unique<RayCasting>();
+    picker_ = ifx::make_unique<SoftBodyPicker>();
 }
 
-void SoftBodyScreenView::Render(std::shared_ptr<Renderer> renderer) {
+void SoftBodyScreenView::Render(
+    std::shared_ptr<Renderer> renderer,
+    std::shared_ptr<RenderComponent> render_component) {
     auto fbo_renderer = std::dynamic_pointer_cast<FBORenderer>(renderer);
     if (!fbo_renderer)
         return;
@@ -43,28 +52,35 @@ void SoftBodyScreenView::Render(std::shared_ptr<Renderer> renderer) {
     auto local_mouse_x = mouse_x - image_begin_x;
     auto local_mouse_y = mouse_y - image_begin_y;
 
-    if(local_mouse_x < 0 || local_mouse_y < 0
-        || local_mouse_x > image_width || local_mouse_y > image_height){
+    if (local_mouse_x < 0 || local_mouse_y < 0
+        || local_mouse_x > image_width || local_mouse_y > image_height) {
         return;
     }
-    if(!ray_casting_ || !camera_){
-        return ;
+    if (!camera_) {
+        return;
     }
-    ray_casting_->projection(camera_->getProjectionMatrix());
-    ray_casting_->view(camera_->getViewMatrix());
-    ray_casting_->window_width(image_width);
-    ray_casting_->window_height(image_height);
+    picker_->Pick(render_component, camera_,
+                  image_width, image_height,
+                  glm::vec2(local_mouse_x, local_mouse_y));
 
-    std::cout << "In" << std::endl;
-    std::cout << local_mouse_x
-              << ", "
-              << local_mouse_y
-              << std::endl;
+}
 
-    std::cout << std::endl;
+std::unique_ptr<Mesh> SoftBodyScreenView::CreateLine(const glm::vec3 &p1,
+                                                     const glm::vec3 &p2) {
+    std::vector<Vertex> vertices;
+    std::vector<GLuint> indices;
 
+    vertices.push_back(Vertex{
+        p1, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(0.0f, 0.0f)});
+    vertices.push_back(Vertex{
+        p2, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec2(1.0f, 1.0f)});
+    indices.push_back(0);
+    indices.push_back(1);
 
+    std::unique_ptr<Mesh> mesh(new Mesh(vertices, indices));
+    mesh->primitive_draw_mode(PrimitiveDrawMode::LINES);
 
+    return mesh;
 }
 
 }

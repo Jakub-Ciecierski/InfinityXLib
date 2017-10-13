@@ -15,6 +15,7 @@
 #include "editor/views/soft_body_views/meshing/soft_body_meshing_info_view.h"
 #include "editor/views/soft_body_views/guide/soft_body_guide_view.h"
 #include <editor/views/soft_body_views/picking/ray_casting.h>
+#include "editor/views/soft_body_views/picking/soft_body_picker.h"
 
 #include <game/factory/game_systems_factory.h>
 #include <game/game_updater.h>

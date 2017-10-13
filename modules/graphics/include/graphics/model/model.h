@@ -26,6 +26,8 @@ public:
 
     std::string toString() const;
 
+    void AddMesh(std::unique_ptr<Mesh> mesh);
+
     friend class ModelCreator;
 private:
     Model(std::string filepath,
