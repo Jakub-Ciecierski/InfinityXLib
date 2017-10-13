@@ -30,6 +30,7 @@ public:
                 SoftBodyRenderingEffects &rendering_effects);
 
     void SetRenderObjectMode(RenderObjectMode mode);
+    void UpdateRenderObjectMode(SoftBodyObjects &soft_body_objects);
 private:
     void RenderShowRenderingEffects(
         SoftBodyRenderingEffects &rendering_effects);

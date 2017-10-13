@@ -8,6 +8,8 @@
 
 struct Vertex;
 
+class VBO;
+
 namespace ifx {
 
 struct Ray;
@@ -43,6 +45,8 @@ private:
         const glm::mat4 &model_matrix,
         const std::vector<Vertex> &vertices,
         const Ray &ray);
+    void ColorSelectedVertices(
+        VBO& vbo);
 
     std::shared_ptr<RenderComponent> current_picked_;
 

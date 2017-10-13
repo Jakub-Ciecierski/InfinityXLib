@@ -130,6 +130,7 @@ void SoftBodyView::RenderLeftColumn() {
 
     if(mesh_created){
         rendering_view_->SetRenderObjectMode(RenderObjectMode::Output);
+        rendering_view_->UpdateRenderObjectMode(soft_body_objects_);
     }
 }
 

@@ -13,7 +13,7 @@ VAO::~VAO() {
 void VAO::bindVertexBuffers(VBO &vbo, EBO &ebo) {
     this->bind();
 
-    vbo.bind(GL_STATIC_DRAW);
+    vbo.bind();
     ebo.bind(GL_STATIC_DRAW);
 
     const GLuint DATA_PER_POSITION = 3;

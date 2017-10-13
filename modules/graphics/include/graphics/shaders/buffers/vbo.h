@@ -7,22 +7,33 @@
 typedef unsigned int GLenum;
 typedef unsigned int GLuint;
 
-class VBO {
-private:
-    GLuint vboID;
-    const std::vector<Vertex> *vertices;
+enum class VBOUsage{
+    Static, Dynamic
+};
 
+class VBO {
 public:
 
-    VBO(const std::vector<Vertex> *vertices);
+    VBO(std::vector<Vertex> *vertices);
     ~VBO();
+
+    std::vector<Vertex> *vertices() {return vertices_;}
 
     /*
      * Default usage is GL_STATIC_DRAW
      */
-    void bind(GLenum usage);
+    void bind();
 
     void unbind();
+
+    void Update();
+private:
+    GLenum GetNativeVBOUsage(VBOUsage usage);
+
+    GLuint vboID;
+    std::vector<Vertex> *vertices_;
+
+    VBOUsage usage_;
 };
 
 #endif //DUCK_VBO_H

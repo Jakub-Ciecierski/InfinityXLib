@@ -7,9 +7,8 @@ layout (location = 2) in vec2 texCoords;
 layout (location = 3) in vec3 tangent;
 layout (location = 4) in vec3 binormal;
 
-out VS_OUT {
-    vec3 normal;
-} vs_out;
+out vec3 gNormal;
+out vec2 gTexCoords;
 
 uniform mat4 ModelMatrix;
 uniform mat4 ViewMatrix;
@@ -29,5 +28,8 @@ void main()
     // position vectors as clip-space coordinates so we should also transform
     // the normal vectors to the same space).
     mat3 normalMatrix = mat3(transpose(inverse(ViewMatrix * ModelMatrix)));
-    vs_out.normal = normalize(vec3(ProjectionMatrix * vec4(normalMatrix * normal, 1.0)));
+
+    gNormal = normalize(vec3(ProjectionMatrix * vec4(normalMatrix * normal, 1.0)));
+
+	gTexCoords = texCoords;
 }

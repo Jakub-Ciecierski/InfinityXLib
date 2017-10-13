@@ -56,14 +56,7 @@ void SoftBodyRenderingView::RenderShowObjects(
             SetRenderObjectMode(RenderObjectMode::Output);
         }
 
-        if (soft_body_objects.triangle_mesh) {
-            soft_body_objects.triangle_mesh->do_render(
-                render_object_settings_.show_input);
-        }
-        if (soft_body_objects.soft_body_fem_render) {
-            soft_body_objects.soft_body_fem_render->do_render(
-                render_object_settings_.show_output);
-        }
+        UpdateRenderObjectMode(soft_body_objects);
 
         ImGui::TreePop();
     }
@@ -79,6 +72,18 @@ void SoftBodyRenderingView::SetRenderObjectMode(RenderObjectMode mode) {
             render_object_settings_.show_input = false;
             render_object_settings_.show_output = true;
             break;
+    }
+}
+
+void SoftBodyRenderingView::UpdateRenderObjectMode(
+    SoftBodyObjects &soft_body_objects){
+    if (soft_body_objects.triangle_mesh) {
+        soft_body_objects.triangle_mesh->do_render(
+            render_object_settings_.show_input);
+    }
+    if (soft_body_objects.soft_body_fem_render) {
+        soft_body_objects.soft_body_fem_render->do_render(
+            render_object_settings_.show_output);
     }
 }
 

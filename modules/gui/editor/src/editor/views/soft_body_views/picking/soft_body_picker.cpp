@@ -31,9 +31,12 @@ void SoftBodyPicker::Pick(std::shared_ptr<RenderComponent> render_component,
     if(!ImGui::IsMouseClicked(1))
         return;*/
     auto ray = ray_casting_->ComputeRayDirection(viewport_space);
+
+    auto mesh = render_component->models()[0]->getMesh(0);
     ComputeIntersection(render_component->GetModelMatrix(),
-                        render_component->models()[0]->getMesh(0)->vertices(),
+                        mesh->vertices(),
                         ray);
+    ColorSelectedVertices(*mesh->vbo());
 }
 
 void SoftBodyPicker::Reset(){
@@ -90,6 +93,19 @@ void SoftBodyPicker::ComputeIntersection(
 
         index++;
     }
+}
+
+void SoftBodyPicker::ColorSelectedVertices(
+    VBO& vbo){
+    std::vector<Vertex> *vertices = vbo.vertices();
+    for(auto index : selected_vertices_){
+        auto& vertex = (*vertices)[index];
+        //vertex.Normal.x = 9;
+        //vertex.Position = glm::vec3(0,0,0);
+        vertex.TexCoords = glm::vec2(10,10);
+    }
+
+    vbo.Update();
 }
 
 }
