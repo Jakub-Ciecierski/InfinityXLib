@@ -25,6 +25,7 @@ class SoftBodyRenderingView;
 class SoftBodyMaterialView;
 class SoftBodyLoadView;
 class SoftBodyGuideView;
+class SoftBodyPicker;
 
 template<class T>
 class SoftBodyFEMComponent;
@@ -90,7 +91,8 @@ struct SoftBodyViews{
 class SoftBodyView : public View, public SceneViewObserver {
 public:
     SoftBodyView(std::unique_ptr<GameUpdater> game_updater,
-                 const SoftBodyRenderingEffects &rendering_effects);
+                 const SoftBodyRenderingEffects &rendering_effects,
+                 std::unique_ptr<SoftBodyPicker> soft_body_picker);
     ~SoftBodyView() = default;
 
     bool Terminate() override;

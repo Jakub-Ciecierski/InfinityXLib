@@ -33,7 +33,9 @@
 #include "editor/views/soft_body_views/meshing/soft_body_meshing_info_view.h"
 #include <editor/views/soft_body_views/guide/soft_body_guide_view.h>
 #include <editor/views/soft_body_views/picking/ray_casting.h>
+#include <editor/views/soft_body_views/picking/box_casting.h>
 #include "editor/views/soft_body_views/picking/soft_body_picker.h"
+#include "editor/views/soft_body_views/picking/soft_body_node_selection.h"
 
 #include <common/unique_ptr.h>
 
@@ -42,14 +44,16 @@
 namespace ifx {
 
 SoftBodyView::SoftBodyView(std::unique_ptr<GameUpdater> game_updater,
-                           const SoftBodyRenderingEffects &rendering_effects) :
+                           const SoftBodyRenderingEffects &rendering_effects,
+                           std::unique_ptr<SoftBodyPicker> soft_body_picker) :
     View("Soft Body"),
     game_updater_(std::move(game_updater)),
     rendering_effects_(rendering_effects),
     soft_body_objects_(SoftBodyObjects{nullptr, nullptr, nullptr}),
     first_render_(true),
     soft_body_fem_(nullptr){
-    screen_view_ = ifx::make_unique<SoftBodyScreenView>();
+    screen_view_ = ifx::make_unique<SoftBodyScreenView>(
+        std::move(soft_body_picker));
     selector_ = ifx::make_unique<SoftBodySelector>(
         game_updater_->engine_architecture()->
             engine_systems.scene_container);

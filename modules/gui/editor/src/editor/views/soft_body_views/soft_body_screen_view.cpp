@@ -12,6 +12,8 @@
 
 #include <editor/views/soft_body_views/picking/ray_casting.h>
 #include <editor/views/soft_body_views/picking/soft_body_picker.h>
+#include "editor/views/soft_body_views/picking/soft_body_node_selection.h"
+#include <editor/views/soft_body_views/picking/box_casting.h>
 
 #include <gui/imgui/imgui.h>
 
@@ -23,8 +25,10 @@
 
 namespace ifx {
 
-SoftBodyScreenView::SoftBodyScreenView() : camera_(nullptr){
-    picker_ = ifx::make_unique<SoftBodyPicker>();
+SoftBodyScreenView::SoftBodyScreenView(
+    std::unique_ptr<SoftBodyPicker> soft_body_picker) :
+    camera_(nullptr),
+    picker_(std::move(soft_body_picker)){
 }
 
 void SoftBodyScreenView::Render(
@@ -52,10 +56,6 @@ void SoftBodyScreenView::Render(
     auto local_mouse_x = mouse_x - image_begin_x;
     auto local_mouse_y = mouse_y - image_begin_y;
 
-    if (local_mouse_x < 0 || local_mouse_y < 0
-        || local_mouse_x > image_width || local_mouse_y > image_height) {
-        return;
-    }
     if (!camera_) {
         return;
     }

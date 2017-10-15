@@ -15,7 +15,10 @@
 #include "editor/views/soft_body_views/meshing/soft_body_meshing_info_view.h"
 #include "editor/views/soft_body_views/guide/soft_body_guide_view.h"
 #include <editor/views/soft_body_views/picking/ray_casting.h>
+#include <editor/views/soft_body_views/picking/box_casting.h>
 #include "editor/views/soft_body_views/picking/soft_body_picker.h"
+#include "editor/views/soft_body_views/picking/soft_body_node_selection.h"
+#include <editor/views/soft_body_views/picking/factory/soft_body_picker_factory.h>
 
 #include <game/factory/game_systems_factory.h>
 #include <game/game_updater.h>
@@ -51,6 +54,7 @@ const std::string NODE_RENDERING_EFFECT_NAME = "soft_body_editor/nodes.prog";
 const std::string EDGES_RENDERING_EFFECT_NAME = "soft_body_editor/edges.prog";
 const std::string FACES_RENDERING_EFFECT_NAME = "soft_body_editor/faces.prog";
 
+
 SoftBodyViewFactory::SoftBodyViewFactory(
     std::shared_ptr<EngineArchitecture> engine_architecture) :
     engine_architecture_(engine_architecture) {}
@@ -62,10 +66,15 @@ std::shared_ptr<View> SoftBodyViewFactory::Create() {
         SetRendererSettings(engine_architecture->engine_systems.renderer,
                             engine_architecture_->engine_systems.renderer);
 
+    auto soft_body_picker = SoftBodyPickerFactory().Create(
+        engine_architecture, engine_architecture_);
+
     auto game_updater = ifx::make_unique<GameUpdater>(engine_architecture);
     auto soft_body_view = std::make_shared<SoftBodyView>(
         std::move(game_updater),
-        soft_body_rendering_effects);
+        soft_body_rendering_effects,
+        std::move(soft_body_picker));
+
 
     SetDefaultScene(engine_architecture->engine_systems.scene_container,
                     soft_body_view);
@@ -216,7 +225,7 @@ void SoftBodyViewFactory::SetKeybinds(
                                      0));
         },
         ifx::MouseControllerEventType {
-            ifx::MouseControllerKeyType::MOUSE_LEFT,
+            ifx::MouseControllerKeyType::MOUSE_RIGHT,
             ifx::MouseControllerCallbackType::PRESSED
         }
     );
@@ -300,7 +309,7 @@ void SoftBodyViewFactory::SetKeybinds(
     controls->AddCommand(command_middle);
     controls->AddCommand(command_rotate_mouse);
     controls->AddCommand(command_scroll);
-    controls->AddCommand(command_zoom);
+    //controls->AddCommand(command_zoom);
 }
 
 }

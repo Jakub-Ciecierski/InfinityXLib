@@ -16,7 +16,7 @@ class Mesh;
 
 class SoftBodyScreenView {
 public:
-    SoftBodyScreenView();
+    SoftBodyScreenView(std::unique_ptr<SoftBodyPicker> soft_body_picker);
 
     ~SoftBodyScreenView() = default;
 
