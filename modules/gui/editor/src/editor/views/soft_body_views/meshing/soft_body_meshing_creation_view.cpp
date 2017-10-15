@@ -16,6 +16,8 @@
 
 #include <iostream>
 
+#include <GL/glew.h>
+
 namespace ifx {
 
 SoftBodyMeshingCreationView::SoftBodyMeshingCreationView(
@@ -126,6 +128,16 @@ void SoftBodyMeshingCreationView::RegisterRenderComponent(
 
     soft_body_objects.current_game_object->Add(
         soft_body_objects.soft_body_fem_render);
+
+    render_component->SetBeforeRender([](const Program* program){
+        glEnable(GL_BLEND);
+        glBlendEquation(GL_MAX);
+    });
+    render_component->SetAfterRender([](const Program* program){
+        glBlendEquation(GL_FUNC_ADD);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    });
+
 }
 
 bool SoftBodyMeshingCreationView::DebugCreator(

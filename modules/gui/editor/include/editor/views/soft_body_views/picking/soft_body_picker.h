@@ -49,7 +49,7 @@ private:
     void UpdateRayCasting(std::shared_ptr<CameraComponent> camera,
                           float window_width,
                           float window_height);
-    int ComputeIntersection(
+    int ComputeRayIntersection(
         const glm::mat4 &model_matrix,
         const std::vector<Vertex> &vertices,
         const Ray &ray);
@@ -63,11 +63,11 @@ private:
     void UpdateBoxCasting(std::shared_ptr<CameraComponent> camera,
                           float window_width,
                           float window_height);
-
-    bool IsInputBeginBoxCasting();
-    bool IsInputUpdateBoxCasting();
-    bool IsInputEndBoxCasting();
-    bool IsInputRayCasting();
+    void ComputeBoxIntersection(
+        std::shared_ptr<RenderComponent> render_component,
+        std::shared_ptr<CameraComponent> camera,
+        float window_width,
+        float window_height);
 
     /**
      * TODO. Currently colored vertices are flickering with old and new color

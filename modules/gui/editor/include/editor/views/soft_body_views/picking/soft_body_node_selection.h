@@ -5,6 +5,10 @@
 
 namespace ifx {
 
+enum class SelectionType{
+    Ray, Box
+};
+
 class SoftBodyNodeSelection {
 public:
     SoftBodyNodeSelection() = default;
@@ -16,7 +20,7 @@ public:
 
     void Reset();
 
-    void NotifyIntersection(unsigned int index);
+    void NotifyIntersection(unsigned int index, SelectionType type);
 
     bool IsSelected(unsigned int index);
 
@@ -24,7 +28,13 @@ public:
 
     bool RemoveSelection(unsigned int selected);
 
+    bool IsInputBeginBoxCasting();
+    bool IsInputUpdateBoxCasting();
+    bool IsInputEndBoxCasting();
+    bool IsInputRayCasting();
+    bool IsInputShiftModifier();
 private:
+
     std::vector<unsigned int> selected_vertices_;
 
 };

@@ -8,16 +8,17 @@ void SoftBodyNodeSelection::Reset(){
     selected_vertices_.clear();
 }
 
-void SoftBodyNodeSelection::NotifyIntersection(unsigned int index){
-    ImGuiIO &io = ImGui::GetIO();
-    if(io.KeyShift){
+void SoftBodyNodeSelection::NotifyIntersection(
+    unsigned int index, SelectionType type){
+    if(IsInputShiftModifier()){
         if(IsSelected(index)){
             RemoveSelection(index);
         }else{
             AddSelection(index);
         }
     }else{
-        Reset();
+        if(type == SelectionType::Ray)
+            Reset();
         AddSelection(index);
     }
 }
@@ -42,6 +43,28 @@ bool SoftBodyNodeSelection::RemoveSelection(unsigned int selected){
         }
     }
     return false;
+}
+
+bool SoftBodyNodeSelection::IsInputBeginBoxCasting(){
+    return ImGui::IsMouseClicked(0);
+}
+
+bool SoftBodyNodeSelection::IsInputUpdateBoxCasting(){
+    ImGuiIO &io = ImGui::GetIO();
+    return (io.MouseDownDuration[0] >= 0.0f);
+}
+
+bool SoftBodyNodeSelection::IsInputEndBoxCasting(){
+    return ImGui::IsMouseReleased(0);
+}
+
+bool SoftBodyNodeSelection::IsInputRayCasting(){
+    return ImGui::IsMouseClicked(0);
+}
+
+bool SoftBodyNodeSelection::IsInputShiftModifier(){
+    ImGuiIO &io = ImGui::GetIO();
+    return io.KeyShift;
 }
 
 }

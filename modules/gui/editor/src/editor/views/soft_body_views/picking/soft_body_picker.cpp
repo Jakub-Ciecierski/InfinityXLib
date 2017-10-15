@@ -39,7 +39,8 @@ void SoftBodyPicker::Pick(std::shared_ptr<RenderComponent> render_component,
     if(!CheckCorrectness(render_component)) {
         return;
     }
-    BoxCastingPick(render_component, camera,
+    BoxCastingPick(render_component,
+                   camera,
                    window_width,
                    window_height,
                    viewport_space);
@@ -49,7 +50,8 @@ void SoftBodyPicker::Pick(std::shared_ptr<RenderComponent> render_component,
                    window_height,
                    viewport_space);
 
-    ColorSelectedVertices(*(render_component->models()[0]->getMesh(0));
+
+    ColorSelectedVertices(*(render_component->models()[0]->getMesh(0)->vbo()));
 }
 
 bool SoftBodyPicker::CheckViewportCorrectness(
@@ -83,7 +85,7 @@ void SoftBodyPicker::RayCastingPick(
     float window_width,
     float window_height,
     const glm::vec2 &viewport_space){
-    if(!IsInputRayCasting())
+    if(!node_selection_->IsInputRayCasting())
         return;
 
     UpdateRayCasting(camera, window_width, window_height);
@@ -91,11 +93,12 @@ void SoftBodyPicker::RayCastingPick(
 
     auto mesh = render_component->models()[0]->getMesh(0);
     auto intersection_count =
-        ComputeIntersection(render_component->GetModelMatrix(),
-                            mesh->vertices(),
-                            ray);
-    if(intersection_count < 1)
+        ComputeRayIntersection(render_component->GetModelMatrix(),
+                               mesh->vertices(),
+                               ray);
+    if(intersection_count < 1 && !node_selection_->IsInputShiftModifier()){
         node_selection_->Reset();
+    }
 }
 
 void SoftBodyPicker::UpdateRayCasting(std::shared_ptr<CameraComponent> camera,
@@ -115,10 +118,10 @@ void SoftBodyPicker::UpdateRayCasting(std::shared_ptr<CameraComponent> camera,
     ray_casting_->window_height(window_height);
 }
 
-int SoftBodyPicker::ComputeIntersection(
-    const glm::mat4& model_matrix,
-    const std::vector<Vertex>& vertices,
-    const Ray& ray){
+int SoftBodyPicker::ComputeRayIntersection(
+    const glm::mat4 &model_matrix,
+    const std::vector<Vertex> &vertices,
+    const Ray &ray){
     int index = 0;
     int intersection_count = 0;
     for (const auto &vertex : vertices) {
@@ -128,7 +131,7 @@ int SoftBodyPicker::ComputeIntersection(
         auto intesection_output = ray_casting_->RaySphereIntersection(
             ray, Sphere{world_vertex, SPHERE_RADIUS});
         if (intesection_output.number_of_solutions > 0) {
-            node_selection_->NotifyIntersection(index);
+            node_selection_->NotifyIntersection(index, SelectionType::Ray);
             intersection_count++;
         }
         index++;
@@ -142,16 +145,54 @@ void SoftBodyPicker::BoxCastingPick(
     float window_width,
     float window_height,
     const glm::vec2 &viewport_space){
-    if(IsInputBeginBoxCasting()){
+    if(node_selection_->IsInputBeginBoxCasting()){
         box_casting_->Begin(viewport_space);
     }
-    if (IsInputUpdateBoxCasting()){
+    if(node_selection_->IsInputUpdateBoxCasting()) {
         UpdateBoxCasting(camera, window_width, window_height);
         box_casting_->SetEndViewport(viewport_space);
+        std::cout << "Area: " << box_casting_->box_viewport().Area() <<
+                                                                     std::endl;
+        if(!node_selection_->IsInputShiftModifier()
+            && box_casting_->box_viewport().Area() > 0.1f){
+            node_selection_->Reset();
+        }
+
+        ComputeBoxIntersection(render_component, camera,
+                               window_width, window_height);
     }
-    if(IsInputEndBoxCasting()){
+    if(node_selection_->IsInputEndBoxCasting()){
         box_casting_->Finish();
     }
+}
+
+void SoftBodyPicker::ComputeBoxIntersection(
+    std::shared_ptr<RenderComponent> render_component,
+    std::shared_ptr<CameraComponent> camera,
+    float window_width,
+    float window_height) {
+    const auto& model_matrix = render_component->GetModelMatrix();
+    const auto& view_matirx = camera->getViewMatrix();
+    const auto& projection_matrix = camera->getProjectionMatrix();
+    auto MVP = projection_matrix * view_matirx * model_matrix;
+
+    const auto& box_viewport = box_casting_->box_viewport();
+
+    const auto& vertices
+        = render_component->models()[0]->getMesh(0)->vertices();
+    for(unsigned int i = 0; i < vertices.size(); i++){
+        auto vertex_4 = glm::vec4(vertices[i].Position, 1.0f);
+        auto clip = MVP * vertex_4;
+        auto nds = clip / clip.w;
+        auto viewport = glm::vec2(
+            ((nds.x * 0.5f) + 0.5f) * window_width,
+            ((nds.y * 0.5f) + 0.5f) * window_height
+        );
+        if(box_viewport.IsInside(viewport)){
+            node_selection_->NotifyIntersection(i, SelectionType::Box);
+        }
+    };
+
 }
 
 void SoftBodyPicker::UpdateBoxCasting(std::shared_ptr<CameraComponent> camera,
@@ -187,23 +228,6 @@ void SoftBodyPicker::ColorSelectedVertices(
     }
     if(value_changed)
         vbo.Update();
-}
-
-bool SoftBodyPicker::IsInputBeginBoxCasting(){
-    return ImGui::IsMouseClicked(0);
-}
-
-bool SoftBodyPicker::IsInputUpdateBoxCasting(){
-    ImGuiIO &io = ImGui::GetIO();
-    return (io.MouseDownDuration[0] >= 0.0f);
-}
-
-bool SoftBodyPicker::IsInputEndBoxCasting(){
-    return ImGui::IsMouseReleased(0);
-}
-
-bool SoftBodyPicker::IsInputRayCasting(){
-    return ImGui::IsMouseClicked(0);
 }
 
 }

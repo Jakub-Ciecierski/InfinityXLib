@@ -8,11 +8,15 @@ in vec2 gTexCoords[3];
 out vec2 fTexCoords;
 
 void draw_node(vec4 position, int index){
-	float a = 0.015*0.5 * position.z;
+	float a = 0.015*0.8 * position.z;
 	float b = a * 0.75;
 	float max = 0.2;
 	if(a > max){
 		a = max;
+	}
+	if(gTexCoords[index].x == 10.0f){
+		a = 2 * a;
+		b = 2 * b;
 	}
 
 	gl_Position = position + vec4(-b, -a, 0.0, 0.0);
