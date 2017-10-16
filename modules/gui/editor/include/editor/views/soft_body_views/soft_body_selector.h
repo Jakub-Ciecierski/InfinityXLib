@@ -10,7 +10,7 @@ class RenderComponent;
 class SceneContainer;
 
 struct SoftBodyRenderingEffects;
-struct SoftBodyObjects;
+struct SoftBodyEditorObjects;
 
 class SoftBodySelector {
 public:
@@ -20,13 +20,13 @@ public:
 
     void Select(std::shared_ptr<GameObject> selected_game_object,
                 SoftBodyRenderingEffects &rendering_effects,
-                SoftBodyObjects &soft_body_objects);
+                SoftBodyEditorObjects &soft_body_objects);
 private:
-    void RemoveCurrentGameObject(SoftBodyObjects &soft_body_objects);
+    void RemoveCurrentGameObject(SoftBodyEditorObjects &soft_body_objects);
     bool CheckSelectedGameObjectCorrectness(
         std::shared_ptr<GameObject> selected_game_object,
-        SoftBodyObjects &soft_body_objects);
-    SoftBodyObjects CreateNewGameObject(
+        SoftBodyEditorObjects &soft_body_objects);
+    SoftBodyEditorObjects CreateNewGameObject(
         std::shared_ptr<GameObject> selected_game_object,
         SoftBodyRenderingEffects &rendering_effects);
     void RegisterGameObjectToRenderingEffects(

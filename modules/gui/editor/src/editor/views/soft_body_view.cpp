@@ -45,15 +45,14 @@ namespace ifx {
 
 SoftBodyView::SoftBodyView(std::unique_ptr<GameUpdater> game_updater,
                            const SoftBodyRenderingEffects &rendering_effects,
-                           std::unique_ptr<SoftBodyPicker> soft_body_picker) :
+                           std::shared_ptr<SoftBodyPicker> soft_body_picker) :
     View("Soft Body"),
     game_updater_(std::move(game_updater)),
     rendering_effects_(rendering_effects),
-    soft_body_objects_(SoftBodyObjects{nullptr, nullptr, nullptr}),
+    soft_body_objects_(SoftBodyEditorObjects{nullptr, nullptr, nullptr}),
     first_render_(true),
     soft_body_fem_(nullptr){
-    screen_view_ = ifx::make_unique<SoftBodyScreenView>(
-        std::move(soft_body_picker));
+    screen_view_ = ifx::make_unique<SoftBodyScreenView>(soft_body_picker);
     selector_ = ifx::make_unique<SoftBodySelector>(
         game_updater_->engine_architecture()->
             engine_systems.scene_container);
@@ -65,7 +64,9 @@ SoftBodyView::SoftBodyView(std::unique_ptr<GameUpdater> game_updater,
             resource_manager());
     rendering_view_ = ifx::make_unique<SoftBodyRenderingView>();
     material_view_ = ifx::make_unique<SoftBodyMaterialView>();
-    boundarary_conditions_view_ = ifx::make_unique<SoftBodyBoundaryConditionsView>();
+    boundarary_conditions_view_
+        = ifx::make_unique<SoftBodyBoundaryConditionsView>(
+        soft_body_picker);
     load_view_ = ifx::make_unique<SoftBodyLoadView>();
     solver_view_ = ifx::make_unique<SoftBodySolverView>();
 }
@@ -97,9 +98,14 @@ void SoftBodyView::RenderLeftColumn() {
     }
 
     if (ImGui::BeginPopup("select")) {
-        for (unsigned int i = 0; i < soft_body_views.names.size(); i++)
-            if (ImGui::Selectable(soft_body_views.names[i].c_str()))
+        for (unsigned int i = 0; i < soft_body_views.names.size(); i++){
+            if (ImGui::Selectable(soft_body_views.names[i].c_str())){
                 soft_body_views.selected = i;
+            }
+            if(i == 0){
+                ImGui::Separator();
+            }
+        }
         ImGui::EndPopup();
     }
     ImGui::Separator();
@@ -118,8 +124,10 @@ void SoftBodyView::RenderLeftColumn() {
             material_view_->Render(soft_body_objects_.soft_body_fem);
             break;
         case soft_body_views.boudary_conditions_id:
+            boundarary_conditions_view_->Render(soft_body_objects_);
             break;
         case soft_body_views.load_id:
+            load_view_->Render(soft_body_objects_);
             break;
         case soft_body_views.rendering_id:
             rendering_view_->Render(soft_body_objects_,

@@ -7,16 +7,16 @@
 
 namespace ifx {
 
-struct SoftBodyObjects;
+struct SoftBodyEditorObjects;
 
 class SoftBodyGuideView {
 public:
     SoftBodyGuideView() = default;
     ~SoftBodyGuideView() = default;
 
-    void Render(const SoftBodyObjects &soft_body_objects);
+    void Render(const SoftBodyEditorObjects &soft_body_objects);
 private:
-    void RenderSelectorInfo(const SoftBodyObjects &soft_body_objects);
+    void RenderSelectorInfo(const SoftBodyEditorObjects &soft_body_objects);
     void RenderScreenInfo();
     void RenderMeshingInfo();
     void RenderMaterialInfo();

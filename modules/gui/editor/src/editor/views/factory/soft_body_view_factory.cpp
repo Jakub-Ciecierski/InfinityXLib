@@ -73,8 +73,7 @@ std::shared_ptr<View> SoftBodyViewFactory::Create() {
     auto soft_body_view = std::make_shared<SoftBodyView>(
         std::move(game_updater),
         soft_body_rendering_effects,
-        std::move(soft_body_picker));
-
+        soft_body_picker);
 
     SetDefaultScene(engine_architecture->engine_systems.scene_container,
                     soft_body_view);

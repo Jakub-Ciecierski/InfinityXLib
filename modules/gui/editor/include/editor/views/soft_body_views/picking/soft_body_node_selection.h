@@ -14,7 +14,7 @@ public:
     SoftBodyNodeSelection() = default;
     ~SoftBodyNodeSelection() = default;
 
-    const std::vector<unsigned int>& selected_vertices(){
+    const std::vector<unsigned int>& selected_vertices() const {
         return selected_vertices_;
     }
 

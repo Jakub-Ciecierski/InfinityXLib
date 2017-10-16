@@ -15,7 +15,7 @@ public:
     SoftBodyPickerFactory() = default;
     ~SoftBodyPickerFactory() = default;
 
-    std::unique_ptr<SoftBodyPicker> Create(
+    std::shared_ptr<SoftBodyPicker> Create(
         std::shared_ptr<EngineArchitecture> new_engine_architecture,
         std::shared_ptr<EngineArchitecture> old_engine_architecture
     );

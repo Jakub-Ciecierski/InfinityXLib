@@ -6,6 +6,7 @@
 #include <game/game_object.h>
 #include <game/game_component.h>
 #include <game/components/render/render_component.h>
+#include <game/components/physics/soft_body_fem_component.h>
 
 #include <graphics/rendering/rendering_effect.h>
 
@@ -26,7 +27,7 @@ SoftBodyMeshingCreationView::SoftBodyMeshingCreationView(
 
 bool SoftBodyMeshingCreationView::Render(
     const rtfem::TetrahedralizationOptions &rtfem_options,
-    SoftBodyObjects &soft_body_objects,
+    SoftBodyEditorObjects &soft_body_objects,
     SoftBodyRenderingEffects &rendering_effects) {
     bool return_value = false;
     if (ImGui::TreeNodeEx("Creation",
@@ -47,7 +48,7 @@ bool SoftBodyMeshingCreationView::Render(
 
 bool SoftBodyMeshingCreationView::BuildMesh(
     const rtfem::TetrahedralizationOptions &rtfem_options,
-    SoftBodyObjects &soft_body_objects,
+    SoftBodyEditorObjects &soft_body_objects,
     SoftBodyRenderingEffects &rendering_effects) {
     if (!soft_body_objects.current_game_object) {
         return false;
@@ -62,8 +63,14 @@ bool SoftBodyMeshingCreationView::BuildMesh(
         return false;
     }
 
-    auto fem_geometry = CreateFEMGeometry(rtfem_options, triangle_mesh);
-    soft_body_objects.soft_body_fem_render = CreateRenderComponent(fem_geometry);
+    soft_body_objects.soft_body_fem->fem_model().fem_geometry(
+        std::move(CreateFEMGeometry(rtfem_options, triangle_mesh)));
+
+    auto fem_geometry =
+        soft_body_objects.soft_body_fem->fem_model().fem_geometry();
+    soft_body_objects.soft_body_fem_render = CreateRenderComponent(
+        fem_geometry);
+
     RegisterRenderComponent(soft_body_objects.soft_body_fem_render,
                             soft_body_objects,
                             rendering_effects);
@@ -90,7 +97,7 @@ bool SoftBodyMeshingCreationView::BuildMesh(
 }
 
 rtfem::TriangleMeshIndexed<double>
-SoftBodyMeshingCreationView::CreateTriangleMesh(SoftBodyObjects &soft_body_objects) {
+SoftBodyMeshingCreationView::CreateTriangleMesh(SoftBodyEditorObjects &soft_body_objects) {
     auto render_components
         = soft_body_objects.current_game_object->GetComponents(
             std::move(GameComponentType::RENDER));
@@ -103,7 +110,8 @@ SoftBodyMeshingCreationView::CreateTriangleMesh(SoftBodyObjects &soft_body_objec
     );
 }
 
-rtfem::FEMGeometry<double> SoftBodyMeshingCreationView::CreateFEMGeometry(
+std::unique_ptr<rtfem::FEMGeometry<double>>
+SoftBodyMeshingCreationView::CreateFEMGeometry(
     const rtfem::TetrahedralizationOptions &rtfem_options,
     const rtfem::TriangleMeshIndexed<double> &triangle_mesh) {
     rtfem::Tetrahedralization<double> tetrahedralization;
@@ -119,7 +127,7 @@ std::shared_ptr<RenderComponent> SoftBodyMeshingCreationView::CreateRenderCompon
 
 void SoftBodyMeshingCreationView::RegisterRenderComponent(
     std::shared_ptr<RenderComponent> render_component,
-    SoftBodyObjects &soft_body_objects,
+    SoftBodyEditorObjects &soft_body_objects,
     SoftBodyRenderingEffects &rendering_effects) {
     rendering_effects.main->RegisterRenderObject(render_component);
     rendering_effects.nodes->RegisterRenderObject(render_component);
@@ -137,12 +145,11 @@ void SoftBodyMeshingCreationView::RegisterRenderComponent(
         glBlendEquation(GL_FUNC_ADD);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     });
-
 }
 
 bool SoftBodyMeshingCreationView::DebugCreator(
     const rtfem::TetrahedralizationOptions &rtfem_options,
-    SoftBodyObjects &soft_body_objects,
+    SoftBodyEditorObjects &soft_body_objects,
     SoftBodyRenderingEffects &rendering_effects) {
     static float limit = 1;
     if (ImGui::SliderFloat("Tet%", &limit, 0, 1)) {
@@ -164,42 +171,44 @@ bool SoftBodyMeshingCreationView::DebugCreator(
         // <limit>
         std::vector<std::shared_ptr<rtfem::FiniteElement<double>>>
             finite_elements;
-        std::sort(fem_geometry.finite_elements.begin(),
-                  fem_geometry.finite_elements.end(),
+        std::sort(fem_geometry->finite_elements.begin(),
+                  fem_geometry->finite_elements.end(),
                   [&fem_geometry](
                       std::shared_ptr<rtfem::FiniteElement<double>> a,
                       std::shared_ptr<rtfem::FiniteElement<double>> b) -> bool {
                       auto a_indices = a->vertices_indices();
                       auto b_indices = b->vertices_indices();
                       auto a_avg_x =
-                          (fem_geometry.vertices[a_indices[0]]->x()
-                              + fem_geometry.vertices[a_indices[1]]->x()
-                              + fem_geometry.vertices[a_indices[2]]->x()
-                              + fem_geometry.vertices[a_indices[3]]->x()) / 4.0;
+                          (fem_geometry->vertices[a_indices[0]]->x()
+                              + fem_geometry->vertices[a_indices[1]]->x()
+                              + fem_geometry->vertices[a_indices[2]]->x()
+                              + fem_geometry->vertices[a_indices[3]]->x()) / 4.0;
 
                       auto b_avg_x =
-                          (fem_geometry.vertices[b_indices[0]]->x()
-                              + fem_geometry.vertices[b_indices[1]]->x()
-                              + fem_geometry.vertices[b_indices[2]]->x()
-                              + fem_geometry.vertices[b_indices[3]]->x()) / 4.0;
+                          (fem_geometry->vertices[b_indices[0]]->x()
+                              + fem_geometry->vertices[b_indices[1]]->x()
+                              + fem_geometry->vertices[b_indices[2]]->x()
+                              + fem_geometry->vertices[b_indices[3]]->x()) / 4.0;
 
                       return a_avg_x < b_avg_x;
                   });
 
         unsigned int new_size
-            = limit * fem_geometry.finite_elements.size();
+            = limit * fem_geometry->finite_elements.size();
         for (unsigned int i = 0; i < new_size; i++) {
             finite_elements.push_back(
-                fem_geometry.finite_elements[i]);
+                fem_geometry->finite_elements[i]);
         }
-        fem_geometry.finite_elements = finite_elements;
+        fem_geometry->finite_elements = finite_elements;
         // </limit>
 
-        soft_body_objects.soft_body_fem_render = CreateRenderComponent(fem_geometry);
+        soft_body_objects.soft_body_fem_render = CreateRenderComponent(
+            *fem_geometry);
         RegisterRenderComponent(soft_body_objects.soft_body_fem_render,
                                 soft_body_objects,
                                 rendering_effects);
-
+        soft_body_objects.soft_body_fem->fem_model().fem_geometry(
+            std::move(fem_geometry));
         return true;
     }
 

@@ -23,7 +23,7 @@ SoftBodySelector::SoftBodySelector(std::shared_ptr<SceneContainer> scene) :
 void SoftBodySelector::Select(
     std::shared_ptr<GameObject> selected_game_object,
     SoftBodyRenderingEffects &rendering_effects,
-    SoftBodyObjects &soft_body_objects) {
+    SoftBodyEditorObjects &soft_body_objects) {
     RemoveCurrentGameObject(soft_body_objects);
 
     if (!CheckSelectedGameObjectCorrectness(selected_game_object,
@@ -36,35 +36,35 @@ void SoftBodySelector::Select(
 }
 
 void SoftBodySelector::RemoveCurrentGameObject(
-    SoftBodyObjects &soft_body_objects) {
+    SoftBodyEditorObjects &soft_body_objects) {
     if (soft_body_objects.current_game_object) {
         scene_->Remove(soft_body_objects.current_game_object);
     }
-    soft_body_objects = SoftBodyObjects{nullptr, nullptr, nullptr, nullptr};
+    soft_body_objects = SoftBodyEditorObjects{nullptr, nullptr, nullptr, nullptr};
 }
 
 bool SoftBodySelector::CheckSelectedGameObjectCorrectness(
     std::shared_ptr<GameObject> selected_game_object,
-    SoftBodyObjects &soft_body_objects) {
+    SoftBodyEditorObjects &soft_body_objects) {
     if (!selected_game_object) {
-        soft_body_objects = SoftBodyObjects{nullptr, nullptr, nullptr, nullptr};
+        soft_body_objects = SoftBodyEditorObjects{nullptr, nullptr, nullptr, nullptr};
         return false;
     }
 
     auto render_components = selected_game_object->GetComponents(
         std::move(GameComponentType::RENDER));
     if (render_components.size() != MAX_RENDER_COMPONENTS) {
-        soft_body_objects = SoftBodyObjects{nullptr, nullptr, nullptr, nullptr};
+        soft_body_objects = SoftBodyEditorObjects{nullptr, nullptr, nullptr, nullptr};
         return false;
     }
 
     return true;
 }
 
-SoftBodyObjects SoftBodySelector::CreateNewGameObject(
+SoftBodyEditorObjects SoftBodySelector::CreateNewGameObject(
     std::shared_ptr<GameObject> selected_game_object,
     SoftBodyRenderingEffects &rendering_effects) {
-    SoftBodyObjects soft_body_objects;
+    SoftBodyEditorObjects soft_body_objects;
 
     auto render_components = selected_game_object->GetComponents(
         std::move(GameComponentType::RENDER));
@@ -77,14 +77,14 @@ SoftBodyObjects SoftBodySelector::CreateNewGameObject(
             std::move(ifx::make_unique<rtfem::FEMModel<double>>()));
 
     for (auto &render_component : render_components) {
-        soft_body_objects.triangle_mesh = std::make_shared<RenderComponent>(
+        soft_body_objects.rigid_body_triangle_mesh = std::make_shared<RenderComponent>(
             std::dynamic_pointer_cast<RenderComponent>(
                 render_component)->models());
-        RegisterGameObjectToRenderingEffects(soft_body_objects.triangle_mesh,
+        RegisterGameObjectToRenderingEffects(soft_body_objects.rigid_body_triangle_mesh,
                                              rendering_effects);
 
         soft_body_objects.current_game_object->Add(
-            soft_body_objects.triangle_mesh);
+            soft_body_objects.rigid_body_triangle_mesh);
     }
     return soft_body_objects;
 }

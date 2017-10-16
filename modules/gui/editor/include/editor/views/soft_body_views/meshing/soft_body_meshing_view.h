@@ -11,7 +11,7 @@ class SoftBodyMeshingInfoView;
 
 class ResourceManager;
 
-struct SoftBodyObjects;
+struct SoftBodyEditorObjects;
 struct SoftBodyRenderingEffects;
 
 class SoftBodyMeshingView {
@@ -19,11 +19,11 @@ public:
     SoftBodyMeshingView(std::shared_ptr<ResourceManager> resource_manager);
     ~SoftBodyMeshingView() = default;
 
-    bool Render(SoftBodyObjects &soft_body_objects,
+    bool Render(SoftBodyEditorObjects &soft_body_objects,
                 SoftBodyRenderingEffects &rendering_effects);
 private:
     void RenderSettings();
-    bool RenderCreation(SoftBodyObjects &soft_body_objects,
+    bool RenderCreation(SoftBodyEditorObjects &soft_body_objects,
                         SoftBodyRenderingEffects &rendering_effects);
     void RenderInfo();
 

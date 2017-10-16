@@ -25,7 +25,7 @@ namespace ifx {
 const std::string BOX_SELECTOR_RENDERING_EFFECT_NAME =
     "soft_body_editor/box_selector.prog";
 
-std::unique_ptr<SoftBodyPicker> SoftBodyPickerFactory::Create(
+std::shared_ptr<SoftBodyPicker> SoftBodyPickerFactory::Create(
     std::shared_ptr<EngineArchitecture> new_engine_architecture,
     std::shared_ptr<EngineArchitecture> old_engine_architecture){
     auto ray_casting = ifx::make_unique<RayCasting>();
@@ -34,7 +34,7 @@ std::unique_ptr<SoftBodyPicker> SoftBodyPickerFactory::Create(
 
     auto node_selection = ifx::make_unique<SoftBodyNodeSelection>();
 
-    auto soft_body_picker = ifx::make_unique<SoftBodyPicker>(
+    auto soft_body_picker = std::make_shared<SoftBodyPicker>(
         std::move(ray_casting),
         std::move(box_casting),
         std::move(node_selection));

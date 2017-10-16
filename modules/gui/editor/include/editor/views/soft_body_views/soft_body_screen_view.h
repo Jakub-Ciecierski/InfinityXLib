@@ -16,7 +16,7 @@ class Mesh;
 
 class SoftBodyScreenView {
 public:
-    SoftBodyScreenView(std::unique_ptr<SoftBodyPicker> soft_body_picker);
+    SoftBodyScreenView(std::shared_ptr<SoftBodyPicker> soft_body_picker);
 
     ~SoftBodyScreenView() = default;
 
@@ -32,7 +32,7 @@ private:
 
     std::shared_ptr<CameraComponent> camera_;
 
-    std::unique_ptr<SoftBodyPicker> picker_;
+    std::shared_ptr<SoftBodyPicker> picker_;
 
 };
 }

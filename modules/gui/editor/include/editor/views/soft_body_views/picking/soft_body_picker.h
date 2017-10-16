@@ -29,6 +29,10 @@ public:
 
     std::shared_ptr<RenderComponent> current_picked(){return current_picked_;}
 
+    const SoftBodyNodeSelection& node_selection() const {
+        return *node_selection_;
+    }
+
     void Pick(std::shared_ptr<RenderComponent> render_component,
               std::shared_ptr<CameraComponent> camera,
               float window_width,

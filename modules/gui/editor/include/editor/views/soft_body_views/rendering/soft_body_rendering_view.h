@@ -6,7 +6,7 @@
 namespace ifx {
 
 struct SoftBodyRenderingEffects;
-struct SoftBodyObjects;
+struct SoftBodyEditorObjects;
 
 class RenderingEffect;
 class RenderComponent;
@@ -26,17 +26,17 @@ public:
     SoftBodyRenderingView();
     ~SoftBodyRenderingView() = default;
 
-    void Render(SoftBodyObjects &soft_body_objects,
+    void Render(SoftBodyEditorObjects &soft_body_objects,
                 SoftBodyRenderingEffects &rendering_effects);
 
     void SetRenderObjectMode(RenderObjectMode mode);
-    void UpdateRenderObjectMode(SoftBodyObjects &soft_body_objects);
+    void UpdateRenderObjectMode(SoftBodyEditorObjects &soft_body_objects);
 private:
     void RenderShowRenderingEffects(
         SoftBodyRenderingEffects &rendering_effects);
     void RenderShowRenderingEffectCheckbox(std::string name,
                                            RenderingEffect &rendering_effect);
-    void RenderShowObjects(SoftBodyObjects &soft_body_objects);
+    void RenderShowObjects(SoftBodyEditorObjects &soft_body_objects);
 
     RenderObjectSettings render_object_settings_;
 

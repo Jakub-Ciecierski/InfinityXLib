@@ -26,9 +26,9 @@
 namespace ifx {
 
 SoftBodyScreenView::SoftBodyScreenView(
-    std::unique_ptr<SoftBodyPicker> soft_body_picker) :
+    std::shared_ptr<SoftBodyPicker> soft_body_picker) :
     camera_(nullptr),
-    picker_(std::move(soft_body_picker)){
+    picker_(soft_body_picker){
 }
 
 void SoftBodyScreenView::Render(

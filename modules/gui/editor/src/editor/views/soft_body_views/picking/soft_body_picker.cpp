@@ -151,8 +151,6 @@ void SoftBodyPicker::BoxCastingPick(
     if(node_selection_->IsInputUpdateBoxCasting()) {
         UpdateBoxCasting(camera, window_width, window_height);
         box_casting_->SetEndViewport(viewport_space);
-        std::cout << "Area: " << box_casting_->box_viewport().Area() <<
-                                                                     std::endl;
         if(!node_selection_->IsInputShiftModifier()
             && box_casting_->box_viewport().Area() > 0.1f){
             node_selection_->Reset();

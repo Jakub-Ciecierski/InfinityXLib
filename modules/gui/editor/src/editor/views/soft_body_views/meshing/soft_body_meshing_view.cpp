@@ -17,7 +17,7 @@ SoftBodyMeshingView::SoftBodyMeshingView(
     info_view_ = ifx::make_unique<SoftBodyMeshingInfoView>();
 }
 
-bool SoftBodyMeshingView::Render(SoftBodyObjects &soft_body_objects,
+bool SoftBodyMeshingView::Render(SoftBodyEditorObjects &soft_body_objects,
                                  SoftBodyRenderingEffects &rendering_effects){
     RenderSettings();
     bool is_mesh_created = RenderCreation(soft_body_objects,
@@ -31,7 +31,7 @@ void SoftBodyMeshingView::RenderSettings(){
     settings_view_->Render();
 }
 
-bool SoftBodyMeshingView::RenderCreation(SoftBodyObjects &soft_body_objects,
+bool SoftBodyMeshingView::RenderCreation(SoftBodyEditorObjects &soft_body_objects,
                                          SoftBodyRenderingEffects &rendering_effects){
     return creation_view_->Render(
         settings_view_->rtfem_options(),

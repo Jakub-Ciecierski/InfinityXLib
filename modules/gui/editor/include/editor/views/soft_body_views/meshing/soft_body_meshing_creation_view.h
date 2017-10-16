@@ -9,7 +9,7 @@
 
 namespace ifx {
 
-struct SoftBodyObjects;
+struct SoftBodyEditorObjects;
 struct SoftBodyRenderingEffects;
 
 class ResourceManager;
@@ -22,17 +22,17 @@ public:
     ~SoftBodyMeshingCreationView() = default;
 
     bool Render(const rtfem::TetrahedralizationOptions &rtfem_options,
-                SoftBodyObjects &soft_body_objects,
+                SoftBodyEditorObjects &soft_body_objects,
                 SoftBodyRenderingEffects &rendering_effects);
 
 private:
     bool BuildMesh(const rtfem::TetrahedralizationOptions &rtfem_options,
-                   SoftBodyObjects &soft_body_objects,
+                   SoftBodyEditorObjects &soft_body_objects,
                    SoftBodyRenderingEffects &rendering_effects);
 
     rtfem::TriangleMeshIndexed<double> CreateTriangleMesh(
-        SoftBodyObjects &soft_body_objects);
-    rtfem::FEMGeometry<double> CreateFEMGeometry(
+        SoftBodyEditorObjects &soft_body_objects);
+    std::unique_ptr<rtfem::FEMGeometry<double>> CreateFEMGeometry(
         const rtfem::TetrahedralizationOptions &rtfem_options,
         const rtfem::TriangleMeshIndexed<double> &triangle_mesh);
     std::shared_ptr<RenderComponent> CreateRenderComponent(
@@ -40,11 +40,11 @@ private:
 
     void RegisterRenderComponent(
         std::shared_ptr<RenderComponent> render_component,
-        SoftBodyObjects &soft_body_objects,
+        SoftBodyEditorObjects &soft_body_objects,
         SoftBodyRenderingEffects &rendering_effects);
 
     bool DebugCreator(const rtfem::TetrahedralizationOptions &rtfem_options,
-                      SoftBodyObjects &soft_body_objects,
+                      SoftBodyEditorObjects &soft_body_objects,
                       SoftBodyRenderingEffects &rendering_effects);
 
     std::shared_ptr<ResourceManager> resource_manager_;

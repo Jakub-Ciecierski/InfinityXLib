@@ -92,7 +92,7 @@ class SoftBodyView : public View, public SceneViewObserver {
 public:
     SoftBodyView(std::unique_ptr<GameUpdater> game_updater,
                  const SoftBodyRenderingEffects &rendering_effects,
-                 std::unique_ptr<SoftBodyPicker> soft_body_picker);
+                 std::shared_ptr<SoftBodyPicker> soft_body_picker);
     ~SoftBodyView() = default;
 
     bool Terminate() override;
@@ -111,7 +111,7 @@ private:
     std::unique_ptr<GameUpdater> game_updater_;
 
     SoftBodyRenderingEffects rendering_effects_;
-    SoftBodyObjects soft_body_objects_;
+    SoftBodyEditorObjects soft_body_objects_;
 
     bool first_render_;
 

@@ -19,9 +19,9 @@ struct SoftBodyRenderingEffects {
     std::shared_ptr<RenderingEffect> main = nullptr;
 };
 
-struct SoftBodyObjects {
+struct SoftBodyEditorObjects {
     std::shared_ptr<GameObject> current_game_object;
-    std::shared_ptr<RenderComponent> triangle_mesh;
+    std::shared_ptr<RenderComponent> rigid_body_triangle_mesh;
     std::shared_ptr<RenderComponent> soft_body_fem_render;
     std::shared_ptr<SoftBodyFEMComponent<double>> soft_body_fem;
 };

@@ -14,7 +14,7 @@ namespace ifx {
 SoftBodyRenderingView::SoftBodyRenderingView() :
     render_object_settings_(RenderObjectSettings()) {}
 
-void SoftBodyRenderingView::Render(SoftBodyObjects &soft_body_objects,
+void SoftBodyRenderingView::Render(SoftBodyEditorObjects &soft_body_objects,
                                    SoftBodyRenderingEffects &rendering_effects) {
     RenderShowRenderingEffects(rendering_effects);
     RenderShowObjects(soft_body_objects);
@@ -43,7 +43,7 @@ void SoftBodyRenderingView::RenderShowRenderingEffectCheckbox(
 }
 
 void SoftBodyRenderingView::RenderShowObjects(
-    SoftBodyObjects &soft_body_objects) {
+    SoftBodyEditorObjects &soft_body_objects) {
     if (ImGui::TreeNodeEx("Objects",
                           ImGuiTreeNodeFlags_DefaultOpen)) {
         ImGui::Checkbox("Input", &render_object_settings_.show_input);
@@ -76,9 +76,9 @@ void SoftBodyRenderingView::SetRenderObjectMode(RenderObjectMode mode) {
 }
 
 void SoftBodyRenderingView::UpdateRenderObjectMode(
-    SoftBodyObjects &soft_body_objects){
-    if (soft_body_objects.triangle_mesh) {
-        soft_body_objects.triangle_mesh->do_render(
+    SoftBodyEditorObjects &soft_body_objects){
+    if (soft_body_objects.rigid_body_triangle_mesh) {
+        soft_body_objects.rigid_body_triangle_mesh->do_render(
             render_object_settings_.show_input);
     }
     if (soft_body_objects.soft_body_fem_render) {

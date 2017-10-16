@@ -8,7 +8,7 @@
 
 namespace ifx {
 
-void SoftBodyGuideView::Render(const SoftBodyObjects &soft_body_objects){
+void SoftBodyGuideView::Render(const SoftBodyEditorObjects &soft_body_objects){
     RenderSelectorInfo(soft_body_objects);
     RenderScreenInfo();
     RenderMeshingInfo();
@@ -20,7 +20,7 @@ void SoftBodyGuideView::Render(const SoftBodyObjects &soft_body_objects){
 }
 
 void SoftBodyGuideView::RenderSelectorInfo(
-    const SoftBodyObjects &soft_body_objects){
+    const SoftBodyEditorObjects &soft_body_objects){
     std::string current_game_object_name = "None selected / Incorrect";
     if(soft_body_objects.current_game_object){
         current_game_object_name = "Selected correct";
