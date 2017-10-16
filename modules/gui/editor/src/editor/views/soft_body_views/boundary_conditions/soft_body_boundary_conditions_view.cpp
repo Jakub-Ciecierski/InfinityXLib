@@ -34,6 +34,7 @@ void SoftBodyBoundaryConditionsView::Render(
                           ImGuiTreeNodeFlags_DefaultOpen)) {
         RenderCurrentBoundaryConditionsContextMenu(
             soft_body_objects.soft_body_fem->fem_model());
+
         ImGui::BeginChild(ImGui::GetID((void *) (intptr_t) 0),
                           ImVec2(ImGui::GetWindowWidth() * 0.17f,
                                  ImGui::GetWindowHeight() * 0.3f),

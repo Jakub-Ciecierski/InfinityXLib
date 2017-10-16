@@ -9,6 +9,8 @@
 namespace ifx {
 
 void SoftBodyGuideView::Render(const SoftBodyEditorObjects &soft_body_objects){
+    ImGui::BeginChild(ImGui::GetID((void *) (intptr_t) 0),
+                      ImVec2(-1, -1), false);
     RenderSelectorInfo(soft_body_objects);
     RenderScreenInfo();
     RenderMeshingInfo();
@@ -17,6 +19,8 @@ void SoftBodyGuideView::Render(const SoftBodyEditorObjects &soft_body_objects){
     RenderLoadInfo();
     RenderRenderingInfo();
     RenderSolverInfo();
+
+    ImGui::EndChild();
 }
 
 void SoftBodyGuideView::RenderSelectorInfo(
