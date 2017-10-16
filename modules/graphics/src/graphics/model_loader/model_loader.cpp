@@ -2,6 +2,7 @@
 
 #include <graphics/model/model_creator.h>
 #include <graphics/shaders/textures/texture_creator.h>
+#include <graphics/model/material.h>
 
 using namespace std;
 

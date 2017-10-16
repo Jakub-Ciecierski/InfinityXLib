@@ -1,6 +1,7 @@
 #include "graphics/rendering/fbo_rendering/fbo_renderer.h"
 
 #include <graphics/shaders/buffers/fbo.h>
+#include <graphics/model/material.h>
 #include <graphics/model/mesh.h>
 #include <graphics/rendering/shadows/shadow_mapping_renderer.h>
 #include <graphics/rendering/scene_renderer.h>

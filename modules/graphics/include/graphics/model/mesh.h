@@ -1,7 +1,6 @@
 #ifndef DUCK_MESH_H
 #define DUCK_MESH_H
 
-#include <graphics/model/material.h>
 #include "graphics/shaders/program.h"
 #include "graphics/shaders/data/shader_data.h"
 #include "graphics/shaders/buffers/vbo.h"
@@ -15,6 +14,8 @@
 typedef unsigned int GLenum;
 
 namespace ifx {
+
+struct Material;
 
 class Texture2D;
 

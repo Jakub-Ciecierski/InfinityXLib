@@ -9,6 +9,7 @@
 #include <graphics/rendering/fbo_rendering/fbo_renderer.h>
 #include <graphics/shaders/loaders/program_loader.h>
 #include <graphics/shaders/program_creator.h>
+#include <graphics/model/material.h>
 
 #include <resources/resource_manager.h>
 

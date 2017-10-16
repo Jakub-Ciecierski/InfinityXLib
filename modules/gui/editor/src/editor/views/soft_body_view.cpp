@@ -134,6 +134,7 @@ void SoftBodyView::RenderLeftColumn() {
                                     rendering_effects_);
             break;
         case soft_body_views.solver_id:
+            solver_view_->Render(soft_body_objects_);
             break;
         default:
             break;

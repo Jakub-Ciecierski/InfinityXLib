@@ -17,35 +17,41 @@ void SoftBodyMaterialView::Render(
 
 void SoftBodyMaterialView::RenderMaterial(
     std::shared_ptr<SoftBodyFEMComponent<double>> soft_body){
-    float young_modulus
-        = (float)soft_body->fem_model().material().young_modulus;
-    float poisson_coefficient
-        = (float)soft_body->fem_model().material().poisson_coefficient;
-    float density
-        = (float)soft_body->fem_model().material().density;
+    auto material = soft_body->fem_model().material();
+
+    float young_modulus = (float)material.young_modulus;
+    float poisson_coefficient = (float)material.poisson_coefficient;
+    float density = (float)material.density;
+
+    bool value_changed = false;
 
     ImGui::PushItemWidth(60);
 
     if(ImGui::InputFloat("Young Modulus",
                       &young_modulus,
                       0, 100000)){
-        soft_body->fem_model().material().young_modulus = young_modulus;
+        material.young_modulus = young_modulus;
+        value_changed = true;
     }
 
     if(ImGui::InputFloat("Poisson Coefficient",
                       &poisson_coefficient,
                       0, 0.5)){
-        soft_body->fem_model().material().poisson_coefficient
-            = poisson_coefficient;
+        material.poisson_coefficient = poisson_coefficient;
+        value_changed = true;
     }
 
     if(ImGui::InputFloat("Density",
                       &density,
                       0, 1000)){
-        soft_body->fem_model().material().density = density;
+        material.density = density;
+        value_changed = true;
     }
-
     ImGui::PopItemWidth();
+
+    if(value_changed){
+        soft_body->fem_model().material(material);
+    }
 }
 
 }

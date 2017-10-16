@@ -1,6 +1,8 @@
 #include <sstream>
+
 #include <graphics/shaders/textures/texture_activator.h>
 #include "graphics/model/mesh.h"
+#include <graphics/model/material.h>
 
 #include <common/unique_ptr.h>
 

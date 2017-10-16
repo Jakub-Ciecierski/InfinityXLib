@@ -3,10 +3,14 @@
 
 namespace ifx {
 
+struct SoftBodyEditorObjects;
+
 class SoftBodySolverView {
 public:
     SoftBodySolverView() = default;
     ~SoftBodySolverView() = default;
+
+    void Render(SoftBodyEditorObjects& soft_body_objects);
 
 private:
 };

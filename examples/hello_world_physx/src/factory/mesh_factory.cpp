@@ -4,6 +4,7 @@
 #include <graphics/shaders/textures/texture.h>
 #include <graphics/shaders/textures/texture_creator.h>
 #include <graphics/model/patch/patch.h>
+#include <graphics/model/material.h>
 #include <vector>
 #include <resources/resource_manager.h>
 #include <resources/resources.h>
