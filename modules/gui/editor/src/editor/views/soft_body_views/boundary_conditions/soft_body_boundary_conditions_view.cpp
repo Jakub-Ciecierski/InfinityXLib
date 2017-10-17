@@ -23,27 +23,17 @@ SoftBodyBoundaryConditionsView::SoftBodyBoundaryConditionsView(
     selected_boundary_condition_(nullptr){}
 
 void SoftBodyBoundaryConditionsView::Render(
-    SoftBodyEditorObjects& soft_body_objects){
-    if(!StaticCorrectnessAndThrowException(soft_body_objects)){
-        selected_boundary_condition_ = nullptr;
-        return;
-    }
-    if(!CheckDynamicCorrectness(soft_body_objects)){
-        selected_boundary_condition_ = nullptr;
-        return;
-    }
-
+    rtfem::BoundaryConditionContainer<double>& boundary_conditions,
+    rtfem::FEMGeometry<double>& fem_geometry){
     if (ImGui::TreeNodeEx("Current Boundary Conditions",
                           ImGuiTreeNodeFlags_DefaultOpen)) {
-        RenderCurrentBoundaryConditionsContextMenu(
-            soft_body_objects.soft_body_fem->fem_model());
+        RenderCurrentBoundaryConditionsContextMenu(boundary_conditions);
 
         ImGui::BeginChild(ImGui::GetID((void *) (intptr_t) 0),
                           ImVec2(ImGui::GetWindowWidth() * 0.17f,
                                  ImGui::GetWindowHeight() * 0.3f),
                           false);
-        RenderCurrentBoundaryConditions(
-            soft_body_objects.soft_body_fem->fem_model());
+        RenderCurrentBoundaryConditions(boundary_conditions);
         ImGui::EndChild();
         ImGui::TreePop();
     }
@@ -56,44 +46,27 @@ void SoftBodyBoundaryConditionsView::Render(
 
     if (ImGui::TreeNodeEx("New Boundary Conditions",
                           ImGuiTreeNodeFlags_DefaultOpen)) {
-        RenderNewBoundaryConditions(
-            soft_body_objects.soft_body_fem->fem_model());
+        RenderNewBoundaryConditions(boundary_conditions,
+                                    fem_geometry);
         ImGui::TreePop();
     }
 }
 
-bool SoftBodyBoundaryConditionsView::StaticCorrectnessAndThrowException(
-    const SoftBodyEditorObjects& soft_body_objects){
-    if(picker_->current_picked() != soft_body_objects.soft_body_fem_render){
-        return false;
-    }
-    return true;
-}
-
-bool SoftBodyBoundaryConditionsView::CheckDynamicCorrectness(
-    const SoftBodyEditorObjects& soft_body_objects){
-    if(!soft_body_objects.soft_body_fem)
-        return false;
-    return true;
-}
-
 void
 SoftBodyBoundaryConditionsView::RenderCurrentBoundaryConditionsContextMenu(
-    rtfem::FEMModel<double>& fem_model){
+    rtfem::BoundaryConditionContainer<double>& boundary_conditions){
     if (ImGui::BeginPopupContextItem("Current BC Context Menu")) {
         if (ImGui::Selectable("Clear")) {
-            auto& boundary_conditions = fem_model.boundary_conditions();
             boundary_conditions.Clear();
 
-            selected_boundary_condition_ = nullptr;
+            ResetSelectedBoundaryCondition();
         }
         ImGui::EndPopup();
     }
 }
 
 void SoftBodyBoundaryConditionsView::RenderCurrentBoundaryConditions(
-    rtfem::FEMModel<double>& fem_model){
-    const auto& boundary_conditions = fem_model.boundary_conditions();
+    rtfem::BoundaryConditionContainer<double>& boundary_conditions){
     std::vector<rtfem::BoundaryCondition<double>> boundary_conditions_to_remove;
 
     static int selection_mask = (1 << 2);
@@ -115,8 +88,7 @@ void SoftBodyBoundaryConditionsView::RenderCurrentBoundaryConditions(
             selected_boundary_condition_ = &(boundary_conditions[i]);
         }
         if(RenderSelectedBoundaryConditionsContextMenu(boundary_conditions[i],
-                                                       i,
-                                                       fem_model)){
+                                                       i)){
             boundary_conditions_to_remove.push_back(boundary_conditions[i]);
         }
 
@@ -126,21 +98,19 @@ void SoftBodyBoundaryConditionsView::RenderCurrentBoundaryConditions(
     }
 
     for(const auto& boundary_condition : boundary_conditions_to_remove){
-        fem_model.boundary_conditions().
-            RemoveBoundaryCondition(boundary_condition);
+        boundary_conditions.RemoveBoundaryCondition(boundary_condition);
     }
 }
 
 bool
 SoftBodyBoundaryConditionsView::RenderSelectedBoundaryConditionsContextMenu(
     const rtfem::BoundaryCondition<double>& boundary_condition,
-    int id,
-    rtfem::FEMModel<double>& fem_model){
+    int id){
     bool has_removed = false;
     ImGui::PushID(std::to_string(id).c_str());
     if (ImGui::BeginPopupContextItem("Selected BC Context Menu")) {
         if (ImGui::Selectable("Remove")) {
-            selected_boundary_condition_ = nullptr;
+            ResetSelectedBoundaryCondition();
             has_removed = true;
         }
         ImGui::EndPopup();
@@ -163,7 +133,8 @@ void SoftBodyBoundaryConditionsView::RenderSelectedBoundaryCondition(){
 }
 
 void SoftBodyBoundaryConditionsView::RenderNewBoundaryConditions(
-    rtfem::FEMModel<double>& fem_model){
+    rtfem::BoundaryConditionContainer<double>& boundary_conditions,
+    rtfem::FEMGeometry<double>& fem_geometry){
     static float values[3] = {0, 0, 0};
 
     ImGui::PushItemWidth(150);
@@ -175,18 +146,22 @@ void SoftBodyBoundaryConditionsView::RenderNewBoundaryConditions(
             picker_->node_selection().selected_vertices();
         for(auto selected_node : selected_nodes){
             const auto& vertex
-                = fem_model.fem_geometry().vertices[selected_node];
+                = fem_geometry.vertices[selected_node];
 
             auto value = Eigen::Vector3<double>(
                 values[0], values[1], values[2]);
             auto new_boundary_condition = rtfem::BoundaryCondition<double>{
                 vertex->id(), value};
-            fem_model.boundary_conditions().
+            boundary_conditions.
                 AddBoundaryCondition(new_boundary_condition);
 
-            selected_boundary_condition_ = nullptr;
+            ResetSelectedBoundaryCondition();
         }
     }
+
+}
+void SoftBodyBoundaryConditionsView::ResetSelectedBoundaryCondition() {
+    selected_boundary_condition_ = nullptr;
 }
 
 }

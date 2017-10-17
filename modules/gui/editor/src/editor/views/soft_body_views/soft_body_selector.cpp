@@ -42,21 +42,21 @@ void SoftBodySelector::RemoveCurrentGameObject(
     if (soft_body_objects.current_game_object) {
         scene_->Remove(soft_body_objects.current_game_object);
     }
-    soft_body_objects = SoftBodyEditorObjects{nullptr, nullptr, nullptr, nullptr};
+    soft_body_objects = SoftBodyEditorObjects{nullptr, nullptr};
 }
 
 bool SoftBodySelector::CheckSelectedGameObjectCorrectness(
     std::shared_ptr<GameObject> selected_game_object,
     SoftBodyEditorObjects &soft_body_objects) {
     if (!selected_game_object) {
-        soft_body_objects = SoftBodyEditorObjects{nullptr, nullptr, nullptr, nullptr};
+        soft_body_objects = SoftBodyEditorObjects{nullptr, nullptr};
         return false;
     }
 
     auto render_components = selected_game_object->GetComponents(
         std::move(GameComponentType::RENDER));
     if (render_components.size() != MAX_RENDER_COMPONENTS) {
-        soft_body_objects = SoftBodyEditorObjects{nullptr, nullptr, nullptr, nullptr};
+        soft_body_objects = SoftBodyEditorObjects{nullptr, nullptr};
         return false;
     }
 
@@ -74,19 +74,23 @@ SoftBodyEditorObjects SoftBodySelector::CreateNewGameObject(
     soft_body_objects.current_game_object
         = scene_->CreateAndAddEmptyGameObject();
 
-    soft_body_objects.soft_body_fem =
-        std::make_shared<SoftBodyFEMComponent<double>>(
-            std::move(ifx::make_unique<rtfem::FEMModel<double>>()));
+    soft_body_objects.soft_body_fem_component_builder
+        = ifx::make_unique<SoftBodyFEMComponentBuilder<double>>();
 
     for (auto &render_component : render_components) {
-        soft_body_objects.rigid_body_triangle_mesh = std::make_shared<RenderComponent>(
-            std::dynamic_pointer_cast<RenderComponent>(
-                render_component)->models());
-        RegisterGameObjectToRenderingEffects(soft_body_objects.rigid_body_triangle_mesh,
-                                             rendering_effects);
+        soft_body_objects.soft_body_fem_component_builder->
+            triangle_mesh_render(
+            std::make_shared<RenderComponent>(
+                std::dynamic_pointer_cast<RenderComponent>(
+                    render_component)->models()));
+
+        RegisterGameObjectToRenderingEffects(
+            soft_body_objects.soft_body_fem_component_builder->
+                triangle_mesh_render(), rendering_effects);
 
         soft_body_objects.current_game_object->Add(
-            soft_body_objects.rigid_body_triangle_mesh);
+            soft_body_objects.soft_body_fem_component_builder->
+                triangle_mesh_render());
     }
     return soft_body_objects;
 }

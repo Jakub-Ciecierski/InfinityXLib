@@ -49,7 +49,7 @@ SoftBodyView::SoftBodyView(std::unique_ptr<GameUpdater> game_updater,
     View("Soft Body"),
     game_updater_(std::move(game_updater)),
     rendering_effects_(rendering_effects),
-    soft_body_objects_(SoftBodyEditorObjects{nullptr, nullptr, nullptr}),
+    soft_body_objects_(SoftBodyEditorObjects{nullptr, nullptr}),
     first_render_(true),
     soft_body_fem_(nullptr){
     screen_view_ = ifx::make_unique<SoftBodyScreenView>(soft_body_picker);
@@ -112,6 +112,7 @@ void SoftBodyView::RenderLeftColumn() {
 
     bool mesh_created = false;
 
+    auto* builder = soft_body_objects_.soft_body_fem_component_builder.get();
     switch(soft_body_views.selected){
         case soft_body_views.guide_id:
             soft_body_guide_view_->Render(soft_body_objects_);
@@ -121,20 +122,39 @@ void SoftBodyView::RenderLeftColumn() {
                                                  rendering_effects_);
             break;
         case soft_body_views.material_id:
-            material_view_->Render(soft_body_objects_.soft_body_fem);
+            if(RenderError(builder)){
+                material_view_->Render(builder->GetMaterial());
+            }
+
             break;
         case soft_body_views.boudary_conditions_id:
-            boundarary_conditions_view_->Render(soft_body_objects_);
+            if(RenderError(builder)){
+                boundarary_conditions_view_->Render(
+                    builder->GetBoundaryConditions(),
+                    builder->GetFEMGeometry()
+                );
+            }else{
+                boundarary_conditions_view_->ResetSelectedBoundaryCondition();
+            }
+
             break;
         case soft_body_views.load_id:
-            load_view_->Render(soft_body_objects_);
+            if(RenderError(builder)){
+                load_view_->Render(builder->GetBodyForce());
+            }
             break;
         case soft_body_views.rendering_id:
-            rendering_view_->Render(soft_body_objects_,
-                                    rendering_effects_);
+            if(RenderError(builder)){
+                rendering_view_->Render(builder->triangle_mesh_render(),
+                                        builder->fem_render(),
+                                        rendering_effects_);
+            }
+
             break;
         case soft_body_views.solver_id:
-            solver_view_->Render(soft_body_objects_);
+            if(RenderError(builder)){
+                solver_view_->Render(soft_body_objects_);
+            }
             break;
         default:
             break;
@@ -143,16 +163,28 @@ void SoftBodyView::RenderLeftColumn() {
 
     if(mesh_created){
         rendering_view_->SetRenderObjectMode(RenderObjectMode::Output);
-        rendering_view_->UpdateRenderObjectMode(soft_body_objects_);
+        if(builder){
+            rendering_view_->UpdateRenderObjectMode(
+                builder->triangle_mesh_render(),
+                builder->fem_render());
+        }
+
     }
 }
 
 void SoftBodyView::RenderRightColumn() {
     if (first_render_)
         ImGui::SetColumnOffset(-1, 150);
+
+    std::shared_ptr<RenderComponent> fem_render_component = nullptr;
+    if(soft_body_objects_.soft_body_fem_component_builder){
+        fem_render_component
+            = soft_body_objects_.soft_body_fem_component_builder->fem_render();
+    }
+
     screen_view_->Render(
         game_updater_->engine_architecture()->engine_systems.renderer,
-        soft_body_objects_.soft_body_fem_render);
+        fem_render_component);
 }
 
 void SoftBodyView::OnSetSelectedGameObject(
@@ -160,6 +192,16 @@ void SoftBodyView::OnSetSelectedGameObject(
     selector_->Select(selected_game_object,
                       rendering_effects_,
                       soft_body_objects_);
+}
+
+bool SoftBodyView::RenderError(
+    SoftBodyFEMComponentBuilder<double>* soft_body_fem_component_builder){
+    bool return_value = true;
+    if(!soft_body_fem_component_builder){
+        ImGui::TextColored(ImVec4(255,0,0,255), "No Game Object Selected");
+        return_value = false;
+    }
+    return return_value;
 }
 
 }

@@ -7,18 +7,12 @@
 namespace ifx {
 
 void SoftBodyMaterialView::Render(
-    std::shared_ptr<SoftBodyFEMComponent<double>> soft_body){
-    if(!soft_body){
-        ImGui::TextColored(ImVec4(255,0,0,255), "No Game Object Selected");
-        return;
-    }
-    RenderMaterial(soft_body);
+    rtfem::Material<double>& material){
+    RenderMaterial(material);
 }
 
 void SoftBodyMaterialView::RenderMaterial(
-    std::shared_ptr<SoftBodyFEMComponent<double>> soft_body){
-    auto material = soft_body->fem_model().material();
-
+    rtfem::Material<double>& material){
     float young_modulus = (float)material.young_modulus;
     float poisson_coefficient = (float)material.poisson_coefficient;
     float density = (float)material.density;
@@ -50,7 +44,9 @@ void SoftBodyMaterialView::RenderMaterial(
     ImGui::PopItemWidth();
 
     if(value_changed){
-        soft_body->fem_model().material(material);
+        material.young_modulus = young_modulus;
+        material.poisson_coefficient = poisson_coefficient;
+        material.density = density;
     }
 }
 

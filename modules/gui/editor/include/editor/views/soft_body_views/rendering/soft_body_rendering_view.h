@@ -2,6 +2,7 @@
 #define PROJECT_SOFT_BODY_RENDERING_VIEW_H
 
 #include <string>
+#include <memory>
 
 namespace ifx {
 
@@ -26,17 +27,22 @@ public:
     SoftBodyRenderingView();
     ~SoftBodyRenderingView() = default;
 
-    void Render(SoftBodyEditorObjects &soft_body_objects,
+    void Render(std::shared_ptr<RenderComponent> triangle_mesh_render,
+                std::shared_ptr<RenderComponent> fem_mesh_render,
                 SoftBodyRenderingEffects &rendering_effects);
 
     void SetRenderObjectMode(RenderObjectMode mode);
-    void UpdateRenderObjectMode(SoftBodyEditorObjects &soft_body_objects);
+    void UpdateRenderObjectMode(
+        std::shared_ptr<RenderComponent> triangle_mesh_render,
+        std::shared_ptr<RenderComponent> fem_mesh_render);
 private:
     void RenderShowRenderingEffects(
         SoftBodyRenderingEffects &rendering_effects);
     void RenderShowRenderingEffectCheckbox(std::string name,
                                            RenderingEffect &rendering_effect);
-    void RenderShowObjects(SoftBodyEditorObjects &soft_body_objects);
+    void RenderShowObjects(
+        std::shared_ptr<RenderComponent> triangle_mesh_render,
+        std::shared_ptr<RenderComponent> fem_mesh_render);
 
     RenderObjectSettings render_object_settings_;
 

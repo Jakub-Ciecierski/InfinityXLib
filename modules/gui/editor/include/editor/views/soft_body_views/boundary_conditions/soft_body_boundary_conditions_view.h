@@ -16,8 +16,11 @@ public:
     SoftBodyBoundaryConditionsView(std::shared_ptr<SoftBodyPicker> picker);
     ~SoftBodyBoundaryConditionsView() = default;
 
-    void Render(SoftBodyEditorObjects& soft_body_objects);
+    void Render(
+        rtfem::BoundaryConditionContainer<double>& boundary_conditions,
+        rtfem::FEMGeometry<double>& fem_geometry);
 
+    void ResetSelectedBoundaryCondition();
 private:
     bool StaticCorrectnessAndThrowException(
         const SoftBodyEditorObjects& soft_body_objects);
@@ -25,18 +28,18 @@ private:
         const SoftBodyEditorObjects& soft_body_objects);
 
     void RenderCurrentBoundaryConditionsContextMenu(
-        rtfem::FEMModel<double>& fem_model);
+        rtfem::BoundaryConditionContainer<double>& boundary_conditions);
     void RenderCurrentBoundaryConditions(
-        rtfem::FEMModel<double>& fem_model);
+        rtfem::BoundaryConditionContainer<double>& boundary_conditions);
 
     bool RenderSelectedBoundaryConditionsContextMenu(
         const rtfem::BoundaryCondition<double>& boundary_condition,
-        int id,
-        rtfem::FEMModel<double>& fem_model);
+        int id);
     void RenderSelectedBoundaryCondition();
 
     void RenderNewBoundaryConditions(
-        rtfem::FEMModel<double>& fem_model);
+        rtfem::BoundaryConditionContainer<double>& boundary_conditions,
+        rtfem::FEMGeometry<double>& fem_geometry);
 
     std::shared_ptr<SoftBodyPicker> picker_;
 

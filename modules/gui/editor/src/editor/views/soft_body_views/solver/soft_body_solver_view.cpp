@@ -21,12 +21,16 @@ namespace ifx {
 
 void SoftBodySolverView::Render(SoftBodyEditorObjects& soft_body_objects){
     if(ImGui::Button("Solve")){
-        auto& fem_model = soft_body_objects.soft_body_fem->fem_model();
+
+        auto soft_body_fem_component
+            = soft_body_objects.soft_body_fem_component_builder->Build();
+        auto& fem_model = soft_body_fem_component->fem_model();
         rtfem::FEMSolver<double> fem_solver;
         auto fem_solver_output = fem_solver.Solve(fem_model);
 
-        auto* vbo = soft_body_objects.
-            soft_body_fem_render->models()[0]->getMesh(0)->vbo();
+        auto* vbo = soft_body_objects
+            .soft_body_fem_component_builder->fem_render()->
+            models()[0]->getMesh(0)->vbo();
 
         auto* vertices = vbo->vertices();
         for(unsigned int i = 0; i < vertices->size(); i++){
@@ -43,7 +47,9 @@ void SoftBodySolverView::Render(SoftBodyEditorObjects& soft_body_objects){
             vertex.Position.y += displacement_y;
             vertex.Position.z += displacement_z;
 
-            auto& fem_vertex = fem_model.fem_geometry().vertices[i];
+            auto &fem_vertex
+                = soft_body_objects.soft_body_fem_component_builder
+                    ->GetFEMGeometry().vertices[i];
             const auto& coordinates = fem_vertex->coordinates();
             fem_vertex->coordinates(
                 coordinates + Eigen::Vector3<double>(

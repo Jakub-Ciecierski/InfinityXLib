@@ -32,7 +32,7 @@ private:
 
     rtfem::TriangleMeshIndexed<double> CreateTriangleMesh(
         SoftBodyEditorObjects &soft_body_objects);
-    std::unique_ptr<rtfem::FEMGeometry<double>> CreateFEMGeometry(
+    rtfem::FEMGeometry<double> CreateFEMGeometry(
         const rtfem::TetrahedralizationOptions &rtfem_options,
         const rtfem::TriangleMeshIndexed<double> &triangle_mesh);
     std::shared_ptr<RenderComponent> CreateRenderComponent(

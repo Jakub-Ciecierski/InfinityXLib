@@ -2,6 +2,7 @@
 #define PROJECT_SOFT_BODY_MATERIAL_VIEW_H
 
 #include <memory>
+#include <RTFEM/FEM/Material.h>
 
 namespace ifx {
 
@@ -13,9 +14,9 @@ public:
     SoftBodyMaterialView() = default;
     ~SoftBodyMaterialView() = default;
 
-    void Render(std::shared_ptr<SoftBodyFEMComponent<double>>);
+    void Render(rtfem::Material<double>& material);
 private:
-    void RenderMaterial(std::shared_ptr<SoftBodyFEMComponent<double>>);
+    void RenderMaterial(rtfem::Material<double>& material);
 };
 
 }

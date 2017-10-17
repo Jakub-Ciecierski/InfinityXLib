@@ -3,6 +3,8 @@
 
 #include <memory>
 
+#include <game/components/physics/builder/soft_body_fem_component_builder.h>
+
 namespace ifx {
 
 class RenderingEffect;
@@ -21,9 +23,9 @@ struct SoftBodyRenderingEffects {
 
 struct SoftBodyEditorObjects {
     std::shared_ptr<GameObject> current_game_object;
-    std::shared_ptr<RenderComponent> rigid_body_triangle_mesh;
-    std::shared_ptr<RenderComponent> soft_body_fem_render;
-    std::shared_ptr<SoftBodyFEMComponent<double>> soft_body_fem;
+
+    std::unique_ptr<SoftBodyFEMComponentBuilder<double>>
+        soft_body_fem_component_builder;
 };
 
 extern const unsigned int MAX_RENDER_COMPONENTS;

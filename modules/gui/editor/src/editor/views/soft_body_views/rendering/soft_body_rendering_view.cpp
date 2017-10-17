@@ -14,10 +14,13 @@ namespace ifx {
 SoftBodyRenderingView::SoftBodyRenderingView() :
     render_object_settings_(RenderObjectSettings()) {}
 
-void SoftBodyRenderingView::Render(SoftBodyEditorObjects &soft_body_objects,
-                                   SoftBodyRenderingEffects &rendering_effects) {
+void SoftBodyRenderingView::Render(
+    std::shared_ptr<RenderComponent> triangle_mesh_render,
+    std::shared_ptr<RenderComponent> fem_mesh_render,
+    SoftBodyRenderingEffects &rendering_effects) {
+
     RenderShowRenderingEffects(rendering_effects);
-    RenderShowObjects(soft_body_objects);
+    RenderShowObjects(triangle_mesh_render, fem_mesh_render);
 }
 
 void SoftBodyRenderingView::RenderShowRenderingEffects(
@@ -43,7 +46,8 @@ void SoftBodyRenderingView::RenderShowRenderingEffectCheckbox(
 }
 
 void SoftBodyRenderingView::RenderShowObjects(
-    SoftBodyEditorObjects &soft_body_objects) {
+    std::shared_ptr<RenderComponent> triangle_mesh_render,
+    std::shared_ptr<RenderComponent> fem_mesh_render) {
     if (ImGui::TreeNodeEx("Objects",
                           ImGuiTreeNodeFlags_DefaultOpen)) {
         ImGui::Checkbox("Input", &render_object_settings_.show_input);
@@ -56,7 +60,7 @@ void SoftBodyRenderingView::RenderShowObjects(
             SetRenderObjectMode(RenderObjectMode::Output);
         }
 
-        UpdateRenderObjectMode(soft_body_objects);
+        UpdateRenderObjectMode(triangle_mesh_render, fem_mesh_render);
 
         ImGui::TreePop();
     }
@@ -76,14 +80,14 @@ void SoftBodyRenderingView::SetRenderObjectMode(RenderObjectMode mode) {
 }
 
 void SoftBodyRenderingView::UpdateRenderObjectMode(
-    SoftBodyEditorObjects &soft_body_objects){
-    if (soft_body_objects.rigid_body_triangle_mesh) {
-        soft_body_objects.rigid_body_triangle_mesh->do_render(
+    std::shared_ptr<RenderComponent> triangle_mesh_render,
+    std::shared_ptr<RenderComponent> fem_mesh_render){
+    if (triangle_mesh_render) {
+        triangle_mesh_render->do_render(
             render_object_settings_.show_input);
     }
-    if (soft_body_objects.soft_body_fem_render) {
-        soft_body_objects.soft_body_fem_render->do_render(
-            render_object_settings_.show_output);
+    if (fem_mesh_render) {
+        fem_mesh_render->do_render(render_object_settings_.show_output);
     }
 }
 

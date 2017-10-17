@@ -108,6 +108,9 @@ private:
     void RenderLeftColumn();
     void RenderRightColumn();
 
+    bool RenderError(
+        SoftBodyFEMComponentBuilder<double>* soft_body_fem_component_builder);
+
     std::unique_ptr<GameUpdater> game_updater_;
 
     SoftBodyRenderingEffects rendering_effects_;

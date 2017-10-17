@@ -12,10 +12,9 @@ public:
     SoftBodyLoadView() = default;
     ~SoftBodyLoadView() = default;
 
-    void Render(SoftBodyEditorObjects& soft_body_objects);
+    void Render(Eigen::Vector3<double>& body_force);
 private:
-    bool CheckCorrectness(SoftBodyEditorObjects& soft_body_objects);
-    void RenderBodyForce(rtfem::FEMModel<double>& fem_model);
+    void RenderBodyForce(Eigen::Vector3<double>& body_force);
 
 };
 

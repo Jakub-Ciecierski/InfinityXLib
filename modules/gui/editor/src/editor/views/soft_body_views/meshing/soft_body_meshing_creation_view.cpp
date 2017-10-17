@@ -54,7 +54,7 @@ bool SoftBodyMeshingCreationView::BuildMesh(
         return false;
     }
     soft_body_objects.current_game_object->Remove(
-        soft_body_objects.soft_body_fem_render);
+        soft_body_objects.soft_body_fem_component_builder->fem_render());
 
     rtfem::TriangleMeshIndexed<double> triangle_mesh;
     try {
@@ -63,17 +63,18 @@ bool SoftBodyMeshingCreationView::BuildMesh(
         return false;
     }
 
-    soft_body_objects.soft_body_fem->fem_model().fem_geometry(
-        std::move(CreateFEMGeometry(rtfem_options, triangle_mesh)));
+    soft_body_objects.soft_body_fem_component_builder->GetFEMGeometry() =
+        CreateFEMGeometry(rtfem_options, triangle_mesh);
 
     auto fem_geometry =
-        soft_body_objects.soft_body_fem->fem_model().fem_geometry();
-    soft_body_objects.soft_body_fem_render = CreateRenderComponent(
-        fem_geometry);
+        soft_body_objects.soft_body_fem_component_builder->GetFEMGeometry();
+    soft_body_objects.soft_body_fem_component_builder->fem_render(
+        CreateRenderComponent(fem_geometry));
 
-    RegisterRenderComponent(soft_body_objects.soft_body_fem_render,
-                            soft_body_objects,
-                            rendering_effects);
+    RegisterRenderComponent(
+        soft_body_objects.soft_body_fem_component_builder->fem_render(),
+        soft_body_objects,
+        rendering_effects);
 
     // Print
     int i = 0;
@@ -110,7 +111,7 @@ SoftBodyMeshingCreationView::CreateTriangleMesh(SoftBodyEditorObjects &soft_body
     );
 }
 
-std::unique_ptr<rtfem::FEMGeometry<double>>
+rtfem::FEMGeometry<double>
 SoftBodyMeshingCreationView::CreateFEMGeometry(
     const rtfem::TetrahedralizationOptions &rtfem_options,
     const rtfem::TriangleMeshIndexed<double> &triangle_mesh) {
@@ -135,7 +136,7 @@ void SoftBodyMeshingCreationView::RegisterRenderComponent(
     rendering_effects.faces->RegisterRenderObject(render_component);
 
     soft_body_objects.current_game_object->Add(
-        soft_body_objects.soft_body_fem_render);
+        soft_body_objects.soft_body_fem_component_builder->fem_render());
 
     render_component->SetBeforeRender([](const Program* program){
         glEnable(GL_BLEND);
@@ -157,7 +158,7 @@ bool SoftBodyMeshingCreationView::DebugCreator(
             return false;
         }
         soft_body_objects.current_game_object->Remove(
-            soft_body_objects.soft_body_fem_render);
+            soft_body_objects.soft_body_fem_component_builder->fem_render());
 
         rtfem::TriangleMeshIndexed<double> triangle_mesh;
         try {
@@ -171,44 +172,46 @@ bool SoftBodyMeshingCreationView::DebugCreator(
         // <limit>
         std::vector<std::shared_ptr<rtfem::FiniteElement<double>>>
             finite_elements;
-        std::sort(fem_geometry->finite_elements.begin(),
-                  fem_geometry->finite_elements.end(),
+        std::sort(fem_geometry.finite_elements.begin(),
+                  fem_geometry.finite_elements.end(),
                   [&fem_geometry](
                       std::shared_ptr<rtfem::FiniteElement<double>> a,
                       std::shared_ptr<rtfem::FiniteElement<double>> b) -> bool {
                       auto a_indices = a->vertices_indices();
                       auto b_indices = b->vertices_indices();
                       auto a_avg_x =
-                          (fem_geometry->vertices[a_indices[0]]->x()
-                              + fem_geometry->vertices[a_indices[1]]->x()
-                              + fem_geometry->vertices[a_indices[2]]->x()
-                              + fem_geometry->vertices[a_indices[3]]->x()) / 4.0;
+                          (fem_geometry.vertices[a_indices[0]]->x()
+                              + fem_geometry.vertices[a_indices[1]]->x()
+                              + fem_geometry.vertices[a_indices[2]]->x()
+                              + fem_geometry.vertices[a_indices[3]]->x()) / 4.0;
 
                       auto b_avg_x =
-                          (fem_geometry->vertices[b_indices[0]]->x()
-                              + fem_geometry->vertices[b_indices[1]]->x()
-                              + fem_geometry->vertices[b_indices[2]]->x()
-                              + fem_geometry->vertices[b_indices[3]]->x()) / 4.0;
+                          (fem_geometry.vertices[b_indices[0]]->x()
+                              + fem_geometry.vertices[b_indices[1]]->x()
+                              + fem_geometry.vertices[b_indices[2]]->x()
+                              + fem_geometry.vertices[b_indices[3]]->x()) / 4.0;
 
                       return a_avg_x < b_avg_x;
                   });
 
         unsigned int new_size
-            = limit * fem_geometry->finite_elements.size();
+            = limit * fem_geometry.finite_elements.size();
         for (unsigned int i = 0; i < new_size; i++) {
             finite_elements.push_back(
-                fem_geometry->finite_elements[i]);
+                fem_geometry.finite_elements[i]);
         }
-        fem_geometry->finite_elements = finite_elements;
+        fem_geometry.finite_elements = finite_elements;
         // </limit>
 
-        soft_body_objects.soft_body_fem_render = CreateRenderComponent(
-            *fem_geometry);
-        RegisterRenderComponent(soft_body_objects.soft_body_fem_render,
-                                soft_body_objects,
-                                rendering_effects);
-        soft_body_objects.soft_body_fem->fem_model().fem_geometry(
-            std::move(fem_geometry));
+        soft_body_objects.soft_body_fem_component_builder->fem_render(
+            CreateRenderComponent(fem_geometry));
+        RegisterRenderComponent(
+            soft_body_objects.soft_body_fem_component_builder->fem_render(),
+            soft_body_objects,
+            rendering_effects);
+        soft_body_objects.soft_body_fem_component_builder->GetFEMGeometry()
+            = fem_geometry;
+
         return true;
     }
 

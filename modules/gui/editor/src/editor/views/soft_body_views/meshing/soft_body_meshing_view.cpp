@@ -21,7 +21,7 @@ bool SoftBodyMeshingView::Render(SoftBodyEditorObjects &soft_body_objects,
                                  SoftBodyRenderingEffects &rendering_effects){
     RenderSettings();
     bool is_mesh_created = RenderCreation(soft_body_objects,
-                                       rendering_effects);
+                                          rendering_effects);
     RenderInfo();
 
     return is_mesh_created;
