@@ -21,7 +21,7 @@ ScreenWindowView::ScreenWindowView(
 void ScreenWindowView::Render() {
     ImGuiStyle &style = ImGui::GetStyle();
     auto old_windowbg = style.Colors[ImGuiCol_WindowBg];
-    if (selected_view_ && selected_view_ == scene_screen_view_) {
+    if (current_selected_view_ && current_selected_view_ == scene_screen_view_) {
         style.Colors[ImGuiCol_WindowBg].w = 0;
     }
 

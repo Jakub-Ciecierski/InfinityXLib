@@ -8,6 +8,7 @@
 #include <game/components/render/render_component.h>
 #include "game/resources/resource_context.h"
 #include <game/components/physics/soft_body_fem_component.h>
+#include <game/components/cameras/camera_component.h>
 
 #include <physics/physics_simulation.h>
 
@@ -125,7 +126,6 @@ void SoftBodyView::RenderLeftColumn() {
             if(RenderError(builder)){
                 material_view_->Render(builder->GetMaterial());
             }
-
             break;
         case soft_body_views.boudary_conditions_id:
             if(RenderError(builder)){
@@ -136,7 +136,6 @@ void SoftBodyView::RenderLeftColumn() {
             }else{
                 boundarary_conditions_view_->ResetSelectedBoundaryCondition();
             }
-
             break;
         case soft_body_views.load_id:
             if(RenderError(builder)){
@@ -149,7 +148,6 @@ void SoftBodyView::RenderLeftColumn() {
                                         builder->fem_render(),
                                         rendering_effects_);
             }
-
             break;
         case soft_body_views.solver_id:
             if(RenderError(builder)){
@@ -158,7 +156,6 @@ void SoftBodyView::RenderLeftColumn() {
             break;
         default:
             break;
-
     }
 
     if(mesh_created){
@@ -220,12 +217,20 @@ bool SoftBodyView::RenderError(
         ImGui::TextWrapped("To edit existing SoftBody: select GameObject with "
                                "SoftBody Component");
         ImGui::PopStyleColor();
-        
+
         return_value = false;
 
         ImGui::EndChild();
     }
     return return_value;
+}
+
+void SoftBodyView::OnViewEnter(){
+    auto camera = game_updater_->engine_architecture()->engine_systems
+        .scene_container->GetActiveCamera();
+    camera->moveTo(glm::vec3(0, 0, 0));
+    camera->rotateTo(glm::vec3(0, 0, 0));
+    camera->scale(5);
 }
 
 }

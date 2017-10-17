@@ -272,7 +272,6 @@ void SoftBodyViewFactory::SetKeybinds(
                 movementSpeed * 0.1f);
             camera->move(yoffset * camera->GetUp() *
                 movementSpeed * 0.1f);
-
         },
         ifx::MouseControllerEventType {
             ifx::MouseControllerKeyType::MOUSE_MIDDLE,

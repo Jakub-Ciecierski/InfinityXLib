@@ -10,4 +10,12 @@ bool View::Terminate() {
     return true;
 }
 
+void View::OnViewEnter(){
+
+}
+
+void View::OnViewLeave(){
+
+}
+
 }

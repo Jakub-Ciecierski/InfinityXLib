@@ -104,6 +104,8 @@ public:
 
     SoftBodyScreenView& screen_view(){return *screen_view_;}
 
+    virtual void OnViewEnter() override;
+
 private:
     void RenderLeftColumn();
     void RenderRightColumn();

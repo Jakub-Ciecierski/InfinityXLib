@@ -59,7 +59,9 @@ protected:
 
     ImGuiWindowFlags flags_;
 
-    std::shared_ptr<View> selected_view_;
+    std::shared_ptr<View> current_selected_view_;
+    std::shared_ptr<View> last_selected_view_;
+
     std::vector<int> selected_views_;
 
 private:
@@ -68,6 +70,9 @@ private:
 
     void FetchWindowInfo();
     void FetchFocus();
+
+    void NotifyPotentialViewChange();
+    bool IsViewChanged();
 
     std::vector<std::shared_ptr<View>> views_;
 

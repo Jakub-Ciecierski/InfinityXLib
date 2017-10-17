@@ -11,7 +11,8 @@ WindowView::WindowView(std::string name) :
     is_focused_(false),
     name_(name),
     flags_(0),
-    selected_view_(nullptr) {}
+    current_selected_view_(nullptr),
+    last_selected_view_(nullptr){}
 
 WindowView::WindowView(std::vector<std::shared_ptr<View>> views,
                        std::string name) :
@@ -19,7 +20,8 @@ WindowView::WindowView(std::vector<std::shared_ptr<View>> views,
     is_focused_(false),
     name_(name),
     flags_(0),
-    selected_view_(nullptr),
+    current_selected_view_(nullptr),
+    last_selected_view_(nullptr),
     views_(views) {
     for (unsigned int i = 0; i < views.size(); i++) {
         selected_views_.push_back(0);
@@ -33,7 +35,8 @@ WindowView::WindowView(std::shared_ptr<View> view,
     is_focused_(false),
     name_(name),
     flags_(0),
-    selected_view_(nullptr) {
+    current_selected_view_(nullptr),
+    last_selected_view_(nullptr){
     views_.push_back(view);
 
     selected_views_.push_back(1);
@@ -90,6 +93,8 @@ void WindowView::RenderViewTabs() {
 }
 
 void WindowView::RenderSelectedView() {
+    last_selected_view_ = current_selected_view_;
+
     if (views_.size() == 0)
         return;
     unsigned int view_to_render = 0;
@@ -97,8 +102,10 @@ void WindowView::RenderSelectedView() {
         if (selected_views_[i] == 1)
             view_to_render = i;
     }
-    selected_view_ = views_[view_to_render];
-    selected_view_->Render();
+
+    current_selected_view_ = views_[view_to_render];
+    NotifyPotentialViewChange();
+    current_selected_view_->Render();
 }
 
 void WindowView::SetFlags(ImGuiWindowFlags flags) {
@@ -122,8 +129,21 @@ void WindowView::FetchFocus() {
         view->is_window_focused(false);
     }
 
-    if (selected_view_)
-        selected_view_->is_window_focused(is_focused_);
+    if (current_selected_view_)
+        current_selected_view_->is_window_focused(is_focused_);
+}
+
+void WindowView::NotifyPotentialViewChange(){
+    if(IsViewChanged()){
+        if(last_selected_view_)
+            last_selected_view_->OnViewLeave();
+        if(current_selected_view_)
+            current_selected_view_->OnViewEnter();
+    }
+}
+
+bool WindowView::IsViewChanged(){
+    return (last_selected_view_ != current_selected_view_);
 }
 
 }

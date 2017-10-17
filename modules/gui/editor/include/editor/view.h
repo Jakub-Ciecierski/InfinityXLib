@@ -18,6 +18,10 @@ public:
     const std::string &name() { return name_; }
 
     virtual void Render() = 0;
+
+    virtual void OnViewEnter();
+    virtual void OnViewLeave();
+
 private:
     std::string name_;
 
