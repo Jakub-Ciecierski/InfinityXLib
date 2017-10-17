@@ -33,11 +33,13 @@ std::shared_ptr<SoftBodyPicker> SoftBodyPickerFactory::Create(
                                         old_engine_architecture);
 
     auto node_selection = ifx::make_unique<SoftBodyNodeSelection>();
+    auto face_selection = ifx::make_unique<SoftBodyNodeSelection>();
 
     auto soft_body_picker = std::make_shared<SoftBodyPicker>(
         std::move(ray_casting),
         std::move(box_casting),
-        std::move(node_selection));
+        std::move(node_selection),
+        std::move(face_selection));
 
     return soft_body_picker;
 }
@@ -49,7 +51,6 @@ std::unique_ptr<BoxCasting> SoftBodyPickerFactory::CreateBoxCasting(
     auto box_rendering_effect = CreateRenderingEffect(old_engine_architecture);
     new_engine_architecture->engine_systems.renderer->scene_renderer()->
         Add(box_rendering_effect);
-
 
     // Position, Normal, TexCoord
     std::vector<Vertex> vertices = {

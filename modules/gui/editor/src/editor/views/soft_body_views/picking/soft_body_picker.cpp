@@ -14,20 +14,23 @@
 #include <common/unique_ptr.h>
 
 #include <gui/imgui/imgui.h>
+#include <RTFEM/FEM/Meshing/Intersections.h>
 
 namespace ifx {
 
 SoftBodyPicker::SoftBodyPicker(
     std::unique_ptr<RayCasting> ray_casting,
     std::unique_ptr<BoxCasting> box_casting,
-    std::unique_ptr<SoftBodyNodeSelection> node_selection) :
+    std::unique_ptr<SoftBodyNodeSelection> node_selection,
+    std::unique_ptr<SoftBodyNodeSelection> face_selection) :
     current_picked_(nullptr),
     ray_casting_(std::move(ray_casting)),
     box_casting_(std::move(box_casting)),
-    node_selection_(std::move(node_selection)) {
+    node_selection_(std::move(node_selection)),
+    face_selection_(std::move(face_selection)){
 }
 
-void SoftBodyPicker::Pick(std::shared_ptr<RenderComponent> render_component,
+void SoftBodyPicker::Pick(SoftBodyFEMComponentBuilder<double>* soft_body_builder,
                           std::shared_ptr<CameraComponent> camera,
                           float window_width,
                           float window_height,
@@ -36,22 +39,26 @@ void SoftBodyPicker::Pick(std::shared_ptr<RenderComponent> render_component,
         box_casting_->Finish();
         return;
     }
-    if(!CheckCorrectness(render_component)) {
+    if(!CheckCorrectness(soft_body_builder->fem_render())) {
         return;
     }
-    BoxCastingPick(render_component,
+    BoxCastingPick(soft_body_builder->fem_render(),
                    camera,
                    window_width,
                    window_height,
                    viewport_space);
-    RayCastingPick(render_component,
+    RayCastingPick(soft_body_builder,
                    camera,
                    window_width,
                    window_height,
                    viewport_space);
 
+    ColorSelectedVertices(*(soft_body_builder->fem_render()->
+        models()[0]->getMesh(0)->vbo()));
+    ColorSelectedFaces(*(soft_body_builder->fem_render()->
+                           models()[0]->getMesh(0)->vbo()),
+                       soft_body_builder->GetFEMGeometry().triangle_faces);
 
-    ColorSelectedVertices(*(render_component->models()[0]->getMesh(0)->vbo()));
 }
 
 bool SoftBodyPicker::CheckViewportCorrectness(
@@ -80,30 +87,32 @@ bool SoftBodyPicker::CheckCorrectness(
 }
 
 void SoftBodyPicker::RayCastingPick(
-    std::shared_ptr<RenderComponent> render_component,
+    SoftBodyFEMComponentBuilder<double>* soft_body_builder,
     std::shared_ptr<CameraComponent> camera,
     float window_width,
     float window_height,
     const glm::vec2 &viewport_space){
-    if(!node_selection_->IsInputRayCasting())
-        return;
+    auto ray = UpdateRayCasting(camera, window_width, window_height,
+                                viewport_space);
 
-    UpdateRayCasting(camera, window_width, window_height);
-    auto ray = ray_casting_->ComputeRay(viewport_space);
-
-    auto mesh = render_component->models()[0]->getMesh(0);
-    auto intersection_count =
-        ComputeRayIntersection(render_component->GetModelMatrix(),
-                               mesh->vertices(),
-                               ray);
-    if(intersection_count < 1 && !node_selection_->IsInputShiftModifier()){
-        node_selection_->Reset();
+    if(node_selection_->IsInputRayCasting()){
+        ComputeRayIntersection(
+            soft_body_builder->fem_render()->GetModelMatrix(),
+            soft_body_builder->fem_render()->models()[0]->getMesh(0)->vertices(),
+            ray);
     }
+
+    ComputeTriangleRayIntersection(
+        soft_body_builder->fem_render()->GetModelMatrix(),
+        soft_body_builder->GetFEMGeometry().triangle_faces,
+        soft_body_builder->GetFEMGeometry().vertices,
+        ray);
 }
 
-void SoftBodyPicker::UpdateRayCasting(std::shared_ptr<CameraComponent> camera,
+Ray SoftBodyPicker::UpdateRayCasting(std::shared_ptr<CameraComponent> camera,
                                       float window_width,
-                                      float window_height) {
+                                      float window_height,
+                                      const glm::vec2 &viewport_space) {
     ray_casting_->projection(camera->getProjectionMatrix());
     ray_casting_->view(camera->getViewMatrix());
     if (camera->camera_style() == CameraStyle::ThirdPerson) {
@@ -116,6 +125,8 @@ void SoftBodyPicker::UpdateRayCasting(std::shared_ptr<CameraComponent> camera,
 
     ray_casting_->window_width(window_width);
     ray_casting_->window_height(window_height);
+
+    return ray_casting_->ComputeRay(viewport_space);
 }
 
 int SoftBodyPicker::ComputeRayIntersection(
@@ -136,7 +147,60 @@ int SoftBodyPicker::ComputeRayIntersection(
         }
         index++;
     }
+
+    if(intersection_count < 1 && !node_selection_->IsInputShiftModifier()){
+        node_selection_->Reset();
+    }
+
     return intersection_count;
+}
+
+void SoftBodyPicker::ComputeTriangleRayIntersection(
+    const glm::mat4 &model_matrix,
+    const std::vector<rtfem::TriangleFace>& triangle_faces,
+    const std::vector<std::shared_ptr<rtfem::Vertex<double>>>& vertices,
+    const Ray &ray){
+    auto rtfem_ray = rtfem::Ray<double>{
+        Eigen::Vector3<double>(ray.origin.x, ray.origin.y, ray.origin.z),
+        Eigen::Vector3<double>(ray.direction.x, ray.direction.y, ray.direction.z)};
+
+    int index = 0;
+    for (const auto &triangle_face : triangle_faces) {
+        auto rtfem_vertex1 = vertices[triangle_face.v1];
+        auto rtfem_vertex2 = vertices[triangle_face.v2];
+        auto rtfem_vertex3 = vertices[triangle_face.v3];
+
+        auto glm_vertex1_4 = glm::vec4(glm::vec3(
+            rtfem_vertex1->x(), rtfem_vertex1->y(), rtfem_vertex1->z()), 1);
+        auto glm_vertex2_4 = glm::vec4(glm::vec3(
+            rtfem_vertex2->x(), rtfem_vertex2->y(), rtfem_vertex2->z()), 1);
+        auto glm_vertex3_4 = glm::vec4(glm::vec3(
+            rtfem_vertex3->x(), rtfem_vertex3->y(), rtfem_vertex3->z()), 1);
+
+        auto glm_world_vertex1 = glm::vec3(model_matrix * glm_vertex1_4);
+        auto glm_world_vertex2 = glm::vec3(model_matrix * glm_vertex2_4);
+        auto glm_world_vertex3 = glm::vec3(model_matrix * glm_vertex3_4);
+
+        if(rtfem::Intersects(rtfem_ray,
+                          rtfem::TriangleFaceWithPoints<double>{
+                              Eigen::Vector3<double>(
+                                  glm_world_vertex1.x,
+                                  glm_world_vertex1.y,
+                                  glm_world_vertex1.z),
+                              Eigen::Vector3<double>(
+                                  glm_world_vertex2.x,
+                                  glm_world_vertex2.y,
+                                  glm_world_vertex2.z),
+                              Eigen::Vector3<double>(
+                                  glm_world_vertex3.x,
+                                  glm_world_vertex3.y,
+                                  glm_world_vertex3.z)
+                          })){
+            face_selection_->NotifyIntersection(index, SelectionType::Ray);
+        }
+
+        index++;
+    }
 }
 
 void SoftBodyPicker::BoxCastingPick(
@@ -190,7 +254,6 @@ void SoftBodyPicker::ComputeBoxIntersection(
             node_selection_->NotifyIntersection(i, SelectionType::Box);
         }
     };
-
 }
 
 void SoftBodyPicker::UpdateBoxCasting(std::shared_ptr<CameraComponent> camera,
@@ -204,7 +267,7 @@ void SoftBodyPicker::UpdateBoxCasting(std::shared_ptr<CameraComponent> camera,
 
 void SoftBodyPicker::ColorSelectedVertices(
     VBO& vbo){
-    const auto selected_color = glm::vec2(10, 10);
+    const auto selected_color = glm::vec2(10, 0);
     const auto not_selected_color = glm::vec2(0, 0);
 
     bool value_changed = false;
@@ -227,5 +290,28 @@ void SoftBodyPicker::ColorSelectedVertices(
     if(value_changed)
         vbo.Update();
 }
+
+void SoftBodyPicker::ColorSelectedFaces(
+    VBO& vbo,
+    const std::vector<rtfem::TriangleFace>& triangle_faces){
+    const auto selected_color = glm::vec2(10, 10);
+    const auto not_selected_color = glm::vec2(0, 0);
+
+    auto* vertices = vbo.vertices();
+    for(unsigned int i = 0; i < triangle_faces.size(); i++){
+        if(face_selection_->IsSelected(i)){
+            (*vertices)[triangle_faces[i].v1].TexCoords = selected_color;
+            (*vertices)[triangle_faces[i].v2].TexCoords = selected_color;
+            (*vertices)[triangle_faces[i].v3].TexCoords = selected_color;
+        }else{
+            (*vertices)[triangle_faces[i].v1].TexCoords = not_selected_color;
+            (*vertices)[triangle_faces[i].v2].TexCoords = not_selected_color;
+            (*vertices)[triangle_faces[i].v3].TexCoords = not_selected_color;
+        }
+    }
+
+    vbo.Update();
+}
+
 
 }

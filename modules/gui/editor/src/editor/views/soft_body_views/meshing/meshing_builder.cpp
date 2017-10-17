@@ -47,7 +47,7 @@ rtfem::TriangleMeshIndexed<double> MeshingBuilder::CreateTriangleMesh(
                     throw std::invalid_argument(
                         "CreateTriangleMesh Triangle out of bounds");
                 }
-                auto triangle = rtfem::TriangleIndices{
+                auto triangle = rtfem::TriangleFace{
                     indices[starting_index + v1],
                     indices[starting_index + v2],
                     indices[starting_index + v3]};

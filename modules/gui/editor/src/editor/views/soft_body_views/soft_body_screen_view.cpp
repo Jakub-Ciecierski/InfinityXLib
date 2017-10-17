@@ -9,6 +9,7 @@
 
 #include <game/components/cameras/camera_component.h>
 #include <game/components/render/render_component.h>
+#include <game/components/physics/builder/soft_body_fem_component_builder.h>
 
 #include <editor/views/soft_body_views/picking/ray_casting.h>
 #include <editor/views/soft_body_views/picking/soft_body_picker.h>
@@ -28,12 +29,24 @@ namespace ifx {
 SoftBodyScreenView::SoftBodyScreenView(
     std::shared_ptr<SoftBodyPicker> soft_body_picker) :
     camera_(nullptr),
-    picker_(soft_body_picker){
-}
+    picker_(soft_body_picker),
+    screen_width_(0),
+    screen_height_(0) {}
 
 void SoftBodyScreenView::Render(
     std::shared_ptr<Renderer> renderer,
-    std::shared_ptr<RenderComponent> render_component) {
+    SoftBodyFEMComponentBuilder<double>* soft_body_builder) {
+    RenderImage(renderer);
+
+    if(soft_body_builder){
+        Pick(soft_body_builder,
+             ComputeLocalMousePosition());
+    }
+
+}
+
+void SoftBodyScreenView::RenderImage(
+    std::shared_ptr<Renderer> renderer){
     auto fbo_renderer = std::dynamic_pointer_cast<FBORenderer>(renderer);
     if (!fbo_renderer)
         return;
@@ -43,12 +56,15 @@ void SoftBodyScreenView::Render(
     ImTextureID im_tex_id = (ImTextureID) (tex_id);
     auto width_ratio = ImGui::GetColumnWidth() / texture.width();
 
-    auto image_width = texture.width() * width_ratio;
-    auto image_height = texture.height() * width_ratio;
-    ImGui::Image(im_tex_id, ImVec2(image_width, image_height));
+    screen_width_ = texture.width() * width_ratio;
+    screen_height_ = texture.height() * width_ratio;
 
+    ImGui::Image(im_tex_id, ImVec2(screen_width_, screen_height_));
+}
+
+glm::vec2 SoftBodyScreenView::ComputeLocalMousePosition(){
     auto image_begin_x = ImGui::GetCursorScreenPos().x;
-    auto image_begin_y = ImGui::GetCursorScreenPos().y - image_height;
+    auto image_begin_y = ImGui::GetCursorScreenPos().y - screen_height_;
 
     auto mouse_x = ImGui::GetMousePos().x;
     auto mouse_y = ImGui::GetMousePos().y;
@@ -56,13 +72,20 @@ void SoftBodyScreenView::Render(
     auto local_mouse_x = mouse_x - image_begin_x;
     auto local_mouse_y = mouse_y - image_begin_y;
 
+    return glm::vec2(local_mouse_x, local_mouse_y);
+}
+
+void SoftBodyScreenView::Pick(
+    SoftBodyFEMComponentBuilder<double>* soft_body_builder,
+    const glm::vec2& mouse_position){
     if (!camera_) {
         return;
     }
-    picker_->Pick(render_component, camera_,
-                  image_width, image_height,
-                  glm::vec2(local_mouse_x, local_mouse_y));
 
+    picker_->Pick(soft_body_builder,
+                  camera_,
+                  screen_width_, screen_height_,
+                  mouse_position);
 }
 
 std::unique_ptr<Mesh> SoftBodyScreenView::CreateLine(const glm::vec3 &p1,

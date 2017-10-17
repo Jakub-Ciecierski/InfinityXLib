@@ -14,4 +14,8 @@ void main() {
 	float r = VertexID / 150.0;
 
 	color = vec4(vec3(1,0,0), alpha);
+	
+	if(TexCoords.y == 10.0f){
+		color = vec4(vec3(0,0,1), alpha);
+	}
 }

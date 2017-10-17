@@ -33,6 +33,7 @@ public:
     bool IsInputEndBoxCasting();
     bool IsInputRayCasting();
     bool IsInputShiftModifier();
+
 private:
 
     std::vector<unsigned int> selected_vertices_;

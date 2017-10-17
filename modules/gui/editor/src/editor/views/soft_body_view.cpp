@@ -181,7 +181,7 @@ void SoftBodyView::RenderRightColumn() {
 
     screen_view_->Render(
         game_updater_->engine_architecture()->engine_systems.renderer,
-        fem_render_component);
+        soft_body_objects_.soft_body_fem_component_builder.get());
 }
 
 void SoftBodyView::OnSetSelectedGameObject(
