@@ -1,6 +1,8 @@
 #include "game/components/physics/soft_body_fem_component.h"
 
 #include <RTFEM/FEM/FEMGeometry.h>
+#include <RTFEM/FEM/BoundaryConditionContainer.h>
+#include <RTFEM/FEM/BoundaryCondition.h>
 
 namespace ifx {
 

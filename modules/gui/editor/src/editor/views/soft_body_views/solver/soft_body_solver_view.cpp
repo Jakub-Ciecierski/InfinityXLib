@@ -49,7 +49,6 @@ void SoftBodySolverView::Render(SoftBodyEditorObjects& soft_body_objects){
                 coordinates + Eigen::Vector3<double>(
                     displacement_x, displacement_y, displacement_z)
             );
-
         }
 
         vbo->Update();

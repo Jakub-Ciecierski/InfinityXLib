@@ -14,6 +14,8 @@
 
 #include "RTFEM/FEM/FEMModel.h"
 #include <RTFEM/FEM/FEMGeometry.h>
+#include <RTFEM/FEM/BoundaryConditionContainer.h>
+#include <RTFEM/FEM/BoundaryCondition.h>
 
 namespace ifx {
 

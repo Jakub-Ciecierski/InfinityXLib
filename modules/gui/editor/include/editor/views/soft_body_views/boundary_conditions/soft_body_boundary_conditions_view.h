@@ -4,6 +4,7 @@
 #include <memory>
 
 #include <RTFEM/FEM/FEMModel.h>
+#include <RTFEM/FEM/BoundaryCondition.h>
 
 namespace ifx {
 

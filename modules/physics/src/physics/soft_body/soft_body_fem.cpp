@@ -1,6 +1,8 @@
 #include "physics/soft_body/soft_body_fem.h"
 
 #include <RTFEM/FEM/FEMGeometry.h>
+#include <RTFEM/FEM/BoundaryConditionContainer.h>
+#include <RTFEM/FEM/BoundaryCondition.h>
 
 namespace ifx {
 

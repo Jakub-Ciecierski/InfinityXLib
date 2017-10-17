@@ -9,7 +9,10 @@
 #include <gui/imgui/imgui.h>
 
 #include <RTFEM/FEM/FEMGeometry.h>
+#include <RTFEM/FEM/BoundaryConditionContainer.h>
+#include <RTFEM/FEM/BoundaryCondition.h>
 #include <RTFEM/FEM/Vertex.h>
+
 #include <iostream>
 
 namespace ifx {
@@ -79,10 +82,9 @@ SoftBodyBoundaryConditionsView::RenderCurrentBoundaryConditionsContextMenu(
     rtfem::FEMModel<double>& fem_model){
     if (ImGui::BeginPopupContextItem("Current BC Context Menu")) {
         if (ImGui::Selectable("Clear")) {
-            auto boundary_conditions = fem_model.boundary_conditions();
-            for(const auto& boundary_condition : boundary_conditions){
-                fem_model.RemoveBoundaryCondition(boundary_condition);
-            }
+            auto& boundary_conditions = fem_model.boundary_conditions();
+            boundary_conditions.Clear();
+
             selected_boundary_condition_ = nullptr;
         }
         ImGui::EndPopup();
@@ -95,7 +97,7 @@ void SoftBodyBoundaryConditionsView::RenderCurrentBoundaryConditions(
     std::vector<rtfem::BoundaryCondition<double>> boundary_conditions_to_remove;
 
     static int selection_mask = (1 << 2);
-    for (unsigned int i = 0; i < boundary_conditions.size(); i++) {
+    for (unsigned int i = 0; i < boundary_conditions.Size(); i++) {
         auto name = std::to_string(boundary_conditions[i].vertex_id);
         int node_clicked = -1;
         ImGuiTreeNodeFlags node_flags
@@ -124,7 +126,8 @@ void SoftBodyBoundaryConditionsView::RenderCurrentBoundaryConditions(
     }
 
     for(const auto& boundary_condition : boundary_conditions_to_remove){
-        fem_model.RemoveBoundaryCondition(boundary_condition);
+        fem_model.boundary_conditions().
+            RemoveBoundaryCondition(boundary_condition);
     }
 }
 
@@ -178,7 +181,8 @@ void SoftBodyBoundaryConditionsView::RenderNewBoundaryConditions(
                 values[0], values[1], values[2]);
             auto new_boundary_condition = rtfem::BoundaryCondition<double>{
                 vertex->id(), value};
-            fem_model.AddBoundaryCondition(new_boundary_condition);
+            fem_model.boundary_conditions().
+                AddBoundaryCondition(new_boundary_condition);
 
             selected_boundary_condition_ = nullptr;
         }
