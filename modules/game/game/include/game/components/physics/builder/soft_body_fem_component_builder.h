@@ -4,6 +4,7 @@
 #include <RTFEM/FEM/FEMGeometry.h>
 #include <RTFEM/FEM/Material.h>
 #include <RTFEM/FEM/BoundaryConditionContainer.h>
+#include <RTFEM/FEM/FEMModel.h>
 
 namespace ifx {
 
@@ -41,15 +42,8 @@ public:
     rtfem::BoundaryConditionContainer<T>& GetBoundaryConditions();
     Eigen::Vector3<T>& GetBodyForce();
 
-    SoftBodyFEMComponentBuilder& SetFEMGeometry(
-        const rtfem::FEMGeometry<T>& fem_geometry);
-    SoftBodyFEMComponentBuilder& SetMaterial(
-        const rtfem::Material<T>& material);
-    SoftBodyFEMComponentBuilder& SetBoundaryConditions(
-        const rtfem::BoundaryConditionContainer<T>& boundary_conditions);
-    SoftBodyFEMComponentBuilder& SetBodyForce(
-        const Eigen::Vector3<T>& body_force);
 private:
+    std::unique_ptr<rtfem::FEMModel<T>> BuildFEMModel();
 
     rtfem::FEMGeometry<T> fem_geometry_;
 

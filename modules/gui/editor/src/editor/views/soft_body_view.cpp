@@ -198,8 +198,32 @@ bool SoftBodyView::RenderError(
     SoftBodyFEMComponentBuilder<double>* soft_body_fem_component_builder){
     bool return_value = true;
     if(!soft_body_fem_component_builder){
-        ImGui::TextColored(ImVec4(255,0,0,255), "No Game Object Selected");
+        ImGui::BeginChild(ImGui::GetID((void *) (intptr_t) 1),
+                          ImVec2(-1, -1), false);
+
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(255, 0, 0, 255));
+        ImGui::Bullet();
+        ImGui::SameLine();
+        ImGui::TextWrapped("No Game Object Selected");
+        ImGui::PopStyleColor();
+
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0, 255, 0, 255));
+        ImGui::Bullet();
+        ImGui::SameLine();
+        ImGui::TextWrapped("To create new SoftBody: select GameObject with "
+                               "single RenderComponent");
+        ImGui::PopStyleColor();
+
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0, 255, 0, 255));
+        ImGui::Bullet();
+        ImGui::SameLine();
+        ImGui::TextWrapped("To edit existing SoftBody: select GameObject with "
+                               "SoftBody Component");
+        ImGui::PopStyleColor();
+        
         return_value = false;
+
+        ImGui::EndChild();
     }
     return return_value;
 }

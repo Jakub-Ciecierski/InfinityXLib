@@ -4,7 +4,7 @@
 
 #include <common/unique_ptr.h>
 
-#include <RTFEM/FEM/FEMModel.h>
+
 #include <RTFEM/FEM/BoundaryCondition.h>
 
 namespace ifx {
@@ -19,15 +19,23 @@ SoftBodyFEMComponentBuilder<T>::SoftBodyFEMComponentBuilder() :
 template<class T>
 std::shared_ptr<SoftBodyFEMComponent<T>>
 SoftBodyFEMComponentBuilder<T>::Build(){
-    auto fem_model = ifx::make_unique<rtfem::FEMModel<T>>(
-        fem_geometry_, std::move(material_));
+    auto fem_model = BuildFEMModel();
+
+    auto soft_body_fem_component
+        = std::make_shared<SoftBodyFEMComponent<T>>(std::move(fem_model));
+
+    return soft_body_fem_component;
+}
+
+template<class T>
+std::unique_ptr<rtfem::FEMModel<T>>
+SoftBodyFEMComponentBuilder<T>::BuildFEMModel(){
+    auto fem_model = ifx::make_unique<rtfem::FEMModel<T>>(fem_geometry_);
+    fem_model->material(material_);
     fem_model->SetBodyForce(body_force_);
     fem_model->boundary_conditions(boundary_conditions_);
 
-    auto soft_body_fem_component = std::make_shared<SoftBodyFEMComponent<T>>(
-        std::move(fem_model));
-
-    return soft_body_fem_component;
+    return fem_model;
 }
 
 template<class T>
@@ -49,32 +57,6 @@ SoftBodyFEMComponentBuilder<T>::GetBoundaryConditions(){
 template<class T>
 Eigen::Vector3<T>& SoftBodyFEMComponentBuilder<T>::GetBodyForce(){
     return body_force_;
-}
-
-template<class T>
-SoftBodyFEMComponentBuilder<T>& SoftBodyFEMComponentBuilder<T>::SetFEMGeometry(
-    const rtfem::FEMGeometry<T>& fem_geometry){
-
-}
-
-template<class T>
-SoftBodyFEMComponentBuilder<T>& SoftBodyFEMComponentBuilder<T>::SetMaterial(
-    const rtfem::Material<T>& material){
-
-}
-
-template<class T>
-SoftBodyFEMComponentBuilder<T>&
-SoftBodyFEMComponentBuilder<T>::SetBoundaryConditions(
-    const rtfem::BoundaryConditionContainer<T>& boundary_conditions){
-
-
-}
-
-template<class T>
-SoftBodyFEMComponentBuilder<T>& SoftBodyFEMComponentBuilder<T>::SetBodyForce(
-    const Eigen::Vector3<T>& body_force){
-
 }
 
 template
