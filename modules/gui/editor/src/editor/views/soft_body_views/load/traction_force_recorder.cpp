@@ -40,6 +40,11 @@ void TractionForceRecorder::End(){
     render_component_->do_render(false);
 }
 
+float TractionForceRecorder::GetMagnitude(){
+    glm::distance(viewport_position_begin_,
+                  viewport_position_end_);
+}
+
 glm::vec4 TractionForceRecorder::ToHomogeneousClipSpace(const glm::vec2& a){
     auto nds = ViewPortSpace2NormalisedDeviceSpace(a,
                                                    window_width_,

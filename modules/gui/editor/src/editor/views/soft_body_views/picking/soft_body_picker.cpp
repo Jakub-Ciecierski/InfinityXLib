@@ -181,6 +181,10 @@ void SoftBodyPicker::ComputeTriangleRayIntersection(
     Triangle closest_triangle;
 
     for (const auto &triangle_face : triangle_faces) {
+        if(!triangle_face.is_boundary_face){
+            index++;
+            continue;
+        }
         auto rtfem_vertex1 = vertices[triangle_face.v1];
         auto rtfem_vertex2 = vertices[triangle_face.v2];
         auto rtfem_vertex3 = vertices[triangle_face.v3];

@@ -19,6 +19,7 @@ public:
                 const glm::vec2& viewport_position);
     void End();
 
+    float GetMagnitude();
 private:
     glm::vec4 ToHomogeneousClipSpace(const glm::vec2& a);
 

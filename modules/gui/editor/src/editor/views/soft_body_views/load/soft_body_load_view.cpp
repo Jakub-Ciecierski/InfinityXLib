@@ -11,6 +11,7 @@
 #include <gui/imgui/imgui.h>
 
 #include <common/unique_ptr.h>
+#include <iostream>
 
 namespace ifx {
 
@@ -69,6 +70,7 @@ void SoftBodyLoadView::RenderTractionForce(){
         }
         if(ImGui::IsMouseReleased(0)){
             traction_force_recorder_->End();
+            traction_force_recorder_->GetMagnitude();
         }
         traction_force_recorder_->Update(
             soft_body_picker_->window_width(),
