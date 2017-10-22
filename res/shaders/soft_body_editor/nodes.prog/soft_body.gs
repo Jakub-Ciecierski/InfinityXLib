@@ -14,7 +14,7 @@ void draw_node(vec4 position, int index){
 	if(a > max){
 		a = max;
 	}
-	if(gTexCoords[index].x == 10.0f){
+	if(gTexCoords[index].x == 10.0f || gTexCoords[index].y == 10.0f){
 		a = 2 * a;
 		b = 2 * b;
 	}

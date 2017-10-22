@@ -59,4 +59,50 @@ SphereRayIntersectionOutput RayCasting::ComputeQuadratic(
     return SphereRayIntersectionOutput{0, -1, -1};
 }
 
+TriangleRayIntersectionOutput RayCasting::TriangleRayIntersection(
+    const Ray& ray,
+    const Triangle& triangle){
+    TriangleRayIntersectionOutput output;
+    output.is_intersection = false;
+
+    const float EPSILON = 0.0000001;
+    auto vertex0 = triangle.v1;
+    auto vertex1 = triangle.v2;
+    auto vertex2 = triangle.v3;
+
+    auto edge1 = vertex1 - vertex0;
+    auto edge2 = vertex2 - vertex0;
+    auto h = glm::cross(ray.direction, edge2);
+    auto a = glm::dot(edge1, h);
+
+    if (a > -EPSILON && a < EPSILON){
+        return output;
+    }
+
+    auto f = 1.0f / a;
+    auto s = ray.origin - vertex0;
+    auto u = f * (glm::dot(s,h));
+    if (u < 0.0 || u > 1.0){
+        return output;
+    }
+
+    auto q = glm::cross(s, edge1);
+    auto v = f * glm::dot(ray.direction, q);
+    if (v < 0.0 || u + v > 1.0){
+        return output;
+    }
+
+    auto t = f * glm::dot(edge2, q);
+    if (t > EPSILON) // ray intersection
+    {
+        output.intersection_point = ray.origin + (
+            ray.direction * (t * glm::length(ray.direction)));
+        output.is_intersection = true;
+        return output;
+    }
+    else{
+        return output;
+    }
+}
+
 }

@@ -21,6 +21,19 @@ struct SphereRayIntersectionOutput{
     float t2;
 };
 
+
+struct Triangle{
+    glm::vec3 v1;
+    glm::vec3 v2;
+    glm::vec3 v3;
+};
+
+
+struct TriangleRayIntersectionOutput{
+    bool is_intersection;
+    glm::vec3 intersection_point;
+};
+
 class RayCasting {
 public:
     RayCasting();
@@ -38,6 +51,10 @@ public:
 
     SphereRayIntersectionOutput RaySphereIntersection(const Ray& ray,
                                                       const Sphere& sphere);
+
+    TriangleRayIntersectionOutput TriangleRayIntersection(
+        const Ray& ray,
+        const Triangle& triangle);
 private:
     SphereRayIntersectionOutput ComputeQuadratic(float a, float b, float c);
 

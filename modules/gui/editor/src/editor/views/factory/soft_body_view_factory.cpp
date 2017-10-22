@@ -19,6 +19,7 @@
 #include "editor/views/soft_body_views/picking/soft_body_picker.h"
 #include "editor/views/soft_body_views/picking/soft_body_node_selection.h"
 #include <editor/views/soft_body_views/picking/factory/soft_body_picker_factory.h>
+#include <editor/views/soft_body_views/load/traction_force_recorder.h>
 
 #include <game/factory/game_systems_factory.h>
 #include <game/game_updater.h>
@@ -47,13 +48,13 @@
 #include <math/print_math.h>
 
 #include <iostream>
+#include <editor/views/soft_body_views/load/soft_body_load_view_factory.h>
 
 namespace ifx {
 
 const std::string NODE_RENDERING_EFFECT_NAME = "soft_body_editor/nodes.prog";
 const std::string EDGES_RENDERING_EFFECT_NAME = "soft_body_editor/edges.prog";
 const std::string FACES_RENDERING_EFFECT_NAME = "soft_body_editor/faces.prog";
-
 
 SoftBodyViewFactory::SoftBodyViewFactory(
     std::shared_ptr<EngineArchitecture> engine_architecture) :
@@ -69,11 +70,15 @@ std::shared_ptr<View> SoftBodyViewFactory::Create() {
     auto soft_body_picker = SoftBodyPickerFactory().Create(
         engine_architecture, engine_architecture_);
 
+    auto soft_body_load_view = SoftBodyLoadViewFactory().Create(
+        engine_architecture, engine_architecture_, soft_body_picker);
+
     auto game_updater = ifx::make_unique<GameUpdater>(engine_architecture);
     auto soft_body_view = std::make_shared<SoftBodyView>(
         std::move(game_updater),
         soft_body_rendering_effects,
-        soft_body_picker);
+        soft_body_picker,
+        std::move(soft_body_load_view));
 
     SetDefaultScene(engine_architecture->engine_systems.scene_container,
                     soft_body_view);

@@ -37,6 +37,7 @@
 #include <editor/views/soft_body_views/picking/box_casting.h>
 #include "editor/views/soft_body_views/picking/soft_body_picker.h"
 #include "editor/views/soft_body_views/picking/soft_body_node_selection.h"
+#include <editor/views/soft_body_views/load/traction_force_recorder.h>
 
 #include <common/unique_ptr.h>
 
@@ -46,12 +47,14 @@ namespace ifx {
 
 SoftBodyView::SoftBodyView(std::unique_ptr<GameUpdater> game_updater,
                            const SoftBodyRenderingEffects &rendering_effects,
-                           std::shared_ptr<SoftBodyPicker> soft_body_picker) :
+                           std::shared_ptr<SoftBodyPicker> soft_body_picker,
+                           std::unique_ptr<SoftBodyLoadView> load_view) :
     View("Soft Body"),
     game_updater_(std::move(game_updater)),
     rendering_effects_(rendering_effects),
     soft_body_objects_(SoftBodyEditorObjects{nullptr, nullptr}),
     first_render_(true),
+    load_view_(std::move(load_view)),
     soft_body_fem_(nullptr){
     screen_view_ = ifx::make_unique<SoftBodyScreenView>(soft_body_picker);
     selector_ = ifx::make_unique<SoftBodySelector>(
@@ -68,7 +71,7 @@ SoftBodyView::SoftBodyView(std::unique_ptr<GameUpdater> game_updater,
     boundarary_conditions_view_
         = ifx::make_unique<SoftBodyBoundaryConditionsView>(
         soft_body_picker);
-    load_view_ = ifx::make_unique<SoftBodyLoadView>();
+
     solver_view_ = ifx::make_unique<SoftBodySolverView>();
 }
 

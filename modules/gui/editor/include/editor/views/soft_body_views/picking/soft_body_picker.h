@@ -38,12 +38,24 @@ public:
     const SoftBodyNodeSelection& node_selection() const {
         return *node_selection_;
     }
+    const SoftBodyNodeSelection& face_selection() const {
+        return *face_selection_;
+    }
+
+    float window_width(){return window_width_;}
+    float window_height(){return window_height_;}
+
+    const glm::vec2& last_mouse_position(){return last_mouse_position_;}
 
     void Pick(SoftBodyFEMComponentBuilder<double>* soft_body_builder,
               std::shared_ptr<CameraComponent> camera,
               float window_width,
               float window_height,
               const glm::vec2 &viewport_space);
+
+    void EnableBoxCasting();
+    void DisableBoxCasting();
+
 private:
     bool CheckViewportCorrectness(
         float window_width, float window_height,
@@ -105,6 +117,13 @@ private:
     std::unique_ptr<SoftBodyNodeSelection> face_selection_;
 
     const float SPHERE_RADIUS = 0.1f;
+
+    float window_width_;
+    float window_height_;
+
+    glm::vec2 last_mouse_position_;
+
+    bool is_box_casting_enabled_;
 };
 
 }
