@@ -44,6 +44,7 @@ void SoftBodyPicker::Pick(SoftBodyFEMComponentBuilder<double>* soft_body_builder
     last_mouse_position_ = viewport_space;
     if(!CheckViewportCorrectness(window_width, window_height, viewport_space)){
         box_casting_->Finish();
+        face_selection_->Reset();
         return;
     }
     if(!CheckCorrectness(soft_body_builder->fem_render())) {
@@ -170,7 +171,7 @@ int SoftBodyPicker::ComputeRayIntersection(
 
 void SoftBodyPicker::ComputeTriangleRayIntersection(
     const glm::mat4 &model_matrix,
-    const std::vector<rtfem::TriangleFace>& triangle_faces,
+    const std::vector<rtfem::TriangleFace<double>>& triangle_faces,
     const std::vector<std::shared_ptr<rtfem::Vertex<double>>>& vertices,
     const Ray &ray){
     int index = 0;
@@ -314,7 +315,7 @@ void SoftBodyPicker::ColorSelectedVertices(
 
 void SoftBodyPicker::ColorSelectedFaces(
     VBO& vbo,
-    const std::vector<rtfem::TriangleFace>& triangle_faces){
+    const std::vector<rtfem::TriangleFace<double>>& triangle_faces){
     const auto selected_color = 10.0f;
     const auto not_selected_color = 0.0f;
 

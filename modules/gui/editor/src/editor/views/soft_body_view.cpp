@@ -142,7 +142,8 @@ void SoftBodyView::RenderLeftColumn() {
             break;
         case soft_body_views.load_id:
             if(RenderError(builder)){
-                load_view_->Render(builder->GetBodyForce());
+                load_view_->Render(builder->GetBodyForce(),
+                                   builder->GetFEMGeometry().triangle_faces);
             }
             break;
         case soft_body_views.rendering_id:
@@ -174,7 +175,7 @@ void SoftBodyView::RenderLeftColumn() {
 
 void SoftBodyView::RenderRightColumn() {
     if (first_render_)
-        ImGui::SetColumnOffset(-1, 150);
+        ImGui::SetColumnOffset(-1, 200);
 
     std::shared_ptr<RenderComponent> fem_render_component = nullptr;
     if(soft_body_objects_.soft_body_fem_component_builder){

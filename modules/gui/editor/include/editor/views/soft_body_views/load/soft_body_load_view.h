@@ -16,19 +16,33 @@ public:
                      std::shared_ptr<SoftBodyPicker> soft_body_picker);
     ~SoftBodyLoadView() = default;
 
-    void Render(Eigen::Vector3<double>& body_force);
+    void Render(Eigen::Vector3<double>& body_force,
+                std::vector<rtfem::TriangleFace<double>>& triangle_faces);
 private:
     void RenderBodyForce(Eigen::Vector3<double>& body_force);
 
-    void RenderTractionForce();
+    void RenderTractionForce(
+        std::vector<rtfem::TriangleFace<double>>& triangle_faces);
     void RenderTractionForceIsRecording();
-    void RenderTractionForceCurrent();
+
+    void RenderTractionForceCurrent(
+        std::vector<rtfem::TriangleFace<double>>& triangle_faces);
+    void RenderTractionForceInspector(
+        std::vector<rtfem::TriangleFace<double>>& triangle_faces);
+
+    void RecordTractionForce(
+        std::vector<rtfem::TriangleFace<double>>& triangle_faces);
+
+    bool RenderTractionForceError(
+        const std::vector<rtfem::TriangleFace<double>>& triangle_faces);
 
     std::shared_ptr<RenderComponent> traction_force_;
     std::shared_ptr<SoftBodyPicker> soft_body_picker_;
 
     bool is_recording_traction_force_;
     std::unique_ptr<TractionForceRecorder> traction_force_recorder_;
+
+    int selected_triangle_face_;
 };
 
 }

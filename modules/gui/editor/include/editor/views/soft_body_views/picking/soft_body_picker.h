@@ -78,7 +78,7 @@ private:
         const Ray &ray);
     void ComputeTriangleRayIntersection(
         const glm::mat4 &model_matrix,
-        const std::vector<rtfem::TriangleFace>& triangle_faces,
+        const std::vector<rtfem::TriangleFace<double>>& triangle_faces,
         const std::vector<std::shared_ptr<rtfem::Vertex<double>>>& vertices,
         const Ray &ray);
 
@@ -106,7 +106,7 @@ private:
 
     void ColorSelectedFaces(
         VBO& vbo,
-        const std::vector<rtfem::TriangleFace>& triangle_faces);
+        const std::vector<rtfem::TriangleFace<double>>& triangle_faces);
 
     std::shared_ptr<RenderComponent> current_picked_;
 
