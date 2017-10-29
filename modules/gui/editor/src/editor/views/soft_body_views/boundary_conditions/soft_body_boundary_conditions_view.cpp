@@ -25,6 +25,8 @@ SoftBodyBoundaryConditionsView::SoftBodyBoundaryConditionsView(
 void SoftBodyBoundaryConditionsView::Render(
     rtfem::BoundaryConditionContainer<double>& boundary_conditions,
     rtfem::FEMGeometry<double>& fem_geometry){
+    picker_->EnableBoxCasting();
+
     if (ImGui::TreeNodeEx("Current Boundary Conditions",
                           ImGuiTreeNodeFlags_DefaultOpen)) {
         RenderCurrentBoundaryConditionsContextMenu(boundary_conditions);

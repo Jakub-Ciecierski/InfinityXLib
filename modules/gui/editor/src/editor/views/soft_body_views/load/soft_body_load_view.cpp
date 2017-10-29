@@ -20,7 +20,6 @@ SoftBodyLoadView::SoftBodyLoadView(
     std::shared_ptr<SoftBodyPicker> soft_body_picker) :
     traction_force_(traction_force),
     soft_body_picker_(soft_body_picker),
-    is_recording_traction_force_(false),
     selected_triangle_face_(-1){
     traction_force_recorder_
         = ifx::make_unique<TractionForceRecorder>(traction_force);
@@ -62,22 +61,9 @@ void SoftBodyLoadView::RenderBodyForce(
 
 void SoftBodyLoadView::RenderTractionForce(
     std::vector<rtfem::TriangleFace<double>>& triangle_faces){
-    RenderTractionForceIsRecording();
     RenderTractionForceInspector(triangle_faces);
     RenderTractionForceCurrent(triangle_faces);
     RecordTractionForce(triangle_faces);
-}
-
-void SoftBodyLoadView::RenderTractionForceIsRecording(){
-    std::string display;
-    if(is_recording_traction_force_){
-        display = "Stop Adding Traction Forces";
-    }else{
-        display = "Start Adding Traction Forces";
-    }
-
-    ImGui::Checkbox(display.c_str(),
-                    &is_recording_traction_force_);
 }
 
 void SoftBodyLoadView::RenderTractionForceCurrent(
@@ -136,31 +122,27 @@ void SoftBodyLoadView::RenderTractionForceInspector(
 
 void SoftBodyLoadView::RecordTractionForce(
     std::vector<rtfem::TriangleFace<double>>& triangle_faces){
-    if(is_recording_traction_force_){
-        soft_body_picker_->DisableBoxCasting();
+    soft_body_picker_->DisableBoxCasting();
 
-        const auto& face_selection = soft_body_picker_->face_selection();
-        if(ImGui::IsMouseClicked(0)){
-            traction_force_recorder_->Begin(
-                soft_body_picker_->last_mouse_position()
-            );
-        }
-        if(ImGui::IsMouseReleased(0)){
-            traction_force_recorder_->End();
-
-            auto selected_indices = face_selection.selected_vertices();
-            for(auto selected_index : selected_indices){
-                triangle_faces[selected_index].traction_force =
-                    traction_force_recorder_->GetMagnitude();
-            }
-        }
-        traction_force_recorder_->Update(
-            soft_body_picker_->window_width(),
-            soft_body_picker_->window_height(),
-            soft_body_picker_->last_mouse_position());
-    }else{
-        soft_body_picker_->EnableBoxCasting();
+    const auto& face_selection = soft_body_picker_->face_selection();
+    if(ImGui::IsMouseClicked(0)){
+        traction_force_recorder_->Begin(
+            soft_body_picker_->last_mouse_position()
+        );
     }
+    if(ImGui::IsMouseReleased(0)){
+        traction_force_recorder_->End();
+
+        auto selected_indices = face_selection.selected_vertices();
+        for(auto selected_index : selected_indices){
+            triangle_faces[selected_index].traction_force =
+                traction_force_recorder_->GetMagnitude();
+        }
+    }
+    traction_force_recorder_->Update(
+        soft_body_picker_->window_width(),
+        soft_body_picker_->window_height(),
+        soft_body_picker_->last_mouse_position());
 }
 
 bool SoftBodyLoadView::RenderTractionForceError(

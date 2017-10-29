@@ -23,7 +23,6 @@ private:
 
     void RenderTractionForce(
         std::vector<rtfem::TriangleFace<double>>& triangle_faces);
-    void RenderTractionForceIsRecording();
 
     void RenderTractionForceCurrent(
         std::vector<rtfem::TriangleFace<double>>& triangle_faces);
@@ -39,7 +38,6 @@ private:
     std::shared_ptr<RenderComponent> traction_force_;
     std::shared_ptr<SoftBodyPicker> soft_body_picker_;
 
-    bool is_recording_traction_force_;
     std::unique_ptr<TractionForceRecorder> traction_force_recorder_;
 
     int selected_triangle_face_;
