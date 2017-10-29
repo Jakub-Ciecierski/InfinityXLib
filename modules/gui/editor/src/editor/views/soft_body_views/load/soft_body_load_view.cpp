@@ -61,9 +61,30 @@ void SoftBodyLoadView::RenderBodyForce(
 
 void SoftBodyLoadView::RenderTractionForce(
     std::vector<rtfem::TriangleFace<double>>& triangle_faces){
+    RenderTractionForceMagnitude();
     RenderTractionForceInspector(triangle_faces);
     RenderTractionForceCurrent(triangle_faces);
+
     RecordTractionForce(triangle_faces);
+}
+
+void SoftBodyLoadView::RenderTractionForceInspector(
+    std::vector<rtfem::TriangleFace<double>>& triangle_faces){
+    if (ImGui::TreeNodeEx("Inspector",
+                          ImGuiTreeNodeFlags_DefaultOpen)) {
+        if(selected_triangle_face_ >= 0){
+            auto& triangle_face = triangle_faces[selected_triangle_face_];
+            float imgui_traction_force = (float)triangle_face.traction_force;
+
+            ImGui::PushItemWidth(50);
+            if(ImGui::InputFloat("Traction Force", &imgui_traction_force)){
+                triangle_face.traction_force = imgui_traction_force;
+            }
+            ImGui::PopItemWidth();
+        }
+
+        ImGui::TreePop();
+    }
 }
 
 void SoftBodyLoadView::RenderTractionForceCurrent(
@@ -101,23 +122,12 @@ void SoftBodyLoadView::RenderTractionForceCurrent(
     ImGui::EndChild();
 }
 
-void SoftBodyLoadView::RenderTractionForceInspector(
-    std::vector<rtfem::TriangleFace<double>>& triangle_faces){
-    if (ImGui::TreeNodeEx("Inspector",
-                          ImGuiTreeNodeFlags_DefaultOpen)) {
-        if(selected_triangle_face_ >= 0){
-            auto& triangle_face = triangle_faces[selected_triangle_face_];
-            float imgui_traction_force = (float)triangle_face.traction_force;
-
-            ImGui::PushItemWidth(50);
-            if(ImGui::InputFloat("Traction Force", &imgui_traction_force)){
-                triangle_face.traction_force = imgui_traction_force;
-            }
-            ImGui::PopItemWidth();
-        }
-
-        ImGui::TreePop();
+void SoftBodyLoadView::RenderTractionForceMagnitude(){
+    float magnitude = 0;
+    if(traction_force_recorder_->is_active()){
+        magnitude = traction_force_recorder_->GetMagnitude();
     }
+    ImGui::Text("Magnitude: %f", magnitude);
 }
 
 void SoftBodyLoadView::RecordTractionForce(

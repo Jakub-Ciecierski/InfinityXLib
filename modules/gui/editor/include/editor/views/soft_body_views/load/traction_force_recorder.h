@@ -13,6 +13,8 @@ public:
     TractionForceRecorder(std::shared_ptr<RenderComponent> render_component);
     ~TractionForceRecorder() = default;
 
+    bool is_active(){return is_active_;}
+
     void Begin(const glm::vec2& viewport_position_begin);
     void Update(float window_width,
                 float window_height,
@@ -30,6 +32,8 @@ private:
 
     float window_width_;
     float window_height_;
+
+    bool is_active_;
 };
 
 }

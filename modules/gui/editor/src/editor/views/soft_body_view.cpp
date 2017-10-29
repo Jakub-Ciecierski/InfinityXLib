@@ -175,7 +175,7 @@ void SoftBodyView::RenderLeftColumn() {
 
 void SoftBodyView::RenderRightColumn() {
     if (first_render_)
-        ImGui::SetColumnOffset(-1, 200);
+        ImGui::SetColumnOffset(-1, 220);
 
     std::shared_ptr<RenderComponent> fem_render_component = nullptr;
     if(soft_body_objects_.soft_body_fem_component_builder){

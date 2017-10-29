@@ -24,10 +24,12 @@ private:
     void RenderTractionForce(
         std::vector<rtfem::TriangleFace<double>>& triangle_faces);
 
-    void RenderTractionForceCurrent(
-        std::vector<rtfem::TriangleFace<double>>& triangle_faces);
     void RenderTractionForceInspector(
         std::vector<rtfem::TriangleFace<double>>& triangle_faces);
+    void RenderTractionForceCurrent(
+        std::vector<rtfem::TriangleFace<double>>& triangle_faces);
+
+    void RenderTractionForceMagnitude();
 
     void RecordTractionForce(
         std::vector<rtfem::TriangleFace<double>>& triangle_faces);

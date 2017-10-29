@@ -14,6 +14,8 @@
 
 #include <RTFEM/FEM/Vertex.h>
 #include <RTFEM/FEM/FiniteElement.h>
+#include <RTFEM/FEM/BoundaryConditionContainer.h>
+#include <RTFEM/FEM/BoundaryCondition.h>
 
 #include <iostream>
 
@@ -63,11 +65,12 @@ bool SoftBodyMeshingCreationView::BuildMesh(
         return false;
     }
 
-    soft_body_objects.soft_body_fem_component_builder->GetFEMGeometry() =
-        CreateFEMGeometry(rtfem_options, triangle_mesh);
+    soft_body_objects.soft_body_fem_component_builder->GetBoundaryConditions()
+        = rtfem::BoundaryConditionContainer<double>();
 
-    auto fem_geometry =
-        soft_body_objects.soft_body_fem_component_builder->GetFEMGeometry();
+    auto fem_geometry = CreateFEMGeometry(rtfem_options, triangle_mesh);
+    soft_body_objects.soft_body_fem_component_builder->GetFEMGeometry()
+        = fem_geometry;
     soft_body_objects.soft_body_fem_component_builder->fem_render(
         CreateRenderComponent(fem_geometry));
 
@@ -75,24 +78,6 @@ bool SoftBodyMeshingCreationView::BuildMesh(
         soft_body_objects.soft_body_fem_component_builder->fem_render(),
         soft_body_objects,
         rendering_effects);
-
-    // Print
-    int i = 0;
-    for(const auto& vertex : fem_geometry.vertices){
-        std::cout << i++ << ": " << vertex->coordinates() << std::endl;
-    }
-    i = 0;
-    for(const auto& element : fem_geometry.finite_elements){
-        auto indices = element->vertices_indices();
-        std::cout << i++ << ": "
-                  << indices[0] << ", "
-                  << indices[1] << ", "
-                  << indices[2] << ", "
-                  << indices[3] << ", "
-                  << std::endl;
-    }
-
-    //
 
     return true;
 }

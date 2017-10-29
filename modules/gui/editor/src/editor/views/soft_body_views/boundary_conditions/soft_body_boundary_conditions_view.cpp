@@ -27,6 +27,19 @@ void SoftBodyBoundaryConditionsView::Render(
     rtfem::FEMGeometry<double>& fem_geometry){
     picker_->EnableBoxCasting();
 
+    if (ImGui::TreeNodeEx("New Boundary Conditions",
+                          ImGuiTreeNodeFlags_DefaultOpen)) {
+        RenderNewBoundaryConditions(boundary_conditions,
+                                    fem_geometry);
+        ImGui::TreePop();
+    }
+
+    if (ImGui::TreeNodeEx("Inspector",
+                          ImGuiTreeNodeFlags_DefaultOpen)) {
+        RenderSelectedBoundaryCondition();
+        ImGui::TreePop();
+    }
+
     if (ImGui::TreeNodeEx("Current Boundary Conditions",
                           ImGuiTreeNodeFlags_DefaultOpen)) {
         RenderCurrentBoundaryConditionsContextMenu(boundary_conditions);
@@ -37,19 +50,6 @@ void SoftBodyBoundaryConditionsView::Render(
                           false);
         RenderCurrentBoundaryConditions(boundary_conditions);
         ImGui::EndChild();
-        ImGui::TreePop();
-    }
-
-    if (ImGui::TreeNodeEx("Inspector",
-                          ImGuiTreeNodeFlags_DefaultOpen)) {
-        RenderSelectedBoundaryCondition();
-        ImGui::TreePop();
-    }
-
-    if (ImGui::TreeNodeEx("New Boundary Conditions",
-                          ImGuiTreeNodeFlags_DefaultOpen)) {
-        RenderNewBoundaryConditions(boundary_conditions,
-                                    fem_geometry);
         ImGui::TreePop();
     }
 }

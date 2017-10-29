@@ -10,9 +10,11 @@ namespace ifx {
 
 TractionForceRecorder::TractionForceRecorder(
     std::shared_ptr<RenderComponent> render_component) :
-    render_component_(render_component) {}
+    render_component_(render_component),
+    is_active_(false){}
 
 void TractionForceRecorder::Begin(const glm::vec2& viewport_position_begin){
+    is_active_ = true;
     viewport_position_begin_ = viewport_position_begin;
 
     render_component_->do_render(true);
@@ -37,12 +39,13 @@ void TractionForceRecorder::Update(float window_width,
 }
 
 void TractionForceRecorder::End(){
+    is_active_ = false;
     render_component_->do_render(false);
 }
 
 float TractionForceRecorder::GetMagnitude(){
-    glm::distance(viewport_position_begin_,
-                  viewport_position_end_);
+    auto difference = viewport_position_end_ - viewport_position_begin_;
+    return difference.x + difference.y;
 }
 
 glm::vec4 TractionForceRecorder::ToHomogeneousClipSpace(const glm::vec2& a){
