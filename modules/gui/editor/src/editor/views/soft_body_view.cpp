@@ -130,7 +130,7 @@ void SoftBodyView::RenderLeftColumn() {
                 material_view_->Render(builder->GetMaterial());
             }
             break;
-        case soft_body_views.boudary_conditions_id:
+        case soft_body_views.boundary_conditions_id:
             if(RenderError(builder)){
                 boundarary_conditions_view_->Render(
                     builder->GetBoundaryConditions(),

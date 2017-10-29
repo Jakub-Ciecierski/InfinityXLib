@@ -42,8 +42,8 @@ struct SoftBodyViews{
     const std::string material_name = "Material";
     static constexpr unsigned int material_id = 2;
 
-    const std::string boudary_conditions_name = "Boundary Conditions";
-    static constexpr unsigned int boudary_conditions_id = 3;
+    const std::string boundary_conditions_name = "Boundary Conditions";
+    static constexpr unsigned int boundary_conditions_id = 3;
 
     const std::string load_name = "Load";
     static constexpr unsigned int load_id = 4;
@@ -58,7 +58,7 @@ struct SoftBodyViews{
         guide_name,
         meshing_name,
         material_name,
-        boudary_conditions_name,
+        boundary_conditions_name,
         load_name,
         rendering_name,
         solver_name
