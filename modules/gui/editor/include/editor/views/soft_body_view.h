@@ -31,7 +31,7 @@ template<class T>
 class SoftBodyFEMComponent;
 
 struct SoftBodyViews{
-    unsigned int selected = 0;
+    unsigned int selected = 1;
 
     const std::string guide_name = "Guide";
     static constexpr unsigned int guide_id = 0;
