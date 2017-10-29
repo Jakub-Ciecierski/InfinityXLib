@@ -131,7 +131,7 @@ private:
     std::unique_ptr<SoftBodyMeshingView> meshing_view_;
     std::unique_ptr<SoftBodyRenderingView> rendering_view_;
     std::unique_ptr<SoftBodyMaterialView> material_view_;
-    std::unique_ptr<SoftBodyBoundaryConditionsView> boundarary_conditions_view_;
+    std::unique_ptr<SoftBodyBoundaryConditionsView> boundary_conditions_view_;
     std::unique_ptr<SoftBodyLoadView> load_view_;
     std::unique_ptr<SoftBodySolverView> solver_view_;
 

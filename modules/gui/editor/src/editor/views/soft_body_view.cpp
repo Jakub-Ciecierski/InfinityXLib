@@ -68,7 +68,7 @@ SoftBodyView::SoftBodyView(std::unique_ptr<GameUpdater> game_updater,
             resource_manager());
     rendering_view_ = ifx::make_unique<SoftBodyRenderingView>();
     material_view_ = ifx::make_unique<SoftBodyMaterialView>();
-    boundarary_conditions_view_
+    boundary_conditions_view_
         = ifx::make_unique<SoftBodyBoundaryConditionsView>(
         soft_body_picker);
 
@@ -132,12 +132,12 @@ void SoftBodyView::RenderLeftColumn() {
             break;
         case soft_body_views.boundary_conditions_id:
             if(RenderError(builder)){
-                boundarary_conditions_view_->Render(
+                boundary_conditions_view_->Render(
                     builder->GetBoundaryConditions(),
                     builder->GetFEMGeometry()
                 );
             }else{
-                boundarary_conditions_view_->ResetSelectedBoundaryCondition();
+                boundary_conditions_view_->ResetSelectedBoundaryCondition();
             }
             break;
         case soft_body_views.load_id:
