@@ -8,9 +8,12 @@ in vec2 fTexCoords;
 
 void main()
 {
-	color = vec4(0.0f, 1.0f, 0.0f, 1.0f);
-	//if(fTexCoords.x == 10.0){
-	//	color = vec4(0.0f, 0.5f, 0.0f, 1.0f);
-	//}
+	vec4 not_selected_color = vec4(0.0f, 1.0f, 0.0f, 1.0f);
+	vec4 selected_color = vec4(0.0f, 1.0f, 1.0f, 1.0f);
+
+	color = not_selected_color;
+	if(fTexCoords.x > 1.0 || fTexCoords.y > 1.0){
+		color = selected_color;
+	}
     
 }

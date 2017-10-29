@@ -19,6 +19,8 @@ uniform mat4 ProjectionMatrix;
 
 void main()
 {
+    TexCoords = texCoords;
+
     vec4 pos4 = vec4(position, 1.0f);
     mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
     gl_Position = MVP * pos4;
@@ -33,8 +35,6 @@ void main()
     Normal = normalize(NormalMatrix * normal);
     Tangent = normalize(NormalMatrix * tangent);
     Binormal = normalize(NormalMatrix * binormal);
-
-    TexCoords = texCoords;
 
 	VertexID = gl_VertexID;
 }
