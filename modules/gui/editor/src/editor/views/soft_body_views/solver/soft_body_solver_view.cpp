@@ -13,7 +13,7 @@
 #include <graphics/shaders/data/shader_data.h>
 
 #include <RTFEM/FEM/Solver/FEMSolvers/FEMStaticSolver.h>
-#include <RTFEM/FEM/Solver/FEMSolver.h>
+
 #include <RTFEM/FEM/FEMModel.h>
 #include <RTFEM/FEM/FEMGeometry.h>
 #include <RTFEM/FEM/Vertex.h>

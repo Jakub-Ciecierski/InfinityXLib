@@ -46,13 +46,14 @@ void *RenderingContextOpengl::InitAndCreateNativeWindowHandle(std::string name,
 
     auto glfwWindow = glfwCreateWindow(*width, *height,
                                        name.c_str(), nullptr, nullptr);
+    if(!glfwWindow){
+        throw new std::invalid_argument("Failed to create glfw window");
+    }
 
     glfwMakeContextCurrent(glfwWindow);
     glfwGetFramebufferSize(glfwWindow, width, height);
     glViewport(0, 0, *width, *height);
 
-    if (!glfwWindow)
-        throw new std::invalid_argument("Failed to initialize glfwWindow");
     if (!InitGLEW())
         throw new std::invalid_argument("Failed to initialize GLEW");
 
