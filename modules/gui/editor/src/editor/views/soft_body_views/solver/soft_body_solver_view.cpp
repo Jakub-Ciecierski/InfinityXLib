@@ -28,9 +28,9 @@ SoftBodySolverView::SoftBodySolverView() :
 
 void SoftBodySolverView::Render(SoftBodyEditorObjects& soft_body_objects){
     if(fem_dynamic_solver_){
-        if(ImGui::Button("Run Iteraion")){
+        //if(ImGui::Button("Run Iteraion")){
             DynamicIteration();
-        }
+        //}
     }
     if(ImGui::Button("Solve Dynamic")){
         RenderDynamic(soft_body_objects);
