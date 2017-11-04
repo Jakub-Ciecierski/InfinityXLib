@@ -22,7 +22,8 @@ SoftBodyFEMComponentBuilder<T>::Build(){
     auto fem_model = BuildFEMModel();
 
     auto soft_body_fem_component
-        = std::make_shared<SoftBodyFEMComponent<T>>(std::move(fem_model));
+        = std::make_shared<SoftBodyFEMComponent<T>>(std::move(fem_model),
+                                                    fem_render_);
 
     return soft_body_fem_component;
 }

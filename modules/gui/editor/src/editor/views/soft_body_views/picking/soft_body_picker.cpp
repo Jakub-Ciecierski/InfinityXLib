@@ -333,21 +333,6 @@ void SoftBodyPicker::ColorSelectedFaces(
             (*vertices)[triangle_faces[i].v3].TexCoords.y = selected_color;
         }
     }
-
-
-    /*
-    for(unsigned int i = 0; i < triangle_faces.size(); i++){
-        if(face_selection_->IsSelected(i)){
-            (*vertices)[triangle_faces[i].v1].TexCoords.y = selected_color;
-            (*vertices)[triangle_faces[i].v2].TexCoords.y = selected_color;
-            (*vertices)[triangle_faces[i].v3].TexCoords.y = selected_color;
-        }else{
-            (*vertices)[triangle_faces[i].v1].TexCoords.y = not_selected_color;
-            (*vertices)[triangle_faces[i].v2].TexCoords.y = not_selected_color;
-            (*vertices)[triangle_faces[i].v3].TexCoords.y = not_selected_color;
-        }
-    }
-*/
     vbo.Update();
 }
 

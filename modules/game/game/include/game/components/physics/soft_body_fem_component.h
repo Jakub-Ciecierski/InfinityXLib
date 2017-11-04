@@ -11,8 +11,12 @@ class RenderComponent;
 template<class T>
 class SoftBodyFEMComponent : public GameComponent, public SoftBodyFEM<T> {
 public:
-    SoftBodyFEMComponent(std::unique_ptr<rtfem::FEMModel<T>> fem_model);
+    SoftBodyFEMComponent(std::unique_ptr<rtfem::FEMModel<T>> fem_model,
+                         std::shared_ptr<RenderComponent> render_component);
     ~SoftBodyFEMComponent() = default;
+
+    std::shared_ptr<RenderComponent> render_component(){
+        return render_component_;}
 
 private:
     std::shared_ptr<RenderComponent> render_component_;

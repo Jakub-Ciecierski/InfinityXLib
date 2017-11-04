@@ -1,18 +1,32 @@
 #ifndef PROJECT_SOFT_BODY_SOLVER_VIEW_H
 #define PROJECT_SOFT_BODY_SOLVER_VIEW_H
 
+#include <RTFEM/FEM/Solver/FEMSolverTypes.h>
+#include <RTFEM/FEM/Solver/FEMSolvers/FEMDynamicSolver.h>
+
 namespace ifx {
 
 struct SoftBodyEditorObjects;
 
+template<class T>
+class SoftBodyFEMComponent;
+
 class SoftBodySolverView {
 public:
-    SoftBodySolverView() = default;
+    SoftBodySolverView();
     ~SoftBodySolverView() = default;
 
     void Render(SoftBodyEditorObjects& soft_body_objects);
 
 private:
+    void RenderDynamic(SoftBodyEditorObjects& soft_body_objects);
+    void DynamicIteration();
+
+    std::shared_ptr<SoftBodyFEMComponent<double>> soft_body_fem_component_;
+
+    rtfem::AnalysisSolverType solver_type_;
+
+    std::unique_ptr<rtfem::FEMDynamicSolver<double>> fem_dynamic_solver_;
 };
 
 }

@@ -16,8 +16,8 @@ void SoftBodyMaterialView::RenderMaterial(
     float young_modulus = (float)material.young_modulus;
     float poisson_coefficient = (float)material.poisson_coefficient;
     float density = (float)material.density;
-
-    bool value_changed = false;
+    float damping_mass = (float)material.damping_mass;
+    float damping_stiffness = (float)material.damping_stiffness;
 
     ImGui::PushItemWidth(60);
 
@@ -25,29 +25,33 @@ void SoftBodyMaterialView::RenderMaterial(
                       &young_modulus,
                       0, 100000)){
         material.young_modulus = young_modulus;
-        value_changed = true;
     }
 
     if(ImGui::InputFloat("Poisson Coefficient",
                       &poisson_coefficient,
                       0, 0.5)){
         material.poisson_coefficient = poisson_coefficient;
-        value_changed = true;
     }
 
     if(ImGui::InputFloat("Density",
                       &density,
                       0, 1000)){
         material.density = density;
-        value_changed = true;
     }
-    ImGui::PopItemWidth();
 
-    if(value_changed){
-        material.young_modulus = young_modulus;
-        material.poisson_coefficient = poisson_coefficient;
-        material.density = density;
+    if(ImGui::InputFloat("Damping Mass",
+                         &damping_mass,
+                         0, 1000)){
+        material.damping_mass = damping_mass;
     }
+
+    if(ImGui::InputFloat("Damping Stiffness",
+                         &damping_stiffness,
+                         0, 1000)){
+        material.damping_stiffness = damping_stiffness;
+    }
+
+    ImGui::PopItemWidth();
 }
 
 }
