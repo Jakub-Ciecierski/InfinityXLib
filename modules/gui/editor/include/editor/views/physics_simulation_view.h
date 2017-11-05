@@ -20,7 +20,7 @@ public:
 private:
     void RenderBasicInfo();
     void RenderGravity();
-    void RenderImpulse();
+    void RenderTimeStep();
 
     std::shared_ptr<PhysicsSimulation> physics_simulation_;
 };
