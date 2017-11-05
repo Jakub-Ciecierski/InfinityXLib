@@ -12,9 +12,8 @@ struct DockerSettings;
 class MainMenuViewItem {
 public:
 
-    MainMenuViewItem();
-
-    ~MainMenuViewItem();
+    MainMenuViewItem() = default;
+    ~MainMenuViewItem() = default;
 
     void Render(std::shared_ptr<Editor> editor);
 

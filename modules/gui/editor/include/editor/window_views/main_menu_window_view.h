@@ -9,10 +9,13 @@ namespace ifx {
 class Editor;
 
 class MainMenuViewItem;
+class MainMenuUpdateItem;
+
+struct EngineArchitecture;
 
 class MainMenuWindowView : public WindowView {
 public:
-    MainMenuWindowView();
+    MainMenuWindowView(std::shared_ptr<EngineArchitecture> engine_architecture);
     ~MainMenuWindowView();
 
     virtual void Render() override;
@@ -28,9 +31,12 @@ private:
     void RenderEdit();
     void RenderWindow();
 
+    std::shared_ptr<EngineArchitecture> engine_architecture_;
+
     std::shared_ptr<Editor> editor_;
 
     std::unique_ptr<MainMenuViewItem> view_item_;
+    std::unique_ptr<MainMenuUpdateItem> update_item_;
 };
 
 }

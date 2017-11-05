@@ -8,10 +8,6 @@
 
 namespace ifx {
 
-MainMenuViewItem::MainMenuViewItem() {}
-
-MainMenuViewItem::~MainMenuViewItem() {}
-
 void MainMenuViewItem::Render(std::shared_ptr<Editor> editor) {
     if (ImGui::BeginMenu("View")) {
         RenderShowWindows(editor);

@@ -64,7 +64,8 @@ std::shared_ptr<Editor> EditorFactory::CreateEngineGUI(
 
     auto bottom_window_view = std::make_shared<WindowView>("Bottom");
 
-    auto top_window_view = std::make_shared<MainMenuWindowView>();
+    auto top_window_view = std::make_shared<MainMenuWindowView>(
+        engine_architecture);
 
     auto imgui_demo_view = std::make_shared<ImGuiDemoWindowView>();
 
