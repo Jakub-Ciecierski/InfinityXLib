@@ -1,7 +1,7 @@
 #ifndef PROJECT_RIGID_BODY_IMPL_PHYSX_H
 #define PROJECT_RIGID_BODY_IMPL_PHYSX_H
 
-#include <physics/impl/rigid_body_impl.h>
+#include <physics/rigid_body/impl/rigid_body_impl.h>
 
 #include <memory>
 

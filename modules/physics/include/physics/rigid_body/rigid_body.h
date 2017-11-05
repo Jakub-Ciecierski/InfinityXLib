@@ -19,7 +19,7 @@ public:
 
     RigidBody(std::unique_ptr<RigidBodyImpl> rigid_body_impl,
               const RigidBodyParams &&params);
-    ~RigidBody();
+    ~RigidBody() = default;
 
     void *GetNativeRigidBody();
 

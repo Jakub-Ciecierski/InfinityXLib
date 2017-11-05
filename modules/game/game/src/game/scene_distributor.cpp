@@ -6,7 +6,7 @@
 #include <game/game_component.h>
 
 #include <graphics/rendering/render_object.h>
-#include <physics/rigid_body.h>
+#include "physics/rigid_body/rigid_body.h"
 #include <graphics/lighting/light_source.h>
 #include <graphics/rendering/camera/camera.h>
 #include <game/components/render/render_component.h>

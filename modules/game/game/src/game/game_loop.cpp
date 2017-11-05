@@ -14,8 +14,6 @@ GameLoop::GameLoop(std::unique_ptr<GameUpdater> game_updater,
     game_updater_(std::move(game_updater)),
     engine_architecture_(engine_architecture) {}
 
-GameLoop::~GameLoop() {}
-
 void GameLoop::Start() {
     while (!engine_architecture_->window->ShouldClose()) {
         RunSingleIteration();

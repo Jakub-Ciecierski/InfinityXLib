@@ -1,4 +1,4 @@
-#include "physics/impl/rigid_body_impl_bullet.h"
+#include "physics/rigid_body/impl/rigid_body_impl_bullet.h"
 
 #include <BulletCollision/CollisionShapes/btBoxShape.h>
 #include <BulletDynamics/Dynamics/btRigidBody.h>

@@ -1,14 +1,14 @@
 #include "physics/simulations/physx_physics_simulation.h"
 
-#include <physics/rigid_body.h>
-#include <physics/impl/rigid_body_impl.h>
+#include "physics/rigid_body/rigid_body.h"
+#include <physics/rigid_body/impl/rigid_body_impl.h>
 
 #define _DEBUG
 #include <PxPhysicsAPI.h>
 
 #include <common/unique_ptr.h>
 
-#include <physics/impl/rigid_body_impl_physx.h>
+#include <physics/rigid_body/impl/rigid_body_impl_physx.h>
 #include <physics/context/physx_context.h>
 
 namespace ifx {

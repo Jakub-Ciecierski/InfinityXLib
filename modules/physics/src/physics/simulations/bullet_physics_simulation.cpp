@@ -1,5 +1,6 @@
 #include "physics/simulations/bullet_physics_simulation.h"
-#include <physics/rigid_body.h>
+
+#include "physics/rigid_body/rigid_body.h"
 
 #include <BulletCollision/CollisionDispatch/btCollisionDispatcher.h>
 #include <BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h>
@@ -9,9 +10,8 @@
 #include <BulletDynamics/Dynamics/btRigidBody.h>
 #include <iostream>
 
-#include <physics/impl/rigid_body_impl.h>
-#include <physics/impl/rigid_body_impl_bullet.h>
-#include <physics/rigid_body.h>
+#include <physics/rigid_body/impl/rigid_body_impl.h>
+#include <physics/rigid_body/impl/rigid_body_impl_bullet.h>
 
 namespace ifx {
 

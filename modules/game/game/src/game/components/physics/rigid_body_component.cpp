@@ -1,7 +1,7 @@
 #include "game/components/physics/rigid_body_component.h"
 
 #include <physics/physics_simulation.h>
-#include <physics/impl/rigid_body_impl.h>
+#include <physics/rigid_body/impl/rigid_body_impl.h>
 
 namespace ifx {
 

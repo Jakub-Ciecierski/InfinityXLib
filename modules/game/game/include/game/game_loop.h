@@ -32,7 +32,7 @@ class GameLoop {
 public:
     GameLoop(std::unique_ptr<GameUpdater> game_updater,
              std::shared_ptr<EngineArchitecture> engine_architecture);
-    ~GameLoop();
+    ~GameLoop() = default;
 
     std::shared_ptr<Renderer> renderer() {
         return

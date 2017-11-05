@@ -1,4 +1,4 @@
-#include <physics/impl/rigid_body_impl_physx.h>
+#include <physics/rigid_body/impl/rigid_body_impl_physx.h>
 
 #include <physics/collision/shapes/static_plane_shape.h>
 #include <physics/collision/shapes/box_collision_shape.h>

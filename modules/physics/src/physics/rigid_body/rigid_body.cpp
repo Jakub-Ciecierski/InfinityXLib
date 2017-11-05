@@ -1,6 +1,6 @@
-#include "physics/rigid_body.h"
+#include "physics/rigid_body/rigid_body.h"
 
-#include <physics/impl/rigid_body_impl.h>
+#include <physics/rigid_body/impl/rigid_body_impl.h>
 
 namespace ifx {
 
@@ -11,8 +11,6 @@ RigidBody::RigidBody(std::unique_ptr<RigidBodyImpl> rigid_body_impl,
     mass_(params.mass) {
     rigid_body_impl_->InitImpl(collision_shape_, mass_);
 }
-
-RigidBody::~RigidBody() {}
 
 void *RigidBody::GetNativeRigidBody() {
     return rigid_body_impl_->GetNativeRigidBody();

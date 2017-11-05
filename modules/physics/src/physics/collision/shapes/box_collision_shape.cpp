@@ -2,7 +2,7 @@
 
 #include <BulletCollision/CollisionShapes/btBoxShape.h>
 
-#include <physics/impl/rigid_body_impl.h>
+#include <physics/rigid_body/impl/rigid_body_impl.h>
 
 namespace ifx {
 

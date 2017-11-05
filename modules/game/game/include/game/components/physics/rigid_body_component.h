@@ -2,7 +2,7 @@
 #define PROJECT_RIGIDBODYCOMPONENT_H
 
 #include <game/game_component.h>
-#include <physics/rigid_body.h>
+#include "physics/rigid_body/rigid_body.h"
 
 namespace ifx {
 

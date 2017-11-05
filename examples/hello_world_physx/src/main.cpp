@@ -3,7 +3,8 @@
 
 #include <gui/gui.h>
 
-#include <physics/rigid_body.h>
+#include "physics/rigid_body/rigid_body.h"
+#include "physics/rigid_body/impl/rigid_body_impl.h"
 #include <physics/collision/shapes/box_collision_shape.h>
 #include "physics/collision/shapes/static_plane_shape.h"
 #include <physics/simulations/bullet_physics_simulation.h>
