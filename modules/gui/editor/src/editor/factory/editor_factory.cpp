@@ -38,6 +38,7 @@
 namespace ifx {
 
 std::shared_ptr<Editor> EditorFactory::CreateEngineGUI(
+    std::shared_ptr<GameLoop> game_loop,
     std::shared_ptr<EngineArchitecture> engine_architecture) {
     // Create Views
     auto scene_view = std::make_shared<SceneView>();
@@ -50,7 +51,7 @@ std::shared_ptr<Editor> EditorFactory::CreateEngineGUI(
     auto rendering_view = CreateRenderingView(
         engine_architecture->engine_systems.renderer->scene_renderer(),
         engine_architecture->engine_contexts.resource_context);
-    auto soft_body_view = CreateSoftBodyView(engine_architecture);
+    auto soft_body_view = CreateSoftBodyView(game_loop, engine_architecture);
     scene_list_view->AddObserver(soft_body_view);
 
     // Create Window views
@@ -114,9 +115,10 @@ std::shared_ptr<RenderingView> EditorFactory::CreateRenderingView(
 }
 
 std::shared_ptr<SoftBodyView> EditorFactory::CreateSoftBodyView(
+    std::shared_ptr<GameLoop> game_loop,
     std::shared_ptr<EngineArchitecture> engine_architecture) {
     return std::dynamic_pointer_cast<SoftBodyView>(
-        SoftBodyViewFactory(engine_architecture).Create());
+        SoftBodyViewFactory(game_loop, engine_architecture).Create());
 }
 
 std::shared_ptr<Docker> EditorFactory::CreateDefaultDocker(

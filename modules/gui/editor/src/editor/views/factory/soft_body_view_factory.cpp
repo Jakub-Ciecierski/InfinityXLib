@@ -23,6 +23,7 @@
 
 #include <game/factory/game_systems_factory.h>
 #include <game/game_updater.h>
+#include <game/game_loop.h>
 #include <game/scene_container.h>
 #include <game/game_object.h>
 #include <game/resources/resource_context.h>
@@ -57,7 +58,9 @@ const std::string EDGES_RENDERING_EFFECT_NAME = "soft_body_editor/edges.prog";
 const std::string FACES_RENDERING_EFFECT_NAME = "soft_body_editor/faces.prog";
 
 SoftBodyViewFactory::SoftBodyViewFactory(
+    std::shared_ptr<GameLoop> game_loop,
     std::shared_ptr<EngineArchitecture> engine_architecture) :
+    game_loop_(game_loop),
     engine_architecture_(engine_architecture) {}
 
 std::shared_ptr<View> SoftBodyViewFactory::Create() {
@@ -74,8 +77,10 @@ std::shared_ptr<View> SoftBodyViewFactory::Create() {
         engine_architecture, engine_architecture_, soft_body_picker);
 
     auto game_updater = ifx::make_unique<GameUpdater>(engine_architecture);
+    game_loop_->AddGameUpdater(std::move(game_updater));
+
     auto soft_body_view = std::make_shared<SoftBodyView>(
-        std::move(game_updater),
+        engine_architecture,
         soft_body_rendering_effects,
         soft_body_picker,
         std::move(soft_body_load_view));

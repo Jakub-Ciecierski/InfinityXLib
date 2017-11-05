@@ -45,25 +45,27 @@
 
 namespace ifx {
 
-SoftBodyView::SoftBodyView(std::unique_ptr<GameUpdater> game_updater,
+SoftBodyView::SoftBodyView(std::shared_ptr<EngineArchitecture>
+                           engine_architecture,
                            const SoftBodyRenderingEffects &rendering_effects,
                            std::shared_ptr<SoftBodyPicker> soft_body_picker,
                            std::unique_ptr<SoftBodyLoadView> load_view) :
     View("Soft Body"),
-    game_updater_(std::move(game_updater)),
+    engine_architecture_(engine_architecture),
     rendering_effects_(rendering_effects),
     soft_body_objects_(SoftBodyEditorObjects{nullptr, nullptr}),
     first_render_(true),
     load_view_(std::move(load_view)),
-    soft_body_fem_(nullptr){
+    soft_body_fem_(nullptr) {
+
     screen_view_ = ifx::make_unique<SoftBodyScreenView>(soft_body_picker);
     selector_ = ifx::make_unique<SoftBodySelector>(
-        game_updater_->engine_architecture()->
+        engine_architecture_->
             engine_systems.scene_container);
 
     soft_body_guide_view_ = ifx::make_unique<SoftBodyGuideView>();
     meshing_view_ = ifx::make_unique<SoftBodyMeshingView>(
-        game_updater_->engine_architecture()->
+        engine_architecture_->
             engine_contexts.resource_context->
             resource_manager());
     rendering_view_ = ifx::make_unique<SoftBodyRenderingView>();
@@ -72,18 +74,19 @@ SoftBodyView::SoftBodyView(std::unique_ptr<GameUpdater> game_updater,
         = ifx::make_unique<SoftBodyBoundaryConditionsView>(
         soft_body_picker);
 
-    solver_view_ = ifx::make_unique<SoftBodySolverView>();
+    solver_view_ = ifx::make_unique<SoftBodySolverView>(
+        engine_architecture_->engine_systems.scene_container
+    );
+
 }
 
 bool SoftBodyView::Terminate() {
-    game_updater_->engine_architecture()->engine_systems
+    engine_architecture_->engine_systems
         .physics_simulation->Terminate();
     return true;
 }
 
 void SoftBodyView::Render() {
-    game_updater_->Update(1.0f / 60.0f);
-
     ImGui::Columns(2, "Soft");
     RenderLeftColumn();
 
@@ -184,7 +187,7 @@ void SoftBodyView::RenderRightColumn() {
     }
 
     screen_view_->Render(
-        game_updater_->engine_architecture()->engine_systems.renderer,
+        engine_architecture_->engine_systems.renderer,
         soft_body_objects_.soft_body_fem_component_builder.get());
 }
 
@@ -230,7 +233,7 @@ bool SoftBodyView::RenderError(
 }
 
 void SoftBodyView::OnViewEnter(){
-    auto camera = game_updater_->engine_architecture()->engine_systems
+    auto camera = engine_architecture_->engine_systems
         .scene_container->GetActiveCamera();
     camera->moveTo(glm::vec3(0, 0, 0));
     camera->rotateTo(glm::vec3(0, 0, 0));

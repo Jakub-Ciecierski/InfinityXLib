@@ -23,6 +23,7 @@ public:
     bool Remove(std::shared_ptr<SoftBodyFEM<T>> soft_body);
 
 private:
+
     std::vector<std::shared_ptr<SoftBodyFEM<T>>> soft_bodies_;
     std::vector<std::unique_ptr<rtfem::FEMDynamicSolver<T>>> fem_solvers_;
 

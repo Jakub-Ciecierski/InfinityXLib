@@ -2,26 +2,30 @@
 
 #include <graphics/rendering/window/window.h>
 
-#include <game/architecture/engine_architecture.h>
-#include <game/game_updater.h>
-
 #include <GLFW/glfw3.h>
 
 namespace ifx {
 
-GameLoop::GameLoop(std::unique_ptr<GameUpdater> game_updater,
-                   std::shared_ptr<EngineArchitecture> engine_architecture) :
-    game_updater_(std::move(game_updater)),
-    engine_architecture_(engine_architecture) {}
+GameLoop::GameLoop(std::unique_ptr<GameUpdater> game_updater) :
+    game_updater_(std::move(game_updater)) {}
+
+void GameLoop::AddGameUpdater(std::unique_ptr<GameUpdater> game_updater){
+    game_updaters_.push_back(std::move(game_updater));
+}
 
 void GameLoop::Start() {
-    while (!engine_architecture_->window->ShouldClose()) {
+    while (!game_updater_->engine_architecture()->window->ShouldClose()) {
         RunSingleIteration();
     }
 }
 
 void GameLoop::RunSingleIteration() {
-    game_updater_->Update(ComputeElapsedTime());
+    auto elapsed_time = ComputeElapsedTime();
+    game_updater_->Update(elapsed_time);
+
+    for(auto& game_updater : game_updaters_){
+        game_updater->Update(elapsed_time);
+    }
 }
 
 double GameLoop::ComputeElapsedTime(){

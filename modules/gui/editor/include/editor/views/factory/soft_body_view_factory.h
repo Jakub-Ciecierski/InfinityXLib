@@ -13,6 +13,7 @@ class SceneContainer;
 class Renderer;
 class Controls;
 class CameraComponent;
+class GameLoop;
 
 struct EngineArchitecture;
 struct SoftBodyRenderingEffects;
@@ -24,6 +25,7 @@ extern const std::string FACES_RENDERING_EFFECT_NAME;
 class SoftBodyViewFactory : public ViewFactory {
 public:
     SoftBodyViewFactory(
+        std::shared_ptr<GameLoop> game_loop,
         std::shared_ptr<EngineArchitecture> engine_architecture);
     ~SoftBodyViewFactory() = default;
 
@@ -46,6 +48,7 @@ private:
         std::shared_ptr<CameraComponent> camera,
         std::shared_ptr<SoftBodyView> soft_body_view);
 
+    std::shared_ptr<GameLoop> game_loop_;
     std::shared_ptr<EngineArchitecture> engine_architecture_;
 };
 }

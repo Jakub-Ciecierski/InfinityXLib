@@ -21,6 +21,7 @@ class PhysicsSimulationView;
 class SceneRenderer;
 class RenderingView;
 class SoftBodyView;
+class GameLoop;
 
 struct EngineArchitecture;
 
@@ -30,6 +31,7 @@ public:
     ~EditorFactory() = default;
 
     std::shared_ptr<Editor> CreateEngineGUI(
+        std::shared_ptr<GameLoop> game_loop,
         std::shared_ptr<EngineArchitecture> engine_architecture);
 private:
     std::shared_ptr<SceneListView> CreateSceneView(
@@ -42,6 +44,7 @@ private:
         std::shared_ptr<SceneRenderer> scene_renderer,
         std::shared_ptr<ResourceContext> resource_creator);
     std::shared_ptr<SoftBodyView> CreateSoftBodyView(
+        std::shared_ptr<GameLoop> game_loop,
         std::shared_ptr<EngineArchitecture> engine_architecture);
 
     std::shared_ptr<Docker> CreateDefaultDocker(

@@ -11,9 +11,11 @@ struct SoftBodyEditorObjects;
 template<class T>
 class SoftBodyFEMComponent;
 
+class SceneContainer;
+
 class SoftBodySolverView {
 public:
-    SoftBodySolverView();
+    SoftBodySolverView(std::shared_ptr<SceneContainer> scene_container);
     ~SoftBodySolverView() = default;
 
     void Render(SoftBodyEditorObjects& soft_body_objects);
@@ -27,6 +29,8 @@ private:
     rtfem::AnalysisSolverType solver_type_;
 
     std::unique_ptr<rtfem::FEMDynamicSolver<double>> fem_dynamic_solver_;
+
+    std::shared_ptr<SceneContainer> scene_container_;
 };
 
 }

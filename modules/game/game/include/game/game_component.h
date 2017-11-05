@@ -8,7 +8,7 @@
 namespace ifx {
 
 enum class GameComponentType {
-    RENDER, PHYSICS, LIGHT, CAMERA
+    RENDER, PHYSICS, LIGHT, CAMERA, PHYSICS_SOFT_BODY
 };
 
 /**

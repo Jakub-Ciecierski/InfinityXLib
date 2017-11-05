@@ -8,7 +8,8 @@ namespace ifx {
 
 template <class T>
 SoftBodyFEM<T>::SoftBodyFEM(std::unique_ptr<rtfem::FEMModel<T>> fem_model) :
-    fem_model_(std::move(fem_model)){}
+    fem_solver_output_(nullptr),
+    fem_model_(std::move(fem_model)) {}
 
 template
 class SoftBodyFEM<double>;

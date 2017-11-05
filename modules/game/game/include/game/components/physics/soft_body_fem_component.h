@@ -18,6 +18,8 @@ public:
     std::shared_ptr<RenderComponent> render_component(){
         return render_component_;}
 
+    void Update(float time_delta) override;
+
 private:
     std::shared_ptr<RenderComponent> render_component_;
 };

@@ -473,6 +473,7 @@ int main() {
     head->moveTo(glm::vec3(0.0f, 7.0f, 0.0f));
 
     auto editor = ifx::EditorFactory().CreateEngineGUI(
+        game->game_loop(),
         game->engine_architecture());
     game->game_loop()->gui()->AddGUIPart(editor);
 

@@ -17,8 +17,8 @@ struct EngineArchitecture;
 class GameLoopFactory {
 public:
 
-    GameLoopFactory();
-    ~GameLoopFactory();
+    GameLoopFactory() = default;
+    ~GameLoopFactory() = default;
 
     std::shared_ptr<GameLoop> Create(
         std::shared_ptr<EngineArchitecture> engine_architecture);

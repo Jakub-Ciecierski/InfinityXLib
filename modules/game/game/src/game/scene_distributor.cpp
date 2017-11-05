@@ -1,17 +1,20 @@
 #include "game/scene_distributor.h"
 
-#include <graphics/rendering/scene_renderer.h>
 #include <physics/physics_simulation.h>
-#include <game/game_object.h>
-#include <game/game_component.h>
-
-#include <graphics/rendering/render_object.h>
+#include <physics/soft_body/simulation/soft_body_fem_simulation.h>
 #include "physics/rigid_body/rigid_body.h"
+
+#include <graphics/rendering/scene_renderer.h>
+#include <graphics/rendering/render_object.h>
 #include <graphics/lighting/light_source.h>
 #include <graphics/rendering/camera/camera.h>
+
+#include <game/game_object.h>
+#include <game/game_component.h>
 #include <game/components/render/render_component.h>
 #include <game/components/cameras/camera_component.h>
 #include <game/components/physics/rigid_body_component.h>
+#include <game/components/physics/soft_body_fem_component.h>
 
 namespace ifx {
 
@@ -52,6 +55,10 @@ void SceneDistributor::Add(std::shared_ptr<GameComponent> game_component) {
         case GameComponentType::PHYSICS:
             Add(std::dynamic_pointer_cast<RigidBodyComponent>(game_component));
             break;
+        case GameComponentType::PHYSICS_SOFT_BODY:
+            Add(std::dynamic_pointer_cast<SoftBodyFEMComponent<double>>
+                    (game_component));
+            break;
     }
 }
 
@@ -68,6 +75,10 @@ bool SceneDistributor::Remove(std::shared_ptr<GameComponent> game_component) {
             break;
         case GameComponentType::PHYSICS:
             Remove(std::dynamic_pointer_cast<RigidBodyComponent>
+                       (game_component));
+            break;
+        case GameComponentType::PHYSICS_SOFT_BODY:
+            Remove(std::dynamic_pointer_cast<SoftBodyFEMComponent<double>>
                        (game_component));
             break;
     }
@@ -90,6 +101,11 @@ void SceneDistributor::Add(std::shared_ptr<RigidBodyComponent> rigid_body) {
     physics_simulation_->Add(rigid_body);
 }
 
+void SceneDistributor::Add(
+    std::shared_ptr<SoftBodyFEMComponent<double>> soft_body){
+    physics_simulation_->soft_body_fem_simulation().Add(soft_body);
+}
+
 bool SceneDistributor::Remove(std::shared_ptr<RenderComponent> render_object) {
     return scene_renderer_->Remove(render_object);
 }
@@ -104,6 +120,11 @@ bool SceneDistributor::Remove(std::shared_ptr<CameraComponent> camera) {
 
 bool SceneDistributor::Remove(std::shared_ptr<RigidBodyComponent> rigid_body) {
     return physics_simulation_->Remove(rigid_body);
+}
+
+bool SceneDistributor::Remove(
+    std::shared_ptr<SoftBodyFEMComponent<double>> soft_body) {
+    return physics_simulation_->soft_body_fem_simulation().Remove(soft_body);
 }
 
 }

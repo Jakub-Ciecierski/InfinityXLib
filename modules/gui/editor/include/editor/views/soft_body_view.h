@@ -27,6 +27,8 @@ class SoftBodyLoadView;
 class SoftBodyGuideView;
 class SoftBodyPicker;
 
+struct EngineArchitecture;
+
 template<class T>
 class SoftBodyFEMComponent;
 
@@ -90,10 +92,11 @@ struct SoftBodyViews{
 
 class SoftBodyView : public View, public SceneViewObserver {
 public:
-    SoftBodyView(std::unique_ptr<GameUpdater> game_updater,
-                 const SoftBodyRenderingEffects &rendering_effects,
-                 std::shared_ptr<SoftBodyPicker> soft_body_picker,
-                 std::unique_ptr<SoftBodyLoadView> load_view);
+    SoftBodyView(
+        std::shared_ptr<EngineArchitecture> engine_architecture,
+        const SoftBodyRenderingEffects &rendering_effects,
+        std::shared_ptr<SoftBodyPicker> soft_body_picker,
+        std::unique_ptr<SoftBodyLoadView> load_view);
     ~SoftBodyView() = default;
 
     bool Terminate() override;
@@ -114,7 +117,7 @@ private:
     bool RenderError(
         SoftBodyFEMComponentBuilder<double>* soft_body_fem_component_builder);
 
-    std::unique_ptr<GameUpdater> game_updater_;
+    std::shared_ptr<EngineArchitecture> engine_architecture_;
 
     SoftBodyRenderingEffects rendering_effects_;
     SoftBodyEditorObjects soft_body_objects_;

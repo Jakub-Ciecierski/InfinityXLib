@@ -14,6 +14,9 @@ class RigidBodyComponent;
 class GameObject;
 class GameComponent;
 
+template<class T>
+class SoftBodyFEMComponent;
+
 /**
  * Distributes Game Components around to sub systems (e.g. render objects to
  * scene renderer.).
@@ -35,11 +38,13 @@ private:
     void Add(std::shared_ptr<LightSource> light_source);
     void Add(std::shared_ptr<CameraComponent> camera);
     void Add(std::shared_ptr<RigidBodyComponent> rigid_body);
+    void Add(std::shared_ptr<SoftBodyFEMComponent<double>> soft_body);
 
     bool Remove(std::shared_ptr<RenderComponent> render_object);
     bool Remove(std::shared_ptr<LightSource> light_source);
     bool Remove(std::shared_ptr<CameraComponent> camera);
     bool Remove(std::shared_ptr<RigidBodyComponent> rigid_body);
+    bool Remove(std::shared_ptr<SoftBodyFEMComponent<double>> soft_body);
 
     std::shared_ptr<SceneRenderer> scene_renderer_;
     std::shared_ptr<PhysicsSimulation> physics_simulation_;

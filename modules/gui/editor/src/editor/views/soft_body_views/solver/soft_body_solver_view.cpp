@@ -4,6 +4,8 @@
 
 #include <game/components/physics/soft_body_fem_component.h>
 #include <game/components/render/render_component.h>
+#include <game/scene_container.h>
+#include <game/game_object.h>
 
 #include <gui/imgui/imgui.h>
 
@@ -20,23 +22,19 @@
 
 #include <common/unique_ptr.h>
 
+#include <physics/physics_simulation.h>
+
 namespace ifx {
 
-SoftBodySolverView::SoftBodySolverView() :
+SoftBodySolverView::SoftBodySolverView(
+    std::shared_ptr<SceneContainer> scene_container) :
     solver_type_(rtfem::AnalysisSolverType::Dynamic),
-    fem_dynamic_solver_(nullptr){}
+    fem_dynamic_solver_(nullptr),
+    scene_container_(scene_container){}
 
 void SoftBodySolverView::Render(SoftBodyEditorObjects& soft_body_objects){
-    if(fem_dynamic_solver_){
-        //if(ImGui::Button("Run Iteraion")){
-            DynamicIteration();
-        //}
-    }
     if(ImGui::Button("Solve Dynamic")){
         RenderDynamic(soft_body_objects);
-    }
-    if(ImGui::Button("Stop Dynamic")){
-        fem_dynamic_solver_ = nullptr;
     }
 
     if(ImGui::Button("Solve")){
@@ -81,40 +79,11 @@ void SoftBodySolverView::Render(SoftBodyEditorObjects& soft_body_objects){
 
 void SoftBodySolverView::RenderDynamic(
     SoftBodyEditorObjects& soft_body_objects){
-    fem_dynamic_solver_ =
-        ifx::make_unique<rtfem::FEMDynamicSolver<double>>();
-
     soft_body_fem_component_
         = soft_body_objects.soft_body_fem_component_builder->Build();
-
-    auto& fem_model = soft_body_fem_component_->fem_model();
-    fem_dynamic_solver_->Solve(fem_model);
+    auto game_object = scene_container_->CreateAndAddEmptyGameObject();
+    game_object->Add(soft_body_fem_component_);
 }
 
-void SoftBodySolverView::DynamicIteration(){
-    fem_dynamic_solver_->RunIteration(1.0 / 100.0);
-    const auto& fem_solver_output = fem_dynamic_solver_->solver_output();
-    auto* vbo = soft_body_fem_component_->render_component()->
-        models()[0]->getMesh(0)->vbo();
-
-    auto* vertices = vbo->vertices();
-    for(unsigned int i = 0; i < vertices->size(); i++){
-        auto& vertex = (*vertices)[i];
-        auto displacement_index_start = i * 3;
-        auto displacement_x
-            = fem_solver_output.displacement[displacement_index_start];
-        auto displacement_y
-            = fem_solver_output.displacement[displacement_index_start + 1];
-        auto displacement_z
-            = fem_solver_output.displacement[displacement_index_start + 2];
-
-        vertex.Position.x += displacement_x;
-        vertex.Position.y += displacement_y;
-        vertex.Position.z += displacement_z;
-
-    }
-
-    vbo->Update();
-}
 
 }

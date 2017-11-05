@@ -8,8 +8,13 @@ namespace ifx {
 
 template <class T>
 void SoftBodyFEMSimulation<T>::Update(float delta_time){
+    int i = 0;
     for(auto& fem_solver : fem_solvers_){
         fem_solver->RunIteration(delta_time);
+
+        auto& soft_body_fem = soft_bodies_[i];
+        soft_body_fem->fem_solver_output(fem_solver->solver_output());
+        i++;
     }
 }
 
