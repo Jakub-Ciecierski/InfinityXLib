@@ -1,6 +1,9 @@
 #include "physics/simulations/bullet_physics_simulation.h"
 
 #include "physics/rigid_body/rigid_body.h"
+#include <physics/soft_body/simulation/soft_body_fem_simulation.h>
+#include <physics/rigid_body/impl/rigid_body_impl.h>
+#include <physics/rigid_body/impl/rigid_body_impl_bullet.h>
 
 #include <BulletCollision/CollisionDispatch/btCollisionDispatcher.h>
 #include <BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h>
@@ -8,10 +11,8 @@
 #include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
 #include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 #include <BulletDynamics/Dynamics/btRigidBody.h>
-#include <iostream>
 
-#include <physics/rigid_body/impl/rigid_body_impl.h>
-#include <physics/rigid_body/impl/rigid_body_impl_bullet.h>
+#include <iostream>
 
 namespace ifx {
 
@@ -52,7 +53,9 @@ BulletPhysicsSimulation::CreateRigidBodyImpl() {
 }
 
 void BulletPhysicsSimulation::UpdateFixedContent() {
-    if (!is_running_)
+    PhysicsSimulation::UpdateFixedContent();
+
+    if(!is_running_)
         return;
 
     SynchronizeRigidBodiesTransform();

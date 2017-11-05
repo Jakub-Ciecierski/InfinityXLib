@@ -37,7 +37,7 @@ void PhysicsSimulationView::RenderGravity() {
     ImGui::PushItemWidth(150);
     ImGui::SliderFloat3("Gravity", raw, -20, 20);
     ImGui::PopItemWidth();
-    
+
     gravity.x = raw[0];
     gravity.y = raw[1];
     gravity.z = raw[2];

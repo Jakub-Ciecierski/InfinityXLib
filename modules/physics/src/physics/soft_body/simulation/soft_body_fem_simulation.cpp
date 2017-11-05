@@ -9,7 +9,7 @@ namespace ifx {
 template <class T>
 void SoftBodyFEMSimulation<T>::Update(float delta_time){
     for(auto& fem_solver : fem_solvers_){
-        fem_solver->RunIteration();
+        fem_solver->RunIteration(delta_time);
     }
 }
 
@@ -17,8 +17,7 @@ template <class T>
 void SoftBodyFEMSimulation<T>::Add(std::shared_ptr<SoftBodyFEM<T>> soft_body){
     soft_bodies_.push_back(soft_body);
 
-    T delta_time = 1.0 / 60.0;
-    auto fem_solver = ifx::make_unique<rtfem::FEMDynamicSolver<T>>(delta_time);
+    auto fem_solver = ifx::make_unique<rtfem::FEMDynamicSolver<T>>();
     fem_solver->Solve(soft_body->fem_model());
     fem_solvers_.push_back(std::move(fem_solver));
 }

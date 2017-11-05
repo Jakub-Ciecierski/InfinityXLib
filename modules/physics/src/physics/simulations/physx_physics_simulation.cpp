@@ -2,14 +2,14 @@
 
 #include "physics/rigid_body/rigid_body.h"
 #include <physics/rigid_body/impl/rigid_body_impl.h>
+#include <physics/soft_body/simulation/soft_body_fem_simulation.h>
+#include <physics/rigid_body/impl/rigid_body_impl_physx.h>
+#include <physics/context/physx_context.h>
 
 #define _DEBUG
 #include <PxPhysicsAPI.h>
 
 #include <common/unique_ptr.h>
-
-#include <physics/rigid_body/impl/rigid_body_impl_physx.h>
-#include <physics/context/physx_context.h>
 
 namespace ifx {
 
@@ -29,6 +29,8 @@ bool PhysxPhysicsSimulation::Terminate() {
 }
 
 void PhysxPhysicsSimulation::UpdateFixedContent() {
+    PhysicsSimulation::UpdateFixedContent();
+
     if (!is_running_)
         return;
 

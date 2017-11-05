@@ -14,12 +14,17 @@ class RigidBodyImpl;
 struct RigidBodyParams;
 class PhysicsContext;
 
+template<class T>
+class SoftBodyFEMSimulation;
+
 class PhysicsSimulation : public Updatable {
 public:
     PhysicsSimulation(std::shared_ptr<PhysicsContext> physics_context);
     virtual ~PhysicsSimulation() = default;
 
-    virtual bool Terminate() = 0;
+    SoftBodyFEMSimulation<double>& soft_body_fem_simulation(){
+        return *soft_body_fem_simulation_;
+    };
 
     bool is_running() { return is_running_; }
     void is_running(bool v) { is_running_ = v; }
@@ -27,23 +32,29 @@ public:
     virtual void SetGravity(const glm::vec3 &g) = 0;
     virtual glm::vec3 GetGravity() = 0;
 
+    virtual bool Terminate() = 0;
+
     virtual void AddImpulse() = 0;
 
     void Play();
     void Pause();
 
     virtual void Add(std::shared_ptr<RigidBody> rigid_body);
-
     virtual bool Remove(std::shared_ptr<RigidBody> rigid_body);
 
     virtual std::unique_ptr<RigidBodyImpl> CreateRigidBodyImpl() = 0;
 
 protected:
+    virtual void UpdateFixedContent() override;
+
     std::shared_ptr<PhysicsContext> physics_context_;
 
     std::vector<std::shared_ptr<RigidBody>> rigid_bodies_;
 
     bool is_running_;
+
+private:
+    std::unique_ptr<SoftBodyFEMSimulation<double>> soft_body_fem_simulation_;
 };
 }
 

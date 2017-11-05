@@ -3,6 +3,7 @@
 #include <physics/simulations/physx_physics_simulation.h>
 #include <physics/physics_simulation.h>
 #include "physics/context/physx_context.h"
+#include "physics/soft_body/simulation/soft_body_fem_simulation.h"
 
 #include <common/unique_ptr.h>
 

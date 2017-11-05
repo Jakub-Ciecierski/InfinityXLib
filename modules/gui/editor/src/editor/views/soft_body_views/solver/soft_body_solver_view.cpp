@@ -82,7 +82,7 @@ void SoftBodySolverView::Render(SoftBodyEditorObjects& soft_body_objects){
 void SoftBodySolverView::RenderDynamic(
     SoftBodyEditorObjects& soft_body_objects){
     fem_dynamic_solver_ =
-        ifx::make_unique<rtfem::FEMDynamicSolver<double>>(1.0 / 100.0);
+        ifx::make_unique<rtfem::FEMDynamicSolver<double>>();
 
     soft_body_fem_component_
         = soft_body_objects.soft_body_fem_component_builder->Build();
@@ -92,7 +92,7 @@ void SoftBodySolverView::RenderDynamic(
 }
 
 void SoftBodySolverView::DynamicIteration(){
-    fem_dynamic_solver_->RunIteration();
+    fem_dynamic_solver_->RunIteration(1.0 / 100.0);
     const auto& fem_solver_output = fem_dynamic_solver_->solver_output();
     auto* vbo = soft_body_fem_component_->render_component()->
         models()[0]->getMesh(0)->vbo();

@@ -2,6 +2,8 @@
 
 #include <physics/physics_simulation.h>
 #include <physics/simulations/bullet_physics_simulation.h>
+#include "physics/soft_body/simulation/soft_body_fem_simulation.h"
+
 #include <BulletCollision/BroadphaseCollision/btDbvtBroadphase.h>
 #include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
 #include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
