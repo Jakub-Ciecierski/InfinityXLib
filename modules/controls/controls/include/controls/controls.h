@@ -28,10 +28,11 @@ public:
         return controller_container_;
     }
 
-    virtual void Update(float = 0) override;
-
     void AddCommand(std::shared_ptr<Command> command);
     bool RemoveCommand(std::shared_ptr<Command> command);
+
+protected:
+    void UpdateFixedContent() override;
 
 private:
     std::vector<std::shared_ptr<Command>> commands_;

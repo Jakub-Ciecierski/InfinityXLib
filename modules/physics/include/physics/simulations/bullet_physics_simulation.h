@@ -40,12 +40,13 @@ public:
 
     virtual std::unique_ptr<RigidBodyImpl> CreateRigidBodyImpl() override;
 
-    virtual void Update(float time_delta) override;
-
     virtual void SetGravity(const glm::vec3 &g) override;
     virtual glm::vec3 GetGravity() override;
 
     virtual void AddImpulse() override;
+protected:
+    void UpdateFixedContent() override;
+
 private:
     /**
      * Synchronizes transform of game object and rigid bodies

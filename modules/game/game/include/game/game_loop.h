@@ -53,7 +53,7 @@ public:
 private:
     void RunSingleIteration();
 
-    bool UpdateTime();
+    double ComputeElapsedTime();
 
     std::unique_ptr<GameUpdater> game_updater_;
 

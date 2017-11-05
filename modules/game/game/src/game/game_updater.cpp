@@ -22,18 +22,18 @@ void GameUpdater::Update(float time_elapsed) {
     auto &systems = engine_architecture_->engine_systems;
 
     if (systems.physics_simulation)
-        systems.physics_simulation->Update(time_elapsed);
+        systems.physics_simulation->UpdateFixed();
     if (systems.scene_container)
-        systems.scene_container->Update();
+        systems.scene_container->UpdateFixed();
     if (systems.controls)
-        systems.controls->Update();
+        systems.controls->UpdateFixed();
     if (systems.renderer)
-        systems.renderer->Update();
+        systems.renderer->UpdateFixed();
     if (systems.gui)
-        systems.gui->Update();
+        systems.gui->UpdateFixed();
 
     if (engine_architecture_->window)
-        engine_architecture_->window->Update();
+        engine_architecture_->window->UpdateFixed();
 }
 
 }

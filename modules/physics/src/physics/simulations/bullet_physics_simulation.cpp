@@ -51,12 +51,12 @@ BulletPhysicsSimulation::CreateRigidBodyImpl() {
     return std::unique_ptr<RigidBodyImplBullet>(new RigidBodyImplBullet());
 }
 
-void BulletPhysicsSimulation::Update(float time_delta) {
+void BulletPhysicsSimulation::UpdateFixedContent() {
     if (!is_running_)
         return;
 
     SynchronizeRigidBodiesTransform();
-    dynamics_world_->stepSimulation(time_delta);
+    dynamics_world_->stepSimulation(update_time_delta_.time_delta);
     SynchronizeGameObjectsTransform();
 }
 

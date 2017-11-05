@@ -19,11 +19,12 @@ public:
 
     virtual ~GUI() = default;
 
-    virtual void Update(float time_delta = 0) override;
-
     bool Terminate();
 
     void AddGUIPart(std::shared_ptr<GUIPart> gui_part);
+protected:
+    void UpdateFixedContent() override;
+
 private:
     std::vector<std::shared_ptr<GUIPart>> gui_parts_;
     std::shared_ptr<GUIContext> context_;

@@ -29,17 +29,15 @@ public:
         return game_objects_;
     }
 
-    virtual void Update(float time_delta = 0) override;
-
     bool Remove(std::shared_ptr<GameObject> game_object);
-
     bool Exists(std::shared_ptr<GameObject> game_object);
 
     std::shared_ptr<GameObject> CreateAndAddEmptyGameObject();
     std::shared_ptr<GameObject> CreateGameObject();
 
     std::shared_ptr<CameraComponent> GetActiveCamera();
-
+protected:
+    void UpdateFixedContent() override;
 private:
     void Add(std::shared_ptr<GameObject> game_object);
 

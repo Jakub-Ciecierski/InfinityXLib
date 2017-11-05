@@ -24,8 +24,9 @@ public:
     std::shared_ptr<Window> window() { return window_; }
     std::shared_ptr<SceneRenderer> scene_renderer() { return scene_renderer_; }
 
-    virtual void Update(float time_delta = 0) override;
 protected:
+    virtual void UpdateFixedContent() override;
+
     virtual void Render();
     void RenderScene();
 

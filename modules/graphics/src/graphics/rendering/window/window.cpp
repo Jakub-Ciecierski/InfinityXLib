@@ -44,7 +44,7 @@ void Window::Resize(int width, int height) {
     NotifyResize(width, height);
 }
 
-void Window::Update(float) {
+void Window::UpdateFixedContent() {
     glfwPollEvents();
     glfwSwapBuffers(getHandle());
 }

@@ -31,8 +31,6 @@ public:
 
     virtual bool Terminate() override;
 
-    virtual void Update(float time_delta) override;
-
     virtual void Add(std::shared_ptr<RigidBody> rigid_body) override;
     virtual bool Remove(std::shared_ptr<RigidBody> rigid_body) override;
 
@@ -45,6 +43,9 @@ public:
 
     void SynchronizeRigidBodiesTransform();
     void SynchronizeGameObjectsTransform();
+protected:
+    virtual void UpdateFixedContent() override;
+
 private:
     physx::PxDefaultCpuDispatcher *px_dispatcher_;
     physx::PxScene *px_scene_;

@@ -32,16 +32,14 @@ public:
 
     void Resize(int width, int height);
 
-    // Overridden from Updatable
-    virtual void Update(float time_delta = 0) override;
-
     int ShouldClose();
 
     GLFWwindow *getHandle();
 
     void ShowCursor();
     void HideCursor();
-
+protected:
+    void UpdateFixedContent() override;
 private:
     GLFWwindow *glfwWindow;
 

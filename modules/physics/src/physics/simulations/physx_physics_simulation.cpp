@@ -28,7 +28,7 @@ bool PhysxPhysicsSimulation::Terminate() {
     return true;
 }
 
-void PhysxPhysicsSimulation::Update(float time_delta) {
+void PhysxPhysicsSimulation::UpdateFixedContent() {
     if (!is_running_)
         return;
 
@@ -36,7 +36,7 @@ void PhysxPhysicsSimulation::Update(float time_delta) {
 
     SynchronizeRigidBodiesTransform();
 
-    px_scene_->simulate(time_delta);
+    px_scene_->simulate(update_time_delta_.time_delta);
     px_scene_->fetchResults(true);
 
     SynchronizeGameObjectsTransform();

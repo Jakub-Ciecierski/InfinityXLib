@@ -15,7 +15,7 @@ SceneContainer::SceneContainer(
         new SceneDistributor(scene_renderer, physics_simulation));
 }
 
-void SceneContainer::Update(float time_delta) {
+void SceneContainer::UpdateFixedContent() {
     for (auto &object : game_objects_) {
         object->Update();
     }

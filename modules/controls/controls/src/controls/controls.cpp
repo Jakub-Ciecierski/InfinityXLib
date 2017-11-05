@@ -18,7 +18,7 @@ Controls::Controls(
     ControlsContainer::GetInstance().controls(this);
 }
 
-void Controls::Update(float) {
+void Controls::UpdateFixedContent() {
     for (auto &command : commands_) {
         if (command->IsConditionSatisfied())
             command->Execute();

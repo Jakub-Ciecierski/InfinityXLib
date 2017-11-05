@@ -19,9 +19,8 @@ Renderer::Renderer(std::shared_ptr<Window> window,
         scene_renderer_, window_);
 }
 
-void Renderer::Update(float) {
+void Renderer::UpdateFixedContent(){
     TextureActivator::GetInstance().ResetGlobal();
-
     Render();
 }
 

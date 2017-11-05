@@ -21,24 +21,18 @@ void GameLoop::Start() {
 }
 
 void GameLoop::RunSingleIteration() {
-    if (!UpdateTime())
-        return;
-    game_updater_->Update(time_data_.time_delta);
+    game_updater_->Update(ComputeElapsedTime());
 }
 
-bool GameLoop::UpdateTime() {
+double GameLoop::ComputeElapsedTime(){
     time_data_.current_time = glfwGetTime();
 
     double elapsed = time_data_.current_time - time_data_.last_time;
-    time_data_.time_since_last_update += elapsed;
     time_data_.total_time += elapsed;
     time_data_.last_time = time_data_.current_time;
 
-    if (time_data_.time_since_last_update >= time_data_.time_delta) {
-        time_data_.time_since_last_update = 0.0f;
-        return true;
-    }
-    return false;
+    return elapsed;
 }
+
 
 }

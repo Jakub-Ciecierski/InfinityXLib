@@ -11,7 +11,7 @@ GUI::GUI(std::shared_ptr<GUIContext> context) :
     context_(context),
     is_init_(false) {}
 
-void GUI::Update(float time_delta) {
+void GUI::UpdateFixedContent() {
     context_->NewFrame();
 
     for (auto &gui_part : gui_parts_)
