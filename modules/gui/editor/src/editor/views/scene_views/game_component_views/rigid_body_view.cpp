@@ -26,7 +26,8 @@ void RigidBodyView::RenderCollisionShape(RigidBodyComponent& rigd_body_component
     auto name =
             CollisionShapeName(rigd_body_component.collision_shape()->type());
 
-    if (ImGui::TreeNodeEx(name.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
+    if (ImGui::TreeNodeEx(name.c_str(),
+                          ImGuiTreeNodeFlags_DefaultOpen)) {
 
         ImGui::TreePop();
     }

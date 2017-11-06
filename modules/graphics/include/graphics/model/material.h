@@ -21,6 +21,8 @@ struct Material {
      * Adds texture to appropriate type slot
      */
     void AddTexture(std::shared_ptr<Texture2D> texture);
+
+    void AddTexture(std::shared_ptr<Texture2D> texture, TextureTypes type);
 };
 }
 

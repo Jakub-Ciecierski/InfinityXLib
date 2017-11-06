@@ -12,11 +12,13 @@ class LightView;
 class RenderObjectView;
 class SceneRenderer;
 class RigidBodyView;
+class ResourceContext;
 
 class GameComponentView {
 public:
 
-    GameComponentView(std::shared_ptr<SceneRenderer> scene_renderer);
+    GameComponentView(std::shared_ptr<SceneRenderer> scene_renderer,
+                      std::shared_ptr<ResourceContext> resource_creator);
     ~GameComponentView() = default;
 
     void Render(std::shared_ptr<GameComponent> game_component);

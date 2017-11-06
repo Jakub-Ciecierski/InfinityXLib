@@ -34,7 +34,7 @@ std::shared_ptr<Texture2D> TextureCreator::MakeTexture2DFromFile(
                                                SOIL_LOAD_RGBA);
         if (image == NULL) {
             std::string info = "NULL returned";
-            throw new std::invalid_argument(info);
+            return nullptr;
         }
         //texture->InitData((void*)image, width, height);
         texture->Bind();

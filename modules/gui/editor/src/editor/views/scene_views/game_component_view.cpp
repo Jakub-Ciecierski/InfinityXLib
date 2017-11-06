@@ -5,6 +5,7 @@
 #include <editor/views/scene_views/game_component_views/light_view.h>
 #include <editor/views/scene_views/game_component_views/render_object_view.h>
 #include <editor/views/scene_views/game_component_views/rigid_body_view.h>
+#include <editor/views/scene_views/game_component_views/render_object_views/render_object_material_view.h>
 
 #include <game/game_component.h>
 #include <game/components/render/render_component.h>
@@ -17,11 +18,14 @@
 
 namespace ifx {
 
-GameComponentView::GameComponentView(std::shared_ptr<SceneRenderer> scene_renderer) {
+GameComponentView::GameComponentView(
+        std::shared_ptr<SceneRenderer> scene_renderer,
+        std::shared_ptr<ResourceContext> resource_creator) {
     movable_object_view_ = ifx::make_unique<MovableObjectView>();
     camera_view_ = ifx::make_unique<CameraView>();
     light_view_ = ifx::make_unique<LightView>();
-    render_object_view_ = ifx::make_unique<RenderObjectView>(scene_renderer);
+    render_object_view_ = ifx::make_unique<RenderObjectView>(scene_renderer,
+                                                             resource_creator);
     rigid_body_view_ = ifx::make_unique<RigidBodyView>();
 }
 

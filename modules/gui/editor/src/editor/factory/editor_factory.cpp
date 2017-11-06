@@ -31,6 +31,7 @@
 #include "editor/views/scene_views/game_component_views/rigid_body_view.h"
 #include "editor/views/resource_view.h"
 #include <editor/views/factory/resource_view_factory.h>
+#include <editor/views/scene_views/game_component_views/render_object_views/render_object_material_view.h>
 
 #include "game/scene_container.h"
 #include <game/architecture/engine_architecture.h>

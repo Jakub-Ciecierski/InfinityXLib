@@ -4,20 +4,40 @@
 #include <graphics/rendering/scene_renderer.h>
 #include <graphics/rendering/rendering_effect.h>
 
+#include <editor/views/scene_views/game_component_views/render_object_views/render_object_material_view.h>
+
 #include <game/components/render/render_component.h>
 
 #include <gui/imgui/imgui.h>
 
+#include <common/unique_ptr.h>
+
 namespace ifx {
 
-RenderObjectView::RenderObjectView(std::shared_ptr<SceneRenderer> scene_renderer)
-    :
-    scene_renderer_(scene_renderer) {}
+RenderObjectView::RenderObjectView(
+        std::shared_ptr<SceneRenderer> scene_renderer,
+        std::shared_ptr<ResourceContext> resource_creator)
+        : scene_renderer_(scene_renderer) {
+    render_component_material_view_ =
+            ifx::make_unique<RenderObjectMaterialView>(resource_creator);
+}
 
 void RenderObjectView::Render(std::shared_ptr<RenderComponent> render_object) {
-    if (ImGui::TreeNode("Rendering Effects")) {
+    if (ImGui::TreeNodeEx("Render",
+                          ImGuiTreeNodeFlags_DefaultOpen)) {
+        RenderRenderingEffects(render_object);
+        render_component_material_view_->Render(render_object);
+        ImGui::TreePop();
+    }
+}
+
+void RenderObjectView::RenderRenderingEffects(
+        std::shared_ptr<RenderComponent> render_object){
+    if (ImGui::TreeNodeEx("Rendering Effects",
+                          ImGuiTreeNodeFlags_DefaultOpen)) {
         RenderRenderingEffectsContextMenu(render_object);
         RenderList(render_object);
+
         ImGui::TreePop();
     }
 }

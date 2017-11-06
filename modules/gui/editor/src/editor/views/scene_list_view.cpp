@@ -22,6 +22,7 @@
 #include <editor/views/scene_views/context_menus/game_object_context_menu/context_menu_add_render_object/context_menu_add_render_object_asset.h>
 #include <editor/views/scene_views/context_menus/game_object_context_menu/context_menu_add_rigid_body.h>
 #include "editor/views/scene_views/game_component_views/rigid_body_view.h"
+#include <editor/views/scene_views/game_component_views/render_object_views/render_object_material_view.h>
 
 #include <game/scene_container.h>
 #include <game/game_component.h>
@@ -47,7 +48,8 @@ SceneListView::SceneListView(std::shared_ptr<SceneContainer> scene,
     scene_manipulator_ = std::make_shared<SceneManipulator>();
 
     game_object_view_ = ifx::make_unique<GameObjectView>();
-    game_component_view_ = ifx::make_unique<GameComponentView>(scene_renderer);
+    game_component_view_ = ifx::make_unique<GameComponentView>(scene_renderer,
+                                                               resource_creator);
     scene_manipulator_view_
         = ifx::make_unique<SceneManipulatorView>(scene_manipulator_);
     game_object_context_menu_ = ifx::make_unique<GameObjectContextMenu>(
