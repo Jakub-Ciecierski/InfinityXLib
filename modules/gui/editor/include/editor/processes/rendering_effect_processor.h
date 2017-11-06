@@ -4,8 +4,6 @@
 #include <memory>
 #include <vector>
 
-//#include <boost/filesystem.hpp>
-
 namespace boost {
 namespace filesystem {
 class directory_entry;

@@ -6,15 +6,20 @@
 namespace ifx {
 
 class ResourceManager;
+class ResourceFinder;
+class Resources;
 
 class ResourceManagerFactory {
 public:
-    ResourceManagerFactory();
+    ResourceManagerFactory() = default;
 
-    ~ResourceManagerFactory();
+    ~ResourceManagerFactory() = default;
 
     std::shared_ptr<ResourceManager> Create();
 private:
+
+    std::shared_ptr<ResourceFinder> CreateModelFinder(Resources& resource);
+    std::shared_ptr<ResourceFinder> CreateTextureFinder(Resources& resource);
 };
 }
 

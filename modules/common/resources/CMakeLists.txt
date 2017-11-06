@@ -38,6 +38,11 @@ include_directories(${IFX_ROOT}/configuration/include)
 # PROJECT
 #---------------------------------
 
+include_directories(${IFX_ROOT}/modules/common/common/${INC_DIR})
+
+find_package(Boost COMPONENTS filesystem system REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+
 # INCLUDE AUTOMATIC SEARCH
 FIND_INCLUDE_DIR(INC_DIRS ${INC_DIR}/*.h)
 include_directories(${INC_DIR})

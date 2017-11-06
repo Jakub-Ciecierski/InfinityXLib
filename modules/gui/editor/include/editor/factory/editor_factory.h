@@ -22,6 +22,7 @@ class SceneRenderer;
 class RenderingView;
 class SoftBodyView;
 class GameLoop;
+class ResourceView;
 
 struct EngineArchitecture;
 
@@ -47,6 +48,8 @@ private:
     std::shared_ptr<SoftBodyView> CreateSoftBodyView(
         std::shared_ptr<GameLoop> game_loop,
         std::shared_ptr<EngineArchitecture> engine_architecture);
+    std::shared_ptr<ResourceView> CreateResourceView(
+            std::shared_ptr<ResourceContext> resource_context);
 
     std::shared_ptr<Docker> CreateDefaultDocker(
         std::shared_ptr<Window> window,

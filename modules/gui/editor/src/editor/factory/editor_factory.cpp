@@ -29,6 +29,8 @@
 #include <editor/window_views/screen_window_view.h>
 #include <editor/views/scene_views/context_menus/game_object_context_menu/context_menu_add_rigid_body.h>
 #include "editor/views/scene_views/game_component_views/rigid_body_view.h"
+#include "editor/views/resource_view.h"
+#include <editor/views/factory/resource_view_factory.h>
 
 #include "game/scene_container.h"
 #include <game/architecture/engine_architecture.h>
@@ -36,6 +38,8 @@
 
 #include "graphics/model_loader/parametric_loader/parametric_interpreter.h"
 #include <graphics/rendering/renderer.h>
+
+#include <resources/resource_finder.h>
 
 namespace ifx {
 
@@ -57,6 +61,9 @@ std::shared_ptr<Editor> EditorFactory::CreateEngineGUI(
     auto soft_body_view = CreateSoftBodyView(game_loop, engine_architecture);
     scene_list_view->AddObserver(soft_body_view);
 
+    auto resource_view = CreateResourceView(
+            engine_architecture->engine_contexts.resource_context);
+
     // Create Window views
     auto left_window_view =
         std::make_shared<WindowView>(scene_list_view, "Left");
@@ -65,7 +72,8 @@ std::shared_ptr<Editor> EditorFactory::CreateEngineGUI(
         views{physics_simulation_view, rendering_view};
     auto right_window_view = std::make_shared<WindowView>(views, "Right");
 
-    auto bottom_window_view = std::make_shared<WindowView>("Bottom");
+    auto bottom_window_view = std::make_shared<WindowView>(resource_view,
+                                                           "Bottom");
 
     auto top_window_view = std::make_shared<MainMenuWindowView>(
         engine_architecture);
@@ -125,6 +133,12 @@ std::shared_ptr<SoftBodyView> EditorFactory::CreateSoftBodyView(
     std::shared_ptr<EngineArchitecture> engine_architecture) {
     return std::dynamic_pointer_cast<SoftBodyView>(
         SoftBodyViewFactory(game_loop, engine_architecture).Create());
+}
+
+std::shared_ptr<ResourceView> EditorFactory::CreateResourceView(
+        std::shared_ptr<ResourceContext> resource_context) {
+    return std::dynamic_pointer_cast<ResourceView>(
+            ResourceViewFactory(resource_context).Create());
 }
 
 std::shared_ptr<Docker> EditorFactory::CreateDefaultDocker(
