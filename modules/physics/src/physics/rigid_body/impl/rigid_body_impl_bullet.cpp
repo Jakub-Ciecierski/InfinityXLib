@@ -76,4 +76,14 @@ bool RigidBodyImplBullet::IsDynamic() {
     return rigid_body_bt_->getInvMass() != 0;
 }
 
+void RigidBodyImplBullet::SetMass(float mass){
+    throw std::invalid_argument("RigidBodyImplBullet::SetMass Not Implemented");
+}
+
+void RigidBodyImplBullet::SetPhysicsMaterial(
+        const PhysicsMaterial& physics_material){
+    throw std::invalid_argument(
+            "RigidBodyImplBullet::SetPhysicsMaterial Not Implemented");
+}
+
 }

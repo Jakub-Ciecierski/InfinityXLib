@@ -16,8 +16,24 @@ class RigidBodyImpl {
 public:
 
     RigidBodyImpl();
-
     virtual ~RigidBodyImpl() = default;
+
+    std::shared_ptr<CollisionShape> collision_shape(){
+        return collision_shape_;
+    }
+    float mass(){return mass_;}
+    void mass(float mass){
+        if (IsDynamic() && mass <= 0) {
+            return;
+        }
+        mass_ = mass;
+        SetMass(mass_);
+    }
+    const PhysicsMaterial& physics_material() {return physics_material_;}
+    void physics_material(const PhysicsMaterial& physics_material) {
+        physics_material_ = physics_material;
+        SetPhysicsMaterial(physics_material_);
+    }
 
     virtual void *GetNativeRigidBody() = 0;
 
@@ -32,6 +48,10 @@ public:
     virtual void SetCollisionShapeScale(const glm::vec3 &scale) = 0;
 
     virtual bool IsDynamic() = 0;
+
+    virtual void SetMass(float mass) = 0;
+    virtual void SetPhysicsMaterial(const PhysicsMaterial& physics_material) = 0;
+
 protected:
     std::shared_ptr<CollisionShape> collision_shape_;
     float mass_;

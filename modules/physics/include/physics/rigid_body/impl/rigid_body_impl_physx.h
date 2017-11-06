@@ -35,6 +35,9 @@ public:
     virtual void SetCollisionShapeScale(const glm::vec3 &scale) override;
 
     virtual bool IsDynamic() override;
+
+    virtual void SetMass(float mass) override;
+    virtual void SetPhysicsMaterial(const PhysicsMaterial& physics_material) override;
 private:
     physx::PxPhysics *px_physics_;
 
@@ -42,10 +45,6 @@ private:
     physx::PxShape *px_shape_;
     physx::PxMaterial *px_material_;
 
-    glm::vec3 previous_collision_shape_scale_;
-    std::shared_ptr<CollisionShape> ifx_collision_shape_;
-
-    float mass_;
 };
 }
 

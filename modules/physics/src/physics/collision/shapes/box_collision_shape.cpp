@@ -7,6 +7,7 @@
 namespace ifx {
 
 BoxCollisionShape::BoxCollisionShape(const glm::vec3 &dim) :
+    CollisionShape(CollisionShapeType::Box),
     dimension_(dim) {}
 
 void BoxCollisionShape::InitImpl(RigidBodyImpl *rigid_body_impl) {

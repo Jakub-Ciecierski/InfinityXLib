@@ -26,11 +26,14 @@ void RigidBodyImplPhysx::InitImpl(
     std::shared_ptr<CollisionShape> collision_shape,
     float mass,
     const PhysicsMaterial& physics_material) {
-    ifx_collision_shape_ = collision_shape;
+    collision_shape_ = collision_shape;
     mass_ = mass;
     physics_material_ = physics_material;
 
-    px_material_ = px_physics_->createMaterial(0.5, 0.5, 0.1);
+    px_material_ = px_physics_->createMaterial(
+            physics_material_.static_friction,
+            physics_material_.dynamic_friction,
+            physics_material_.restitution);
 
     collision_shape->InitImpl(this);
     if (!px_shape_)
@@ -41,7 +44,7 @@ void RigidBodyImplPhysx::InitImpl(
             physx::PxTransform(physx::PxIDENTITY::PxIdentity));
         physx::PxRigidDynamic
             *dynamic = (physx::PxRigidDynamic *) px_rigid_actor_;
-        dynamic->setMass(mass);
+        dynamic->setMass(mass_);
     } else {
         px_rigid_actor_ = px_physics_->createRigidStatic(
             physx::PxTransform(physx::PxIDENTITY::PxIdentity));
@@ -77,16 +80,16 @@ void RigidBodyImplPhysx::InitCollisionShape(const SphereCollisionShape *shape) {
 }
 
 void RigidBodyImplPhysx::SetCollisionShapeScale(const glm::vec3 &scale) {
-    if (ifx_collision_shape_->scale() == scale) {
+    if (collision_shape_->scale() == scale) {
         return;
     }
-    ifx_collision_shape_->scale(scale);
+    collision_shape_->scale(scale);
 
     physx::PxBoxGeometry box;
     if (px_shape_->getBoxGeometry(box)) {
         const auto &dimensions
             = std::static_pointer_cast<BoxCollisionShape>(
-                ifx_collision_shape_)->dimension();
+                        collision_shape_)->dimension();
 
         px_rigid_actor_->detachShape(*px_shape_);
 
@@ -100,7 +103,7 @@ void RigidBodyImplPhysx::SetCollisionShapeScale(const glm::vec3 &scale) {
     if (px_shape_->getSphereGeometry(sphere)) {
         const auto &radius
                 = std::static_pointer_cast<SphereCollisionShape>(
-                        ifx_collision_shape_)->radius();
+                        collision_shape_)->radius();
         px_rigid_actor_->detachShape(*px_shape_);
         px_shape_->setGeometry(physx::PxSphereGeometry(radius * scale.x));
         px_rigid_actor_->attachShape(*px_shape_);
@@ -109,6 +112,22 @@ void RigidBodyImplPhysx::SetCollisionShapeScale(const glm::vec3 &scale) {
 
 bool RigidBodyImplPhysx::IsDynamic() {
     return mass_ != 0;
+}
+
+void RigidBodyImplPhysx::SetMass(float mass){
+    physx::PxRigidDynamic
+            *dynamic = (physx::PxRigidDynamic *) px_rigid_actor_;
+    dynamic->setMass(mass);
+}
+
+void RigidBodyImplPhysx::SetPhysicsMaterial(
+        const PhysicsMaterial& physics_material){
+    if(!px_material_){
+        return;
+    }
+    px_material_->setDynamicFriction(physics_material.dynamic_friction);
+    px_material_->setStaticFriction(physics_material.static_friction);
+    px_material_->setRestitution(physics_material.restitution);
 }
 
 }

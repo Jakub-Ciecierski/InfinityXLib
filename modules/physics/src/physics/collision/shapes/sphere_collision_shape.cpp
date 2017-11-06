@@ -4,7 +4,9 @@
 
 namespace ifx {
 
-SphereCollisionShape::SphereCollisionShape(float radius) : radius_(radius){}
+SphereCollisionShape::SphereCollisionShape(float radius) :
+        CollisionShape(CollisionShapeType::Sphere),
+        radius_(radius){}
 
 void SphereCollisionShape::InitImpl(RigidBodyImpl *rigid_body_impl) {
     rigid_body_impl->InitCollisionShape(this);

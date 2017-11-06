@@ -1,7 +1,5 @@
 #include "physics/rigid_body/rigid_body.h"
 
-#include <physics/rigid_body/impl/rigid_body_impl.h>
-
 namespace ifx {
 
 RigidBody::RigidBody(std::unique_ptr<RigidBodyImpl> rigid_body_impl,
