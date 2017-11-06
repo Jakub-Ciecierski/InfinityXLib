@@ -33,7 +33,7 @@ public:
     std::shared_ptr<ifx::Model> loadModel();
 
 private:
-    void checkError(const aiScene *scene,
+    bool checkError(const aiScene *scene,
                     std::string errorString);
 
     /*

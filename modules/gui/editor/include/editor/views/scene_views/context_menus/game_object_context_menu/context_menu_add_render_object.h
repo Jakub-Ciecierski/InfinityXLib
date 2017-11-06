@@ -17,7 +17,6 @@ class ContextMenuAddRenderObject {
 public:
 
     ContextMenuAddRenderObject();
-
     ~ContextMenuAddRenderObject() = default;
 
     void Render(

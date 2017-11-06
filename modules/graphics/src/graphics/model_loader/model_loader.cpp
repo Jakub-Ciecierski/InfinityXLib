@@ -23,7 +23,8 @@ std::shared_ptr<Model> ModelLoader::loadModel() {
                               | aiProcess_FlipUVs
                               | aiProcess_CalcTangentSpace);
 
-    checkError(scene, string(importer.GetErrorString()));
+    if(!checkError(scene, string(importer.GetErrorString())))
+        return nullptr;
 
     // Retrieve the directory path of the filepath
     this->directory = filepath.substr(0, filepath.find_last_of('/'));
@@ -37,14 +38,15 @@ std::shared_ptr<Model> ModelLoader::loadModel() {
     return model;
 }
 
-void ModelLoader::checkError(const aiScene *scene,
+bool ModelLoader::checkError(const aiScene *scene,
                              string errorString) {
     if (!scene
         || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         string info = "ERROR::ASSIMP::" + errorString;
         cout << info << endl;
-        throw new std::invalid_argument(info);
+        return false;
     }
+    return true;
 }
 
 void ModelLoader::processNode(aiNode *node, const aiScene *scene,

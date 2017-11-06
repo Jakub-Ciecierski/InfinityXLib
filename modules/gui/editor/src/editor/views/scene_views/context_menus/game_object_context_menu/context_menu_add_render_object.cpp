@@ -29,7 +29,8 @@ void ContextMenuAddRenderObject::Render(
     if (ImGui::BeginMenu("Render Object")) {
         context_menu_add_render_object_parametric_equation_->
             Render(scene_renderer, resource_creator, game_object);
-
+        context_menu_add_render_object_asset_->Render(
+                scene_renderer, resource_creator, game_object);
         ImGui::EndMenu();
     }
 }
