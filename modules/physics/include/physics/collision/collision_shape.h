@@ -10,6 +10,10 @@ namespace ifx {
 
 class RigidBodyImpl;
 
+enum class CollisionShapeType{
+    StaticPlane, Box, Sphere
+};
+
 class CollisionShape {
 public:
 

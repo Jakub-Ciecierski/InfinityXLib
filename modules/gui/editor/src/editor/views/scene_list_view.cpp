@@ -20,6 +20,8 @@
 #include "editor/views/scene_views/context_menus/game_object_context_menu/context_menu_add_render_object.h"
 #include <editor/views/scene_views/context_menus/game_object_context_menu/context_menu_add_render_object/context_menu_add_render_object_parametric_equation.h>
 #include <editor/views/scene_views/context_menus/game_object_context_menu/context_menu_add_render_object/context_menu_add_render_object_asset.h>
+#include <editor/views/scene_views/context_menus/game_object_context_menu/context_menu_add_rigid_body.h>
+#include "editor/views/scene_views/game_component_views/rigid_body_view.h"
 
 #include <game/scene_container.h>
 #include <game/game_component.h>
@@ -35,7 +37,8 @@ namespace ifx {
 
 SceneListView::SceneListView(std::shared_ptr<SceneContainer> scene,
                              std::shared_ptr<ResourceContext> resource_creator,
-                             std::shared_ptr<SceneRenderer> scene_renderer) :
+                             std::shared_ptr<SceneRenderer> scene_renderer,
+                             std::shared_ptr<PhysicsSimulation> physics_simulation) :
     View("Scene"),
     scene_(scene),
     resource_creator_(resource_creator),
@@ -49,7 +52,9 @@ SceneListView::SceneListView(std::shared_ptr<SceneContainer> scene,
         = ifx::make_unique<SceneManipulatorView>(scene_manipulator_);
     game_object_context_menu_ = ifx::make_unique<GameObjectContextMenu>(
         scene_renderer,
-        resource_creator_, scene_);
+        resource_creator_,
+        scene_,
+        physics_simulation);
     game_component_context_menu_ = ifx::make_unique<GameComponentContextMenu>();
     scene_list_context_menu_ = ifx::make_unique<SceneListContextMenu>(scene_);
 }

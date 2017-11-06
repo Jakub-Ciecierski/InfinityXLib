@@ -23,13 +23,15 @@ class SceneRenderer;
 class GameObjectContextMenu;
 class GameComponentContextMenu;
 class SceneListContextMenu;
+class PhysicsSimulation;
 
 class SceneListView : public View, public SceneViewSubject {
 public:
 
     SceneListView(std::shared_ptr<SceneContainer> scene,
                   std::shared_ptr<ResourceContext> resource_creator,
-                  std::shared_ptr<SceneRenderer> scene_renderer);
+                  std::shared_ptr<SceneRenderer> scene_renderer,
+                  std::shared_ptr<PhysicsSimulation> physics_simulation);
 
     ~SceneListView() = default;
 

@@ -10,8 +10,6 @@ StaticPlaneShape::StaticPlaneShape(const glm::vec3 &normal,
     normal_(normal),
     plane_constant_(plane_constant) {}
 
-StaticPlaneShape::~StaticPlaneShape() {}
-
 void StaticPlaneShape::InitImpl(RigidBodyImpl *rigid_body_impl) {
     rigid_body_impl->InitCollisionShape(this);
 }

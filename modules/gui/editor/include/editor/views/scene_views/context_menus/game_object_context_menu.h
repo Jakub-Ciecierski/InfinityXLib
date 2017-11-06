@@ -11,6 +11,8 @@ class ResourceContext;
 class ContextMenuAddRenderObject;
 class ContextMenuAddLight;
 class SceneRenderer;
+class ContextMenuAddRigidBody;
+class PhysicsSimulation;
 
 enum class GameObjectContextMenuEvent {
     Remove, Add, None
@@ -20,7 +22,8 @@ class GameObjectContextMenu {
 public:
     GameObjectContextMenu(std::shared_ptr<SceneRenderer> scene_renderer,
                           std::shared_ptr<ResourceContext> resource_creator,
-                          std::shared_ptr<SceneContainer> scene);
+                          std::shared_ptr<SceneContainer> scene,
+                          std::shared_ptr<PhysicsSimulation> physics_simulation);
     ~GameObjectContextMenu() = default;
 
     GameObjectContextMenuEvent Render(std::shared_ptr<GameObject> game_object,
@@ -43,8 +46,11 @@ private:
         std::shared_ptr<ResourceContext> resource_creator,
         std::shared_ptr<GameObject> game_object);
 
+    void AddRigidBody(std::shared_ptr<GameObject> game_object);
+
     std::unique_ptr<ContextMenuAddLight> context_menu_add_light_;
     std::unique_ptr<ContextMenuAddRenderObject> context_menu_add_render_object_;
+    std::unique_ptr<ContextMenuAddRigidBody> context_menu_add_rigid_body_;
 
     std::shared_ptr<SceneRenderer> scene_renderer_;
     std::shared_ptr<ResourceContext> resource_creator_;

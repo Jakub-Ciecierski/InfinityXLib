@@ -12,6 +12,7 @@ std::string GameComponent::GetTypeString(GameComponentType type) {
         case GameComponentType::RENDER:return "Render";
         case GameComponentType::LIGHT:return "Light";
         case GameComponentType::PHYSICS:return "Rigid Body";
+        case GameComponentType::PHYSICS_SOFT_BODY:return "Soft Body";
     }
     return "Unknown";
 }

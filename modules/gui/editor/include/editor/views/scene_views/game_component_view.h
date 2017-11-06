@@ -11,6 +11,7 @@ class CameraView;
 class LightView;
 class RenderObjectView;
 class SceneRenderer;
+class RigidBodyView;
 
 class GameComponentView {
 public:
@@ -27,7 +28,9 @@ private:
     std::unique_ptr<CameraView> camera_view_;
     std::unique_ptr<LightView> light_view_;
     std::unique_ptr<RenderObjectView> render_object_view_;
+    std::unique_ptr<RigidBodyView> rigid_body_view_;
 };
 }
 
 #endif //PROJECT_GAME_COMPONENT_VIEW_H
+

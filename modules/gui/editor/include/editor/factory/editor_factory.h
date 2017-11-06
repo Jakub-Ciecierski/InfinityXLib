@@ -37,7 +37,8 @@ private:
     std::shared_ptr<SceneListView> CreateSceneView(
         std::shared_ptr<SceneContainer> scene,
         std::shared_ptr<ResourceContext> resource_creator,
-        std::shared_ptr<SceneRenderer> scene_renderer);
+        std::shared_ptr<SceneRenderer> scene_renderer,
+        std::shared_ptr<PhysicsSimulation> physics_simulation);
     std::shared_ptr<PhysicsSimulationView> CreatePhysicsSimulationView(
         std::shared_ptr<PhysicsSimulation> physics_simulation);
     std::shared_ptr<RenderingView> CreateRenderingView(

@@ -10,7 +10,7 @@ class StaticPlaneShape : public CollisionShape {
 public:
 
     StaticPlaneShape(const glm::vec3 &normal, float plane_constant);
-    ~StaticPlaneShape();
+    ~StaticPlaneShape() = default;
 
     const glm::vec3 &normal() const { return normal_; }
     float plane_constant() const { return plane_constant_; }

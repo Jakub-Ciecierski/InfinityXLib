@@ -4,21 +4,25 @@
 #include <editor/views/scene_views/game_component_views/camera_view.h>
 #include <editor/views/scene_views/game_component_views/light_view.h>
 #include <editor/views/scene_views/game_component_views/render_object_view.h>
+#include <editor/views/scene_views/game_component_views/rigid_body_view.h>
 
 #include <game/game_component.h>
-
 #include <game/components/render/render_component.h>
 #include <game/components/cameras/camera_component.h>
+#include <game/components/physics/rigid_body_component.h>
+
 #include <graphics/lighting/light_source.h>
+
+#include <common/unique_ptr.h>
 
 namespace ifx {
 
 GameComponentView::GameComponentView(std::shared_ptr<SceneRenderer> scene_renderer) {
-    movable_object_view_.reset(new MovableObjectView());
-
-    camera_view_.reset(new CameraView());
-    light_view_.reset(new LightView());
-    render_object_view_.reset(new RenderObjectView(scene_renderer));
+    movable_object_view_ = ifx::make_unique<MovableObjectView>();
+    camera_view_ = ifx::make_unique<CameraView>();
+    light_view_ = ifx::make_unique<LightView>();
+    render_object_view_ = ifx::make_unique<RenderObjectView>(scene_renderer);
+    rigid_body_view_ = ifx::make_unique<RigidBodyView>();
 }
 
 void GameComponentView::Render(std::shared_ptr<GameComponent> game_component) {
@@ -38,7 +42,12 @@ void GameComponentView::Render(std::shared_ptr<GameComponent> game_component) {
             camera_view_->Render(
                 std::dynamic_pointer_cast<CameraComponent>(game_component));
             break;
-        default:return;
+        case GameComponentType::PHYSICS:
+            rigid_body_view_->Render(
+                    std::dynamic_pointer_cast<RigidBodyComponent>(game_component));
+            break;
+        default:
+            return;
     }
 }
 

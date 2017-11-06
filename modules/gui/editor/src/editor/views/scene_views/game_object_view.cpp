@@ -9,7 +9,6 @@ namespace ifx {
 GameObjectView::GameObjectView() {
     movable_object_view_.reset(new MovableObjectView());
 }
-GameObjectView::~GameObjectView() {}
 
 void GameObjectView::Render(std::shared_ptr<GameObject> game_object) {
     movable_object_view_->Render(game_object);

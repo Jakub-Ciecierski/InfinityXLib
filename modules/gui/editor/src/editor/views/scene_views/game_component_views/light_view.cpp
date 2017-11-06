@@ -8,9 +8,6 @@
 
 namespace ifx {
 
-LightView::LightView() {}
-LightView::~LightView() {}
-
 void LightView::Render(std::shared_ptr<LightSource> light_source) {
     std::string display = "Light";
     display += " [";

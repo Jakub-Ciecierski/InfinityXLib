@@ -11,8 +11,8 @@ class LightDirectional;
 class LightView {
 public:
 
-    LightView();
-    ~LightView();
+    LightView() = default;
+    ~LightView() = default;
 
     void Render(std::shared_ptr<LightSource> light_source);
 private:

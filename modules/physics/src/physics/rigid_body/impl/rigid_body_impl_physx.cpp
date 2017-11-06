@@ -3,6 +3,7 @@
 #include <physics/collision/shapes/static_plane_shape.h>
 #include <physics/collision/shapes/box_collision_shape.h>
 #include <physics/collision/collision_shape.h>
+#include <physics/collision/shapes/sphere_collision_shape.h>
 
 #define _DEBUG
 #include <PxPhysicsAPI.h>
@@ -63,6 +64,12 @@ void RigidBodyImplPhysx::InitCollisionShape(const BoxCollisionShape *shape) {
     px_shape_ = px_physics_->createShape(
         physx::PxBoxGeometry(dim.x, dim.y, dim.z),
         *px_material_);
+}
+
+void RigidBodyImplPhysx::InitCollisionShape(const SphereCollisionShape *shape) {
+    px_shape_ = px_physics_->createShape(
+            physx::PxSphereGeometry(shape->radius()),
+            *px_material_);
 }
 
 void RigidBodyImplPhysx::SetCollisionShapeScale(const glm::vec3 &scale) {

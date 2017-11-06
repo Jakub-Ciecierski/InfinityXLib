@@ -12,7 +12,7 @@ class GameObjectView {
 public:
 
     GameObjectView();
-    ~GameObjectView();
+    ~GameObjectView() = default;
 
     void Render(std::shared_ptr<GameObject> game_object);
 private:

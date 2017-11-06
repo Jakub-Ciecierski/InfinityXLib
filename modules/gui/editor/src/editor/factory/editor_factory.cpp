@@ -27,6 +27,8 @@
 #include "editor/views/soft_body_view.h"
 #include "editor/views/scene_view.h"
 #include <editor/window_views/screen_window_view.h>
+#include <editor/views/scene_views/context_menus/game_object_context_menu/context_menu_add_rigid_body.h>
+#include "editor/views/scene_views/game_component_views/rigid_body_view.h"
 
 #include "game/scene_container.h"
 #include <game/architecture/engine_architecture.h>
@@ -45,7 +47,8 @@ std::shared_ptr<Editor> EditorFactory::CreateEngineGUI(
     auto scene_list_view = CreateSceneView(
         engine_architecture->engine_systems.scene_container,
         engine_architecture->engine_contexts.resource_context,
-        engine_architecture->engine_systems.renderer->scene_renderer());
+        engine_architecture->engine_systems.renderer->scene_renderer(),
+        engine_architecture->engine_systems.physics_simulation);
     auto physics_simulation_view = CreatePhysicsSimulationView(
         engine_architecture->engine_systems.physics_simulation);
     auto rendering_view = CreateRenderingView(
@@ -94,9 +97,11 @@ std::shared_ptr<Editor> EditorFactory::CreateEngineGUI(
 std::shared_ptr<SceneListView> EditorFactory::CreateSceneView(
     std::shared_ptr<SceneContainer> scene,
     std::shared_ptr<ResourceContext> resource_creator,
-    std::shared_ptr<SceneRenderer> scene_renderer) {
+    std::shared_ptr<SceneRenderer> scene_renderer,
+    std::shared_ptr<PhysicsSimulation> physics_simulation) {
     return std::make_shared<SceneListView>(scene, resource_creator,
-                                           scene_renderer);
+                                           scene_renderer,
+                                           physics_simulation);
 }
 
 std::shared_ptr<PhysicsSimulationView>

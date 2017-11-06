@@ -22,16 +22,16 @@ public:
 
     ~RigidBodyImplPhysx();
 
-    void *GetNativeRigidBody() override;
+    virtual void *GetNativeRigidBody() override;
 
-    void InitImpl(std::shared_ptr<CollisionShape> collision_shape,
+    virtual void InitImpl(std::shared_ptr<CollisionShape> collision_shape,
                   float mass) override;
 
-    void InitCollisionShape(const StaticPlaneShape *shape) override;
+    virtual void InitCollisionShape(const StaticPlaneShape *shape) override;
+    virtual void InitCollisionShape(const BoxCollisionShape *shape) override;
+    virtual void InitCollisionShape(const SphereCollisionShape *shape) override;
 
-    void InitCollisionShape(const BoxCollisionShape *shape) override;
-
-    void SetCollisionShapeScale(const glm::vec3 &scale) override;
+    virtual void SetCollisionShapeScale(const glm::vec3 &scale) override;
 
     virtual bool IsDynamic() override;
 private:

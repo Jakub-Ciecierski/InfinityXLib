@@ -10,7 +10,7 @@ class BoxCollisionShape : public CollisionShape {
 public:
 
     BoxCollisionShape(const glm::vec3 &dim);
-    ~BoxCollisionShape();
+    ~BoxCollisionShape() = default;
 
     const glm::vec3 &dimension() const { return dimension_; }
 

@@ -8,6 +8,9 @@
 #include <physics/collision/collision_shape.h>
 #include <physics/collision/shapes/static_plane_shape.h>
 #include <physics/collision/shapes/box_collision_shape.h>
+#include <physics/collision/shapes/sphere_collision_shape.h>
+
+#include <BulletCollision/CollisionShapes/btSphereShape.h>
 
 namespace ifx {
 
@@ -53,6 +56,9 @@ void RigidBodyImplBullet::InitCollisionShape(const BoxCollisionShape *shape) {
     const auto &dim = shape->dimension();
     collision_shape_bt_ = std::shared_ptr<btBoxShape>(new btBoxShape(
         btVector3(dim.x, dim.y, dim.z)));
+}
+void RigidBodyImplBullet::InitCollisionShape(const SphereCollisionShape *shape){
+    collision_shape_bt_ = std::make_shared<btSphereShape>(shape->radius());
 }
 
 void RigidBodyImplBullet::SetCollisionShapeScale(const glm::vec3 &scale) {
