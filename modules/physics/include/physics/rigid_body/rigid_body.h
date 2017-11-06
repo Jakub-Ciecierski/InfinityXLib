@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <math/transform.h>
+#include <physics/rigid_body/physics_material.h>
 
 namespace ifx {
 
@@ -11,7 +12,10 @@ class RigidBodyImpl;
 
 struct RigidBodyParams {
     std::shared_ptr<CollisionShape> collision_shape;
+
     float mass;
+
+    PhysicsMaterial physics_material;
 };
 
 class RigidBody : public Transformable {
@@ -27,8 +31,6 @@ public:
 private:
     std::unique_ptr<RigidBodyImpl> rigid_body_impl_;
 
-    std::shared_ptr<CollisionShape> collision_shape_;
-    float mass_;
 };
 }
 

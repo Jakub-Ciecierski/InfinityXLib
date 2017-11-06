@@ -14,18 +14,18 @@
 
 namespace ifx {
 
-RigidBodyImplBullet::RigidBodyImplBullet() {}
-
-RigidBodyImplBullet::~RigidBodyImplBullet() {}
-
 void *RigidBodyImplBullet::GetNativeRigidBody() {
     return (void *) rigid_body_bt_.get();
 }
 
 void RigidBodyImplBullet::InitImpl(
     std::shared_ptr<CollisionShape> collision_shape,
-    float mass) {
+    float mass,
+    const PhysicsMaterial& physics_material) {
     ifx_collision_shape_ = collision_shape;
+    physics_material_ = physics_material;
+    mass_ = mass;
+
     collision_shape->InitImpl(this);
     if (!collision_shape_bt_)
         throw std::invalid_argument("collision_shape_bt_ failed to Init");

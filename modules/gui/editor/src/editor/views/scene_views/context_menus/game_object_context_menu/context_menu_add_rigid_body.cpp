@@ -36,12 +36,13 @@ void ContextMenuAddRigidBody::RenderPopWindow(std::shared_ptr<GameObject> game_o
                                ImGuiWindowFlags_AlwaysAutoResize)) {
         RenderCollisionType();
         ImGui::Separator();
-
         if(colliders_selectables_.selected !=
                 colliders_selectables_.static_plane_id){
             RenderMass();
         }
-
+        ImGui::Separator();
+        RenderPhysicsMaterial();
+        ImGui::Separator();
         RenderFooter(game_object);
 
         ImGui::EndPopup();
@@ -51,6 +52,14 @@ void ContextMenuAddRigidBody::RenderPopWindow(std::shared_ptr<GameObject> game_o
 void ContextMenuAddRigidBody::RenderMass(){
     ImGui::PushItemWidth(70);
     ImGui::InputFloat("Mass", &mass_);
+    ImGui::PopItemWidth();
+}
+
+void ContextMenuAddRigidBody::RenderPhysicsMaterial(){
+    ImGui::PushItemWidth(70);
+    ImGui::InputFloat("Dynamic Friction", &physics_material_.dynamic_friction);
+    ImGui::InputFloat("Static Friction", &physics_material_.static_friction);
+    ImGui::InputFloat("Restitution", &physics_material_.restitution);
     ImGui::PopItemWidth();
 }
 
@@ -128,7 +137,6 @@ void ContextMenuAddRigidBody::RenderStaticPlaneConstructionData(){
 }
 
 void ContextMenuAddRigidBody::RenderFooter(std::shared_ptr<GameObject> game_object){
-    ImGui::Separator();
     if (ImGui::Button("OK", ImVec2(60, 0))) {
         game_object->Add(Create());
         ImGui::CloseCurrentPopup();
@@ -149,26 +157,33 @@ std::shared_ptr<RigidBodyComponent> ContextMenuAddRigidBody::Create(){
 }
 
 RigidBodyParams ContextMenuAddRigidBody::CreateRigidBodyParams(){
+    std::shared_ptr<CollisionShape> collision_shape = nullptr;
+    auto mass = mass_;
     switch(colliders_selectables_.selected){
+
         case colliders_selectables_.box_id: {
-            auto box_collision = std::make_shared<BoxCollisionShape>(
+            collision_shape = std::make_shared<BoxCollisionShape>(
                     box_construction_data_.box_dim);
-            return RigidBodyParams{box_collision, mass_};
+            break;
         }
         case colliders_selectables_.sphere_id:{
-            auto sphere_collision = std::make_shared<SphereCollisionShape>(
+            collision_shape = std::make_shared<SphereCollisionShape>(
                     sphere_construction_data_.radius);
-            return RigidBodyParams{sphere_collision, mass_};
+            break;
         }
         case colliders_selectables_.static_plane_id: {
-            auto plane_collision = std::make_shared<StaticPlaneShape>(
+            collision_shape = std::make_shared<StaticPlaneShape>(
                     static_plane_construction_data_.plane_normal,
                     static_plane_construction_data_.plane_constant);
-            return RigidBodyParams{plane_collision, 0};
+            mass = 0;
+            break;
         }
         default:
-            return RigidBodyParams{nullptr, mass_};
+            collision_shape = nullptr;
+            break;
     }
+
+    return RigidBodyParams{collision_shape, mass, physics_material_};
 }
 
 }

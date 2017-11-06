@@ -2,8 +2,7 @@
 
 namespace ifx {
 
-RigidBodyImpl::RigidBodyImpl() {}
-
-RigidBodyImpl::~RigidBodyImpl() {}
+RigidBodyImpl::RigidBodyImpl() : collision_shape_(nullptr),
+                                 mass_(0) {}
 
 }

@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <math/math_ifx.h>
+#include <physics/rigid_body/physics_material.h>
 
 namespace ifx {
 
@@ -16,13 +17,14 @@ public:
 
     RigidBodyImpl();
 
-    virtual ~RigidBodyImpl();
+    virtual ~RigidBodyImpl() = default;
 
     virtual void *GetNativeRigidBody() = 0;
 
     virtual void InitImpl(
         std::shared_ptr<CollisionShape> collision_shape,
-        float mass) = 0;
+        float mass,
+        const PhysicsMaterial& physics_material) = 0;
     virtual void InitCollisionShape(const StaticPlaneShape *shape) = 0;
     virtual void InitCollisionShape(const BoxCollisionShape *shape) = 0;
     virtual void InitCollisionShape(const SphereCollisionShape *shape) = 0;
@@ -30,6 +32,10 @@ public:
     virtual void SetCollisionShapeScale(const glm::vec3 &scale) = 0;
 
     virtual bool IsDynamic() = 0;
+protected:
+    std::shared_ptr<CollisionShape> collision_shape_;
+    float mass_;
+    PhysicsMaterial physics_material_;
 
 private:
 };

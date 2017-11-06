@@ -23,9 +23,13 @@ void *RigidBodyImplPhysx::GetNativeRigidBody() {
 }
 
 void RigidBodyImplPhysx::InitImpl(
-    std::shared_ptr<CollisionShape> collision_shape, float mass) {
+    std::shared_ptr<CollisionShape> collision_shape,
+    float mass,
+    const PhysicsMaterial& physics_material) {
     ifx_collision_shape_ = collision_shape;
     mass_ = mass;
+    physics_material_ = physics_material;
+
     px_material_ = px_physics_->createMaterial(0.5, 0.5, 0.1);
 
     collision_shape->InitImpl(this);

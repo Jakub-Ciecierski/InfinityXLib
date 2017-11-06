@@ -4,6 +4,7 @@
 #include <memory>
 
 #include <physics/collision/collision_shape.h>
+#include <physics/rigid_body/physics_material.h>
 
 namespace ifx {
 
@@ -64,9 +65,11 @@ public:
     void Render(std::shared_ptr<GameObject> game_object);
 private:
     void RenderPopWindow(std::shared_ptr<GameObject> game_object);
-    void RenderMass();
-    void RenderCollisionType();
 
+    void RenderMass();
+    void RenderPhysicsMaterial();
+
+    void RenderCollisionType();
     void RenderCollisionData();
     void RenderBoxConstructionData();
     void RenderSphereConstructionData();
@@ -83,6 +86,7 @@ private:
 
     CollisionShapeType collision_shape_type_;
     float mass_;
+    PhysicsMaterial physics_material_;
 
     BoxConstructionData box_construction_data_;
     SphereConstructionData sphere_construction_data_;

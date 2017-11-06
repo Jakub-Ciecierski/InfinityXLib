@@ -25,7 +25,8 @@ public:
     virtual void *GetNativeRigidBody() override;
 
     virtual void InitImpl(std::shared_ptr<CollisionShape> collision_shape,
-                  float mass) override;
+                          float mass,
+                          const PhysicsMaterial& physics_material) override;
 
     virtual void InitCollisionShape(const StaticPlaneShape *shape) override;
     virtual void InitCollisionShape(const BoxCollisionShape *shape) override;

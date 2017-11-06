@@ -18,7 +18,7 @@ class CollisionShape {
 public:
 
     CollisionShape();
-    virtual ~CollisionShape();
+    virtual ~CollisionShape() = default;
 
     const glm::vec3 &scale() { return scale_; }
     void scale(const glm::vec3 &scale) { scale_ = scale; }
