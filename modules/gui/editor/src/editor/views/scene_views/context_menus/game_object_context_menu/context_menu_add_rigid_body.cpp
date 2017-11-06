@@ -36,7 +36,12 @@ void ContextMenuAddRigidBody::RenderPopWindow(std::shared_ptr<GameObject> game_o
                                ImGuiWindowFlags_AlwaysAutoResize)) {
         RenderCollisionType();
         ImGui::Separator();
-        RenderMass();
+
+        if(colliders_selectables_.selected !=
+                colliders_selectables_.static_plane_id){
+            RenderMass();
+        }
+
         RenderFooter(game_object);
 
         ImGui::EndPopup();
@@ -159,7 +164,7 @@ RigidBodyParams ContextMenuAddRigidBody::CreateRigidBodyParams(){
             auto plane_collision = std::make_shared<StaticPlaneShape>(
                     static_plane_construction_data_.plane_normal,
                     static_plane_construction_data_.plane_constant);
-            return RigidBodyParams{plane_collision, mass_};
+            return RigidBodyParams{plane_collision, 0};
         }
         default:
             return RigidBodyParams{nullptr, mass_};

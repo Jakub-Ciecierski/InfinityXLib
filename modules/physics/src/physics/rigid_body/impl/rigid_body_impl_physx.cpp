@@ -91,6 +91,16 @@ void RigidBodyImplPhysx::SetCollisionShapeScale(const glm::vec3 &scale) {
                                                     dimensions.z * scale.z));
         px_rigid_actor_->attachShape(*px_shape_);
     }
+
+    physx::PxSphereGeometry sphere;
+    if (px_shape_->getSphereGeometry(sphere)) {
+        const auto &radius
+                = std::static_pointer_cast<SphereCollisionShape>(
+                        ifx_collision_shape_)->radius();
+        px_rigid_actor_->detachShape(*px_shape_);
+        px_shape_->setGeometry(physx::PxSphereGeometry(radius * scale.x));
+        px_rigid_actor_->attachShape(*px_shape_);
+    }
 }
 
 bool RigidBodyImplPhysx::IsDynamic() {
