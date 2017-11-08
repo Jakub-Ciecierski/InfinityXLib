@@ -27,10 +27,12 @@ void GameUpdater::Update(float time_elapsed) {
         systems.scene_container->UpdateFixed();
     if (systems.controls)
         systems.controls->UpdateFixed();
+
+    bool rendered = false;
     if (systems.renderer)
-        systems.renderer->UpdateFixed();
-    if (systems.gui)
-        systems.gui->UpdateFixed();
+        rendered = systems.renderer->UpdateFixed();
+    if (systems.gui && rendered)
+        systems.gui->Update(time_elapsed);
 
     if (engine_architecture_->window)
         engine_architecture_->window->UpdateFixed();

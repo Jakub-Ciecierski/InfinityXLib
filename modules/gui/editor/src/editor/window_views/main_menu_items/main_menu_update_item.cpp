@@ -38,7 +38,6 @@ void MainMenuUpdateItem::RenderEngineUpdateSettings(
                          "Renderer");
     RenderUpdateSettings(engine_architecture.engine_systems.scene_container,
                          "Scene Container");
-    RenderUpdateSettings(engine_architecture.engine_systems.gui, "GUI");
     RenderUpdateSettings(engine_architecture.engine_systems.controls,
                          "Input Controls");
 }
@@ -46,12 +45,17 @@ void MainMenuUpdateItem::RenderEngineUpdateSettings(
 void MainMenuUpdateItem::RenderUpdateSettings(
     std::shared_ptr<Updatable> updatable,
     std::string name) {
+    const float min = 5;
     float time_step_hz = 1.0f / updatable->fixed_time_delta();
 
     ImGui::PushItemWidth(75);
 
     if (ImGui::InputFloat(name.c_str(), &time_step_hz)) {
+        if(time_step_hz < min){
+            time_step_hz = min;
+        }
         float time_step_s = 1.0f / time_step_hz;
+
         updatable->fixed_time_delta(time_step_s);
     }
 

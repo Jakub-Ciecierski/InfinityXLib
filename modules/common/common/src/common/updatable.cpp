@@ -9,6 +9,8 @@ Updatable::Updatable(const UpdateTimeDelta& update_time_delta) :
 
 void Updatable::Update(float time_delta){
     UpdateTimers();
+
+    UpdateFixedContent();
 }
 
 bool Updatable::UpdateFixed(){
