@@ -22,8 +22,9 @@ template <class T>
 void SoftBodyFEMSimulation<T>::Add(std::shared_ptr<SoftBodyFEM<T>> soft_body){
     soft_bodies_.push_back(soft_body);
 
-    auto fem_solver = ifx::make_unique<rtfem::FEMDynamicSolver<T>>();
-    fem_solver->Solve(soft_body->fem_model());
+    auto fem_solver = ifx::make_unique<rtfem::FEMDynamicSolver<T>>(
+        soft_body->fem_model());
+    fem_solver->Solve();
     fem_solvers_.push_back(std::move(fem_solver));
 }
 

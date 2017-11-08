@@ -33,7 +33,7 @@ std::unique_ptr<rtfem::FEMModel<T>>
 SoftBodyFEMComponentBuilder<T>::BuildFEMModel(){
     auto fem_model = ifx::make_unique<rtfem::FEMModel<T>>(fem_geometry_);
     fem_model->material(material_);
-    fem_model->SetBodyForce(body_force_);
+    fem_model->SetStaticBodyForce(body_force_);
     fem_model->boundary_conditions(boundary_conditions_);
 
     return fem_model;

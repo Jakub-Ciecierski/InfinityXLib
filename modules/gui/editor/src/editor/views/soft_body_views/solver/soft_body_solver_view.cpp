@@ -40,9 +40,9 @@ void SoftBodySolverView::Render(SoftBodyEditorObjects& soft_body_objects){
     if(ImGui::Button("Solve")){
         auto soft_body_fem_component
             = soft_body_objects.soft_body_fem_component_builder->Build();
-        auto& fem_model = soft_body_fem_component->fem_model();
-        rtfem::FEMStaticSolver<double> fem_solver;
-        auto fem_solver_output = fem_solver.Solve(fem_model);
+        auto fem_model = soft_body_fem_component->fem_model();
+        rtfem::FEMStaticSolver<double> fem_solver(fem_model);
+        auto fem_solver_output = fem_solver.Solve();
 
         auto* vbo = soft_body_objects
             .soft_body_fem_component_builder->fem_render()->

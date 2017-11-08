@@ -14,7 +14,7 @@ public:
     SoftBodyFEM(std::unique_ptr<rtfem::FEMModel<T>> fem_model);
     ~SoftBodyFEM() = default;
 
-    rtfem::FEMModel<T>& fem_model(){return *fem_model_;}
+    rtfem::FEMModel<T>* fem_model(){return fem_model_.get();}
 
     void fem_solver_output(const rtfem::FEMSolverOutput<T>* fem_solver_output){
         fem_solver_output_ = fem_solver_output;

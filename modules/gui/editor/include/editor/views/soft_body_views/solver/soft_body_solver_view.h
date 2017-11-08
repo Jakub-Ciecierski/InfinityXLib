@@ -22,7 +22,6 @@ public:
 
 private:
     void RenderDynamic(SoftBodyEditorObjects& soft_body_objects);
-    void DynamicIteration();
 
     std::shared_ptr<SoftBodyFEMComponent<double>> soft_body_fem_component_;
 
