@@ -55,7 +55,8 @@ bool SoftBodyMeshingCreationView::BuildMesh(
     if (!soft_body_objects.current_game_object) {
         return false;
     }
-
+    soft_body_objects.current_game_object->Remove(
+            soft_body_objects.current_fem_render_component);
     rtfem::TriangleMeshIndexed<double> triangle_mesh;
     try {
         triangle_mesh = CreateTriangleMesh(soft_body_objects);
