@@ -157,7 +157,7 @@ void SoftBodyView::RenderLeftColumn() {
             }
             break;
         case soft_body_views.solver_id:
-            if(RenderError(builder)){
+            if(RenderError(builder) && RenderSolverError(builder)){
                 solver_view_->Render(soft_body_objects_);
             }
             break;
@@ -223,6 +223,28 @@ bool SoftBodyView::RenderError(
         ImGui::SameLine();
         ImGui::TextWrapped("To edit existing SoftBody: select GameObject with "
                                "SoftBody Component");
+        ImGui::PopStyleColor();
+
+        return_value = false;
+
+        ImGui::EndChild();
+    }
+    return return_value;
+}
+
+bool SoftBodyView::RenderSolverError(
+        SoftBodyFEMComponentBuilder<double>* soft_body_fem_component_builder){
+    bool return_value = true;
+    if(!soft_body_fem_component_builder
+       || soft_body_fem_component_builder->GetFEMGeometry().finite_elements
+                         .size() == 0){
+        ImGui::BeginChild(ImGui::GetID((void *) (intptr_t) 2),
+                          ImVec2(-1, -1), false);
+
+        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(255, 0, 0, 255));
+        ImGui::Bullet();
+        ImGui::SameLine();
+        ImGui::TextWrapped("FEM Model must be meshes properly");
         ImGui::PopStyleColor();
 
         return_value = false;

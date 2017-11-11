@@ -114,6 +114,8 @@ private:
     void RenderLeftColumn();
     void RenderRightColumn();
 
+    bool RenderSolverError(
+        SoftBodyFEMComponentBuilder<double> *soft_body_fem_component_builder);
     bool RenderError(
         SoftBodyFEMComponentBuilder<double>* soft_body_fem_component_builder);
 
