@@ -33,57 +33,85 @@ SoftBodySolverView::SoftBodySolverView(
     scene_container_(scene_container){}
 
 void SoftBodySolverView::Render(SoftBodyEditorObjects& soft_body_objects){
-    if(ImGui::Button("Solve Dynamic")){
-        RenderDynamic(soft_body_objects);
-    }
+    RenderSolverType();
 
+    switch(soft_body_solvers_.selected){
+        case soft_body_solvers_.dynamic_id:
+            RenderDynamic(soft_body_objects);
+            break;
+        case soft_body_solvers_.static_id:
+            RenderStatic(soft_body_objects);
+            break;
+    }
+}
+
+void SoftBodySolverView::RenderSolverType(){
+    ImGui::Text("Solver Type:");
+    ImGui::SameLine();
+    if (ImGui::Button(soft_body_solvers_.names[soft_body_solvers_.selected].c_str(),
+                      ImVec2(80, 20))){
+        ImGui::OpenPopup("SoftBodySolverView");
+    }
+    if (ImGui::BeginPopup("SoftBodySolverView")) {
+        for (unsigned int i = 0; i < soft_body_solvers_.names.size(); i++){
+            if (ImGui::Selectable(soft_body_solvers_.names[i].c_str())){
+                soft_body_solvers_.selected = i;
+            }
+        }
+        ImGui::EndPopup();
+    }
+}
+
+void SoftBodySolverView::RenderDynamic(
+        SoftBodyEditorObjects& soft_body_objects){
+    if(ImGui::Button("Solve")){
+        soft_body_fem_component_
+                = soft_body_objects.soft_body_fem_component_builder->Build();
+        auto game_object = scene_container_->CreateAndAddEmptyGameObject();
+        game_object->Add(soft_body_fem_component_);
+    }
+}
+
+
+void SoftBodySolverView::RenderStatic(SoftBodyEditorObjects& soft_body_objects){
     if(ImGui::Button("Solve")){
         auto soft_body_fem_component
-            = soft_body_objects.soft_body_fem_component_builder->Build();
+                = soft_body_objects.soft_body_fem_component_builder->Build();
         auto fem_model = soft_body_fem_component->fem_model();
         rtfem::FEMStaticSolver<double> fem_solver(fem_model);
         auto fem_solver_output = fem_solver.Solve();
 
         auto* vbo = soft_body_objects
-            .soft_body_fem_component_builder->fem_render()->
-            models()[0]->getMesh(0)->vbo();
+                .soft_body_fem_component_builder->fem_render()->
+                models()[0]->getMesh(0)->vbo();
 
         auto* vertices = vbo->vertices();
         for(unsigned int i = 0; i < vertices->size(); i++){
             auto& vertex = (*vertices)[i];
             auto displacement_index_start = i * 3;
             auto displacement_x
-                = fem_solver_output.displacement[displacement_index_start];
+                    = fem_solver_output.displacement[displacement_index_start];
             auto displacement_y
-                = fem_solver_output.displacement[displacement_index_start + 1];
+                    = fem_solver_output.displacement[displacement_index_start + 1];
             auto displacement_z
-                = fem_solver_output.displacement[displacement_index_start + 2];
+                    = fem_solver_output.displacement[displacement_index_start + 2];
 
             vertex.Position.x += displacement_x;
             vertex.Position.y += displacement_y;
             vertex.Position.z += displacement_z;
 
             auto &fem_vertex
-                = soft_body_objects.soft_body_fem_component_builder
-                    ->GetFEMGeometry().vertices[i];
+                    = soft_body_objects.soft_body_fem_component_builder
+                            ->GetFEMGeometry().vertices[i];
             const auto& coordinates = fem_vertex->coordinates();
             fem_vertex->coordinates(
-                coordinates + Eigen::Vector3<double>(
-                    displacement_x, displacement_y, displacement_z)
+                    coordinates + Eigen::Vector3<double>(
+                            displacement_x, displacement_y, displacement_z)
             );
         }
 
         vbo->Update();
     }
 }
-
-void SoftBodySolverView::RenderDynamic(
-    SoftBodyEditorObjects& soft_body_objects){
-    soft_body_fem_component_
-        = soft_body_objects.soft_body_fem_component_builder->Build();
-    auto game_object = scene_container_->CreateAndAddEmptyGameObject();
-    game_object->Add(soft_body_fem_component_);
-}
-
 
 }

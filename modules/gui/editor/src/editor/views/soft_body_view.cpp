@@ -101,10 +101,10 @@ void SoftBodyView::Render() {
 void SoftBodyView::RenderLeftColumn() {
     if (ImGui::Button(soft_body_views.names[soft_body_views.selected].c_str(),
                       ImVec2(150, 20))){
-        ImGui::OpenPopup("select");
+        ImGui::OpenPopup("SoftBodyView");
     }
 
-    if (ImGui::BeginPopup("select")) {
+    if (ImGui::BeginPopup("SoftBodyView")) {
         for (unsigned int i = 0; i < soft_body_views.names.size(); i++){
             if (ImGui::Selectable(soft_body_views.names[i].c_str())){
                 soft_body_views.selected = i;

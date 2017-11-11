@@ -13,6 +13,22 @@ class SoftBodyFEMComponent;
 
 class SceneContainer;
 
+struct SoftBodySolvers{
+    unsigned int selected = 0;
+
+    const std::string dynamic_name = "Dynamic";
+    static constexpr unsigned int dynamic_id = 0;
+
+    const std::string static_name = "Static";
+    static constexpr unsigned int static_id = 1;
+
+    const std::vector<std::string> names{
+            dynamic_name,
+            static_name
+    };
+
+};
+
 class SoftBodySolverView {
 public:
     SoftBodySolverView(std::shared_ptr<SceneContainer> scene_container);
@@ -21,7 +37,10 @@ public:
     void Render(SoftBodyEditorObjects& soft_body_objects);
 
 private:
+    void RenderSolverType();
+
     void RenderDynamic(SoftBodyEditorObjects& soft_body_objects);
+    void RenderStatic(SoftBodyEditorObjects& soft_body_objects);
 
     std::shared_ptr<SoftBodyFEMComponent<double>> soft_body_fem_component_;
 
@@ -30,6 +49,8 @@ private:
     std::unique_ptr<rtfem::FEMDynamicSolver<double>> fem_dynamic_solver_;
 
     std::shared_ptr<SceneContainer> scene_container_;
+
+    SoftBodySolvers soft_body_solvers_;
 };
 
 }
