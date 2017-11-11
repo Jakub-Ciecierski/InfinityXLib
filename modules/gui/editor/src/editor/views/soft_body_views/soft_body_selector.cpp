@@ -19,8 +19,11 @@
 
 namespace ifx {
 
-SoftBodySelector::SoftBodySelector(std::shared_ptr<SceneContainer> scene) :
-    scene_(scene) {}
+SoftBodySelector::SoftBodySelector(
+        std::shared_ptr<SceneContainer> scene,
+        std::shared_ptr<ResourceManager> resource_manager) :
+    scene_(scene),
+    resource_manager_(resource_manager){}
 
 void SoftBodySelector::Select(
     std::shared_ptr<GameObject> selected_game_object,
@@ -75,7 +78,8 @@ SoftBodyEditorObjects SoftBodySelector::CreateNewGameObject(
         = scene_->CreateAndAddEmptyGameObject();
 
     soft_body_objects.soft_body_fem_component_builder
-        = ifx::make_unique<SoftBodyFEMComponentBuilder<double>>();
+        = ifx::make_unique<SoftBodyFEMComponentBuilder<double>>(
+            resource_manager_);
 
     for (auto &render_component : render_components) {
         soft_body_objects.soft_body_fem_component_builder->

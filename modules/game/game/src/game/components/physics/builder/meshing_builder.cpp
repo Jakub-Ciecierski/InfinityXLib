@@ -1,4 +1,4 @@
-#include "editor/views/soft_body_views/meshing/meshing_builder.h"
+#include "game/components/physics/builder/meshing_builder.h"
 
 #include <game/components/render/render_component.h>
 
@@ -12,9 +12,10 @@
 
 namespace ifx {
 
-rtfem::TriangleMeshIndexed<double> MeshingBuilder::CreateTriangleMesh(
+template <class T>
+rtfem::TriangleMeshIndexed<T> MeshingBuilder<T>::CreateTriangleMesh(
     std::shared_ptr<RenderComponent> render_component) {
-    rtfem::TriangleMeshIndexed<double> triangle_mesh;
+    rtfem::TriangleMeshIndexed<T> triangle_mesh;
 
     auto models = render_component->models();
     for (auto &model : models) {
@@ -26,7 +27,7 @@ rtfem::TriangleMeshIndexed<double> MeshingBuilder::CreateTriangleMesh(
             unsigned int starting_index = triangle_mesh.points.size();
 
             for (auto &vertex : vertices) {
-                auto eigen_vertex = Eigen::Vector3<double>(
+                auto eigen_vertex = Eigen::Vector3<T>(
                     vertex.Position.x,
                     vertex.Position.y,
                     vertex.Position.z
@@ -47,7 +48,7 @@ rtfem::TriangleMeshIndexed<double> MeshingBuilder::CreateTriangleMesh(
                     throw std::invalid_argument(
                         "CreateTriangleMesh Triangle out of bounds");
                 }
-                auto triangle = rtfem::TriangleFace<double>{
+                auto triangle = rtfem::TriangleFace<T>{
                     indices[starting_index + v1],
                     indices[starting_index + v2],
                     indices[starting_index + v3]};
@@ -59,8 +60,9 @@ rtfem::TriangleMeshIndexed<double> MeshingBuilder::CreateTriangleMesh(
     return triangle_mesh;
 }
 
-std::shared_ptr<RenderComponent> MeshingBuilder::CreateRenderComponent(
-    const rtfem::FEMGeometry<double> &fem_geometry,
+template <class T>
+std::shared_ptr<RenderComponent> MeshingBuilder<T>::CreateRenderComponent(
+    const rtfem::FEMGeometry<T> &fem_geometry,
     std::shared_ptr<ResourceManager> resource_manager) {
     unsigned int point_count = fem_geometry.vertices.size();
     unsigned int element_count = fem_geometry.finite_elements.size();
@@ -98,5 +100,10 @@ std::shared_ptr<RenderComponent> MeshingBuilder::CreateRenderComponent(
                                                           std::move(mesh));
     return std::make_shared<RenderComponent>(model);
 }
+
+template
+class MeshingBuilder<double>;
+template
+class MeshingBuilder<float>;
 
 }

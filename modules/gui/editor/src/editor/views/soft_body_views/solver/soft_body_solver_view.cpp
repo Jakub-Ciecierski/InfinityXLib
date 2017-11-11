@@ -1,6 +1,7 @@
 #include "editor/views/soft_body_views/solver/soft_body_solver_view.h"
 
 #include "editor/views/soft_body_views/soft_body_structers.h"
+#include <editor/views/soft_body_views/solver/dynamic/soft_body_dynamic_solver_view.h>
 
 #include <game/components/physics/soft_body_fem_component.h>
 #include <game/components/render/render_component.h>
@@ -27,17 +28,22 @@
 namespace ifx {
 
 SoftBodySolverView::SoftBodySolverView(
-    std::shared_ptr<SceneContainer> scene_container) :
-    solver_type_(rtfem::AnalysisSolverType::Dynamic),
-    fem_dynamic_solver_(nullptr),
-    scene_container_(scene_container){}
+    std::shared_ptr<SceneContainer> scene_container,
+    std::shared_ptr<PhysicsSimulation> physics_simulation) :
+    solver_type_(rtfem::AnalysisSolverType::Dynamic){
+    dynamic_solver_view_
+            = ifx::make_unique<SoftBodyDynamicSolverView>(scene_container,
+                                                          physics_simulation);
+}
 
-void SoftBodySolverView::Render(SoftBodyEditorObjects& soft_body_objects){
+void SoftBodySolverView::Render(SoftBodyEditorObjects& soft_body_objects,
+                                SoftBodyRenderingEffects &rendering_effects){
     RenderSolverType();
 
     switch(soft_body_solvers_.selected){
         case soft_body_solvers_.dynamic_id:
-            RenderDynamic(soft_body_objects);
+            dynamic_solver_view_->Render(soft_body_objects,
+                                         rendering_effects);
             break;
         case soft_body_solvers_.static_id:
             RenderStatic(soft_body_objects);
@@ -61,17 +67,6 @@ void SoftBodySolverView::RenderSolverType(){
         ImGui::EndPopup();
     }
 }
-
-void SoftBodySolverView::RenderDynamic(
-        SoftBodyEditorObjects& soft_body_objects){
-    if(ImGui::Button("Solve")){
-        soft_body_fem_component_
-                = soft_body_objects.soft_body_fem_component_builder->Build();
-        auto game_object = scene_container_->CreateAndAddEmptyGameObject();
-        game_object->Add(soft_body_fem_component_);
-    }
-}
-
 
 void SoftBodySolverView::RenderStatic(SoftBodyEditorObjects& soft_body_objects){
     if(ImGui::Button("Solve")){

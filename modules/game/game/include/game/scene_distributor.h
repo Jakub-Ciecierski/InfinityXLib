@@ -25,7 +25,7 @@ class SceneDistributor {
 public:
     SceneDistributor(std::shared_ptr<SceneRenderer> scene_renderer,
                      std::shared_ptr<PhysicsSimulation> physics_simulation);
-    ~SceneDistributor();
+    ~SceneDistributor() = default;
 
     void Add(std::shared_ptr<GameObject> game_object);
     bool Remove(std::shared_ptr<GameObject> game_object);

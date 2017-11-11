@@ -20,7 +20,6 @@
 #include <graphics/rendering/rendering_effect.h>
 #include <graphics/shaders/textures/texture.h>
 
-#include <editor/views/soft_body_views/meshing/meshing_builder.h>
 #include "editor/views/soft_body_views/soft_body_screen_view.h"
 #include <editor/views/soft_body_views/soft_body_selector.h>
 #include <editor/views/soft_body_views/solver/soft_body_solver_view.h>
@@ -38,6 +37,9 @@
 #include "editor/views/soft_body_views/picking/soft_body_picker.h"
 #include "editor/views/soft_body_views/picking/soft_body_node_selection.h"
 #include <editor/views/soft_body_views/load/traction_force_recorder.h>
+#include "editor/views/soft_body_views/solver/dynamic/soft_body_dynamic_solver_view.h"
+
+#include "game/components/physics/builder/meshing_builder.h"
 
 #include <common/unique_ptr.h>
 
@@ -61,7 +63,9 @@ SoftBodyView::SoftBodyView(std::shared_ptr<EngineArchitecture>
     screen_view_ = ifx::make_unique<SoftBodyScreenView>(soft_body_picker);
     selector_ = ifx::make_unique<SoftBodySelector>(
         engine_architecture_->
-            engine_systems.scene_container);
+            engine_systems.scene_container,
+        engine_architecture_->engine_contexts.resource_context->
+                resource_manager());
 
     soft_body_guide_view_ = ifx::make_unique<SoftBodyGuideView>();
     meshing_view_ = ifx::make_unique<SoftBodyMeshingView>(
@@ -75,7 +79,8 @@ SoftBodyView::SoftBodyView(std::shared_ptr<EngineArchitecture>
         soft_body_picker);
 
     solver_view_ = ifx::make_unique<SoftBodySolverView>(
-        engine_architecture_->engine_systems.scene_container
+        engine_architecture_->engine_systems.scene_container,
+        engine_architecture_->engine_systems.physics_simulation
     );
 
 }
@@ -158,7 +163,8 @@ void SoftBodyView::RenderLeftColumn() {
             break;
         case soft_body_views.solver_id:
             if(RenderError(builder) && RenderSolverError(builder)){
-                solver_view_->Render(soft_body_objects_);
+                solver_view_->Render(soft_body_objects_,
+                                     rendering_effects_);
             }
             break;
         default:

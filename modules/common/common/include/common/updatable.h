@@ -9,14 +9,17 @@ struct UpdateTimeDelta{
 
 struct UpdateTimer{
     float last_time = 0;
-    float current_time = 0;
-    float total_time = 0;
     float time_since_last_update = 0;
+    float last_time_since_last_update = 0;
+
+    float total_time = 0;
+
+    unsigned long iterations = 0;
 };
 
 class Updatable {
 public:
-    Updatable() = default;
+    Updatable();
     Updatable(const UpdateTimeDelta& update_time_delta_);
 
     virtual ~Updatable() = default;
@@ -25,19 +28,32 @@ public:
     void fixed_time_delta(float fixed_time_delta){
         update_time_delta_.time_delta = fixed_time_delta;}
 
+    const UpdateTimer& update_timer(){return update_timer_;}
+
+    bool is_running(){return is_running_;}
+    void is_running(bool is_running){is_running_ = is_running;}
+
     virtual void Update(float time_delta);
     bool UpdateFixed();
+
+    void ResetTimers();
+
+    void Pause();
+    void Play();
 
 protected:
     virtual void UpdateFixedContent();
 
     UpdateTimeDelta update_time_delta_;
 private:
-    void UpdateTimers();
+    void UpdateTimersPre();
+    void UpdateTimersPost();
+
     bool IsUpdateReady();
 
     UpdateTimer update_timer_;
 
+    bool is_running_;
 };
 }
 

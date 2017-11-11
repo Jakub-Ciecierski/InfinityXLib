@@ -13,10 +13,13 @@ class SoftBodyFEMComponent;
 
 class RenderComponent;
 
+class ResourceManager;
+
 template<class T>
 class SoftBodyFEMComponentBuilder {
 public:
-    SoftBodyFEMComponentBuilder();
+    SoftBodyFEMComponentBuilder(
+            std::shared_ptr<ResourceManager> resource_manager);
     ~SoftBodyFEMComponentBuilder() = default;
 
     std::shared_ptr<RenderComponent> triangle_mesh_render(){
@@ -30,12 +33,12 @@ public:
     std::shared_ptr<RenderComponent> fem_render(){
         return fem_render_;
     }
-    void fem_render(
-        std::shared_ptr<RenderComponent> fem_render){
+    void fem_render(std::shared_ptr<RenderComponent> fem_render){
         fem_render_ = fem_render;
     }
 
     std::shared_ptr<SoftBodyFEMComponent<T>> Build();
+
 
     rtfem::FEMGeometry<T>& GetFEMGeometry();
     rtfem::Material<T>& GetMaterial();
@@ -44,6 +47,8 @@ public:
 
 private:
     std::unique_ptr<rtfem::FEMModel<T>> BuildFEMModel();
+
+    std::shared_ptr<ResourceManager> resource_manager_;
 
     rtfem::FEMGeometry<T> fem_geometry_;
 

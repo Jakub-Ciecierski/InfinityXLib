@@ -20,6 +20,7 @@
 #include "editor/views/soft_body_views/picking/soft_body_node_selection.h"
 #include <editor/views/soft_body_views/picking/factory/soft_body_picker_factory.h>
 #include <editor/views/soft_body_views/load/traction_force_recorder.h>
+#include "editor/views/soft_body_views/solver/dynamic/soft_body_dynamic_solver_view.h"
 
 #include <game/factory/game_systems_factory.h>
 #include <game/game_updater.h>

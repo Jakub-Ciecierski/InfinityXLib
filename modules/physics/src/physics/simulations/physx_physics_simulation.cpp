@@ -31,9 +31,6 @@ bool PhysxPhysicsSimulation::Terminate() {
 void PhysxPhysicsSimulation::UpdateFixedContent() {
     PhysicsSimulation::UpdateFixedContent();
 
-    if (!is_running_)
-        return;
-
     PX_UNUSED(false);
 
     SynchronizeRigidBodiesTransform();

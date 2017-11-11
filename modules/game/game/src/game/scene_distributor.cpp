@@ -24,8 +24,6 @@ SceneDistributor::SceneDistributor(
     : scene_renderer_(scene_renderer),
       physics_simulation_(physics_simulation) {}
 
-SceneDistributor::~SceneDistributor() {}
-
 void SceneDistributor::Add(std::shared_ptr<GameObject> game_object) {
     auto components = game_object->GetComponents();
     for (auto &component : components) {

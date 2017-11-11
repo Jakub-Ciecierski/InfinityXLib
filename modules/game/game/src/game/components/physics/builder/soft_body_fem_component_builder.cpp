@@ -6,21 +6,27 @@
 
 
 #include <RTFEM/FEM/BoundaryCondition.h>
+#include <game/components/physics/builder/meshing_builder.h>
 
 namespace ifx {
 
 template<class T>
-SoftBodyFEMComponentBuilder<T>::SoftBodyFEMComponentBuilder() :
-    material_(rtfem::Material<T>{80000, 0.3, 1}),
-    body_force_(Eigen::Vector3<T>(0,0,0)),
-    triangle_mesh_render_(nullptr),
-    fem_render_(nullptr) {}
+SoftBodyFEMComponentBuilder<T>::SoftBodyFEMComponentBuilder(
+        std::shared_ptr<ResourceManager> resource_manager) :
+        resource_manager_(resource_manager),
+        material_(rtfem::Material<T>{80000, 0.3, 1}),
+        body_force_(Eigen::Vector3<T>(0, 0, 0)),
+        triangle_mesh_render_(nullptr),
+        fem_render_(nullptr) {}
 
 template<class T>
 std::shared_ptr<SoftBodyFEMComponent<T>>
 SoftBodyFEMComponentBuilder<T>::Build(){
     auto fem_model = BuildFEMModel();
 
+    fem_render_ = MeshingBuilder<T>().CreateRenderComponent(
+            fem_model->fem_geometry(),
+            resource_manager_);
     auto soft_body_fem_component
         = std::make_shared<SoftBodyFEMComponent<T>>(std::move(fem_model),
                                                     fem_render_);

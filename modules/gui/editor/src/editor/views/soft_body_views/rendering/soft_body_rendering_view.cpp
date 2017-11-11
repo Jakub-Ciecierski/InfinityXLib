@@ -1,13 +1,13 @@
 #include "editor/views/soft_body_views/rendering/soft_body_rendering_view.h"
 
 #include <editor/views/soft_body_views/soft_body_structers.h>
-#include <editor/views/soft_body_views/meshing/meshing_builder.h>
 
 #include <gui/imgui/imgui.h>
 
 #include <graphics/rendering/rendering_effect.h>
 
 #include <game/components/render/render_component.h>
+#include "game/components/physics/builder/meshing_builder.h"
 
 namespace ifx {
 

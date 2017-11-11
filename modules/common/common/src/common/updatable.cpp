@@ -4,20 +4,34 @@
 
 namespace ifx {
 
+Updatable::Updatable() :
+        is_running_(true){}
+
 Updatable::Updatable(const UpdateTimeDelta& update_time_delta) :
-    update_time_delta_(update_time_delta){}
+    update_time_delta_(update_time_delta),
+    is_running_(true){}
 
 void Updatable::Update(float time_delta){
-    UpdateTimers();
+    UpdateTimersPre();
+    if(!is_running_){
+        return;
+    }
+
+    UpdateTimersPost();
 
     UpdateFixedContent();
 }
 
 bool Updatable::UpdateFixed(){
-    UpdateTimers();
+    UpdateTimersPre();
     if(!IsUpdateReady()){
         return false;
     }
+    if(!is_running_){
+        return false;
+    }
+
+    UpdateTimersPost();
 
     UpdateFixedContent();
 
@@ -28,13 +42,18 @@ void Updatable::UpdateFixedContent(){
 
 }
 
-void Updatable::UpdateTimers() {
-    update_timer_.current_time = glfwGetTime();
+void Updatable::UpdateTimersPre() {
+    auto current_time = glfwGetTime();
+    auto last_elapsed = current_time - update_timer_.last_time;
+    update_timer_.time_since_last_update += last_elapsed;
+    update_timer_.last_time_since_last_update =
+            update_timer_.time_since_last_update;
+    update_timer_.last_time = current_time;
+}
 
-    double elapsed = update_timer_.current_time - update_timer_.last_time;
-    update_timer_.time_since_last_update += elapsed;
-    update_timer_.total_time += elapsed;
-    update_timer_.last_time = update_timer_.current_time;
+void Updatable::UpdateTimersPost(){
+    update_timer_.iterations++;
+    update_timer_.total_time += update_timer_.last_time_since_last_update;
 }
 
 bool Updatable::IsUpdateReady(){
@@ -43,6 +62,19 @@ bool Updatable::IsUpdateReady(){
         return true;
     }
     return false;
+}
+
+void Updatable::ResetTimers(){
+    update_timer_.total_time = 0;
+    update_timer_.iterations = 0;
+}
+
+void Updatable::Pause(){
+    is_running_ = false;
+}
+
+void Updatable::Play(){
+    is_running_ = true;
 }
 
 }

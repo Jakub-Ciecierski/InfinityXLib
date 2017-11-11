@@ -1,17 +1,20 @@
 #ifndef PROJECT_SOFT_BODY_SOLVER_VIEW_H
 #define PROJECT_SOFT_BODY_SOLVER_VIEW_H
 
+#include <memory>
+#include <vector>
+
 #include <RTFEM/FEM/Solver/FEMSolverTypes.h>
-#include <RTFEM/FEM/Solver/FEMSolvers/FEMDynamicSolver.h>
 
 namespace ifx {
 
 struct SoftBodyEditorObjects;
-
-template<class T>
-class SoftBodyFEMComponent;
+struct SoftBodyRenderingEffects;
 
 class SceneContainer;
+class PhysicsSimulation;
+
+class SoftBodyDynamicSolverView;
 
 struct SoftBodySolvers{
     unsigned int selected = 0;
@@ -31,26 +34,23 @@ struct SoftBodySolvers{
 
 class SoftBodySolverView {
 public:
-    SoftBodySolverView(std::shared_ptr<SceneContainer> scene_container);
+    SoftBodySolverView(std::shared_ptr<SceneContainer> scene_container,
+                       std::shared_ptr<PhysicsSimulation> physics_simulation);
     ~SoftBodySolverView() = default;
 
-    void Render(SoftBodyEditorObjects& soft_body_objects);
+    void Render(SoftBodyEditorObjects& soft_body_objects,
+                SoftBodyRenderingEffects &rendering_effects);
 
 private:
     void RenderSolverType();
 
-    void RenderDynamic(SoftBodyEditorObjects& soft_body_objects);
     void RenderStatic(SoftBodyEditorObjects& soft_body_objects);
-
-    std::shared_ptr<SoftBodyFEMComponent<double>> soft_body_fem_component_;
 
     rtfem::AnalysisSolverType solver_type_;
 
-    std::unique_ptr<rtfem::FEMDynamicSolver<double>> fem_dynamic_solver_;
-
-    std::shared_ptr<SceneContainer> scene_container_;
-
     SoftBodySolvers soft_body_solvers_;
+
+    std::unique_ptr<SoftBodyDynamicSolverView> dynamic_solver_view_;
 };
 
 }

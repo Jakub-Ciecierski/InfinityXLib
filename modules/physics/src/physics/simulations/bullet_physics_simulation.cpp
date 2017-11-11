@@ -55,9 +55,6 @@ BulletPhysicsSimulation::CreateRigidBodyImpl() {
 void BulletPhysicsSimulation::UpdateFixedContent() {
     PhysicsSimulation::UpdateFixedContent();
 
-    if(!is_running_)
-        return;
-
     SynchronizeRigidBodiesTransform();
     dynamics_world_->stepSimulation(update_time_delta_.time_delta);
     SynchronizeGameObjectsTransform();

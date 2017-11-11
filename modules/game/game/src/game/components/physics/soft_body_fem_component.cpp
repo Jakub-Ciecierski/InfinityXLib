@@ -22,17 +22,23 @@ template<class T>
 void SoftBodyFEMComponent<T>::Update(float time_delta) {
     Transformable::Update(time_delta);
 
+    if(this->fem_solver_output_)
+        UpdateVBOPositions();
+}
+
+template<class T>
+void SoftBodyFEMComponent<T>::UpdateVBOPositions(){
     auto* vbo = render_component_->models()[0]->getMesh(0)->vbo();
     auto* vertices = vbo->vertices();
     for(unsigned int i = 0; i < vertices->size(); i++){
         auto& vertex = (*vertices)[i];
         auto displacement_index_start = i * 3;
         auto displacement_x
-            = this->fem_solver_output_->displacement[displacement_index_start];
+                = this->fem_solver_output_->displacement[displacement_index_start];
         auto displacement_y
-            = this->fem_solver_output_->displacement[displacement_index_start + 1];
+                = this->fem_solver_output_->displacement[displacement_index_start + 1];
         auto displacement_z
-            = this->fem_solver_output_->displacement[displacement_index_start + 2];
+                = this->fem_solver_output_->displacement[displacement_index_start + 2];
 
         vertex.Position.x += displacement_x;
         vertex.Position.y += displacement_y;
@@ -40,6 +46,8 @@ void SoftBodyFEMComponent<T>::Update(float time_delta) {
     }
 
     vbo->Update();
+
+    this->fem_solver_output_ = nullptr;
 }
 
 template

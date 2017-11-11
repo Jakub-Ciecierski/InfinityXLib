@@ -11,16 +11,17 @@ namespace ifx {
 class RenderComponent;
 class ResourceManager;
 
+template <class T>
 class MeshingBuilder {
 public:
     MeshingBuilder() = default;
     ~MeshingBuilder() = default;
 
-    rtfem::TriangleMeshIndexed<double> CreateTriangleMesh(
+    rtfem::TriangleMeshIndexed<T> CreateTriangleMesh(
         std::shared_ptr<RenderComponent> render_component);
 
     std::shared_ptr<RenderComponent> CreateRenderComponent(
-        const rtfem::FEMGeometry<double> &fem_geometry,
+        const rtfem::FEMGeometry<T> &fem_geometry,
         std::shared_ptr<ResourceManager> resource_manager);
 
 private:

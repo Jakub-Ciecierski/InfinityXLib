@@ -21,6 +21,8 @@ public:
     void Update(float time_delta) override;
 
 private:
+    void UpdateVBOPositions();
+
     std::shared_ptr<RenderComponent> render_component_;
 };
 

@@ -1,12 +1,12 @@
 #include "editor/views/soft_body_views/meshing/soft_body_meshing_creation_view.h"
 
 #include <editor/views/soft_body_views/soft_body_structers.h>
-#include <editor/views/soft_body_views/meshing/meshing_builder.h>
 
 #include <game/game_object.h>
 #include <game/game_component.h>
 #include <game/components/render/render_component.h>
 #include <game/components/physics/soft_body_fem_component.h>
+#include "game/components/physics/builder/meshing_builder.h"
 
 #include <graphics/rendering/rendering_effect.h>
 
@@ -55,8 +55,6 @@ bool SoftBodyMeshingCreationView::BuildMesh(
     if (!soft_body_objects.current_game_object) {
         return false;
     }
-    soft_body_objects.current_game_object->Remove(
-        soft_body_objects.soft_body_fem_component_builder->fem_render());
 
     rtfem::TriangleMeshIndexed<double> triangle_mesh;
     try {
@@ -91,7 +89,7 @@ SoftBodyMeshingCreationView::CreateTriangleMesh(SoftBodyEditorObjects &soft_body
         throw std::invalid_argument("Render Component count incorrect");
     }
 
-    return MeshingBuilder().CreateTriangleMesh(
+    return MeshingBuilder<double>().CreateTriangleMesh(
         std::dynamic_pointer_cast<RenderComponent>(render_components[0])
     );
 }
@@ -107,7 +105,7 @@ SoftBodyMeshingCreationView::CreateFEMGeometry(
 
 std::shared_ptr<RenderComponent> SoftBodyMeshingCreationView::CreateRenderComponent(
     const rtfem::FEMGeometry<double> &fem_geometry) {
-    return MeshingBuilder().CreateRenderComponent(
+    return MeshingBuilder<double>().CreateRenderComponent(
         fem_geometry, resource_manager_);
 }
 
@@ -115,22 +113,8 @@ void SoftBodyMeshingCreationView::RegisterRenderComponent(
     std::shared_ptr<RenderComponent> render_component,
     SoftBodyEditorObjects &soft_body_objects,
     SoftBodyRenderingEffects &rendering_effects) {
-    rendering_effects.main->RegisterRenderObject(render_component);
-    rendering_effects.nodes->RegisterRenderObject(render_component);
-    rendering_effects.edges->RegisterRenderObject(render_component);
-    rendering_effects.faces->RegisterRenderObject(render_component);
-
-    soft_body_objects.current_game_object->Add(
-        soft_body_objects.soft_body_fem_component_builder->fem_render());
-
-    render_component->SetBeforeRender([](const Program* program){
-        glEnable(GL_BLEND);
-        glBlendEquation(GL_MAX);
-    });
-    render_component->SetAfterRender([](const Program* program){
-        glBlendEquation(GL_FUNC_ADD);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    });
+    rendering_effects.Register(render_component);
+    soft_body_objects.UpdateFEMRenderComponent(render_component);
 }
 
 bool SoftBodyMeshingCreationView::DebugCreator(

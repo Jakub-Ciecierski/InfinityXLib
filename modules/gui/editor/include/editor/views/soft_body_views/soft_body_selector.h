@@ -8,13 +8,15 @@ namespace ifx {
 class GameObject;
 class RenderComponent;
 class SceneContainer;
+class ResourceManager;
 
 struct SoftBodyRenderingEffects;
 struct SoftBodyEditorObjects;
 
 class SoftBodySelector {
 public:
-    SoftBodySelector(std::shared_ptr<SceneContainer> scene);
+    SoftBodySelector(std::shared_ptr<SceneContainer> scene,
+                     std::shared_ptr<ResourceManager> resource_manager);
 
     ~SoftBodySelector() = default;
 
@@ -34,6 +36,8 @@ private:
         SoftBodyRenderingEffects &rendering_effects);
 
     std::shared_ptr<SceneContainer> scene_;
+
+    std::shared_ptr<ResourceManager> resource_manager_;
 };
 
 }
