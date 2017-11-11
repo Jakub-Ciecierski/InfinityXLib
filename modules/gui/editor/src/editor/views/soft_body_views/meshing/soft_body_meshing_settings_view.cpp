@@ -10,9 +10,8 @@ void SoftBodyMeshingSettingsView::Render() {
     if (ImGui::TreeNodeEx("Parameters",
                           ImGuiTreeNodeFlags_DefaultOpen)) {
         ImGui::PushItemWidth(50);
-        ImGui::SliderFloat("Maximum Volume",
-                           &rtfem_options_.maximum_volume,
-                           0, 10);
+        ImGui::InputFloat("Maximum Volume",
+                           &rtfem_options_.maximum_volume);
         ImGui::PopItemWidth();
         ImGui::TreePop();
     }

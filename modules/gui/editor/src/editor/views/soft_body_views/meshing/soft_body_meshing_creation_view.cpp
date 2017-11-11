@@ -39,9 +39,7 @@ bool SoftBodyMeshingCreationView::Render(
                                      soft_body_objects,
                                      rendering_effects);
         }
-        if (DebugCreator(rtfem_options, soft_body_objects, rendering_effects)) {
-            return_value = true;
-        }
+
         ImGui::TreePop();
     }
 

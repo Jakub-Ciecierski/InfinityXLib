@@ -93,7 +93,11 @@ bool SoftBodyView::Terminate() {
 
 void SoftBodyView::Render() {
     ImGui::Columns(2, "Soft");
+    ImGui::BeginChild(ImGui::GetID((void *) (intptr_t) 0),
+                      ImVec2(-1, -1), true,
+                      ImGuiWindowFlags_HorizontalScrollbar);
     RenderLeftColumn();
+    ImGui::EndChild();
 
     ImGui::NextColumn();
     RenderRightColumn();

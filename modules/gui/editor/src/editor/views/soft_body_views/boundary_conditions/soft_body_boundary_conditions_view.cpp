@@ -44,12 +44,8 @@ void SoftBodyBoundaryConditionsView::Render(
                           ImGuiTreeNodeFlags_DefaultOpen)) {
         RenderCurrentBoundaryConditionsContextMenu(boundary_conditions);
 
-        ImGui::BeginChild(ImGui::GetID((void *) (intptr_t) 0),
-                          ImVec2(ImGui::GetWindowWidth() * 0.17f,
-                                 ImGui::GetWindowHeight() * 0.3f),
-                          false);
         RenderCurrentBoundaryConditions(boundary_conditions);
-        ImGui::EndChild();
+
         ImGui::TreePop();
     }
 }

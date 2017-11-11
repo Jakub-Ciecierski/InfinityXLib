@@ -76,7 +76,7 @@ void SoftBodyLoadView::RenderTractionForceInspector(
             auto& triangle_face = triangle_faces[selected_triangle_face_];
             float imgui_traction_force = (float)triangle_face.traction_force;
 
-            ImGui::PushItemWidth(50);
+            ImGui::PushItemWidth(65);
             if(ImGui::InputFloat("Traction Force", &imgui_traction_force)){
                 triangle_face.traction_force = imgui_traction_force;
             }
@@ -89,10 +89,6 @@ void SoftBodyLoadView::RenderTractionForceInspector(
 
 void SoftBodyLoadView::RenderTractionForceCurrent(
     std::vector<rtfem::TriangleFace<double>>& triangle_faces){
-    ImGui::BeginChild(ImGui::GetID((void *) (intptr_t) 0),
-                      ImVec2(ImGui::GetWindowWidth() * 0.17f,
-                             ImGui::GetWindowHeight() * 0.3f),
-                      false);
     static int selection_mask = (1 << 2);
     for (unsigned int i = 0; i < triangle_faces.size(); i++) {
         if(triangle_faces[i].traction_force == 0)
@@ -118,8 +114,6 @@ void SoftBodyLoadView::RenderTractionForceCurrent(
             ImGui::TreePop();
         }
     }
-
-    ImGui::EndChild();
 }
 
 void SoftBodyLoadView::RenderTractionForceMagnitude(){
