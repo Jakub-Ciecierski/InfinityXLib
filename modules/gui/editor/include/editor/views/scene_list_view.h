@@ -6,6 +6,7 @@
 
 #include <memory>
 #include <vector>
+#include <editor/views/scene_views/context_menus/game_object_context_menu.h>
 
 namespace ifx {
 
@@ -41,6 +42,8 @@ private:
     void RenderWindow();
 
     void RenderGameObjectsList();
+    void HandleContextMenuEvent(const GameObjectContextMenuEvent& event,
+                                std::shared_ptr<GameObject> game_object);
 
     void RenderInspector();
     void RenderSelectedGameObject();

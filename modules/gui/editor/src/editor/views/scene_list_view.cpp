@@ -142,13 +142,27 @@ void SceneListView::RenderGameObjectsList(
         }
 
         auto event = game_object_context_menu_->Render(game_objects[i], i);
-        if (event == GameObjectContextMenuEvent::Remove)
-            SetSelectedGameObject(nullptr);
+        HandleContextMenuEvent(event, game_objects[i]);
 
         if (node_open) {
             RenderGameComponentsList(game_objects[i], i);
             ImGui::TreePop();
         }
+    }
+}
+
+void SceneListView::HandleContextMenuEvent(
+        const GameObjectContextMenuEvent& event,
+        std::shared_ptr<GameObject> game_object){
+    switch(event){
+        case GameObjectContextMenuEvent::Remove:
+            SetSelectedGameObject(nullptr);
+            break;
+        case GameObjectContextMenuEvent::OpenSoftBodyEditor:
+            NotifySetSelectedGameObject(game_object);
+            break;
+        default:
+            break;
     }
 }
 
@@ -210,7 +224,6 @@ std::string SceneListView::GetComponentName(
 void SceneListView::SetSelectedGameObject(
     std::shared_ptr<GameObject> selected_game_object) {
     selected_game_object_ = selected_game_object;
-    NotifySetSelectedGameObject(selected_game_object);
 }
 
 } // namespace ifx

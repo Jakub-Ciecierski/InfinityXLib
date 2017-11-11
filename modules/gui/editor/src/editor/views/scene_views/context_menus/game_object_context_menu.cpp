@@ -16,6 +16,7 @@
 #include <gui/imgui/imgui.h>
 
 #include <common/unique_ptr.h>
+#include <game/game_component.h>
 
 namespace ifx {
 
@@ -42,7 +43,10 @@ GameObjectContextMenuEvent GameObjectContextMenu::Render(std::shared_ptr<
     if (ImGui::BeginPopupContextItem("GameObject context menu")) {
 
         Add(scene_renderer_, resource_creator_, game_object);
+        if(Open(game_object))
+            event = GameObjectContextMenuEvent::OpenSoftBodyEditor;
         ImGui::Separator();
+
         if (Remove(scene_, game_object))
             event = GameObjectContextMenuEvent::Remove;
 
@@ -51,16 +55,6 @@ GameObjectContextMenuEvent GameObjectContextMenu::Render(std::shared_ptr<
     ImGui::PopID();
 
     return event;
-}
-
-bool GameObjectContextMenu::Remove(std::shared_ptr<SceneContainer> scene,
-                                   std::shared_ptr<GameObject> game_object) {
-    bool removed = false;
-    if (ImGui::Selectable("Remove")) {
-        scene->Remove(game_object);
-        removed = true;
-    }
-    return removed;
 }
 
 void GameObjectContextMenu::Add(std::shared_ptr<SceneRenderer> scene_renderer,
@@ -89,6 +83,38 @@ void GameObjectContextMenu::AddRenderObject(
 
 void GameObjectContextMenu::AddRigidBody(std::shared_ptr<GameObject> game_object){
     context_menu_add_rigid_body_->Render(game_object);
+}
+
+bool GameObjectContextMenu::Open(std::shared_ptr<GameObject> game_object){
+    bool return_value = false;
+    if (ImGui::BeginMenu("Open")) {
+        return_value = OpenInSoftBodyEditor(game_object);
+        ImGui::EndMenu();
+    }
+    return return_value;
+}
+
+bool GameObjectContextMenu::OpenInSoftBodyEditor(
+        std::shared_ptr<GameObject> game_object){
+    bool return_value = false;
+    auto render_components =
+            game_object->GetComponents(GameComponentType::RENDER);
+    if(render_components.size() == 1){
+        if (ImGui::Selectable("Soft Body Editor")) {
+            return_value = true;
+        }
+    }
+    return return_value;
+}
+
+bool GameObjectContextMenu::Remove(std::shared_ptr<SceneContainer> scene,
+                                   std::shared_ptr<GameObject> game_object) {
+    bool removed = false;
+    if (ImGui::Selectable("Remove")) {
+        scene->Remove(game_object);
+        removed = true;
+    }
+    return removed;
 }
 
 }
