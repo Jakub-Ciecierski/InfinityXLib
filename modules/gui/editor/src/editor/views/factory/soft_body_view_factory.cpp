@@ -248,6 +248,73 @@ void SoftBodyViewFactory::SetKeybinds(
     std::shared_ptr<SoftBodyView> soft_body_view) {
     auto command_factory = ifx::CommandFactory(controls);
 
+    auto command_q = command_factory.CreateKeyboardCommand(
+        nullptr,
+        [soft_body_view](std::shared_ptr<ifx::Controller> controller,
+                         std::shared_ptr<ifx::Controlable> obj){
+            soft_body_view->soft_body_views_selection().selected = 1;
+        },
+        KeyboardControllerEventType{
+            KeyboardControllerKeyType::Q,
+            KeyboardControllerCallbackType::PRESSED
+        }
+    );
+    auto command_w = command_factory.CreateKeyboardCommand(
+        nullptr,
+        [soft_body_view](std::shared_ptr<ifx::Controller> controller,
+                         std::shared_ptr<ifx::Controlable> obj){
+            soft_body_view->soft_body_views_selection().selected = 2;
+        },
+        KeyboardControllerEventType{
+            KeyboardControllerKeyType::W,
+            KeyboardControllerCallbackType::PRESSED
+        }
+    );
+    auto command_e = command_factory.CreateKeyboardCommand(
+        nullptr,
+        [soft_body_view](std::shared_ptr<ifx::Controller> controller,
+                         std::shared_ptr<ifx::Controlable> obj){
+            soft_body_view->soft_body_views_selection().selected = 3;
+        },
+        KeyboardControllerEventType{
+            KeyboardControllerKeyType::E,
+            KeyboardControllerCallbackType::PRESSED
+        }
+    );
+    auto command_r = command_factory.CreateKeyboardCommand(
+        nullptr,
+        [soft_body_view](std::shared_ptr<ifx::Controller> controller,
+                         std::shared_ptr<ifx::Controlable> obj){
+            soft_body_view->soft_body_views_selection().selected = 4;
+        },
+        KeyboardControllerEventType{
+            KeyboardControllerKeyType::R,
+            KeyboardControllerCallbackType::PRESSED
+        }
+    );
+    auto command_t = command_factory.CreateKeyboardCommand(
+        nullptr,
+        [soft_body_view](std::shared_ptr<ifx::Controller> controller,
+                         std::shared_ptr<ifx::Controlable> obj){
+            soft_body_view->soft_body_views_selection().selected = 5;
+        },
+        KeyboardControllerEventType{
+            KeyboardControllerKeyType::T,
+            KeyboardControllerCallbackType::PRESSED
+        }
+    );
+    auto command_y = command_factory.CreateKeyboardCommand(
+        nullptr,
+        [soft_body_view](std::shared_ptr<ifx::Controller> controller,
+                         std::shared_ptr<ifx::Controlable> obj){
+            soft_body_view->soft_body_views_selection().selected = 6;
+        },
+        KeyboardControllerEventType{
+            KeyboardControllerKeyType::Y,
+            KeyboardControllerCallbackType::PRESSED
+        }
+    );
+
     auto command_rotate_mouse = command_factory.CreateMouseCommand(
         camera,
         [soft_body_view](
@@ -352,10 +419,16 @@ void SoftBodyViewFactory::SetKeybinds(
             ifx::MouseControllerCallbackType::PRESSED
         }
     );
+
+    controls->AddCommand(command_q);
+    controls->AddCommand(command_w);
+    controls->AddCommand(command_e);
+    controls->AddCommand(command_r);
+    controls->AddCommand(command_t);
+    controls->AddCommand(command_y);
     controls->AddCommand(command_middle);
     controls->AddCommand(command_rotate_mouse);
     controls->AddCommand(command_scroll);
-    //controls->AddCommand(command_zoom);
 }
 
 }

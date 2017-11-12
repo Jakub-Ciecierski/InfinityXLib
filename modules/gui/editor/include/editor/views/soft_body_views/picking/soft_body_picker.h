@@ -77,6 +77,7 @@ private:
         const std::vector<Vertex> &vertices,
         const Ray &ray);
     void ComputeTriangleRayIntersection(
+        SoftBodyFEMComponentBuilder<double>* soft_body_builder,
         const glm::mat4 &model_matrix,
         const std::vector<rtfem::TriangleFace<double>>& triangle_faces,
         const std::vector<std::shared_ptr<rtfem::Vertex<double>>>& vertices,

@@ -37,8 +37,11 @@ public:
         fem_render_ = fem_render;
     }
 
-    std::shared_ptr<SoftBodyFEMComponent<T>> Build();
+    std::shared_ptr<SoftBodyFEMComponent<T>> last_soft_body_fem_component(){
+        return last_soft_body_fem_component_;
+    }
 
+    std::shared_ptr<SoftBodyFEMComponent<T>> Build();
 
     rtfem::FEMGeometry<T>& GetFEMGeometry();
     rtfem::Material<T>& GetMaterial();
@@ -48,7 +51,11 @@ public:
 private:
     std::unique_ptr<rtfem::FEMModel<T>> BuildFEMModel();
 
+    std::shared_ptr<SoftBodyFEMComponent<T>> last_soft_body_fem_component_;
+
     std::shared_ptr<ResourceManager> resource_manager_;
+
+    //
 
     rtfem::FEMGeometry<T> fem_geometry_;
 

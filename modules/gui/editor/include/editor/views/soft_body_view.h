@@ -99,6 +99,10 @@ public:
         std::unique_ptr<SoftBodyLoadView> load_view);
     ~SoftBodyView() = default;
 
+    SoftBodyViews& soft_body_views_selection(){
+        return soft_body_views;
+    }
+
     bool Terminate() override;
 
     virtual void Render() override;

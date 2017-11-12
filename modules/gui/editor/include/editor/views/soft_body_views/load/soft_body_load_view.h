@@ -18,6 +18,9 @@ public:
 
     void Render(Eigen::Vector3<double>& body_force,
                 std::vector<rtfem::TriangleFace<double>>& triangle_faces);
+
+    void RecordTractionForce(
+        std::vector<rtfem::TriangleFace<double>>& triangle_faces);
 private:
     void RenderBodyForce(Eigen::Vector3<double>& body_force);
 
@@ -30,9 +33,6 @@ private:
         std::vector<rtfem::TriangleFace<double>>& triangle_faces);
 
     void RenderTractionForceMagnitude();
-
-    void RecordTractionForce(
-        std::vector<rtfem::TriangleFace<double>>& triangle_faces);
 
     bool RenderTractionForceError(
         const std::vector<rtfem::TriangleFace<double>>& triangle_faces);

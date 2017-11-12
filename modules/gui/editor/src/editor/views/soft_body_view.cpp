@@ -167,6 +167,12 @@ void SoftBodyView::RenderLeftColumn() {
             break;
         case soft_body_views.solver_id:
             if(RenderError(builder) && RenderSolverError(builder)){
+                if(builder->last_soft_body_fem_component()){
+                    load_view_->RecordTractionForce(
+                        builder->last_soft_body_fem_component()->fem_model()
+                            ->fem_geometry().triangle_faces);
+                }
+
                 solver_view_->Render(soft_body_objects_,
                                      rendering_effects_);
             }

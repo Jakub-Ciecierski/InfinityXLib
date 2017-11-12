@@ -16,14 +16,17 @@ public:
 
     rtfem::FEMModel<T>* fem_model(){return fem_model_.get();}
 
+    const rtfem::FEMSolverOutput<T>* last_fem_solver_output(){
+        return last_fem_solver_output_;
+    };
     void fem_solver_output(const rtfem::FEMSolverOutput<T>* fem_solver_output){
         fem_solver_output_ = fem_solver_output;
     }
 
 protected:
     const rtfem::FEMSolverOutput<T>* fem_solver_output_;
+    const rtfem::FEMSolverOutput<T>* last_fem_solver_output_;
 
-private:
     std::unique_ptr<rtfem::FEMModel<T>> fem_model_;
 };
 

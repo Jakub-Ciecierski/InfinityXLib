@@ -10,12 +10,17 @@
 
 #include <game/components/cameras/camera_component.h>
 #include <game/components/render/render_component.h>
+#include "game/components/physics/soft_body_fem_component.h"
 
 #include <common/unique_ptr.h>
 
 #include <gui/imgui/imgui.h>
+
 #include <RTFEM/FEM/Meshing/Intersections.h>
+
 #include <math/print_math.h>
+
+#include "physics/soft_body/soft_body_fem.h"
 
 namespace ifx {
 
@@ -115,6 +120,7 @@ void SoftBodyPicker::RayCastingPick(
 
     if(face_selection_->IsInputRayCasting()){
         ComputeTriangleRayIntersection(
+            soft_body_builder,
             soft_body_builder->fem_render()->GetModelMatrix(),
             soft_body_builder->GetFEMGeometry().triangle_faces,
             soft_body_builder->GetFEMGeometry().vertices,
@@ -170,6 +176,7 @@ int SoftBodyPicker::ComputeRayIntersection(
 }
 
 void SoftBodyPicker::ComputeTriangleRayIntersection(
+    SoftBodyFEMComponentBuilder<double>* soft_body_builder,
     const glm::mat4 &model_matrix,
     const std::vector<rtfem::TriangleFace<double>>& triangle_faces,
     const std::vector<std::shared_ptr<rtfem::Vertex<double>>>& vertices,
@@ -180,6 +187,12 @@ void SoftBodyPicker::ComputeTriangleRayIntersection(
     int closest_index = -1;
     float closest_distance = 9999;
     Triangle closest_triangle;
+
+    const rtfem::FEMSolverOutput<double>* fem_solver_output = nullptr;
+    if(soft_body_builder->last_soft_body_fem_component()){
+        fem_solver_output = soft_body_builder->last_soft_body_fem_component()
+            ->last_fem_solver_output();
+    }
 
     for (const auto &triangle_face : triangle_faces) {
         if(!triangle_face.is_boundary_face){
@@ -196,6 +209,30 @@ void SoftBodyPicker::ComputeTriangleRayIntersection(
             rtfem_vertex2->x(), rtfem_vertex2->y(), rtfem_vertex2->z()), 1);
         auto glm_vertex3_4 = glm::vec4(glm::vec3(
             rtfem_vertex3->x(), rtfem_vertex3->y(), rtfem_vertex3->z()), 1);
+
+        // Apply current displacements;
+        if(fem_solver_output){
+            glm_vertex1_4[0] +=
+                fem_solver_output->displacement[triangle_face.v1*3 + 0];
+            glm_vertex1_4[1] +=
+                fem_solver_output->displacement[triangle_face.v1*3 + 1];
+            glm_vertex1_4[2] +=
+                fem_solver_output->displacement[triangle_face.v1*3 + 2];
+
+            glm_vertex2_4[0] +=
+                fem_solver_output->displacement[triangle_face.v2*3 + 0];
+            glm_vertex2_4[1] +=
+                fem_solver_output->displacement[triangle_face.v2*3 + 1];
+            glm_vertex2_4[2] +=
+                fem_solver_output->displacement[triangle_face.v2*3 + 2];
+
+            glm_vertex3_4[0] +=
+                fem_solver_output->displacement[triangle_face.v3*3 + 0];
+            glm_vertex3_4[1] +=
+                fem_solver_output->displacement[triangle_face.v3*3 + 1];
+            glm_vertex3_4[2] +=
+                fem_solver_output->displacement[triangle_face.v3*3 + 2];
+        }
 
         auto glm_world_vertex1 = glm::vec3(model_matrix * glm_vertex1_4);
         auto glm_world_vertex2 = glm::vec3(model_matrix * glm_vertex2_4);
