@@ -22,7 +22,12 @@ void main()
     mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
 
     mat4 ModelRotation = mat4(mat3(ModelMatrix));
-    mat4 ModelScale = mat4(mat3(0.1));
+    float scale_factor = 0.1;
+    mat4 ModelScale = mat4(mat3(
+        scale_factor, 0, 0,
+        0, scale_factor, 0,
+        0, 0, scale_factor
+    ));
     mat4 Model = ModelRotation * ModelScale;
 
     mat4 ViewRotation = mat4(mat3(ViewMatrix));
