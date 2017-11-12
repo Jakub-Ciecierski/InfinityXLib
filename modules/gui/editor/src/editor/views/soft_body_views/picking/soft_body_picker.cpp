@@ -193,7 +193,7 @@ void SoftBodyPicker::ComputeTriangleRayIntersection(
         fem_solver_output = soft_body_builder->last_soft_body_fem_component()
             ->last_fem_solver_output();
     }
-
+    try{
     for (const auto &triangle_face : triangle_faces) {
         if(!triangle_face.is_boundary_face){
             index++;
@@ -260,6 +260,10 @@ void SoftBodyPicker::ComputeTriangleRayIntersection(
     }else{
         face_selection_->Reset();
     }
+    }catch(const std::exception& e){
+        face_selection_->Reset();
+    }
+
 }
 
 void SoftBodyPicker::BoxCastingPick(
