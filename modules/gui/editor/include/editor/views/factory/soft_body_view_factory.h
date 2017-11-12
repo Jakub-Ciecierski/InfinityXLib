@@ -14,6 +14,8 @@ class Renderer;
 class Controls;
 class CameraComponent;
 class GameLoop;
+class ResourceContext;
+class RenderComponent;
 
 struct EngineArchitecture;
 struct SoftBodyRenderingEffects;
@@ -41,7 +43,11 @@ private:
         std::shared_ptr<Renderer> old_renderer);
 
     void SetDefaultScene(std::shared_ptr<SceneContainer> scene,
+                         std::shared_ptr<ResourceContext> resource_context,
+                         SoftBodyRenderingEffects& rendering_effects,
                          std::shared_ptr<SoftBodyView> soft_body_view);
+    std::shared_ptr<RenderComponent> CreateAxis(
+        std::shared_ptr<ResourceContext> resource_context);
 
     void SetKeybinds(
         std::shared_ptr<Controls> controls,

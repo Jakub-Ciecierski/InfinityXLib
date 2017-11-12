@@ -20,6 +20,8 @@ struct SoftBodyRenderingEffects {
     std::shared_ptr<RenderingEffect> faces = nullptr;
     std::shared_ptr<RenderingEffect> main = nullptr;
 
+    std::shared_ptr<RenderingEffect> axis = nullptr;
+
     void Register(std::shared_ptr<RenderComponent> render_component);
 };
 

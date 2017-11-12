@@ -21,7 +21,9 @@
 #include <editor/views/soft_body_views/picking/factory/soft_body_picker_factory.h>
 #include <editor/views/soft_body_views/load/traction_force_recorder.h>
 #include "editor/views/soft_body_views/solver/dynamic/soft_body_dynamic_solver_view.h"
+#include <editor/views/soft_body_views/load/soft_body_load_view_factory.h>
 
+#include "game/resources/resource_context.h"
 #include <game/factory/game_systems_factory.h>
 #include <game/game_updater.h>
 #include <game/game_loop.h>
@@ -33,11 +35,13 @@
 #include <game/components/lights/factory/light_component_factory.h>
 #include "game/components/lights/light_directional_component.h"
 #include "game/components/cameras/camera_component.h"
+#include "game/components/render/render_component.h"
 
 #include <graphics/factory/fbo_renderer_factory.h>
 #include <graphics/rendering/fbo_rendering/fbo_renderer.h>
 #include <graphics/rendering/scene_renderer.h>
 #include <graphics/rendering/rendering_effect.h>
+#include <graphics/model_loader/model_loader.h>
 
 #include <common/unique_ptr.h>
 
@@ -50,13 +54,18 @@
 #include <math/print_math.h>
 
 #include <iostream>
-#include <editor/views/soft_body_views/load/soft_body_load_view_factory.h>
+
+#include "resources/resource_manager.h"
+#include <resources/resources.h>
 
 namespace ifx {
 
 const std::string NODE_RENDERING_EFFECT_NAME = "soft_body_editor/nodes.prog";
 const std::string EDGES_RENDERING_EFFECT_NAME = "soft_body_editor/edges.prog";
 const std::string FACES_RENDERING_EFFECT_NAME = "soft_body_editor/faces.prog";
+const std::string AXIS_RENDERING_EFFECT_NAME = "soft_body_editor/axis.prog";
+
+const std::string AXIS_OBJECT_NAME = "soft_body_editor/axis-obj/axis.obj";
 
 SoftBodyViewFactory::SoftBodyViewFactory(
     std::shared_ptr<GameLoop> game_loop,
@@ -87,6 +96,8 @@ std::shared_ptr<View> SoftBodyViewFactory::Create() {
         std::move(soft_body_load_view));
 
     SetDefaultScene(engine_architecture->engine_systems.scene_container,
+                    engine_architecture->engine_contexts.resource_context,
+                    soft_body_rendering_effects,
                     soft_body_view);
 
     return soft_body_view;
@@ -137,6 +148,7 @@ SoftBodyRenderingEffects SoftBodyViewFactory::SetRendererSettings(
     renderer->scene_renderer()->Add(soft_body_rendering_effects.nodes);
     renderer->scene_renderer()->Add(soft_body_rendering_effects.edges);
     renderer->scene_renderer()->Add(soft_body_rendering_effects.faces);
+    renderer->scene_renderer()->Add(soft_body_rendering_effects.axis);
 
     return soft_body_rendering_effects;
 }
@@ -161,13 +173,17 @@ SoftBodyRenderingEffects SoftBodyViewFactory::CreateRenderingEffects(
         } else if (rendering_effect->name() == FACES_RENDERING_EFFECT_NAME) {
             soft_body_rendering_effects.faces =
                 std::make_shared<RenderingEffect>(*rendering_effect);
+        } else if (rendering_effect->name() == AXIS_RENDERING_EFFECT_NAME){
+            soft_body_rendering_effects.axis =
+                std::make_shared<RenderingEffect>(*rendering_effect);
         }
     }
 
     if (!soft_body_rendering_effects.main
         || !soft_body_rendering_effects.nodes
         || !soft_body_rendering_effects.edges
-        || !soft_body_rendering_effects.faces) {
+        || !soft_body_rendering_effects.faces
+        || !soft_body_rendering_effects.axis) {
         throw std::invalid_argument("SoftBodyRenderingEffects not found");
     }
 
@@ -176,6 +192,8 @@ SoftBodyRenderingEffects SoftBodyViewFactory::CreateRenderingEffects(
 
 void SoftBodyViewFactory::SetDefaultScene(
     std::shared_ptr<SceneContainer> scene,
+    std::shared_ptr<ResourceContext> resource_context,
+    SoftBodyRenderingEffects& rendering_effects,
     std::shared_ptr<SoftBodyView> soft_body_view) {
     // Camera
     auto game_object = scene->CreateAndAddEmptyGameObject();
@@ -204,6 +222,24 @@ void SoftBodyViewFactory::SetDefaultScene(
                 program_creator()));
     light_game_object->rotateTo(glm::vec3(50, -50, 0));
     light_game_object->moveTo(glm::vec3(0, 10, 0));
+
+    // Axis
+    auto axis_game_object = scene->CreateAndAddEmptyGameObject();
+    auto axis_render_component = CreateAxis(resource_context);
+    axis_game_object->Add(axis_render_component);
+    rendering_effects.axis->RegisterRenderObject(axis_render_component);
+}
+
+std::shared_ptr<RenderComponent> SoftBodyViewFactory::CreateAxis(
+    std::shared_ptr<ResourceContext> resource_context){
+    auto asset_name = resource_context->resource_manager()->resource_path()
+        ->GetResourcePath(AXIS_OBJECT_NAME, ResourceType::MODEL);
+    ModelLoader model_loader(asset_name,
+                             resource_context->model_creator(),
+                             resource_context->texture_creator());
+    auto model = model_loader.loadModel();
+
+    return std::make_shared<RenderComponent>(model);
 }
 
 void SoftBodyViewFactory::SetKeybinds(
