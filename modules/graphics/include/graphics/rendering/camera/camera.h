@@ -36,6 +36,10 @@ public:
         camera_style_ = camera_style;
     }
 
+    void SetWorldUp(const glm::vec3& world_up){
+        WorldUp = world_up;
+    };
+
     /**
      * Override from MovableObject.
      */

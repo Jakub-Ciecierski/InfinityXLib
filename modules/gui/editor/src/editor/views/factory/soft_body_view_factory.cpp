@@ -185,6 +185,7 @@ void SoftBodyViewFactory::SetDefaultScene(
     camera->moveTo(glm::vec3(0, 0, 0));
     camera->rotateTo(glm::vec3(0, 0, 0));
     camera->scale(5);
+    camera->SetWorldUp(glm::vec3(0, -1, 0));
 
     game_object->Add(std::dynamic_pointer_cast<GameComponent>(camera));
     soft_body_view->screen_view().SetCamera(camera);
@@ -230,8 +231,8 @@ void SoftBodyViewFactory::SetKeybinds(
             float yoffset = previous_position.y - current_position.y;
 
             float rotationSpeed = 0.1f;
-            camera->rotate(glm::vec3(xoffset * rotationSpeed,
-                                     -yoffset * rotationSpeed,
+            camera->rotate(glm::vec3(-xoffset * rotationSpeed,
+                                     yoffset * rotationSpeed,
                                      0));
         },
         ifx::MouseControllerEventType {
