@@ -38,6 +38,7 @@
 #include "editor/views/soft_body_views/picking/soft_body_node_selection.h"
 #include <editor/views/soft_body_views/load/traction_force_recorder.h>
 #include "editor/views/soft_body_views/solver/dynamic/soft_body_dynamic_solver_view.h"
+#include "editor/views/soft_body_views/scene_builder/soft_body_scene_builder.h"
 
 #include "game/components/physics/builder/meshing_builder.h"
 
@@ -47,29 +48,30 @@
 
 namespace ifx {
 
-SoftBodyView::SoftBodyView(std::shared_ptr<EngineArchitecture>
-                           engine_architecture,
+SoftBodyView::SoftBodyView(std::shared_ptr<EngineArchitecture> editor_architecture,
                            const SoftBodyRenderingEffects &rendering_effects,
                            std::shared_ptr<SoftBodyPicker> soft_body_picker,
-                           std::unique_ptr<SoftBodyLoadView> load_view) :
+                           std::unique_ptr<SoftBodyLoadView> load_view,
+                           std::unique_ptr<SoftBodySceneBuilder> scene_builder) :
     View("Soft Body"),
-    engine_architecture_(engine_architecture),
+    editor_architecture_(editor_architecture),
     rendering_effects_(rendering_effects),
     soft_body_objects_(SoftBodyEditorObjects{nullptr, nullptr}),
     first_render_(true),
     load_view_(std::move(load_view)),
+    scene_builder_(std::move(scene_builder)),
     soft_body_fem_(nullptr) {
 
     screen_view_ = ifx::make_unique<SoftBodyScreenView>(soft_body_picker);
     selector_ = ifx::make_unique<SoftBodySelector>(
-        engine_architecture_->
+        editor_architecture_->
             engine_systems.scene_container,
-        engine_architecture_->engine_contexts.resource_context->
+        editor_architecture_->engine_contexts.resource_context->
                 resource_manager());
 
     soft_body_guide_view_ = ifx::make_unique<SoftBodyGuideView>();
     meshing_view_ = ifx::make_unique<SoftBodyMeshingView>(
-        engine_architecture_->
+        editor_architecture_->
             engine_contexts.resource_context->
             resource_manager());
     rendering_view_ = ifx::make_unique<SoftBodyRenderingView>();
@@ -79,14 +81,13 @@ SoftBodyView::SoftBodyView(std::shared_ptr<EngineArchitecture>
         soft_body_picker);
 
     solver_view_ = ifx::make_unique<SoftBodySolverView>(
-        engine_architecture_->engine_systems.scene_container,
-        engine_architecture_->engine_systems.physics_simulation
+        editor_architecture_->engine_systems.scene_container,
+        editor_architecture_->engine_systems.physics_simulation
     );
-
 }
 
 bool SoftBodyView::Terminate() {
-    engine_architecture_->engine_systems
+    editor_architecture_->engine_systems
         .physics_simulation->Terminate();
     return true;
 }
@@ -118,7 +119,7 @@ void SoftBodyView::RenderLeftColumn() {
             if (ImGui::Selectable(soft_body_views.names[i].c_str())){
                 soft_body_views.selected = i;
             }
-            if(i == 0){
+            if(i == 0 || i == 6){
                 ImGui::Separator();
             }
         }
@@ -177,6 +178,12 @@ void SoftBodyView::RenderLeftColumn() {
                                      rendering_effects_);
             }
             break;
+        case soft_body_views.builder_id:
+            if(RenderError(builder) && RenderSolverError(builder)){
+                scene_builder_->Render(selector_->selected_game_object(),
+                                       builder);
+            }
+            break;
         default:
             break;
     }
@@ -203,7 +210,7 @@ void SoftBodyView::RenderRightColumn() {
     }
 
     screen_view_->Render(
-        engine_architecture_->engine_systems.renderer,
+        editor_architecture_->engine_systems.renderer,
         soft_body_objects_.soft_body_fem_component_builder.get());
 }
 
@@ -260,7 +267,7 @@ bool SoftBodyView::RenderSolverError(
         ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(255, 0, 0, 255));
         ImGui::Bullet();
         ImGui::SameLine();
-        ImGui::TextWrapped("FEM Model must be meshes properly");
+        ImGui::TextWrapped("FEM Model must be meshed properly");
         ImGui::PopStyleColor();
 
         return_value = false;
@@ -271,7 +278,7 @@ bool SoftBodyView::RenderSolverError(
 }
 
 void SoftBodyView::OnViewEnter(){
-    auto camera = engine_architecture_->engine_systems
+    auto camera = editor_architecture_->engine_systems
         .scene_container->GetActiveCamera();
     camera->moveTo(glm::vec3(0, 0, 0));
     camera->rotateTo(glm::vec3(0, 0, 0));

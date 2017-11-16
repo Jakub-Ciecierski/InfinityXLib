@@ -57,8 +57,14 @@ void RigidBodyImplBullet::InitCollisionShape(const BoxCollisionShape *shape) {
     collision_shape_bt_ = std::shared_ptr<btBoxShape>(new btBoxShape(
         btVector3(dim.x, dim.y, dim.z)));
 }
+
 void RigidBodyImplBullet::InitCollisionShape(const SphereCollisionShape *shape){
     collision_shape_bt_ = std::make_shared<btSphereShape>(shape->radius());
+}
+
+void RigidBodyImplBullet::InitCollisionShape(const MeshCollisionShape *shape){
+    throw std::invalid_argument(
+            "RigidBodyImplBullet::InitCollisionShape Not Implemented");
 }
 
 void RigidBodyImplBullet::SetCollisionShapeScale(const glm::vec3 &scale) {

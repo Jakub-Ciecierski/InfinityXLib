@@ -11,7 +11,7 @@ namespace ifx {
 class RigidBodyImpl;
 
 enum class CollisionShapeType{
-    StaticPlane, Box, Sphere
+    StaticPlane, Box, Sphere, Mesh
 };
 
 inline std::string CollisionShapeName(CollisionShapeType type){

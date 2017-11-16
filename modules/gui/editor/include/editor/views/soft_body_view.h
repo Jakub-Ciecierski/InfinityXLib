@@ -26,6 +26,7 @@ class SoftBodyMaterialView;
 class SoftBodyLoadView;
 class SoftBodyGuideView;
 class SoftBodyPicker;
+class SoftBodySceneBuilder;
 
 struct EngineArchitecture;
 
@@ -50,11 +51,14 @@ struct SoftBodyViews{
     const std::string load_name = "Load";
     static constexpr unsigned int load_id = 4;
 
-    const std::string rendering_name = "Rendering";
-    static constexpr unsigned int rendering_id = 5;
-
     const std::string solver_name = "Solver";
-    static constexpr unsigned int solver_id = 6;
+    static constexpr unsigned int solver_id = 5;
+
+    const std::string rendering_name = "Rendering";
+    static constexpr unsigned int rendering_id = 6;
+
+    const std::string builder_name = "Builder";
+    static constexpr unsigned int builder_id = 7;
 
     const std::vector<std::string> names{
         guide_name,
@@ -62,8 +66,9 @@ struct SoftBodyViews{
         material_name,
         boundary_conditions_name,
         load_name,
+        solver_name,
         rendering_name,
-        solver_name
+        builder_name
     };
 
     const int GetID(std::string name)  {
@@ -93,10 +98,11 @@ struct SoftBodyViews{
 class SoftBodyView : public View, public SceneViewObserver {
 public:
     SoftBodyView(
-        std::shared_ptr<EngineArchitecture> engine_architecture,
+        std::shared_ptr<EngineArchitecture> editor_architecture,
         const SoftBodyRenderingEffects &rendering_effects,
         std::shared_ptr<SoftBodyPicker> soft_body_picker,
-        std::unique_ptr<SoftBodyLoadView> load_view);
+        std::unique_ptr<SoftBodyLoadView> load_view,
+        std::unique_ptr<SoftBodySceneBuilder> scene_builder);
     ~SoftBodyView() = default;
 
     SoftBodyViews& soft_body_views_selection(){
@@ -123,7 +129,7 @@ private:
     bool RenderError(
         SoftBodyFEMComponentBuilder<double>* soft_body_fem_component_builder);
 
-    std::shared_ptr<EngineArchitecture> engine_architecture_;
+    std::shared_ptr<EngineArchitecture> editor_architecture_;
 
     SoftBodyRenderingEffects rendering_effects_;
     SoftBodyEditorObjects soft_body_objects_;
@@ -143,6 +149,7 @@ private:
     std::unique_ptr<SoftBodyBoundaryConditionsView> boundary_conditions_view_;
     std::unique_ptr<SoftBodyLoadView> load_view_;
     std::unique_ptr<SoftBodySolverView> solver_view_;
+    std::unique_ptr<SoftBodySceneBuilder> scene_builder_;
 
     std::shared_ptr<SoftBodyFEMComponent<double>> soft_body_fem_;
 };

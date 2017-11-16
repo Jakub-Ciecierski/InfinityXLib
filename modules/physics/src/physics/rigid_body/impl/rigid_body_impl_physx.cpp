@@ -79,6 +79,10 @@ void RigidBodyImplPhysx::InitCollisionShape(const SphereCollisionShape *shape) {
             *px_material_);
 }
 
+void RigidBodyImplPhysx::InitCollisionShape(const MeshCollisionShape *shape) {
+
+}
+
 void RigidBodyImplPhysx::SetCollisionShapeScale(const glm::vec3 &scale) {
     if (collision_shape_->scale() == scale) {
         return;

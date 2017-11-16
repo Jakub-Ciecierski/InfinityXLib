@@ -23,12 +23,14 @@ SoftBodySelector::SoftBodySelector(
         std::shared_ptr<SceneContainer> scene,
         std::shared_ptr<ResourceManager> resource_manager) :
     scene_(scene),
-    resource_manager_(resource_manager){}
+    resource_manager_(resource_manager),
+    selected_game_object_(nullptr){}
 
 void SoftBodySelector::Select(
     std::shared_ptr<GameObject> selected_game_object,
     SoftBodyRenderingEffects &rendering_effects,
     SoftBodyEditorObjects &soft_body_objects) {
+    selected_game_object_ = selected_game_object;
     RemoveCurrentGameObject(soft_body_objects);
 
     if (!CheckSelectedGameObjectCorrectness(selected_game_object,

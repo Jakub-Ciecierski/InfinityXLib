@@ -31,6 +31,7 @@ public:
     virtual void InitCollisionShape(const StaticPlaneShape *shape) override;
     virtual void InitCollisionShape(const BoxCollisionShape *shape) override;
     virtual void InitCollisionShape(const SphereCollisionShape *shape) override;
+    virtual void InitCollisionShape(const MeshCollisionShape *shape) override;
 
     virtual void SetCollisionShapeScale(const glm::vec3 &scale) override;
 

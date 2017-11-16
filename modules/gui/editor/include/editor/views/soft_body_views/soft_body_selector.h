@@ -20,6 +20,9 @@ public:
 
     ~SoftBodySelector() = default;
 
+    std::shared_ptr<GameObject> selected_game_object(){
+        return selected_game_object_;}
+
     void Select(std::shared_ptr<GameObject> selected_game_object,
                 SoftBodyRenderingEffects &rendering_effects,
                 SoftBodyEditorObjects &soft_body_objects);
@@ -38,6 +41,8 @@ private:
     std::shared_ptr<SceneContainer> scene_;
 
     std::shared_ptr<ResourceManager> resource_manager_;
+
+    std::shared_ptr<GameObject> selected_game_object_;
 };
 
 }

@@ -11,6 +11,7 @@ class CollisionShape;
 class StaticPlaneShape;
 class BoxCollisionShape;
 class SphereCollisionShape;
+class MeshCollisionShape;
 
 class RigidBodyImpl {
 public:
@@ -47,6 +48,7 @@ public:
     virtual void InitCollisionShape(const StaticPlaneShape *shape) = 0;
     virtual void InitCollisionShape(const BoxCollisionShape *shape) = 0;
     virtual void InitCollisionShape(const SphereCollisionShape *shape) = 0;
+    virtual void InitCollisionShape(const MeshCollisionShape *shape) = 0;
 
     virtual void SetCollisionShapeScale(const glm::vec3 &scale) = 0;
 

@@ -22,6 +22,7 @@
 #include <editor/views/soft_body_views/load/traction_force_recorder.h>
 #include "editor/views/soft_body_views/solver/dynamic/soft_body_dynamic_solver_view.h"
 #include <editor/views/soft_body_views/load/soft_body_load_view_factory.h>
+#include "editor/views/soft_body_views/scene_builder/soft_body_scene_builder.h"
 
 #include "game/resources/resource_context.h"
 #include <game/factory/game_systems_factory.h>
@@ -76,6 +77,9 @@ SoftBodyViewFactory::SoftBodyViewFactory(
 std::shared_ptr<View> SoftBodyViewFactory::Create() {
     auto engine_architecture = CreateEngineArchitecture();
 
+    auto scene_builder = ifx::make_unique<SoftBodySceneBuilder>(
+            engine_architecture_->engine_systems.renderer->scene_renderer());
+
     auto soft_body_rendering_effects =
         SetRendererSettings(engine_architecture->engine_systems.renderer,
                             engine_architecture_->engine_systems.renderer);
@@ -93,7 +97,8 @@ std::shared_ptr<View> SoftBodyViewFactory::Create() {
         engine_architecture,
         soft_body_rendering_effects,
         soft_body_picker,
-        std::move(soft_body_load_view));
+        std::move(soft_body_load_view),
+        std::move(scene_builder));
 
     SetDefaultScene(engine_architecture->engine_systems.scene_container,
                     engine_architecture->engine_contexts.resource_context,
