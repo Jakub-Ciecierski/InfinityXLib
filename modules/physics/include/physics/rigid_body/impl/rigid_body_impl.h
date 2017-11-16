@@ -26,6 +26,9 @@ public:
         if (IsDynamic() && mass <= 0) {
             return;
         }
+        if (!IsDynamic()){
+            return;
+        }
         mass_ = mass;
         SetMass(mass_);
     }

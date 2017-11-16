@@ -19,8 +19,6 @@
 
 #include <iostream>
 
-#include <GL/glew.h>
-
 namespace ifx {
 
 SoftBodyMeshingCreationView::SoftBodyMeshingCreationView(
