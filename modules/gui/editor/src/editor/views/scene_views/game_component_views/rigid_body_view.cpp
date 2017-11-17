@@ -16,6 +16,7 @@ void RigidBodyView::Render(
         RenderCollisionShape(*rigd_body_component);
         RenderMass(*rigd_body_component);
         RenderPhysicsMaterial(*rigd_body_component);
+        RenderIsKinematic(*rigd_body_component);
         ImGui::PopItemWidth();
 
         ImGui::TreePop();
@@ -64,6 +65,18 @@ void RigidBodyView::RenderPhysicsMaterial(RigidBodyComponent& rigd_body_componen
 
         if(value_changed){
             rigd_body_component.physics_material(physics_material);
+        }
+
+        ImGui::TreePop();
+    }
+}
+
+void RigidBodyView::RenderIsKinematic(RigidBodyComponent& rigid_body_component){
+    if (ImGui::TreeNodeEx("Is Kinematic",
+                          ImGuiTreeNodeFlags_DefaultOpen)) {
+        bool is_kinematic = rigid_body_component.IsKinematic();
+        if(ImGui::Checkbox("Is Kinematic", &is_kinematic)){
+            rigid_body_component.SetIsKinematic(is_kinematic);
         }
 
         ImGui::TreePop();

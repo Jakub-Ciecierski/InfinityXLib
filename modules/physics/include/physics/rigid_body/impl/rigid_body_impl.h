@@ -57,6 +57,8 @@ public:
     virtual void SetMass(float mass) = 0;
     virtual void SetPhysicsMaterial(const PhysicsMaterial& physics_material) = 0;
 
+    virtual void SetIsKinematic(bool is_kinematic) = 0;
+
 protected:
     std::shared_ptr<CollisionShape> collision_shape_;
     float mass_;

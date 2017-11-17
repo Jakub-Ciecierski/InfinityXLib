@@ -44,6 +44,13 @@ public:
     void *GetNativeRigidBody();
 
     virtual void Update(float time_delta = 0) override;
+
+    void SetIsKinematic(bool is_kinematic);
+    bool IsKinematic();
+
+protected:
+    bool is_kinematic_;
+
 private:
     std::unique_ptr<RigidBodyImpl> rigid_body_impl_;
 

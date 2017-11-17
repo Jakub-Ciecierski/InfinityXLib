@@ -38,6 +38,8 @@ public:
     virtual void SetMass(float mass) override;
     virtual void SetPhysicsMaterial(const PhysicsMaterial& physics_material) override;
 
+    virtual void SetIsKinematic(bool is_kinematic) override;
+
 private:
     std::shared_ptr<btCollisionShape> collision_shape_bt_;
     std::unique_ptr<btRigidBody> rigid_body_bt_;

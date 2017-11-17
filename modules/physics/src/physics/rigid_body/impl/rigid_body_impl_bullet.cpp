@@ -92,4 +92,9 @@ void RigidBodyImplBullet::SetPhysicsMaterial(
             "RigidBodyImplBullet::SetPhysicsMaterial Not Implemented");
 }
 
+void RigidBodyImplBullet::SetIsKinematic(bool is_kinematic){
+    throw std::invalid_argument(
+        "RigidBodyImplBullet::SetIsKinematic Not Implemented");
+}
+
 }

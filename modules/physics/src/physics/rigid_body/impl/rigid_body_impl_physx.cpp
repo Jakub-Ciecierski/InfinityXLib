@@ -134,4 +134,15 @@ void RigidBodyImplPhysx::SetPhysicsMaterial(
     px_material_->setRestitution(physics_material.restitution);
 }
 
+void RigidBodyImplPhysx::SetIsKinematic(bool is_kinematic){
+    if(!IsDynamic()){
+        return;
+    }
+    physx::PxRigidDynamic
+        *dynamic = (physx::PxRigidDynamic *) px_rigid_actor_;
+
+    dynamic->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC,
+                              is_kinematic);
+}
+
 }

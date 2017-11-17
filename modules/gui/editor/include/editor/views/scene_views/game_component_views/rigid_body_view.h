@@ -19,6 +19,7 @@ private:
     void RenderCollisionShape(RigidBodyComponent& rigd_body_component);
     void RenderMass(RigidBodyComponent& rigd_body_component);
     void RenderPhysicsMaterial(RigidBodyComponent& rigd_body_component);
+    void RenderIsKinematic(RigidBodyComponent& rigid_body_component);
 
 
 };

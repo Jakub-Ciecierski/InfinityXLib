@@ -39,6 +39,8 @@ public:
 
     virtual void SetMass(float mass) override;
     virtual void SetPhysicsMaterial(const PhysicsMaterial& physics_material) override;
+
+    virtual void SetIsKinematic(bool is_kinematic) override;
 private:
     physx::PxPhysics *px_physics_;
 
