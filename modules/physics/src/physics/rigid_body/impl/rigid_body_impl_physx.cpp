@@ -145,4 +145,24 @@ void RigidBodyImplPhysx::SetIsKinematic(bool is_kinematic){
                               is_kinematic);
 }
 
+void RigidBodyImplPhysx::SetUserData(void* user_data_){
+    if(px_rigid_actor_){
+        px_rigid_actor_->userData = user_data_;
+    }
+}
+
+void RigidBodyImplPhysx::SetGlobalTransform(const glm::vec3 &position,
+                                            const glm::quat &rotation) {
+    physx::PxTransform px_transform;
+    px_transform.p = physx::PxVec3(position.x,
+                                   position.y,
+                                   position.z);
+    px_transform.q = physx::PxQuat(rotation.x,
+                                   rotation.y,
+                                   rotation.z,
+                                   rotation.w);
+
+    px_rigid_actor_->setGlobalPose(px_transform);
+}
+
 }

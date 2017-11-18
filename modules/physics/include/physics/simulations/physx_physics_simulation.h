@@ -19,12 +19,15 @@ class PxScene;
 
 namespace ifx {
 
+class PhysXEventCallback;
+
 class PhysxPhysicsSimulation : public PhysicsSimulation {
 public:
     PhysxPhysicsSimulation(
         std::shared_ptr<PhysicsContext> physics_context,
         physx::PxDefaultCpuDispatcher *px_dispatcher,
-        physx::PxScene *px_scene
+        physx::PxScene *px_scene,
+        std::unique_ptr<PhysXEventCallback> event_callback
     );
 
     ~PhysxPhysicsSimulation() = default;
@@ -49,6 +52,8 @@ protected:
 private:
     physx::PxDefaultCpuDispatcher *px_dispatcher_;
     physx::PxScene *px_scene_;
+
+    std::unique_ptr<PhysXEventCallback> event_callback_;
 };
 }
 

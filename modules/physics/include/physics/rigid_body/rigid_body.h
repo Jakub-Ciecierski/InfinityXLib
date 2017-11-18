@@ -45,8 +45,14 @@ public:
 
     virtual void Update(float time_delta = 0) override;
 
+    void SetGlobalTransform(const glm::vec3 &position,
+                            const glm::quat &rotation);
+
     void SetIsKinematic(bool is_kinematic);
     bool IsKinematic();
+
+    void SetUserData(void* user_data);
+    void* GetUserData();
 
 protected:
     bool is_kinematic_;
@@ -54,6 +60,7 @@ protected:
 private:
     std::unique_ptr<RigidBodyImpl> rigid_body_impl_;
 
+    void* user_data_;
 };
 }
 

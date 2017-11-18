@@ -15,6 +15,9 @@ struct RigidBodyParams;
 class PhysicsContext;
 
 template<class T>
+class SoftBodyFEM;
+
+template<class T>
 class SoftBodyFEMSimulation;
 
 class PhysicsSimulation : public Updatable {
@@ -35,6 +38,9 @@ public:
 
     virtual void Add(std::shared_ptr<RigidBody> rigid_body);
     virtual bool Remove(std::shared_ptr<RigidBody> rigid_body);
+
+    void Add(std::shared_ptr<SoftBodyFEM<double>> soft_body);
+    bool Remove(std::shared_ptr<SoftBodyFEM<double>> soft_body);
 
     virtual std::unique_ptr<RigidBodyImpl> CreateRigidBodyImpl() = 0;
 

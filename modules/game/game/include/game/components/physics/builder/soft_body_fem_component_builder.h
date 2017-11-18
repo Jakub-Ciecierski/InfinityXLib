@@ -15,6 +15,11 @@ class RenderComponent;
 
 class ResourceManager;
 
+class PhysicsSimulation;
+
+template<class T>
+class SoftBodyCollider;
+
 template<class T>
 class SoftBodyFEMComponentBuilder {
 public:
@@ -41,7 +46,8 @@ public:
         return last_soft_body_fem_component_;
     }
 
-    std::shared_ptr<SoftBodyFEMComponent<T>> Build();
+    std::shared_ptr<SoftBodyFEMComponent<T>> Build(
+        std::shared_ptr<PhysicsSimulation> physics_simulation);
 
     rtfem::FEMGeometry<T>& GetFEMGeometry();
     rtfem::Material<T>& GetMaterial();
@@ -50,6 +56,14 @@ public:
 
 private:
     std::unique_ptr<rtfem::FEMModel<T>> BuildFEMModel();
+
+    std::vector<std::shared_ptr<SoftBodyCollider<T>>>
+    BuildColliders(rtfem::FEMModel<T> &fem_model,
+                   std::shared_ptr<PhysicsSimulation> physics_simulation);
+
+    std::shared_ptr<RenderComponent>
+    BuildRenderComponent(const rtfem::FEMGeometry<T> &fem_geometry,
+                         std::shared_ptr<ResourceManager> resource_manager);
 
     std::shared_ptr<SoftBodyFEMComponent<T>> last_soft_body_fem_component_;
 

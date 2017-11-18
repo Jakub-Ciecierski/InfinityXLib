@@ -61,7 +61,8 @@ void SoftBodyDynamicSolverView::RenderBuild(
             soft_body_fem_game_object_->Remove(soft_body_fem_component_);
         }
         soft_body_fem_component_
-                = soft_body_objects.soft_body_fem_component_builder->Build();
+                = soft_body_objects.soft_body_fem_component_builder->Build(
+            physics_simulation_);
 
         rendering_effects.Register(
                 soft_body_fem_component_->render_component());

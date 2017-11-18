@@ -1,6 +1,8 @@
 #include "physics/physics_simulation.h"
 
 #include <physics/soft_body/simulation/soft_body_fem_simulation.h>
+#include <physics/soft_body/soft_body_fem.h>
+#include <physics/soft_body/soft_body_collisions/soft_body_collider.h>
 
 #include <common/unique_ptr.h>
 
@@ -24,6 +26,25 @@ bool PhysicsSimulation::Remove(std::shared_ptr<RigidBody> rigid_body) {
         }
     }
     return false;
+}
+
+void PhysicsSimulation::Add(std::shared_ptr<SoftBodyFEM<double>> soft_body){
+    soft_body_fem_simulation_->Add(soft_body);
+    const auto& colliders = soft_body->colliders();
+    for(const auto& collider : colliders){
+        Add(collider->collider());
+    }
+}
+
+bool PhysicsSimulation::Remove(std::shared_ptr<SoftBodyFEM<double>> soft_body){
+    bool return_value = soft_body_fem_simulation_->Remove(soft_body);
+
+    const auto& colliders = soft_body->colliders();
+    for(const auto& collider : colliders){
+        Remove(collider->collider());
+    }
+
+    return return_value;
 }
 
 void PhysicsSimulation::UpdateFixedContent() {

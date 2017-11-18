@@ -22,6 +22,11 @@ void RigidBody::Update(float time_delta) {
     rigid_body_impl_->SetCollisionShapeScale(getScale());
 }
 
+void RigidBody::SetGlobalTransform(const glm::vec3 &position,
+                                   const glm::quat &rotation) {
+    rigid_body_impl_->SetGlobalTransform(position, rotation);
+}
+
 void RigidBody::SetIsKinematic(bool is_kinematic){
     is_kinematic_ = is_kinematic;
     rigid_body_impl_->SetIsKinematic(is_kinematic);
@@ -29,6 +34,15 @@ void RigidBody::SetIsKinematic(bool is_kinematic){
 
 bool RigidBody::IsKinematic(){
     return is_kinematic_;
+}
+
+void RigidBody::SetUserData(void* user_data){
+    user_data_ = user_data;
+    rigid_body_impl_->SetUserData(user_data);
+}
+
+void* RigidBody::GetUserData(){
+    return user_data_;
 }
 
 }

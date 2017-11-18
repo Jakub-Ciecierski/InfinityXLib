@@ -77,18 +77,14 @@ void BulletPhysicsSimulation::SynchronizeRigidBodiesTransform() {
         auto parent = rigid_body->movable_parent();
         if (!parent)
             continue;
-        auto rigid_body_bt = (btRigidBody *) rigid_body->GetNativeRigidBody();
 
-        auto transform = rigid_body_bt->getWorldTransform();
         auto &position = rigid_body->getPosition();
         auto &rotation = rigid_body->getRotation();
         glm::quat glm_quat(glm::radians(rotation));
-        btQuaternion bt_quat(glm_quat.x, glm_quat.y, glm_quat.z, glm_quat.w);
-        transform.setOrigin(
-            btVector3(position.x, position.y, position.z));
-        transform.setRotation(bt_quat);
 
-        rigid_body_bt->setWorldTransform(transform);
+        rigid_body->SetGlobalTransform(position, glm_quat);
+
+        auto rigid_body_bt = (btRigidBody *) rigid_body->GetNativeRigidBody();
 
         // TODO
         rigid_body_bt->activate(true);

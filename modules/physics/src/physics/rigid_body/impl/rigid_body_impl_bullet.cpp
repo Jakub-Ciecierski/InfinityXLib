@@ -97,4 +97,24 @@ void RigidBodyImplBullet::SetIsKinematic(bool is_kinematic){
         "RigidBodyImplBullet::SetIsKinematic Not Implemented");
 }
 
+void RigidBodyImplBullet::SetUserData(void* user_data_){
+    throw std::invalid_argument(
+        "RigidBodyImplBullet::SetUserData Not Implemented");
+}
+
+void RigidBodyImplBullet::SetGlobalTransform(const glm::vec3 &position,
+                                             const glm::quat &rotation) {
+    btQuaternion bt_quat(rotation.x,
+                         rotation.y,
+                         rotation.z,
+                         rotation.w);
+    auto transform = rigid_body_bt_->getWorldTransform();
+
+    transform.setOrigin(
+        btVector3(position.x, position.y, position.z));
+    transform.setRotation(bt_quat);
+
+    rigid_body_bt_->setWorldTransform(transform);
+}
+
 }

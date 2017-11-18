@@ -30,7 +30,8 @@ namespace ifx {
 SoftBodySolverView::SoftBodySolverView(
     std::shared_ptr<SceneContainer> scene_container,
     std::shared_ptr<PhysicsSimulation> physics_simulation) :
-    solver_type_(rtfem::AnalysisSolverType::Dynamic){
+    solver_type_(rtfem::AnalysisSolverType::Dynamic),
+    physics_simulation_(physics_simulation){
     dynamic_solver_view_
             = ifx::make_unique<SoftBodyDynamicSolverView>(scene_container,
                                                           physics_simulation);
@@ -71,7 +72,8 @@ void SoftBodySolverView::RenderSolverType(){
 void SoftBodySolverView::RenderStatic(SoftBodyEditorObjects& soft_body_objects){
     if(ImGui::Button("Solve")){
         auto soft_body_fem_component
-                = soft_body_objects.soft_body_fem_component_builder->Build();
+                = soft_body_objects.soft_body_fem_component_builder->Build(
+                physics_simulation_);
         auto fem_model = soft_body_fem_component->fem_model();
         rtfem::FEMStaticSolver<double> fem_solver(fem_model);
         auto fem_solver_output = fem_solver.Solve();

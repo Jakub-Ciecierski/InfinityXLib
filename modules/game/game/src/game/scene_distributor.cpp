@@ -101,7 +101,7 @@ void SceneDistributor::Add(std::shared_ptr<RigidBodyComponent> rigid_body) {
 
 void SceneDistributor::Add(
     std::shared_ptr<SoftBodyFEMComponent<double>> soft_body){
-    physics_simulation_->soft_body_fem_simulation().Add(soft_body);
+    physics_simulation_->Add(soft_body);
 }
 
 bool SceneDistributor::Remove(std::shared_ptr<RenderComponent> render_object) {
@@ -122,7 +122,7 @@ bool SceneDistributor::Remove(std::shared_ptr<RigidBodyComponent> rigid_body) {
 
 bool SceneDistributor::Remove(
     std::shared_ptr<SoftBodyFEMComponent<double>> soft_body) {
-    return physics_simulation_->soft_body_fem_simulation().Remove(soft_body);
+    return physics_simulation_->Remove(soft_body);
 }
 
 }

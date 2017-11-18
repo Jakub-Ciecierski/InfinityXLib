@@ -51,6 +51,8 @@ private:
     SoftBodySolvers soft_body_solvers_;
 
     std::unique_ptr<SoftBodyDynamicSolverView> dynamic_solver_view_;
+
+    std::shared_ptr<PhysicsSimulation> physics_simulation_;
 };
 
 }

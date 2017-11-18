@@ -14,8 +14,10 @@
 namespace ifx {
 
 SoftBodySceneBuilder::SoftBodySceneBuilder(
-        std::shared_ptr<SceneRenderer> scene_renderer) :
-        scene_renderer_(scene_renderer){}
+        std::shared_ptr<SceneRenderer> scene_renderer,
+        std::shared_ptr<PhysicsSimulation> physics_simulation) :
+        scene_renderer_(scene_renderer),
+        physics_simulation_(physics_simulation){}
 
 void SoftBodySceneBuilder::Render(
         std::shared_ptr<GameObject> game_object,
@@ -40,7 +42,7 @@ void SoftBodySceneBuilder::RenderBuild(
             game_object->Remove(render_component);
         }
 
-        auto fem_soft_body = soft_body_builder->Build();
+        auto fem_soft_body = soft_body_builder->Build(physics_simulation_);
 
         scene_renderer_->default_rendering_effect()->RegisterRenderObject(
                 fem_soft_body->render_component());

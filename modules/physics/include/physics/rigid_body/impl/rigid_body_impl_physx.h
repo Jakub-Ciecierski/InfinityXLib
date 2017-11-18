@@ -41,6 +41,11 @@ public:
     virtual void SetPhysicsMaterial(const PhysicsMaterial& physics_material) override;
 
     virtual void SetIsKinematic(bool is_kinematic) override;
+
+    virtual void SetUserData(void* user_data_) override;
+
+    virtual void SetGlobalTransform(const glm::vec3 &position,
+                                    const glm::quat &rotation) override;
 private:
     physx::PxPhysics *px_physics_;
 

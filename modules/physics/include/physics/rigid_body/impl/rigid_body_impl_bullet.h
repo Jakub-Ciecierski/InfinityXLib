@@ -40,6 +40,10 @@ public:
 
     virtual void SetIsKinematic(bool is_kinematic) override;
 
+    virtual void SetUserData(void* user_data_) override;
+
+    virtual void SetGlobalTransform(const glm::vec3 &position,
+                                    const glm::quat &rotation) override;
 private:
     std::shared_ptr<btCollisionShape> collision_shape_bt_;
     std::unique_ptr<btRigidBody> rigid_body_bt_;

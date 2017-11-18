@@ -15,17 +15,23 @@ namespace ifx {
 template<class T>
 SoftBodyFEMComponent<T>::SoftBodyFEMComponent(
     std::unique_ptr<rtfem::FEMModel<T>> fem_model,
+    const std::vector<std::shared_ptr<SoftBodyCollider<T>>>& colliders,
     std::shared_ptr<RenderComponent> render_component) :
     GameComponent(GameComponentType::PHYSICS_SOFT_BODY),
-    SoftBodyFEM<T>(std::move(fem_model)),
+    SoftBodyFEM<T>(std::move(fem_model), colliders),
     render_component_(render_component){}
 
 template<class T>
 void SoftBodyFEMComponent<T>::Update(float time_delta) {
-    Transformable::Update(time_delta);
+    SoftBodyFEM<T>::Update(time_delta);
 
-    if(this->fem_solver_output_)
+    if(this->fem_solver_output_){
         UpdateVBOPositions();
+        // TODO nulling fem_solver_output_ to avoid overhead
+        // might not be the best solution
+        this->last_fem_solver_output_ = this->fem_solver_output_;
+        this->fem_solver_output_ = nullptr;
+    }
 }
 
 template<class T>
@@ -49,9 +55,6 @@ void SoftBodyFEMComponent<T>::UpdateVBOPositions(){
     }
 
     vbo->Update();
-
-    this->last_fem_solver_output_ = this->fem_solver_output_;
-    this->fem_solver_output_ = nullptr;
 }
 
 template

@@ -5,6 +5,7 @@
 #include <physics/soft_body/simulation/soft_body_fem_simulation.h>
 #include <physics/rigid_body/impl/rigid_body_impl_physx.h>
 #include <physics/context/physx_context.h>
+#include <physics/simulations/physx/physx_event_callback.h>
 
 #define _DEBUG
 #include <PxPhysicsAPI.h>
@@ -16,10 +17,12 @@ namespace ifx {
 PhysxPhysicsSimulation::PhysxPhysicsSimulation(
     std::shared_ptr<PhysicsContext> physics_context,
     physx::PxDefaultCpuDispatcher *px_dispatcher,
-    physx::PxScene *px_scene) :
+    physx::PxScene *px_scene,
+    std::unique_ptr<PhysXEventCallback> event_callback) :
     PhysicsSimulation(physics_context),
     px_dispatcher_((px_dispatcher)),
-    px_scene_((px_scene)) {}
+    px_scene_((px_scene)),
+    event_callback_(std::move(event_callback)){}
 
 bool PhysxPhysicsSimulation::Terminate() {
     px_scene_->release();
@@ -83,21 +86,13 @@ void PhysxPhysicsSimulation::SynchronizeRigidBodiesTransform() {
         auto parent = rigid_body->movable_parent();
         if (!parent)
             continue;
-        auto px_rigid_actor
-            = (physx::PxRigidActor *) rigid_body->GetNativeRigidBody();
 
         auto &ifx_position = rigid_body->getPosition();
         auto &ifx_rotation = rigid_body->getRotation();
         glm::quat ifx_quat(glm::radians(ifx_rotation));
 
-        physx::PxTransform px_transform;
-        px_transform.p = physx::PxVec3(ifx_position.x,
-                                       ifx_position.y,
-                                       ifx_position.z);
-        px_transform.q = physx::PxQuat(ifx_quat.x, ifx_quat.y, ifx_quat.z,
-                                       ifx_quat.w);
-
-        px_rigid_actor->setGlobalPose(px_transform);
+        rigid_body->SetGlobalTransform(
+            ifx_position, ifx_quat);
     }
 }
 

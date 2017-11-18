@@ -59,6 +59,10 @@ public:
 
     virtual void SetIsKinematic(bool is_kinematic) = 0;
 
+    virtual void SetUserData(void* user_data_) = 0;
+
+    virtual void SetGlobalTransform(const glm::vec3 &position,
+                                    const glm::quat &rotation) = 0;
 protected:
     std::shared_ptr<CollisionShape> collision_shape_;
     float mass_;

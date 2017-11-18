@@ -78,7 +78,8 @@ std::shared_ptr<View> SoftBodyViewFactory::Create() {
     auto engine_architecture = CreateEngineArchitecture();
 
     auto scene_builder = ifx::make_unique<SoftBodySceneBuilder>(
-            engine_architecture_->engine_systems.renderer->scene_renderer());
+            engine_architecture_->engine_systems.renderer->scene_renderer(),
+            engine_architecture_->engine_systems.physics_simulation);
 
     auto soft_body_rendering_effects =
         SetRendererSettings(engine_architecture->engine_systems.renderer,
