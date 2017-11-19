@@ -140,7 +140,6 @@ void RigidBodyImplPhysx::SetIsKinematic(bool is_kinematic){
     }
     physx::PxRigidDynamic
         *dynamic = (physx::PxRigidDynamic *) px_rigid_actor_;
-
     dynamic->setRigidBodyFlag(physx::PxRigidBodyFlag::eKINEMATIC,
                               is_kinematic);
 }
@@ -163,6 +162,33 @@ void RigidBodyImplPhysx::SetGlobalTransform(const glm::vec3 &position,
                                    rotation.w);
 
     px_rigid_actor_->setGlobalPose(px_transform);
+}
+
+void RigidBodyImplPhysx::SetVelocity(const glm::vec3& velocity){
+    if(!IsDynamic()){
+        return;
+    }
+    physx::PxRigidDynamic
+        *dynamic = (physx::PxRigidDynamic *) px_rigid_actor_;
+    dynamic->setLinearVelocity(physx::PxVec3{velocity.x,
+                                             velocity.y,
+                                             velocity.z});
+}
+
+glm::vec3 RigidBodyImplPhysx::GetVelocity(){
+    glm::vec3 glm_velocity;
+    if(!IsDynamic()){
+        return glm_velocity;
+    }
+    physx::PxRigidDynamic
+        *dynamic = (physx::PxRigidDynamic *) px_rigid_actor_;
+    auto physx_velocity = dynamic->getLinearVelocity();
+
+    glm_velocity = glm::vec3(physx_velocity.x,
+                             physx_velocity.y,
+                             physx_velocity.z);
+
+    return glm_velocity;
 }
 
 }

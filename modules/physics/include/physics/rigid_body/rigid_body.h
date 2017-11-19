@@ -45,6 +45,8 @@ public:
 
     virtual void Update(float time_delta = 0) override;
 
+    bool IsDynamic();
+
     void SetGlobalTransform(const glm::vec3 &position,
                             const glm::quat &rotation);
 
@@ -54,6 +56,8 @@ public:
     void SetUserData(void* user_data);
     void* GetUserData();
 
+    void SetVelocity(const glm::vec3& velocity);
+    glm::vec3 GetVelocity();
 protected:
     bool is_kinematic_;
 

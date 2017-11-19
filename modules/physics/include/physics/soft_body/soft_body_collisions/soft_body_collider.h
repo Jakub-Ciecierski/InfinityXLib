@@ -19,6 +19,8 @@ public:
 
     std::shared_ptr<RigidBody> collider() { return collider_; }
 
+    const SoftBodyColliderData<T>& data(){return data_;}
+
 private:
     std::shared_ptr<RigidBody> collider_;
     SoftBodyColliderData<T> data_;

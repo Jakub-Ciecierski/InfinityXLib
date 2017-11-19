@@ -2,6 +2,8 @@
 
 #include <physics/soft_body/soft_body_collisions/soft_body_collider.h>
 #include <physics/rigid_body/rigid_body.h>
+#include "physics/soft_body/soft_body_collisions/soft_body_collider.h"
+#include "physics/soft_body/soft_body_collisions/soft_body_collider_data.h"
 
 #include <RTFEM/FEM/FEMGeometry.h>
 #include <RTFEM/FEM/BoundaryConditionContainer.h>
@@ -30,9 +32,9 @@ void SoftBodyFEM<T>::Update(float time_delta){
 
 template <class T>
 void SoftBodyFEM<T>::UpdateColliders(){
-    int i = 0;
     for(auto& collider : colliders_){
-        auto& vertex = fem_model_->fem_geometry().vertices[i];
+        auto vertex_id = collider->data().vertex_id();
+        auto& vertex = fem_model_->fem_geometry().vertices[vertex_id];
         const auto& eigen_coordinates = vertex->coordinates();
         glm::vec3 coordinates{
             eigen_coordinates(0),
@@ -44,12 +46,11 @@ void SoftBodyFEM<T>::UpdateColliders(){
         if(fem_solver_output_){
             constexpr int dimensions = 3;
             displacement = glm::vec3{
-                fem_solver_output_->displacement[i * dimensions + 0],
-                fem_solver_output_->displacement[i * dimensions + 1],
-                fem_solver_output_->displacement[i * dimensions + 2]
+                fem_solver_output_->displacement[vertex_id * dimensions + 0],
+                fem_solver_output_->displacement[vertex_id * dimensions + 1],
+                fem_solver_output_->displacement[vertex_id * dimensions + 2]
             };
         }
-
         collider->collider()->SetGlobalTransform(
             coordinates + displacement, glm::quat());
     }

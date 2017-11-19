@@ -117,4 +117,15 @@ void RigidBodyImplBullet::SetGlobalTransform(const glm::vec3 &position,
     rigid_body_bt_->setWorldTransform(transform);
 }
 
+void RigidBodyImplBullet::SetVelocity(const glm::vec3& velocity){
+    rigid_body_bt_->setLinearVelocity(btVector3{velocity.x,
+                                                velocity.y,
+                                                velocity.z});
+}
+
+glm::vec3 RigidBodyImplBullet::GetVelocity(){
+    const auto& velocity = rigid_body_bt_->getLinearVelocity();
+    return glm::vec3(velocity.x(), velocity.y(), velocity.z());
+}
+
 }

@@ -44,6 +44,9 @@ public:
 
     virtual void SetGlobalTransform(const glm::vec3 &position,
                                     const glm::quat &rotation) override;
+
+    virtual void SetVelocity(const glm::vec3& velocity) override;
+    virtual glm::vec3 GetVelocity() override;
 private:
     std::shared_ptr<btCollisionShape> collision_shape_bt_;
     std::unique_ptr<btRigidBody> rigid_body_bt_;

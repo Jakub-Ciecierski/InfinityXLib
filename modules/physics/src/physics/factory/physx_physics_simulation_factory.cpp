@@ -10,6 +10,8 @@
 
 #define _DEBUG // Physx requires that for some reason
 #include <PxPhysicsAPI.h>
+#include <extensions/PxDefaultSimulationFilterShader.h>
+#include <iostream>
 
 namespace ifx {
 
@@ -24,11 +26,12 @@ std::shared_ptr<PhysicsSimulation> PhysxPhysicsSimulationFactory::Create(
 
     physx::PxSceneDesc sceneDesc(
         physx_context->px_physics()->getTolerancesScale());
+    sceneDesc.simulationEventCallback = event_callback.get();
     sceneDesc.gravity = physx::PxVec3(0.0f, -9.81f, 0.0f);
     physx::PxDefaultCpuDispatcher *px_dispatcher
         = physx::PxDefaultCpuDispatcherCreate(2);
     sceneDesc.cpuDispatcher = px_dispatcher;
-    sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
+    //sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
     auto CollisionFilterShader = [] (
         physx::PxFilterObjectAttributes /*attributes0*/,
         physx::PxFilterData /*filterData0*/,
@@ -36,15 +39,19 @@ std::shared_ptr<PhysicsSimulation> PhysxPhysicsSimulationFactory::Create(
         physx::PxFilterData /*filterData1*/,
         physx::PxPairFlags& retPairFlags, const void* /*constantBlock*/,
         physx::PxU32 /*constantBlockSize*/) -> physx::PxFilterFlags {
-        retPairFlags = physx::PxPairFlag::eNOTIFY_TOUCH_FOUND;
-        return physx::PxFilterFlag::eNOTIFY;
+        retPairFlags = physx::PxPairFlag::eCONTACT_DEFAULT;
+        retPairFlags |= physx::PxPairFlag::eNOTIFY_TOUCH_FOUND;
+        retPairFlags |= physx::PxPairFlag::eNOTIFY_CONTACT_POINTS;
+
+
+        return physx::PxFilterFlag::eDEFAULT;
     };
     sceneDesc.filterShader = CollisionFilterShader;
+    sceneDesc.flags |= physx::PxSceneFlag::eENABLE_KINEMATIC_PAIRS;
+    sceneDesc.flags |= physx::PxSceneFlag::eENABLE_KINEMATIC_STATIC_PAIRS;
 
     physx::PxScene *px_scene =
         physx_context->px_physics()->createScene(sceneDesc);
-    //px_scene->setFlag(physx::PxSceneFlag::eENABLE_KINEMATIC_PAIRS, true);
-    //px_scene->setFlag(physx::PxSceneFlag::eENABLE_KINEMATIC_STATIC_PAIRS,true);
     px_scene->setSimulationEventCallback(event_callback.get());
 
     std::shared_ptr<PhysicsSimulation> simulation

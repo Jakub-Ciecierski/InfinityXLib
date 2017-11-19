@@ -81,6 +81,7 @@ SoftBodyFEMComponentBuilder<T>::BuildColliders(
             rigid_body,
             collider_data
         );
+        colliders.push_back(soft_body_collider);
     }
 
     return colliders;

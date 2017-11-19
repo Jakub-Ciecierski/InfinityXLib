@@ -5,10 +5,12 @@ namespace ifx {
 RigidBody::RigidBody(std::unique_ptr<RigidBodyImpl> rigid_body_impl,
                      const RigidBodyParams &&params) :
     is_kinematic_(false),
-    rigid_body_impl_(std::move(rigid_body_impl)){
+    rigid_body_impl_(std::move(rigid_body_impl)),
+    user_data_(nullptr){
     rigid_body_impl_->InitImpl(params.collision_shape,
                                params.mass,
                                params.physics_material);
+    SetUserData(user_data_);
     SetIsKinematic(is_kinematic_);
 }
 
@@ -20,6 +22,10 @@ void RigidBody::Update(float time_delta) {
     Transformable::Update(time_delta);
 
     rigid_body_impl_->SetCollisionShapeScale(getScale());
+}
+
+bool RigidBody::IsDynamic(){
+    return rigid_body_impl_->IsDynamic();
 }
 
 void RigidBody::SetGlobalTransform(const glm::vec3 &position,
@@ -43,6 +49,14 @@ void RigidBody::SetUserData(void* user_data){
 
 void* RigidBody::GetUserData(){
     return user_data_;
+}
+
+void RigidBody::SetVelocity(const glm::vec3& velocity){
+    rigid_body_impl_->SetVelocity(velocity);
+}
+
+glm::vec3 RigidBody::GetVelocity(){
+    return rigid_body_impl_->GetVelocity();
 }
 
 }

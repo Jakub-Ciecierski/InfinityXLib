@@ -46,6 +46,9 @@ public:
 
     virtual void SetGlobalTransform(const glm::vec3 &position,
                                     const glm::quat &rotation) override;
+
+    virtual void SetVelocity(const glm::vec3& velocity) override;
+    virtual glm::vec3 GetVelocity() override;
 private:
     physx::PxPhysics *px_physics_;
 

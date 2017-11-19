@@ -11,7 +11,7 @@ void RigidBodyView::Render(
         std::shared_ptr<RigidBodyComponent> rigd_body_component){
     if (ImGui::TreeNodeEx("Rigid Body",
                           ImGuiTreeNodeFlags_DefaultOpen)) {
-
+        RenderVelocity(*rigd_body_component);
         ImGui::PushItemWidth(70);
         RenderCollisionShape(*rigd_body_component);
         RenderMass(*rigd_body_component);
@@ -21,6 +21,24 @@ void RigidBodyView::Render(
 
         ImGui::TreePop();
     }
+}
+
+void RigidBodyView::RenderVelocity(RigidBodyComponent& rigd_body_component){
+    auto velocity = rigd_body_component.GetVelocity();
+    float velocity_raw[3];
+    velocity_raw[0] = velocity.x;
+    velocity_raw[1] = velocity.y;
+    velocity_raw[2] = velocity.z;
+
+    ImGui::PushItemWidth(150);
+    if(ImGui::InputFloat3("Linear Velocity", velocity_raw)){
+        rigd_body_component.SetVelocity(
+            glm::vec3(velocity_raw[0],
+                      velocity_raw[1],
+                      velocity_raw[2])
+        );
+    }
+    ImGui::PopItemWidth();
 }
 
 void RigidBodyView::RenderCollisionShape(RigidBodyComponent& rigd_body_component){

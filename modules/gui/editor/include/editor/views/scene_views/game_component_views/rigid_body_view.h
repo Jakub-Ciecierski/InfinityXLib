@@ -16,6 +16,7 @@ public:
     void Render(std::shared_ptr<RigidBodyComponent> rigd_body_component);
 
 private:
+    void RenderVelocity(RigidBodyComponent& rigd_body_component);
     void RenderCollisionShape(RigidBodyComponent& rigd_body_component);
     void RenderMass(RigidBodyComponent& rigd_body_component);
     void RenderPhysicsMaterial(RigidBodyComponent& rigd_body_component);

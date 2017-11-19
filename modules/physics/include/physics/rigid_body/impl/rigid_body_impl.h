@@ -63,6 +63,9 @@ public:
 
     virtual void SetGlobalTransform(const glm::vec3 &position,
                                     const glm::quat &rotation) = 0;
+
+    virtual void SetVelocity(const glm::vec3& velocity) = 0;
+    virtual glm::vec3 GetVelocity() = 0;
 protected:
     std::shared_ptr<CollisionShape> collision_shape_;
     float mass_;
