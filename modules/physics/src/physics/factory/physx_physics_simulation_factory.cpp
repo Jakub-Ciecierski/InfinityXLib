@@ -31,7 +31,7 @@ std::shared_ptr<PhysicsSimulation> PhysxPhysicsSimulationFactory::Create(
     physx::PxDefaultCpuDispatcher *px_dispatcher
         = physx::PxDefaultCpuDispatcherCreate(2);
     sceneDesc.cpuDispatcher = px_dispatcher;
-    //sceneDesc.filterShader = physx::PxDefaultSimulationFilterShader;
+
     auto CollisionFilterShader = [] (
         physx::PxFilterObjectAttributes /*attributes0*/,
         physx::PxFilterData /*filterData0*/,
@@ -42,7 +42,6 @@ std::shared_ptr<PhysicsSimulation> PhysxPhysicsSimulationFactory::Create(
         retPairFlags = physx::PxPairFlag::eCONTACT_DEFAULT;
         retPairFlags |= physx::PxPairFlag::eNOTIFY_TOUCH_FOUND;
         retPairFlags |= physx::PxPairFlag::eNOTIFY_CONTACT_POINTS;
-
 
         return physx::PxFilterFlag::eDEFAULT;
     };
