@@ -49,11 +49,15 @@ private:
     void RenderUpdateSettings(
             std::shared_ptr<Updatable> updatable,
             std::string name);
+    void RenderSolverType();
 
     void RenderSetTimeRestrictions();
 
     void RenderSimulationInformation();
-
+    void RenderComputationTimers();
+    void RenderComputationTimer(const std::string &name,
+                                double total_time,
+                                double time);
     void Play();
     void Pause();
     void StepSolver();

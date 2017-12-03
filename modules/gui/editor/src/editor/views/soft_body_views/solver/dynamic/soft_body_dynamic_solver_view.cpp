@@ -9,6 +9,8 @@
 #include <gui/imgui/imgui.h>
 
 #include <physics/physics_simulation.h>
+#include <physics/soft_body/simulation/soft_body_fem_simulation.h>
+
 #include <common/updatable.h>
 
 namespace ifx {
@@ -42,11 +44,12 @@ void SoftBodyDynamicSolverView::Render(
 
     RenderSolverSettings();
     RenderSimulationInformation();
+    RenderComputationTimers();
 }
 
 void SoftBodyDynamicSolverView::HandleTimeRestrictions(){
     if(time_restriction_.do_time_restriction){
-        const auto& update_timer = physics_simulation_->update_timer();
+        const auto& update_timer = physics_simulation_->synchronization_timer();
         if(update_timer.total_time >= time_restriction_.time_seconds){
             Pause();
         }
@@ -98,6 +101,7 @@ void SoftBodyDynamicSolverView::RenderStepSolver(){
 void SoftBodyDynamicSolverView::RenderSolverSettings(){
     RenderSetTimeStep();
     RenderSetTimeRestrictions();
+    RenderSolverType();
 }
 
 void SoftBodyDynamicSolverView::RenderSetTimeStep(){
@@ -118,6 +122,27 @@ void SoftBodyDynamicSolverView::RenderSetTimeRestrictions(){
             ImGui::InputFloat("[s]", &time_restriction_.time_seconds);
             ImGui::PopItemWidth();
         }
+        ImGui::TreePop();
+    }
+}
+
+void SoftBodyDynamicSolverView::RenderSolverType(){
+    if (ImGui::TreeNodeEx("Type", ImGuiTreeNodeFlags_DefaultOpen)) {
+        auto& soft_body_simulation =
+                physics_simulation_->soft_body_fem_simulation();
+        auto fem_solver_type = soft_body_simulation.GetFEMSolverType();
+
+        bool use_gpu = fem_solver_type == rtfem::FEMSolverType::GPU;
+        ImGui::Checkbox("GPU", &use_gpu);
+
+        if(use_gpu){
+            soft_body_simulation.SetFEMSolverType(
+                    rtfem::FEMSolverType::GPU);
+        }else{
+            soft_body_simulation.SetFEMSolverType(
+                    rtfem::FEMSolverType::CPU);
+        }
+
         ImGui::TreePop();
     }
 }
@@ -152,13 +177,65 @@ void SoftBodyDynamicSolverView::RenderUpdateSettings(
 
 void SoftBodyDynamicSolverView::RenderSimulationInformation(){
     if (ImGui::TreeNodeEx("Info", ImGuiTreeNodeFlags_DefaultOpen)) {
-        const auto& update_timer = physics_simulation_->update_timer();
+        const auto& update_timer = physics_simulation_->synchronization_timer();
 
         ImGui::Text("Time: %f [s]", update_timer.total_time);
         ImGui::Text("Iteration: %lu", update_timer.iterations);
 
         ImGui::TreePop();
     }
+
+
+}
+
+void SoftBodyDynamicSolverView::RenderComputationTimers(){
+    if(!soft_body_fem_component_){
+        return;
+    }
+    if(!soft_body_fem_component_->last_fem_solver_output()){
+        return;
+    }
+
+    if (ImGui::TreeNodeEx("Timers", ImGuiTreeNodeFlags_DefaultOpen)) {
+        const auto& timer = soft_body_fem_component_->last_fem_solver_output()
+                ->timer;
+        auto total_time = timer.TotalTime();
+        ImGui::Text("%.2f [ms]: Total Time", total_time);
+
+        RenderComputationTimer("Force Reassemble",
+                               total_time,
+                               timer.reassemble_forces_time);
+        RenderComputationTimer("RHS Solve",
+                               total_time,
+                               timer.rhs_solve_time);
+        RenderComputationTimer("BC Solve",
+                               total_time,
+                               timer.boundary_conditions_solve_time);
+        RenderComputationTimer("CUDA Solve",
+                               total_time,
+                               timer.cuda_solve_time);
+        RenderComputationTimer("Integration Solve",
+                               total_time,
+                               timer.integration_solve_time);
+        RenderComputationTimer("Reset Force",
+                               total_time,
+                               timer.reset_force_time);
+
+        ImGui::TreePop();
+    }
+}
+
+void SoftBodyDynamicSolverView::RenderComputationTimer(
+        const std::string& name,
+        double total_time,
+        double time){
+    std::string text = "%.2f: " + name;
+    ImVec2 progress_bar_size{75, 20};
+    ImGui::ProgressBar(time / total_time, progress_bar_size);
+    ImGui::SameLine();
+    ImGui::Text(text.c_str(),
+                time,
+                time / total_time);
 }
 
 void SoftBodyDynamicSolverView::Play(){

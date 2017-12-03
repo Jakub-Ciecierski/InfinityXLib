@@ -14,7 +14,7 @@ public:
     GameUpdater(std::shared_ptr<EngineArchitecture> engine_architecture);
     ~GameUpdater() = default;
 
-    std::shared_ptr<EngineArchitecture> engine_architecture() {
+    std::shared_ptr<EngineArchitecture> engine_architecture() const {
         return engine_architecture_;
     }
 

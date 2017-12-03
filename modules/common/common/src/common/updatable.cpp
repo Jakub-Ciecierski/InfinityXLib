@@ -12,61 +12,67 @@ Updatable::Updatable(const UpdateTimeDelta& update_time_delta) :
     is_running_(true){}
 
 void Updatable::Update(float time_delta){
-    UpdateTimersPre();
+    UpdateSynchronizationPre();
     if(!is_running_){
+        timer_ = UpdateTimer{};
         return;
     }
+    UpdateSynchronizationPost();
 
-    UpdateTimersPost();
-
-    UpdateFixedContent();
+    UpdateFixedContentTimed();
 }
 
 bool Updatable::UpdateFixed(){
-    UpdateTimersPre();
+    UpdateSynchronizationPre();
     if(!IsUpdateReady()){
         return false;
     }
     if(!is_running_){
+        timer_ = UpdateTimer{};
         return false;
     }
+    UpdateSynchronizationPost();
 
-    UpdateTimersPost();
-
-    UpdateFixedContent();
+    UpdateFixedContentTimed();
 
     return true;
+}
+
+void Updatable::UpdateFixedContentTimed(){
+    timer_.Start();
+    UpdateFixedContent();
+    timer_.Stop();
 }
 
 void Updatable::UpdateFixedContent(){
 
 }
 
-void Updatable::UpdateTimersPre() {
+void Updatable::UpdateSynchronizationPre() {
     auto current_time = glfwGetTime();
-    auto last_elapsed = current_time - update_timer_.last_time;
-    update_timer_.time_since_last_update += last_elapsed;
-    update_timer_.last_time_since_last_update =
-            update_timer_.time_since_last_update;
-    update_timer_.last_time = current_time;
+    auto last_elapsed = current_time - synchronization_timer_.last_time;
+    synchronization_timer_.time_since_last_update += last_elapsed;
+    synchronization_timer_.last_time_since_last_update =
+            synchronization_timer_.time_since_last_update;
+    synchronization_timer_.last_time = current_time;
 }
 
-void Updatable::UpdateTimersPost(){
-    update_timer_.iterations++;
-    update_timer_.total_time += update_timer_.last_time_since_last_update;
+void Updatable::UpdateSynchronizationPost(){
+    synchronization_timer_.iterations++;
+    synchronization_timer_.total_time += synchronization_timer_.last_time_since_last_update;
 }
 
 bool Updatable::IsUpdateReady(){
-    if (update_timer_.time_since_last_update >= update_time_delta_.time_delta) {
-        update_timer_.time_since_last_update = 0.0f;
+    if (synchronization_timer_.time_since_last_update >= update_time_delta_.time_delta) {
+        synchronization_timer_.time_since_last_update = 0.0f;
         return true;
     }
     return false;
 }
 
 void Updatable::ResetTimers(){
-    update_timer_.total_time = 0;
-    update_timer_.iterations = 0;
+    synchronization_timer_.total_time = 0;
+    synchronization_timer_.iterations = 0;
 }
 
 void Updatable::Pause(){

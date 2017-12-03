@@ -157,6 +157,7 @@ void SceneListView::HandleContextMenuEvent(
     switch(event){
         case GameObjectContextMenuEvent::Remove:
             SetSelectedGameObject(nullptr);
+            NotifySetSelectedGameObject(nullptr);
             break;
         case GameObjectContextMenuEvent::OpenSoftBodyEditor:
             NotifySetSelectedGameObject(game_object);

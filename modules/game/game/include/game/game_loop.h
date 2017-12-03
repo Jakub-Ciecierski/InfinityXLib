@@ -49,6 +49,10 @@ public:
         return game_updater_->engine_architecture()->engine_systems.gui;
     }
 
+    const std::vector<std::unique_ptr<GameUpdater>>& game_updaters(){
+        return game_updaters_;
+    };
+
     void AddGameUpdater(std::unique_ptr<GameUpdater> game_updater);
 
     void Start();
@@ -57,7 +61,7 @@ private:
 
     double ComputeElapsedTime();
 
-    std::unique_ptr<GameUpdater> game_updater_;
+    GameUpdater* game_updater_;
 
     std::vector<std::unique_ptr<GameUpdater>> game_updaters_;
 

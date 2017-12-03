@@ -14,7 +14,7 @@ class SoftBodyFEM;
 template <class T>
 class SoftBodyFEMSimulation : public Updatable {
 public:
-    SoftBodyFEMSimulation() = default;
+    SoftBodyFEMSimulation();
     ~SoftBodyFEMSimulation() = default;
 
     virtual void Update(float delta_time) override;
@@ -22,11 +22,15 @@ public:
     void Add(std::shared_ptr<SoftBodyFEM<T>> soft_body);
     bool Remove(std::shared_ptr<SoftBodyFEM<T>> soft_body);
 
+    void SetFEMSolverType(const rtfem::FEMSolverType& type);
+    rtfem::FEMSolverType GetFEMSolverType();
+
 private:
 
     std::vector<std::shared_ptr<SoftBodyFEM<T>>> soft_bodies_;
     std::vector<std::unique_ptr<rtfem::FEMDynamicSolver<T>>> fem_solvers_;
 
+    rtfem::FEMSolverType fem_solver_type_;
 };
 
 }

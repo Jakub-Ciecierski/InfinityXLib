@@ -6,8 +6,10 @@
 
 namespace ifx {
 
-GameLoop::GameLoop(std::unique_ptr<GameUpdater> game_updater) :
-    game_updater_(std::move(game_updater)) {}
+GameLoop::GameLoop(std::unique_ptr<GameUpdater> game_updater){
+    game_updater_ = game_updater.get();
+    game_updaters_.push_back(std::move(game_updater));
+}
 
 void GameLoop::AddGameUpdater(std::unique_ptr<GameUpdater> game_updater){
     game_updaters_.push_back(std::move(game_updater));
@@ -21,7 +23,6 @@ void GameLoop::Start() {
 
 void GameLoop::RunSingleIteration() {
     auto elapsed_time = ComputeElapsedTime();
-    game_updater_->Update(elapsed_time);
 
     for(auto& game_updater : game_updaters_){
         game_updater->Update(elapsed_time);

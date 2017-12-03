@@ -77,7 +77,7 @@ void MainMenuViewItem::RenderDockerAutomaticScale(
     ImGui::SameLine();
     ImGui::PushItemWidth(100);
     ImGui::SliderFloat("Automatic Scale",
-                       &settings.automatic_scale,
+                       &settings.automatic_width_scale,
                        0.1, 0.5);
     ImGui::PopItemWidth();
 }

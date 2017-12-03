@@ -32,6 +32,7 @@
 #include "editor/views/resource_view.h"
 #include <editor/views/factory/resource_view_factory.h>
 #include <editor/views/scene_views/game_component_views/render_object_views/render_object_material_view.h>
+#include <editor/views/profiler_view.h>
 
 #include "game/scene_container.h"
 #include <game/architecture/engine_architecture.h>
@@ -62,18 +63,21 @@ std::shared_ptr<Editor> EditorFactory::CreateEngineGUI(
     auto soft_body_view = CreateSoftBodyView(game_loop, engine_architecture);
     scene_list_view->AddObserver(soft_body_view);
 
-    auto resource_view = CreateResourceView(
-            engine_architecture->engine_contexts.resource_context);
-
     // Create Window views
     auto left_window_view =
         std::make_shared<WindowView>(scene_list_view, "Left");
 
     std::vector<std::shared_ptr<View>>
-        views{physics_simulation_view, rendering_view};
-    auto right_window_view = std::make_shared<WindowView>(views, "Right");
+            right_window_views{physics_simulation_view, rendering_view};
+    auto right_window_view = std::make_shared<WindowView>(right_window_views,
+                                                          "Right");
 
-    auto bottom_window_view = std::make_shared<WindowView>(resource_view,
+    auto profiler_view = std::make_shared<ProfilerView>(game_loop);
+    auto resource_view = CreateResourceView(
+            engine_architecture->engine_contexts.resource_context);
+    std::vector<std::shared_ptr<View>>
+            bottom_window_views{resource_view, profiler_view};
+    auto bottom_window_view = std::make_shared<WindowView>(bottom_window_views,
                                                            "Bottom");
 
     auto top_window_view = std::make_shared<MainMenuWindowView>(

@@ -21,7 +21,8 @@ struct DockerSettings {
 
     // Scale automatically based on window size and scale coefficient
     bool is_automatic_scale;
-    float automatic_scale;
+    float automatic_width_scale;
+    float automatic_height_scale;
 
     bool soft_body_window_full;
 };

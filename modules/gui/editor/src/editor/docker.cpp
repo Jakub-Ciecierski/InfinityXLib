@@ -14,7 +14,7 @@ Docker::Docker(std::shared_ptr<Window> window) :
     top_window_view_(nullptr),
     bottom_window_view_(nullptr),
     is_enabled_(true),
-    docker_settings_{250, 250, 250, true, 0.2, false} {}
+    docker_settings_{250, 250, 350, true, 0.2, 0.3, false} {}
 
 void Docker::Enable() {
     is_enabled_ = true;
@@ -98,8 +98,8 @@ void Docker::UpdateAutomaticSize() {
     if (!docker_settings_.is_automatic_scale)
         return;
 
-    float width = *window_->width() * docker_settings_.automatic_scale;
-    float height = *window_->height() * docker_settings_.automatic_scale;
+    float width = *window_->width() * docker_settings_.automatic_width_scale;
+    float height = *window_->height() * docker_settings_.automatic_height_scale;
 
     docker_settings_.left_view_width = width;
     docker_settings_.right_view_width = width;

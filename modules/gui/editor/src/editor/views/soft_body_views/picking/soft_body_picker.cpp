@@ -212,26 +212,62 @@ void SoftBodyPicker::ComputeTriangleRayIntersection(
 
         // Apply current displacements;
         if(fem_solver_output){
-            glm_vertex1_4[0] +=
-                fem_solver_output->displacement[triangle_face.v1*3 + 0];
-            glm_vertex1_4[1] +=
-                fem_solver_output->displacement[triangle_face.v1*3 + 1];
-            glm_vertex1_4[2] +=
-                fem_solver_output->displacement[triangle_face.v1*3 + 2];
+            auto size = fem_solver_output->displacement.size();
 
-            glm_vertex2_4[0] +=
-                fem_solver_output->displacement[triangle_face.v2*3 + 0];
-            glm_vertex2_4[1] +=
-                fem_solver_output->displacement[triangle_face.v2*3 + 1];
-            glm_vertex2_4[2] +=
-                fem_solver_output->displacement[triangle_face.v2*3 + 2];
+            auto index = triangle_face.v1*3 + 0;
+            if(index < size){
+                glm_vertex1_4[0] +=
+                        fem_solver_output->displacement[index];
+            }
 
-            glm_vertex3_4[0] +=
-                fem_solver_output->displacement[triangle_face.v3*3 + 0];
-            glm_vertex3_4[1] +=
-                fem_solver_output->displacement[triangle_face.v3*3 + 1];
-            glm_vertex3_4[2] +=
-                fem_solver_output->displacement[triangle_face.v3*3 + 2];
+            index = triangle_face.v1*3 + 1;
+            if(index < size){
+                glm_vertex1_4[1] +=
+                        fem_solver_output->displacement[triangle_face.v1*3 + 1];
+            }
+
+            index = triangle_face.v1*3 + 2;
+            if(index < size){
+                glm_vertex1_4[2] +=
+                        fem_solver_output->displacement[triangle_face.v1*3 + 2];
+            }
+
+            index = triangle_face.v2*3 + 0;
+            if(index < size){
+                glm_vertex2_4[0] +=
+                        fem_solver_output->displacement[triangle_face.v2*3 + 0];
+            }
+
+            index = triangle_face.v2*3 + 1;
+            if(index < size){
+                glm_vertex2_4[1] +=
+                        fem_solver_output->displacement[triangle_face.v2*3 + 1];
+            }
+
+            index = triangle_face.v2*3 + 2;
+            if(index < size){
+                glm_vertex2_4[2] +=
+                        fem_solver_output->displacement[triangle_face.v2*3 + 2];
+            }
+
+
+            index = triangle_face.v3*3 + 0;
+            if(index < size){
+                glm_vertex3_4[0] +=
+                        fem_solver_output->displacement[triangle_face.v3*3 + 0];
+            }
+
+            index = triangle_face.v3*3 + 1;
+            if(index < size){
+                glm_vertex3_4[1] +=
+                        fem_solver_output->displacement[triangle_face.v3*3 + 1];
+            }
+
+            index = triangle_face.v3*3 + 2;
+            if(index < size){
+                glm_vertex3_4[2] +=
+                        fem_solver_output->displacement[triangle_face.v3*3 + 2];
+            }
         }
 
         auto glm_world_vertex1 = glm::vec3(model_matrix * glm_vertex1_4);

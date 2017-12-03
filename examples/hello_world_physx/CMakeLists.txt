@@ -9,6 +9,7 @@ set(DEPS_DIR dependencies)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${IFX_APP_BUILD_DIR})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
+set(CMAKE_NVCC_FLAGS "${CMAKE_NVCC_FLAGS}; -arch=compute_61 -code=sm_61 -Wall")
 
 add_definitions(
         -DGLEW_STATIC
@@ -98,8 +99,6 @@ file(GLOB_RECURSE SRC_FILES src/*.cpp)
 file(GLOB_RECURSE INC_FILES include/*.h)
 set(SOURCE_FILES)
 
-add_executable(${APP_NAME} ${SOURCE_FILES} ${SRC_FILES} ${INC_FILES})
-
 #----------------------------------
 # EXTERNAL
 #----------------------------------
@@ -125,6 +124,8 @@ set(Boost_USE_STATIC_LIBS OFF)
 find_package(Boost COMPONENTS filesystem system REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
+set(CUDA_TOOLKIT_ROOT_DIR $ENV{CUDA_BIN_PATH})
+find_package(CUDA 8 REQUIRED COMPONENTS cusolver)
 
 #---------------------------------
 # IFX LIBS
@@ -145,6 +146,8 @@ include_directories(${IFX_ROOT}/modules/gui/editor/${INC_DIR})
 #---------------------------------
 # LINK
 #---------------------------------
+
+cuda_add_executable(${APP_NAME} ${SOURCE_FILES} ${SRC_FILES} ${INC_FILES})
 
 target_link_libraries(${APP_NAME}
         editor_ifx
@@ -167,6 +170,8 @@ target_link_libraries(${APP_NAME} ${OPENGL_LIBRARIES})
 target_link_libraries(${APP_NAME} glew20)
 target_link_libraries(${APP_NAME} glew20)
 target_link_libraries(${APP_NAME} rtfem)
+target_link_libraries(${APP_NAME} $ENV{CUDA_BIN_PATH}/lib64/stubs/libcusolver.so)
 target_link_libraries(${APP_NAME} tet)
 
 target_link_libraries(${APP_NAME} ${Boost_LIBRARIES})
+target_link_libraries(${APP_NAME} ${CUDA_LIBRARIES} ${CUDA_nppi_LIBRARY})
