@@ -50,8 +50,6 @@ void PhysXEventCallback::onContact(
         const physx::PxU32 bufferSize = 64;
         physx::PxContactPairPoint contacts[bufferSize];
         for (physx::PxU32 i = 0; i < nbPairs; i++) {
-            const physx::PxContactPair &cp = pairs[i];
-
             physx::PxU32 nbContacts = pairs[i].extractContacts(contacts,
                                                                bufferSize);
             std::cout << "onContact: nbContacts:" << nbContacts << std::endl;
