@@ -8,6 +8,8 @@
 
 #include <common/unique_ptr.h>
 
+#include "RTFEM/GPU/LinearSolver/GPULinearSolver.cuh"
+
 #define _DEBUG // Physx requires that for some reason
 #include <PxPhysicsAPI.h>
 #include <extensions/PxDefaultSimulationFilterShader.h>

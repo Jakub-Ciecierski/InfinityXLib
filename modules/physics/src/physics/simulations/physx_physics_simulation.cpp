@@ -7,6 +7,8 @@
 #include <physics/context/physx_context.h>
 #include <physics/simulations/physx/physx_event_callback.h>
 
+#include "RTFEM/GPU/LinearSolver/GPULinearSolver.cuh"
+
 #define _DEBUG
 #include <PxPhysicsAPI.h>
 

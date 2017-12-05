@@ -4,6 +4,8 @@
 
 #include <common/unique_ptr.h>
 
+#include "RTFEM/GPU/LinearSolver/GPULinearSolver.cuh"
+
 namespace ifx {
 
 template <class T>

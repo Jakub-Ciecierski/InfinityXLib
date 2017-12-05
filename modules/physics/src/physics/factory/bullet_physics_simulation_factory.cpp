@@ -10,6 +10,8 @@
 #include <BulletCollision/CollisionDispatch/btCollisionDispatcher.h>
 #include <BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h>
 
+#include "RTFEM/GPU/LinearSolver/GPULinearSolver.cuh"
+
 namespace ifx {
 
 BulletPhysicsSimulationFactory::BulletPhysicsSimulationFactory() :
