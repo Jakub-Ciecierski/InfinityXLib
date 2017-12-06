@@ -40,6 +40,9 @@ include_directories(${IFX_ROOT}/dependencies/RT-FEM/sources/include)
 include_directories(${IFX_ROOT}/dependencies/RT-FEM/external/tetgen1.5.0)
 include_directories(${IFX_ROOT}/dependencies/RT-FEM/external/eigen)
 
+set(CUDA_TOOLKIT_ROOT_DIR $ENV{CUDA_BIN_PATH})
+find_package(CUDA REQUIRED)
+
 #---------------------------------
 # PROJECT
 #---------------------------------
@@ -59,6 +62,6 @@ set(SPAM)
 #---------------------------------
 
 if (NOT TARGET ${LIB_NAME})
-    add_library(${LIB_NAME} STATIC ${SRC_FILES} ${INC_FILES} ${SPAM})
+    cuda_add_library(${LIB_NAME} STATIC ${SRC_FILES} ${INC_FILES} ${SPAM})
 endif ()
 set_target_properties(${LIB_NAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY lib)
