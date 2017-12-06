@@ -171,6 +171,7 @@ target_link_libraries(${APP_NAME} glew20)
 target_link_libraries(${APP_NAME} glew20)
 target_link_libraries(${APP_NAME} rtfem)
 target_link_libraries(${APP_NAME} $ENV{CUDA_BIN_PATH}/lib64/stubs/libcusolver.so)
+target_link_libraries(${APP_NAME} $ENV{CUDA_BIN_PATH}/lib64/stubs/libcublas.so)
 target_link_libraries(${APP_NAME} tet)
 
 target_link_libraries(${APP_NAME} ${Boost_LIBRARIES})
