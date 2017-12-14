@@ -8,7 +8,7 @@
 
 #include <common/unique_ptr.h>
 
-#include "RTFEM/GPU/LinearSolver/GPULinearSolver.cuh"
+#include "RTFEM/GPU/LinearSolver/GPULULinearSolver.cuh"
 
 #define _DEBUG // Physx requires that for some reason
 #include <PxPhysicsAPI.h>

@@ -10,7 +10,7 @@
 #include <BulletCollision/CollisionDispatch/btCollisionDispatcher.h>
 #include <BulletCollision/CollisionDispatch/btDefaultCollisionConfiguration.h>
 
-#include "RTFEM/GPU/LinearSolver/GPULinearSolver.cuh"
+#include "RTFEM/GPU/LinearSolver/GPULULinearSolver.cuh"
 
 namespace ifx {
 

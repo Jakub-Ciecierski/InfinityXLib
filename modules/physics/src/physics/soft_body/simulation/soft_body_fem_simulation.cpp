@@ -4,7 +4,7 @@
 
 #include <common/unique_ptr.h>
 
-#include "RTFEM/GPU/LinearSolver/GPULinearSolver.cuh"
+#include "RTFEM/GPU/LinearSolver/GPULULinearSolver.cuh"
 
 namespace ifx {
 

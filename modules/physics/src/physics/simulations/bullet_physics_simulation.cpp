@@ -12,7 +12,7 @@
 #include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 #include <BulletDynamics/Dynamics/btRigidBody.h>
 
-#include "RTFEM/GPU/LinearSolver/GPULinearSolver.cuh"
+#include "RTFEM/GPU/LinearSolver/GPULULinearSolver.cuh"
 
 #include <iostream>
 
