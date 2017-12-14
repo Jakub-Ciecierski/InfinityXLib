@@ -10,7 +10,8 @@ namespace ifx {
 
 template <class T>
 SoftBodyFEMSimulation<T>::SoftBodyFEMSimulation() :
-        fem_solver_type_(rtfem::FEMSolverType::GPU){}
+        fem_solver_type_(rtfem::FEMSolverType::GPU),
+        linear_system_solver_type_(rtfem::LinearSystemSolverType::CG){}
 
 template <class T>
 void SoftBodyFEMSimulation<T>::Update(float delta_time){
@@ -30,7 +31,8 @@ void SoftBodyFEMSimulation<T>::Add(std::shared_ptr<SoftBodyFEM<T>> soft_body){
     soft_bodies_.push_back(soft_body);
 
     auto fem_solver = ifx::make_unique<rtfem::FEMDynamicSolver<T>>(
-        soft_body->fem_model());
+        soft_body->fem_model(),
+        linear_system_solver_type_);
     fem_solver->type(fem_solver_type_);
     fem_solver->Solve();
     fem_solvers_.push_back(std::move(fem_solver));
@@ -61,6 +63,18 @@ void SoftBodyFEMSimulation<T>::SetFEMSolverType(
 template <class T>
 rtfem::FEMSolverType SoftBodyFEMSimulation<T>::GetFEMSolverType(){
     return fem_solver_type_;
+}
+
+template <class T>
+void SoftBodyFEMSimulation<T>::SetLinearSystemSolverType(
+        const rtfem::LinearSystemSolverType& type){
+    linear_system_solver_type_ = type;
+}
+
+template <class T>
+rtfem::LinearSystemSolverType
+SoftBodyFEMSimulation<T>::GetLinearSystemSolverType(){
+    return linear_system_solver_type_;
 }
 
 template class SoftBodyFEMSimulation<double>;

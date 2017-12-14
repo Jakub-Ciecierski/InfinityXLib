@@ -142,6 +142,44 @@ void SoftBodyDynamicSolverView::RenderSolverType(){
             soft_body_simulation.SetFEMSolverType(
                     rtfem::FEMSolverType::CPU);
         }
+        
+        //
+        ImGui::Text("Linear Solver:");
+        ImGui::SameLine();
+        if (ImGui::Button(linear_solvers_.names[linear_solvers_.selected].c_str(),
+                          ImVec2(80, 17))){
+            ImGui::OpenPopup("SoftBodyDynamicSolverView");
+        }
+        if (ImGui::BeginPopup("SoftBodyDynamicSolverView")) {
+            for (unsigned int i = 0; i < linear_solvers_.names.size(); i++){
+                if (ImGui::Selectable(linear_solvers_.names[i].c_str())){
+                    linear_solvers_.selected = i;
+                }
+            }
+            ImGui::EndPopup();
+        }
+        switch(linear_solvers_.selected){
+            case linear_solvers_.cg_id: {
+                physics_simulation_->soft_body_fem_simulation().
+                        SetLinearSystemSolverType
+                        (rtfem::LinearSystemSolverType::CG);
+                break;
+            }
+            case linear_solvers_.cg_precond_id: {
+                physics_simulation_->soft_body_fem_simulation().
+                        SetLinearSystemSolverType
+                        (rtfem::LinearSystemSolverType::CG_PreCond);
+                break;
+            }
+            case linear_solvers_.lu_id: {
+                physics_simulation_->soft_body_fem_simulation().
+                        SetLinearSystemSolverType
+                        (rtfem::LinearSystemSolverType::LU);
+                break;
+            }
+        }
+
+        //
 
         ImGui::TreePop();
     }

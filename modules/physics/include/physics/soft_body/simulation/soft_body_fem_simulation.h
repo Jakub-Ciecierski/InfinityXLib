@@ -25,12 +25,16 @@ public:
     void SetFEMSolverType(const rtfem::FEMSolverType& type);
     rtfem::FEMSolverType GetFEMSolverType();
 
+    void SetLinearSystemSolverType(
+            const rtfem::LinearSystemSolverType& type);
+    rtfem::LinearSystemSolverType GetLinearSystemSolverType();
 private:
 
     std::vector<std::shared_ptr<SoftBodyFEM<T>>> soft_bodies_;
     std::vector<std::unique_ptr<rtfem::FEMDynamicSolver<T>>> fem_solvers_;
 
     rtfem::FEMSolverType fem_solver_type_;
+    rtfem::LinearSystemSolverType linear_system_solver_type_;
 };
 
 }
