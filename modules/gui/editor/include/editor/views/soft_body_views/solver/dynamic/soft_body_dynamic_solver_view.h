@@ -63,6 +63,8 @@ private:
     void RenderStepSolver();
     void RenderResetSolver();
 
+    void RenderGravity();
+
     void RenderSolverSettings();
     void RenderSetTimeStep();
     void RenderSetTimeStepPhysics();

@@ -42,6 +42,8 @@ void SoftBodyDynamicSolverView::Render(
 
     ImGui::PopItemWidth();
 
+    RenderGravity();
+
     RenderSolverSettings();
     RenderSimulationInformation();
     RenderComputationTimers();
@@ -95,6 +97,29 @@ void SoftBodyDynamicSolverView::RenderStepSolver(){
         Play();
         StepSolver();
         Pause();
+    }
+}
+
+void SoftBodyDynamicSolverView::RenderGravity(){
+    if(!soft_body_fem_component_)
+        return;
+    auto body_force = soft_body_fem_component_->fem_model()->total_body_force();
+    if (ImGui::TreeNodeEx("Gravity", ImGuiTreeNodeFlags_DefaultOpen)) {
+        float values[3] ={
+                (float)body_force.x(),
+                (float)body_force.y(),
+                (float)body_force.z(),
+        };
+
+        ImGui::PushItemWidth(150);
+        if(ImGui::InputFloat3("Body Force", values)){
+            body_force[0] = values[0];
+            body_force[1] = values[1];
+            body_force[2] = values[2];
+        }
+        soft_body_fem_component_->fem_model()->SetStaticBodyForce(body_force);
+        ImGui::PopItemWidth();
+        ImGui::TreePop();
     }
 }
 

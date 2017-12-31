@@ -19,7 +19,7 @@ public:
 
     virtual void Update(float delta_time) override;
 
-    void Add(std::shared_ptr<SoftBodyFEM<T>> soft_body);
+    void Add(std::shared_ptr<SoftBodyFEM<T>> soft_body, T time_delta);
     bool Remove(std::shared_ptr<SoftBodyFEM<T>> soft_body);
 
     void SetFEMSolverType(const rtfem::FEMSolverType& type);

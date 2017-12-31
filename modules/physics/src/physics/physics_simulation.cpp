@@ -31,7 +31,8 @@ bool PhysicsSimulation::Remove(std::shared_ptr<RigidBody> rigid_body) {
 }
 
 void PhysicsSimulation::Add(std::shared_ptr<SoftBodyFEM<double>> soft_body){
-    soft_body_fem_simulation_->Add(soft_body);
+    soft_body_fem_simulation_->Add(soft_body,
+                                   fixed_time_delta());
     const auto& colliders = soft_body->colliders();
     for(const auto& collider : colliders){
         Add(collider->collider());

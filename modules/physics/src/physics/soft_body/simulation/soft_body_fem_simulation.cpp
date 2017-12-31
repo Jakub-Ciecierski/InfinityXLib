@@ -16,9 +16,8 @@ SoftBodyFEMSimulation<T>::SoftBodyFEMSimulation() :
 template <class T>
 void SoftBodyFEMSimulation<T>::Update(float delta_time){
     int i = 0;
-
     for(auto& fem_solver : fem_solvers_){
-        fem_solver->RunIteration(delta_time);
+        fem_solver->RunIteration();
 
         auto& soft_body_fem = soft_bodies_[i];
         soft_body_fem->fem_solver_output(fem_solver->solver_output());
@@ -26,13 +25,15 @@ void SoftBodyFEMSimulation<T>::Update(float delta_time){
     }
 }
 
-template <class T>
-void SoftBodyFEMSimulation<T>::Add(std::shared_ptr<SoftBodyFEM<T>> soft_body){
+template<class T>
+void SoftBodyFEMSimulation<T>::Add(std::shared_ptr<SoftBodyFEM<T>> soft_body,
+                                   T time_delta) {
     soft_bodies_.push_back(soft_body);
 
     auto fem_solver = ifx::make_unique<rtfem::FEMDynamicSolver<T>>(
-        soft_body->fem_model(),
-        linear_system_solver_type_);
+            soft_body->fem_model(),
+            linear_system_solver_type_,
+            time_delta);
     fem_solver->type(fem_solver_type_);
     fem_solver->Solve();
     fem_solvers_.push_back(std::move(fem_solver));
