@@ -74,11 +74,11 @@ void SoftBodyLoadView::RenderTractionForceInspector(
                           ImGuiTreeNodeFlags_DefaultOpen)) {
         if(selected_triangle_face_ >= 0){
             auto& triangle_face = triangle_faces[selected_triangle_face_];
-            float imgui_traction_force = (float)triangle_face.traction_force;
+            float imgui_traction_force = (float)triangle_face.constant_traction_force;
 
             ImGui::PushItemWidth(65);
             if(ImGui::InputFloat("Traction Force", &imgui_traction_force)){
-                triangle_face.traction_force = imgui_traction_force;
+                triangle_face.constant_traction_force = imgui_traction_force;
             }
             ImGui::PopItemWidth();
         }
@@ -91,7 +91,7 @@ void SoftBodyLoadView::RenderTractionForceCurrent(
     std::vector<rtfem::TriangleFace<double>>& triangle_faces){
     static int selection_mask = (1 << 2);
     for (unsigned int i = 0; i < triangle_faces.size(); i++) {
-        if(triangle_faces[i].traction_force == 0)
+        if(triangle_faces[i].constant_traction_force == 0)
             continue;
         auto name = std::to_string(i);
         int node_clicked = -1;
@@ -139,8 +139,14 @@ void SoftBodyLoadView::RecordTractionForce(
 
         auto selected_indices = face_selection.selected_vertices();
         for(auto selected_index : selected_indices){
-            triangle_faces[selected_index].traction_force =
-                traction_force_recorder_->GetMagnitude();
+            ImGuiIO &io = ImGui::GetIO();
+            if(io.KeyCtrl){
+                triangle_faces[selected_index].constant_traction_force =
+                        traction_force_recorder_->GetMagnitude();
+            }else{
+                triangle_faces[selected_index].traction_force =
+                        traction_force_recorder_->GetMagnitude();
+            }
         }
     }
     traction_force_recorder_->Update(

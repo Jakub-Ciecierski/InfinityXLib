@@ -11,6 +11,8 @@
 #include <physics/physics_simulation.h>
 #include <physics/soft_body/simulation/soft_body_fem_simulation.h>
 
+#include "RTFEM/GPU/DeviceProperties/DevicesProperties.cuh"
+
 #include <common/updatable.h>
 
 namespace ifx {
@@ -47,6 +49,7 @@ void SoftBodyDynamicSolverView::Render(
     RenderSolverSettings();
     RenderSimulationInformation();
     RenderComputationTimers();
+    RenderGPUInfo();
 }
 
 void SoftBodyDynamicSolverView::HandleTimeRestrictions(){
@@ -247,8 +250,6 @@ void SoftBodyDynamicSolverView::RenderSimulationInformation(){
 
         ImGui::TreePop();
     }
-
-
 }
 
 void SoftBodyDynamicSolverView::RenderComputationTimers(){
@@ -299,6 +300,23 @@ void SoftBodyDynamicSolverView::RenderComputationTimer(
     ImGui::Text(text.c_str(),
                 time,
                 time / total_time);
+}
+
+void SoftBodyDynamicSolverView::RenderGPUInfo(){
+    if (ImGui::TreeNodeEx("GPU", ImGuiTreeNodeFlags_DefaultOpen)) {
+        rtfem::DevicesProperties devices_properties;
+        devices_properties.Update();
+
+        int id = 0;
+        for(auto device_property : devices_properties){
+            ImGui::PushID(id);
+            ImGui::Text("MB used: %f", device_property.GetUsedMegaBytesCount());
+            ImGui::PopID();
+            id++;
+        }
+
+        ImGui::TreePop();
+    }
 }
 
 void SoftBodyDynamicSolverView::Play(){

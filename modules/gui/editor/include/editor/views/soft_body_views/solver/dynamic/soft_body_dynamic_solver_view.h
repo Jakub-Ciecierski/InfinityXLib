@@ -81,6 +81,8 @@ private:
     void RenderComputationTimer(const std::string &name,
                                 double total_time,
                                 double time);
+    void RenderGPUInfo();
+
     void Play();
     void Pause();
     void StepSolver();
