@@ -1,7 +1,8 @@
 # InfinityX
+![alt tag](./ifx.png)
+
 Game Engine supporting 3D graphics and physics simulation.
 
-![alt tag](./ifx.png)
 ## Modules
 
 ## Build
